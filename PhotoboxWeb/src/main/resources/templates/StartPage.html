@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Photobox</title>
+    <style>
+        body {
+            background-color: black;
+            text-align: center; /* Center-align content */
+        }
+
+        h1 {
+            /*margin-top: 20px; /* Add some space at the top of the title */
+            font-size: 130px;
+            color: white;
+        }
+
+        h2 {
+            font-size: 80px;
+            color: white;
+        }
+
+        .button-container {
+            margin: 10% 10%; /* 10% margin on each side */
+        }
+
+        button {
+            display: block; /* Make buttons block-level elements */
+            width: 80%; /* Set button width to 80% of the container */
+            margin: 10px auto 50px; /* Center-align buttons vertically and add spacing between them */
+            height: 100px;
+            font-size: 61px;
+            font-color: black;
+        }
+
+        .container {
+            position: relative;
+            display: inline-block; /* To make the container fit the content */
+        }
+
+        .download-link1 {
+        position: absolute;
+        font-size: 40px;
+        top: 90%; /* Adjust this value to vertically center the button */
+        left: 65%; /* Adjust this value to horizontally center the button */
+        transform: translate(-50%, -50%); /* Center the button precisely */
+        background-color: white;
+        color: black;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        width: 180px;
+        height: 45px;
+        text-size-adjust: 20px;
+        text-align: center;
+        border : 3px solid black;
+       }
+
+       .print-link1 {
+        position: absolute;
+        font-size: 40px;
+        top: 90%; /* Adjust this value to vertically center the button */
+        left: 35%; /* Adjust this value to horizontally center the button */
+        transform: translate(-50%, -50%); /* Center the button precisely */
+        background-color: white;
+        color: black;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        width: 180px;
+        height: 45px;
+        text-size-adjust: 20px;
+        text-align: center;
+        border : 3px solid black;
+       }
+
+        .image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+        }
+
+    </style>
+</head>
+<body>
+<h1>Photobox</h1>
+<div class="button-container">
+    <button onclick="window.location.href='/Pictures/'">Picture Gallery</button>
+    <button onclick="window.location.href='PhotoBoothCommunication/TriggerPictureHTML'">Remote Trigger</button>
+</div>
+<h2>Latest Picture</h2>
+    <div class="container">
+        <img class="image" id="latestImage" th:src="'/Images/' + ${imageName}" alt="NewestImage" style="width:100%">
+        <a class="download-link1" th:href="@{'/Pictures/Download/' + ${imageName}}">Download</a>
+        <a class="print-link1" href="javascript:void(0);" th:attr="data-image-name=${imageName},data-ip-address=${ipAddress}" th:onclick="confirmPrint(this);">Print</a>
+    </div>
+</body>
+<script>
+    function confirmPrint(linkElement) {
+        var imageName = linkElement.getAttribute('data-image-name');
+        var ipAddress = linkElement.getAttribute('data-ip-address');
+        var confirmation = confirm("Do you want to print?");
+        if (confirmation) {
+            // If the user clicks "OK" in the confirmation dialog, open the URL in a new tab/window.
+
+            const apiUrl = 'http://' + ipAddress + ':6969/PhotoBoothCommunication/PrintImage/' + imageName;
+
+            fetch(apiUrl, { method: 'GET', mode: 'no-cors' })
+                .catch(error => {
+                    // Handle any errors that occurred during the fetch
+                    console.error('Fetch error:', error);
+                });
+        }
+    }
+</script>
+</html>

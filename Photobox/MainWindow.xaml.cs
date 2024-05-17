@@ -78,7 +78,7 @@ namespace Photobox
 
                 InitJsonReader();
 
-                CreateFilePaths(dir);
+                CreateFilePaths();
 
 				APIHandler = new CanonAPI();
 
@@ -92,7 +92,9 @@ namespace Photobox
 
 				RefreshCamera();
 
-				MainCamera ??= new MockedCamera();
+				//MainCamera ??= new MockedCamera();
+
+				MainCamera = CamList[0];
 
                 InitTimer();
 

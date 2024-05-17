@@ -1,0 +1,7 @@
+Server:
+  Port: 6969
+
+Spring:
+  mvc:
+    favicon:
+      static-path-pattern: images/favicon.ico

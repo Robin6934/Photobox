@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photobox", "Photobox\Photob
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDSKLib", "EDSKLib\EDSKLib.csproj", "{7DFAA281-E36C-4F90-B1C6-B71C52B47708}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhotoboxWeb", "PhotoboxWeb\PhotoboxWeb.csproj", "{09468063-FA70-4DC6-A598-42DBBAA3D2AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photobox.Lib", "PhotoboxLib\Photobox.Lib.csproj", "{908C8F14-151A-4D4B-AF90-DB1C6265EB74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,14 +33,14 @@ Global
 		{7DFAA281-E36C-4F90-B1C6-B71C52B47708}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7DFAA281-E36C-4F90-B1C6-B71C52B47708}.Release|x86.ActiveCfg = Release|Any CPU
 		{7DFAA281-E36C-4F90-B1C6-B71C52B47708}.Release|x86.Build.0 = Release|Any CPU
-		{09468063-FA70-4DC6-A598-42DBBAA3D2AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{09468063-FA70-4DC6-A598-42DBBAA3D2AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{09468063-FA70-4DC6-A598-42DBBAA3D2AA}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{09468063-FA70-4DC6-A598-42DBBAA3D2AA}.Debug|x86.Build.0 = Debug|Any CPU
-		{09468063-FA70-4DC6-A598-42DBBAA3D2AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{09468063-FA70-4DC6-A598-42DBBAA3D2AA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{09468063-FA70-4DC6-A598-42DBBAA3D2AA}.Release|x86.ActiveCfg = Release|Any CPU
-		{09468063-FA70-4DC6-A598-42DBBAA3D2AA}.Release|x86.Build.0 = Release|Any CPU
+		{908C8F14-151A-4D4B-AF90-DB1C6265EB74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{908C8F14-151A-4D4B-AF90-DB1C6265EB74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{908C8F14-151A-4D4B-AF90-DB1C6265EB74}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{908C8F14-151A-4D4B-AF90-DB1C6265EB74}.Debug|x86.Build.0 = Debug|Any CPU
+		{908C8F14-151A-4D4B-AF90-DB1C6265EB74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{908C8F14-151A-4D4B-AF90-DB1C6265EB74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{908C8F14-151A-4D4B-AF90-DB1C6265EB74}.Release|x86.ActiveCfg = Release|Any CPU
+		{908C8F14-151A-4D4B-AF90-DB1C6265EB74}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

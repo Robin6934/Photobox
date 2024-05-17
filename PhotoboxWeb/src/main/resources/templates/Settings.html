@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Settings</title>
+</head>
+<body>
+<h1>Edit Settings</h1>
+<form th:object="${settingsDTO}" th:action="@{/Settings/Save}" method="post">
+    <label>Count Down Timer: <input type="number" th:field="*{countDown}" /></label><br>
+    <label>Text on picture: <input type="text" th:field="*{TextOnPicture}" /></label><br>
+    <label>Text on picture font: <input type="text" th:field="*{TextOnPictureFont}" /></label><br>
+    <label>Text on picture font size: <input type="number" th:field="*{TextOnPictureFontSize}" /></label><br>
+    <label>Text on picture color: <input type="text" th:field="*{TextOnPictureColor}" /></label><br>
+    <label>Text on picture position from right: <input type="number" th:field="*{TextPositionFromRight}" /></label><br>
+    <label>Text on picture position from bottom: <input type="number" th:field="*{TextPositionFromBottom}" /></label><br>
+    <button type="submit">Save Settings</button>
+</form>
+</body>
+</html>

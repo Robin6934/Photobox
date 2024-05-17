@@ -162,12 +162,11 @@ namespace Photobox
         /// Checks if all the needed directories exist else creates them
         /// </summary>
         /// <param name="basePath">the base path where to create the paths in</param>
-        public static void CreateFilePaths(string basePath)
+        public static void CreateFilePaths()
 		{
-			string[] paths = ["Photos", "Deleted", "Temp" , "ShowTemp", "Static"];
-			foreach (string path in paths)
+			foreach (string path in Folders.AllFolders)
 			{
-				string FullPath = basePath + "\\" + path;
+				string FullPath = Path.Combine(Folders.PhotoBoothBaseDir, path);
 
 				if (!Directory.Exists(FullPath))
 				{
