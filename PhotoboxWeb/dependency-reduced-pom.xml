@@ -10,7 +10,7 @@
   <groupId>com.PhotoBootRestApi</groupId>
   <artifactId>PhotoBoxWeb</artifactId>
   <name>PhotoBooth</name>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.1.0-Release</version>
   <description>Rest API For CanonPhotoBooth</description>
   <build>
     <plugins>

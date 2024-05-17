@@ -92,14 +92,21 @@ public class UserPicturesDownloadController {
 
         for(int i = imageFiles.length - 1; i >= 0; i--)
         {
-            File imageFile = imageFiles[i];
-
-            String imageName = imageFile.getName();
+            String imageName = imageFiles[i].getName();
 
             if(!imageName.contains("downscaled")) {continue;}
 
             imageNames.add(imageName);
         }
+
+//        for (File imageFile:imageFiles)
+//        {
+//            String imageName = imageFile.getName();
+//
+//            if(!imageName.contains("downscaled")) {continue;}
+//
+//            imageNames.add(imageName);
+//        }
 
         model.addAttribute("imageNames", imageNames);
 
