@@ -1,5 +1,5 @@
 Server:
-  Port: 6969
+  Port: 80
 
 Spring:
   mvc:

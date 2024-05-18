@@ -41,14 +41,11 @@ namespace Photobox
         /// <returns>Returns the response as HttpResponseMessage</returns>
         public static async Task<HttpResponseMessage> RestApiGetReturn(string Url)
         {
-            using (HttpClient client = new HttpClient())
-            {
-                string apiUrl = Url; // Replace with your API URL
+            using HttpClient client = new HttpClient();
 
-                HttpResponseMessage response = await client.GetAsync(apiUrl);
+            HttpResponseMessage response = await client.GetAsync(Url);
 
-                return response;
-            }
+            return response;
         }
 
         /// <summary>
@@ -59,22 +56,18 @@ namespace Photobox
         /// <returns></returns>
         public static async Task RestApiPost(string Url, PhotoBoothInit photoBoothInit)
         {
-            using (HttpClient client = new HttpClient())
+            using HttpClient client = new HttpClient();
+
+            string jsonPayload = JsonSerializer.Serialize(photoBoothInit);
+
+            // Set the content type to JSON
+            StringContent content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await client.PostAsync(Url, content);
+
+            if (!response.IsSuccessStatusCode)
             {
-                string apiUrl = Url; // Replace with your API URL
-
-                // Create a JSON payload (replace with your data)
-                string jsonPayload = JsonSerializer.Serialize(photoBoothInit);
-
-                // Set the content type to JSON
-                StringContent content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-
-                HttpResponseMessage response = await client.PostAsync(apiUrl, content);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    ReportError("Error: " + response.StatusCode);
-                }
+                ReportError("Error: " + response.StatusCode);
             }
         }
 

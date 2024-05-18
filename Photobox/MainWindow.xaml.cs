@@ -1,5 +1,5 @@
-﻿#define Dev
-#define MockedCamera
+﻿//#define Dev
+//#define MockedCamera
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -72,11 +72,11 @@ namespace Photobox
 		{
 			try
 			{
+                InitJsonReader();
+
                 InitializeComponent();
 
                 Config = ConfigLoader.LoadFromJsonFile(jsonFilePath, this);
-
-                InitJsonReader();
 
                 CreateFilePaths();
 

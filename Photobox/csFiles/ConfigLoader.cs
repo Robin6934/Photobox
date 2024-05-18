@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Windows;
+using System.Text.Json.Serialization;
 
 namespace Photobox
 {
@@ -24,11 +25,15 @@ namespace Photobox
 					mainWindow.ReportError($"Error reading JSON file: {filePath} does not exist");
 					return null;
 				}
-				// Read the JSON file using System.Text.Json
+
 				string json = File.ReadAllText(filePath);
 
-				// Deserialize the JSON string into an instance of ConfigLoader
-				return JsonSerializer.Deserialize<ConfigLoader>(json);
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                return JsonSerializer.Deserialize<ConfigLoader>(json, options);
 			}
 			catch (Exception ex)
 			{

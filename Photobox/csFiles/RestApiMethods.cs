@@ -17,7 +17,7 @@ namespace Photobox
 
         public static async void Init()
         {
-            await RestApi.RestApiGet("http://localhost:6969/PhotoBoothApi/Init");
+            await RestApi.RestApiGet("http://localhost:80/PhotoBoothApi/Init");
         }
 
         public static async Task PolingForPictureTrigger(MainWindow mainWindow, string dir)
@@ -29,7 +29,7 @@ namespace Photobox
                 while(!cancellationTokenSource.Token.IsCancellationRequested)
                 {
                     // Perform the GET request asynchronously
-                    using HttpResponseMessage response =  await RestApi.RestApiGetReturn("http://localhost:6969/PhotoBoothCommunication/Poling");
+                    using HttpResponseMessage response =  await RestApi.RestApiGetReturn("http://localhost:80/PhotoBoothCommunication/Poling");
                     
                     string responseString = await response.Content.ReadAsStringAsync();
 
