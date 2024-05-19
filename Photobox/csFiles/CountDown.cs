@@ -7,7 +7,7 @@ using System.Windows.Threading;
 
 namespace Photobox
 {
-    internal class CountDown : IDisposable
+    internal class CountDown
     {
         public delegate void TimerCallback();
 
@@ -215,16 +215,6 @@ namespace Photobox
         {
             Canvas.SetLeft(_textBlockCountdown, _point.X - _textBlockCountdown.ActualWidth / 2);
             Canvas.SetTop(_textBlockCountdown, _point.Y - _textBlockCountdown.ActualHeight / 2);
-        }
-
-        public void Dispose()
-        {
-
-        }
-
-        ~CountDown()
-        {
-
         }
     }
 }

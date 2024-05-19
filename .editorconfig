@@ -2,3 +2,6 @@
 
 # IDE0090: Use 'new(...)'
 dotnet_diagnostic.IDE0090.severity = none
+
+# CS8622: Die NULL-Zulässigkeit von Verweistypen im Typ des Parameters entspricht (möglicherweise aufgrund von Attributen für die NULL-Zulässigkeit) nicht dem Zieldelegaten.
+dotnet_diagnostic.CS8622.severity = none

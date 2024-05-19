@@ -1,6 +1,4 @@
-﻿//#define Dev
-//#define MockedCamera
-using System;
+﻿#define Dev
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -9,7 +7,6 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using EOSDigital.API;
 using EOSDigital.SDK;
 using static Photobox.PhotoBoothLib;
@@ -25,19 +22,19 @@ namespace Photobox
 
         #region Variables
 
-        readonly CanonAPI APIHandler;
+        readonly CanonAPI APIHandler = new CanonAPI();
 
         Camera MainCamera;
 
-        List<Camera> CamList;
+        readonly static ImageBrush bgbrush = new ImageBrush();
 
-        readonly ImageBrush bgbrush = new ImageBrush();
+        readonly Action<BitmapImage> SetImageAction = (BitmapImage img) => { bgbrush.ImageSource = img; };
 
-        readonly Action<BitmapImage> SetImageAction;
+        int ErrCount;
 
-		int ErrCount;
+        private bool secondTick = false;
 
-		readonly object ErrLock = new object();
+        readonly object ErrLock = new object();
 
 		static readonly string userName = Environment.UserName;
 
@@ -51,16 +48,7 @@ namespace Photobox
 
 		private readonly FileSystemWatcher fileSystemWatcherConfigFile = new FileSystemWatcher();
 
-		private bool SecondTick = false;
-
-		private BitmapImage CheckColorImage;
-
-		bool saveImageForColorcheck = false;
-
-		string CurrentPictureName = "";
-
-
-        CountDown countDown;
+        private CountDown countDown;
 
 #endregion
 
@@ -76,19 +64,11 @@ namespace Photobox
 
                 CreateFilePaths();
 
-				APIHandler = new CanonAPI();
-
-				APIHandler.CameraAdded += APIHandler_CameraAdded;
-
 				ErrorHandler.SevereErrorHappened += ErrorHandler_SevereErrorHappened;
 
 				ErrorHandler.NonSevereErrorHappened += ErrorHandler_NonSevereErrorHappened;
 
-				SetImageAction = (BitmapImage img) => { bgbrush.ImageSource = img; };
-
-				RefreshCamera();
-
-				MainCamera = CamList[0];
+				GetMainCamera(out MainCamera);
 
                 InitTimer();
 
@@ -157,18 +137,20 @@ namespace Photobox
 		/// <summary>
 		/// Refreshes the connected cameras list and selects the first camera.
 		/// </summary>
-		private void RefreshCamera()
+		private void GetMainCamera(out Camera mainCamera)
 		{
 			int cnt = 0;
 			bool CameraFound = false;
-			while (!CameraFound)
+			List<Camera> CamList = [];
+			mainCamera = null!;
+
+            while (!CameraFound)
 			{
 				try { CamList = APIHandler.GetCameraList(); }
 				catch (Exception ex) { ReportError(ex.Message); }
 				if (CamList.Count > 0)
 				{
-					try { MainCamera = CamList[0]; }
-					catch (Exception ex) { ReportError(ex.Message); }
+					mainCamera = CamList[0];
 					CameraFound = true;
 				}
 				if(cnt>1000)
@@ -319,12 +301,6 @@ namespace Photobox
                 EvfImage.EndInit();
                 EvfImage.Freeze();
 
-                if (saveImageForColorcheck)
-                {
-                    CheckColorImage = EvfImage;
-                    saveImageForColorcheck = false;
-                }
-
                 Application.Current.Dispatcher.BeginInvoke(SetImageAction, EvfImage);
             }
 			catch (Exception ex) { ReportError(ex.Message); }
@@ -336,7 +312,7 @@ namespace Photobox
         #region EventListeners
 		private void KeepAliveTimer_Tick(object sender, EventArgs e)
 		{
-			if (SecondTick)
+			if (secondTick)
             {
                 MainCamera.SendCommand(CameraCommand.DriveLensEvf, (int)DriveLens.Near1);
             }
@@ -345,18 +321,8 @@ namespace Photobox
                 MainCamera.SendCommand(CameraCommand.DriveLensEvf, (int)DriveLens.Far1);
             }
             Debug.WriteLine("Keepalive Timer Ticked " + (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds);
-            SecondTick ^= true;
+            secondTick ^= true;
         }
-
-        /// <summary>
-        /// Eventlistener if a new camera gets detected
-        /// </summary>
-        /// <param name="sender"></param>
-        private void APIHandler_CameraAdded(CanonAPI sender)
-		{
-			try { Dispatcher.Invoke((Action)delegate { RefreshCamera(); }); }
-			catch (Exception ex) { ReportError(ex.Message); }
-		}
 
 		/// <summary>
 		/// Eventlistener for when a picture is ready to be downloaded from the camera, the picture will be downloaded to the Temp folder
@@ -377,8 +343,6 @@ namespace Photobox
 			{
 				//settings.SavePathTextBox.Dispatcher.Invoke((Action)delegate { dir = settings.SavePathTextBox.Text; });
 				sender.DownloadFile(Info, DownloadDir);
-
-                CurrentPictureName = fileName;
 
                 WaitForFileToUnlock(TotalPath, TimeSpan.FromSeconds(10));
 
@@ -424,7 +388,6 @@ namespace Photobox
 		/// </summary>
 		public void TriggerPicture()
 		{
-            saveImageForColorcheck = true;
             KeepAliveTimer.Stop();
             MainCamera.DownloadReady += MainCamera_DownloadReady;
 
@@ -503,15 +466,13 @@ namespace Photobox
 			{
 				MainCamera?.Dispose();
 				APIHandler?.Dispose();
-				//Directory.Delete(dir+"\\Temp", true);
-				//Directory.Delete(dir + "\\ShowTemp", true);
 				MainCamera.LiveViewUpdated -= MainCamera_LiveViewUpdated;
 
 				PowerStatusWatcher.StopWatcher();
 
 				RestApiMethods.StopPolingForPicture();
 
-				await RestApi.RestApiGet("http://localhost:6969/PhotoBoothApi/Shutdown");
+				await RestApi.RestApiGet("http://localhost:80/PhotoBoothApi/Shutdown");
 			}
 			catch (Exception ex) { ReportError(ex.Message); }
 		}
