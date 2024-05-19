@@ -16,16 +16,13 @@ namespace Photobox
         /// <returns></returns>
         public static async Task RestApiGet(string Url)
         {
-            using (HttpClient client = new HttpClient())
+            using HttpClient client = new HttpClient();
+
+            HttpResponseMessage response = await client.GetAsync(Url);
+
+            if (!response.IsSuccessStatusCode)
             {
-                string apiUrl = Url; // Replace with your API URL
-
-                HttpResponseMessage response = await client.GetAsync(apiUrl);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    ReportError("Error: " + response.StatusCode);
-                }
+                ReportError("Error: " + response.StatusCode);
             }
         }
 

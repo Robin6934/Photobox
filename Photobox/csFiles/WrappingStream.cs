@@ -4,55 +4,41 @@ namespace System.IO
     /// <summary>
     /// A stream that does nothing more but wrap another stream (needed for a WPF memory leak)
     /// </summary>
-    public sealed class WrapStream : Stream
+    /// <remarks>
+    /// Creates a new instance of the <see cref="WrapStream"/> class.
+    /// </remarks>
+    /// <param name="inStream">The stream that gets wrapped</param>
+    public sealed class WrapStream(Stream inStream) : Stream
     {
         /// <summary>
         /// Gets a value indicating whether the current stream supports reading.
         /// </summary>
-        public override bool CanRead
-        {
-            get { return Base.CanRead; }
-        }
+        public override bool CanRead => Base.CanRead;
+
         /// <summary>
         /// Gets a value indicating whether the current stream supports seeking.
         /// </summary>
-        public override bool CanSeek
-        {
-            get { return Base.CanSeek; }
-        }
+        public override bool CanSeek => Base.CanSeek;
+
         /// <summary>
         /// Gets a value indicating whether the current stream supports writing.
         /// </summary>
-        public override bool CanWrite
-        {
-            get { return Base.CanWrite; }
-        }
+        public override bool CanWrite => Base.CanWrite;
         /// <summary>
         /// Gets the length in bytes of the stream.
         /// </summary>
-        public override long Length
-        {
-            get { return Base.Length; }
-        }
+        public override long Length => Base.Length;
+
         /// <summary>
         /// Gets or sets the position within the current stream.
         /// </summary>
         public override long Position
         {
-            get { return Base.Position; }
-            set { Base.Position = value; }
+            get => Base.Position;
+            set => Base.Position = value; 
         }
 
-        private Stream Base;
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="WrapStream"/> class.
-        /// </summary>
-        /// <param name="inStream">The stream that gets wrapped</param>
-        public WrapStream(Stream inStream)
-        {
-            Base = inStream;
-        }
+        private Stream Base = inStream;
 
         /// <summary>
         /// reads a sequence of bytes from the current stream and advances
@@ -67,10 +53,7 @@ namespace System.IO
         /// <returns>The total number of bytes read into the buffer. This can be less than the
         /// number of bytes requested if that many bytes are not currently available,
         /// or zero (0) if the end of the stream has been reached.</returns>
-        public override int Read(byte[] buffer, int offset, int count)
-        {
-            return Base.Read(buffer, offset, count);
-        }
+        public override int Read(byte[] buffer, int offset, int count) => Base.Read(buffer, offset, count);
 
         /// <summary>
         /// When overridden in a derived class, writes a sequence of bytes to the current
@@ -81,10 +64,7 @@ namespace System.IO
         /// <param name="offset">The zero-based byte offset in buffer at which to begin copying bytes to the
         /// current stream.</param>
         /// <param name="count">The number of bytes to be written to the current stream.</param>
-        public override void Write(byte[] buffer, int offset, int count)
-        {
-            Base.Write(buffer, offset, count);
-        }
+        public override void Write(byte[] buffer, int offset, int count) => Base.Write(buffer, offset, count);
 
         /// <summary>
         /// sets the position within the current stream.
@@ -94,26 +74,18 @@ namespace System.IO
         /// used
         /// to obtain the new position.</param>
         /// <returns>The new position within the current stream.</returns>
-        public override long Seek(long offset, System.IO.SeekOrigin origin)
-        {
-            return Base.Seek(offset, origin);
-        }
+        public override long Seek(long offset, SeekOrigin origin) => Base.Seek(offset, origin);
 
         /// <summary>
         /// Clears all buffers for this stream and causes any buffered data to be written to the underlying device.
         /// </summary>
-        public override void Flush()
-        {
-            Base.Flush();
-        }
+        public override void Flush() => Base.Flush();
 
         /// <summary>
         /// Sets the length of the current stream.
         /// </summary>
         /// <param name="value">The desired length of the current stream in bytes.</param>
-        public override void SetLength(long value)
-        {
-            Base.SetLength(value);
-        }
+        public override void SetLength(long value) => Base.SetLength(value);
+
     }
 }

@@ -44,7 +44,10 @@ namespace Photobox
 
         private ConfigLoader Config { get; set; }
 
-		readonly DispatcherTimer KeepAliveTimer = new DispatcherTimer();
+		readonly DispatcherTimer KeepAliveTimer = new DispatcherTimer()
+		{
+			Interval = TimeSpan.FromMinutes(1)
+		};
 
 		private readonly FileSystemWatcher fileSystemWatcherConfigFile = new FileSystemWatcher();
 
@@ -192,7 +195,7 @@ namespace Photobox
 		/// <param name="imagePath">the ImagePath of the Image to be shown</param>
 		private void ShowImageViewer(string imagePath)
 		{
-			string imageName= System.IO.Path.GetFileName(imagePath);
+			string imageName = Path.GetFileName(imagePath);
 
 			string TempPath = dir+"\\ShowTemp\\"+imageName;
 
@@ -250,8 +253,6 @@ namespace Photobox
             countDown = new CountDown(Config.CountDown, 1.0d, 200,
                 point, LVCanvas);
 
-            countDown.CountDownExpired += CountDown_CountDownExpired;
-
             countDown.CountDownEarly += CountDown_CountDownEarly;
         }
 
@@ -261,7 +262,6 @@ namespace Photobox
         private void InitTimer()
 		{
 			KeepAliveTimer.Tick += KeepAliveTimer_Tick;
-			KeepAliveTimer.Interval = TimeSpan.FromMinutes(1);
 			KeepAliveTimer.Start();
         }
 
@@ -335,13 +335,12 @@ namespace Photobox
 
             string DownloadDir = dir + "\\Temp\\";
 
-            string fileName = System.IO.Path.GetFileName(Info.FileName);
+            string fileName = Path.GetFileName(Info.FileName);
 			
-			string TotalPath = System.IO.Path.Combine(DownloadDir, fileName);
+			string TotalPath = Path.Combine(DownloadDir, fileName);
 
             try
 			{
-				//settings.SavePathTextBox.Dispatcher.Invoke((Action)delegate { dir = settings.SavePathTextBox.Text; });
 				sender.DownloadFile(Info, DownloadDir);
 
                 WaitForFileToUnlock(TotalPath, TimeSpan.FromSeconds(10));
@@ -363,11 +362,6 @@ namespace Photobox
             KeepAliveTimer.Start();
 
 			TakePicture();
-        }
-
-        private void CountDown_CountDownExpired()
-        {
-            //throw new NotImplementedException();
         }
 
         #endregion
