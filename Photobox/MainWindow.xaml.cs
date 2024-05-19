@@ -14,7 +14,6 @@ using EOSDigital.API;
 using EOSDigital.SDK;
 using static Photobox.PhotoBoothLib;
 using System.Windows.Threading;
-using EDSKLib.API;
 
 namespace Photobox
 {
@@ -27,11 +26,8 @@ namespace Photobox
         #region Variables
 
         readonly CanonAPI APIHandler;
-#if MockedCamera
-        ICamera MainCamera;
-#else
+
         Camera MainCamera;
-#endif
 
         List<Camera> CamList;
 
@@ -91,8 +87,6 @@ namespace Photobox
 				SetImageAction = (BitmapImage img) => { bgbrush.ImageSource = img; };
 
 				RefreshCamera();
-
-				//MainCamera ??= new MockedCamera();
 
 				MainCamera = CamList[0];
 
@@ -312,8 +306,8 @@ namespace Photobox
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="img"></param>
-		private void MainCamera_LiveViewUpdated(ICamera sender, Stream img)
-		{
+		private void MainCamera_LiveViewUpdated(Camera sender, Stream img)
+		{	
 			try
 			{
                 using WrapStream s = new WrapStream(img);
@@ -369,7 +363,7 @@ namespace Photobox
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="Info"></param>
-		private void MainCamera_DownloadReady(ICamera sender, DownloadInfo Info)
+		private void MainCamera_DownloadReady(Camera sender, DownloadInfo Info)
 		{
             MainCamera.DownloadReady -= MainCamera_DownloadReady;
 

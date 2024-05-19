@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using EDSKLib.API;
 using EOSDigital.SDK;
 
 namespace EOSDigital.API
@@ -16,13 +15,13 @@ namespace EOSDigital.API
     /// </summary>
     /// <param name="sender">The sender of this event</param>
     /// <param name="img">An image embedded in a stream</param>
-    public delegate void LiveViewUpdate(ICamera sender, Stream img);
+    public delegate void LiveViewUpdate(Camera sender, Stream img);
     /// <summary>
     /// A delegate to report an available download
     /// </summary>
     /// <param name="sender">The sender of this event</param>
     /// <param name="Info">The data for the download</param>
-    public delegate void DownloadHandler(ICamera sender, DownloadInfo Info);
+    public delegate void DownloadHandler(Camera sender, DownloadInfo Info);
     /// <summary>
     /// A delegate for property changes
     /// </summary>
