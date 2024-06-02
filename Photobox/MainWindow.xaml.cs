@@ -1,5 +1,4 @@
-﻿#define Dev
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -11,6 +10,7 @@ using EOSDigital.API;
 using EOSDigital.SDK;
 using static Photobox.PhotoBoothLib;
 using System.Windows.Threading;
+using System.Runtime.ExceptionServices;
 
 namespace Photobox
 {
@@ -300,17 +300,31 @@ namespace Photobox
                 EvfImage.CacheOption = BitmapCacheOption.OnLoad;
                 EvfImage.EndInit();
                 EvfImage.Freeze();
-
+				//Save(EvfImage, "C:\\Users\\Robin\\Documents\\EvfImage.png");
                 Application.Current.Dispatcher.BeginInvoke(SetImageAction, EvfImage);
             }
 			catch (Exception ex) { ReportError(ex.Message); }
 		}
 
+		static bool first = true;
+        public static void Save(BitmapImage image, string filePath)
+        {
+			if (!first) return;
+			first = false;
+            BitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(image));
+
+            using (var fileStream = new System.IO.FileStream(filePath, System.IO.FileMode.Create))
+            {
+                encoder.Save(fileStream);
+            }
+        }
+
 
         #endregion
 
         #region EventListeners
-		private void KeepAliveTimer_Tick(object sender, EventArgs e)
+        private void KeepAliveTimer_Tick(object sender, EventArgs e)
 		{
 			if (secondTick)
             {

@@ -454,10 +454,10 @@ namespace EOSDigital.API
         /// <exception cref="ObjectDisposedException">Camera is disposed</exception>
         /// <exception cref="CameraSessionException">Session is closed</exception>
         /// <exception cref="SDKStateException">Canon SDK is not initialized</exception>
-        public void TakePhotoAsync()
+        public async Task TakePhotoAsync()
         {
             CheckState();
-            ThreadPool.QueueUserWorkItem((state) =>
+            await Task.Run(() =>
             {
                 try { SendCommand(CameraCommand.TakePicture); }
                 catch (Exception ex) { if (!ErrorHandler.ReportError(this, ex)) throw; }
@@ -486,10 +486,10 @@ namespace EOSDigital.API
         /// <exception cref="ObjectDisposedException">Camera is disposed</exception>
         /// <exception cref="CameraSessionException">Session is closed</exception>
         /// <exception cref="SDKStateException">Canon SDK is not initialized</exception>
-        public void TakePhotoShutterAsync()
+        public async Task TakePhotoShutterAsync()
         {
             CheckState();
-            ThreadPool.QueueUserWorkItem((state) =>
+            await Task.Run(() =>
             {
                 try
                 {
@@ -511,12 +511,14 @@ namespace EOSDigital.API
         /// <exception cref="ObjectDisposedException">Camera is disposed</exception>
         /// <exception cref="CameraSessionException">Session is closed</exception>
         /// <exception cref="SDKStateException">Canon SDK is not initialized</exception>
-        public void TakePhotoBulb(int bulbTime)
+        public void TakePhotoBulb(TimeSpan bulbTime)
         {
             CheckState();
 
             SendCommand(CameraCommand.BulbStart);
-            Thread.Sleep(bulbTime);
+
+            Task.Delay(bulbTime).Wait();
+
             SendCommand(CameraCommand.BulbEnd);
         }
 
@@ -528,20 +530,17 @@ namespace EOSDigital.API
         /// <exception cref="ObjectDisposedException">Camera is disposed</exception>
         /// <exception cref="CameraSessionException">Session is closed</exception>
         /// <exception cref="SDKStateException">Canon SDK is not initialized</exception>
-        public void TakePhotoBulbAsync(int bulbTime)
+        public async Task TakePhotoBulbAsync(TimeSpan bulbTime)
         {
             CheckState();
 
-            ThreadPool.QueueUserWorkItem((state) =>
+            try
             {
-                try
-                {
-                    SendCommand(CameraCommand.BulbStart);
-                    Thread.Sleep(bulbTime);
-                    SendCommand(CameraCommand.BulbEnd);
-                }
-                catch (Exception ex) { if (!ErrorHandler.ReportError(this, ex)) throw; }
-            });
+                SendCommand(CameraCommand.BulbStart);
+                await Task.Delay(bulbTime);
+                SendCommand(CameraCommand.BulbEnd);
+            }
+            catch (Exception ex) { if (!ErrorHandler.ReportError(this, ex)) throw; }
         }
 
         #endregion
