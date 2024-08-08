@@ -1,28 +1,44 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Photobox.Lib.Camera;
+using Photobox.Lib.IPC;
 
 namespace Photobox.LocalServer.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class CameraController(ICamera camera) : Controller
+[Route("api/[controller]/[action]")]
+public class CameraController(ICamera camera, IIPCServer ipcServer) : ControllerBase
 {
     private readonly ICamera camera = camera;
 
-    public async Task<IActionResult> StartCameraStream()
+    private readonly IIPCServer ipcServer = ipcServer;
+
+    private static bool isStreamStarted = false;
+
+    [HttpGet]
+    public async Task<IActionResult> Start()
     {
-        await camera.ConnectAsync();
+        if (!isStreamStarted)
+        {
+            await camera.ConnectAsync();
+            await ipcServer.ConnectAsync();
 
-        _ = camera.StartStreamAsync();
+            camera.CameraStream += async (s, i) => await ipcServer.SendAsync(i);
 
-        return Ok();
+            _ = camera.StartStreamAsync();
+            isStreamStarted = true;
+        }
+        return Ok("Camera stream started.");
     }
 
-    public async Task<IActionResult> StopCameraStream()
+    [HttpGet]
+    public async Task<IActionResult> Stop()
     {
-        await camera.StopStreamAsync();
-
-        return Ok();
+        if (isStreamStarted)
+        {
+            ipcServer.Disconnect();
+            await camera.StopStreamAsync();
+            isStreamStarted = false;
+        }
+        return Ok("Camera stream stopped.");
     }
-
 }

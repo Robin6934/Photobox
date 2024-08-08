@@ -1,0 +1,11 @@
+﻿// This file is used by Code Analysis to maintain SuppressMessage
+// attributes that are applied to this project.
+// Project-level suppressions either have no target or are given
+// a specific target and scoped to a namespace, type, member, etc.
+
+using System.Diagnostics.CodeAnalysis;
+
+[assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "The code will only be used on a windows device", Scope = "member", Target = "~M:Photobox.Lib.IPC.IPCNamedPipeServer.BitmapToBytes(System.Drawing.Bitmap)~System.Byte[]")]
+[assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "The code will only be used on a windows device", Scope = "member", Target = "~M:Photobox.Lib.IPC.IPCNamedPipeServer.ConnectAsync~System.Threading.Tasks.Task")]
+[assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "The code will only be used on a windows device", Scope = "member", Target = "~M:Photobox.Lib.IPC.IPCNamedPipeClient.StartStreamAsync~System.Threading.Tasks.Task")]
+[assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "The code will only be used on a windows device", Scope = "member", Target = "~M:Photobox.Lib.IPC.IPCNamedPipeServer.SendAsync(System.Drawing.Bitmap)~System.Threading.Tasks.Task")]

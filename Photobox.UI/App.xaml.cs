@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Photobox.Lib.Camera;
+using Photobox.Lib.IPC;
 using System.Windows;
 
 namespace Photobox.UI;
@@ -11,21 +12,22 @@ namespace Photobox.UI;
 /// </summary>
 public partial class App : Application
 {
-    private IHost _host = default!;
+    private IHost host = default!;
 
     protected override async void OnStartup(StartupEventArgs e)
     {
-        _host = CreateHostBuilder(e.Args).Build();
-        await _host.StartAsync();
+        host = CreateHostBuilder(e.Args).Build();
+        await host.StartAsync();
 
-        var mainWindow = _host.Services.GetRequiredService<MainWindow>();
+        var mainWindow = host.Services.GetRequiredService<MainWindow>();
+        await mainWindow.Start();
         mainWindow.Show();
     }
 
     protected override async void OnExit(ExitEventArgs e)
     {
-        await _host.StopAsync();
-        _host.Dispose();
+        await host.StopAsync();
+        host.Dispose();
         base.OnExit(e);
     }
 
@@ -35,7 +37,7 @@ public partial class App : Application
             .ConfigureServices((context, services) =>
             {
                 services.AddTransient<MainWindow>();
-                services.AddSingleton<ICamera, WebCam>();
+                services.AddSingleton<ICamera, IPCNamedPipeClient>();
             })
             .ConfigureContainer<ContainerBuilder>(builder =>
             {

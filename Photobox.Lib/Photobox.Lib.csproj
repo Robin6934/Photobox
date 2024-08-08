@@ -20,8 +20,4 @@
     <ProjectReference Include="..\EDSKLib\EDSKLib.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="IPC\" />
-  </ItemGroup>
-
 </Project>

@@ -10,6 +10,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photobox.Lib", "Photobox.Li
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photobox.UI", "Photobox.UI\Photobox.UI.csproj", "{97D3A4FA-57C9-459F-A6A0-F2C643EA07F5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{34F3B384-AE56-46FA-8FE8-217A04220760}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {28BFBBEE-8CC8-4CC4-8467-A74581C53028}

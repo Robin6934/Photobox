@@ -1,4 +1,5 @@
 using Photobox.Lib.Camera;
+using Photobox.Lib.IPC;
 
 namespace Photobox.LocalServer;
 
@@ -16,6 +17,7 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddSingleton<ICamera, WebCam>();
+        builder.Services.AddSingleton<IIPCServer, IPCNamedPipeServer>();
 
         var app = builder.Build();
 
