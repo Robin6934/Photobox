@@ -11,6 +11,6 @@ public interface ICamera : IDisposable
     Task StartStreamAsync();
     Task StopStreamAsync();
     Task FocusAsync();
-    Task TakePictureAsync();
+    Task<string> TakePictureAsync();
     Task DisconnectAsync();
 }

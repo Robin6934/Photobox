@@ -23,4 +23,8 @@
     <ProjectReference Include="..\Photobox.Lib\Photobox.Lib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+
 </Project>

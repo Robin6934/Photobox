@@ -1,7 +1,9 @@
 ﻿using Photobox.Lib.Camera;
+using Photobox.Lib.Models;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO.Pipes;
+using System.Net.Http.Json;
 
 namespace Photobox.Lib.IPC
 {
@@ -120,9 +122,13 @@ namespace Photobox.Lib.IPC
             await Task.Delay(1000);
         }
 
-        public override async Task TakePictureAsync()
+        public override async Task<string> TakePictureAsync()
         {
+            var result = await httpClient.GetAsync("api/Camera/TakePicture");
+            var resultModel = await result.Content
+                .ReadFromJsonAsync<TakePictureResultModel>();
 
+            return resultModel.ImagePath;
         }
 
         public override void Dispose()

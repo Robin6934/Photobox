@@ -50,14 +50,19 @@ public class WebCam : CameraBase
         return Task.Run(cancellationTokenSource.Cancel);
     }
 
-    public override Task TakePictureAsync()
+    public override async Task<string> TakePictureAsync()
     {
-        return Task.Run(() =>
+        string imagePath = Folders.NewImagePath;
+
+        await Task.Run(() =>
         {
             using Mat frame = new();
             capture.Read(frame);
+            frame.Save(imagePath);
             OnPictureTaken(frame.ToBitmap());
         });
+
+        return imagePath;
     }
 
     public override Task FocusAsync()

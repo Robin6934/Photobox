@@ -36,7 +36,7 @@ public abstract class CameraBase : ICamera
 
     public abstract Task FocusAsync();
 
-    public abstract Task TakePictureAsync();
+    public abstract Task<string> TakePictureAsync();
 
     public abstract Task DisconnectAsync();
 
