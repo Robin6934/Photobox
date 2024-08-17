@@ -1,7 +1,6 @@
 using Photobox.Lib.Camera;
 using Photobox.Lib.IPC;
 using Serilog;
-using Serilog.Events;
 
 namespace Photobox.LocalServer;
 

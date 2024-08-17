@@ -13,18 +13,16 @@ public class WebCam : CameraBase
         {
             capture = new VideoCapture();
             capture.Set(Emgu.CV.CvEnum.CapProp.FrameWidth, 1080);
-            capture.Set(Emgu.CV.CvEnum.CapProp.FrameHeight, 702);
+            capture.Set(Emgu.CV.CvEnum.CapProp.FrameHeight, 720);
             capture.Set(Emgu.CV.CvEnum.CapProp.Fps, 60);
         });
     }
 
-    public override Task DisconnectAsync()
+    public override async Task DisconnectAsync()
     {
-        return Task.Run(() =>
-        {
-            capture.Dispose();
-            capture = null!;
-        });
+        capture.Dispose();
+        capture = null!;
+        await Task.CompletedTask;
     }
 
     public override void Dispose()

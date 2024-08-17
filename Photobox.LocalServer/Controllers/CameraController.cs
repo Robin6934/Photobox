@@ -2,7 +2,6 @@
 using Photobox.Lib;
 using Photobox.Lib.Camera;
 using Photobox.Lib.IPC;
-using Serilog;
 
 namespace Photobox.LocalServer.Controllers;
 
@@ -51,9 +50,9 @@ public class CameraController(ICamera camera, IIPCServer ipcServer, ILogger<Came
     {
         string imagePath = await camera.TakePictureAsync();
 
-        var result = new TakePictureResultModel 
+        var result = new TakePictureResultModel
         {
-            ImagePath = imagePath 
+            ImagePath = imagePath
         };
 
         return result;

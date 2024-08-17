@@ -8,13 +8,8 @@
  */
 
 
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net;
-using System.Net.Mime;
 using Photobox.LocalServer.RestApi.Client;
+using System;
 
 namespace Photobox.LocalServer.RestApi.Api
 {
