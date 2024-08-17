@@ -16,7 +16,12 @@ public partial class MainWindow : Window
 
         camera = cam;
 
-        camera.CameraStream += Camera_CameraStream;
+        camera.CameraStream += (o, i) => {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                GridLiveView.Background = new ImageBrush(i.ToBitmapSource());
+            });
+        };
     }
 
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -39,14 +44,6 @@ public partial class MainWindow : Window
     {
         await camera.ConnectAsync();
         _ = camera.StartStreamAsync();
-    }
-
-    private void Camera_CameraStream(object sender, Bitmap img)
-    {
-        Application.Current.Dispatcher.Invoke(() =>
-        {
-            GridLiveView.Background = new ImageBrush(img.ToBitmapSource());
-        });
     }
 
     private async void TakePictureButton_Click(object sender, RoutedEventArgs e)
