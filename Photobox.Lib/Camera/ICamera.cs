@@ -4,8 +4,6 @@ public interface ICamera : IDisposable
 {
     event NewImageHandler CameraStream;
 
-    event NewImageHandler PictureTaken;
-
     Task ResilientConnectAsync();
     Task ConnectAsync();
     Task StartStreamAsync();
