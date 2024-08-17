@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Photobox.UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1000" Width="1600"
+        Title="MainWindow" Height="1080" Width="1920"
         SizeChanged="MainWindow_SizeChanged"
         Loaded="MainWindow_Loaded"
         Closing="MainWindow_Closing">
