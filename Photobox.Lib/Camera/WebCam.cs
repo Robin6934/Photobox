@@ -12,8 +12,8 @@ public class WebCam : CameraBase
         return Task.Run(() =>
         {
             capture = new VideoCapture();
-            capture.Set(Emgu.CV.CvEnum.CapProp.FrameWidth, 1920);
-            capture.Set(Emgu.CV.CvEnum.CapProp.FrameHeight, 1080);
+            capture.Set(Emgu.CV.CvEnum.CapProp.FrameWidth, 1080);
+            capture.Set(Emgu.CV.CvEnum.CapProp.FrameHeight, 702);
             capture.Set(Emgu.CV.CvEnum.CapProp.Fps, 60);
         });
     }
@@ -59,7 +59,6 @@ public class WebCam : CameraBase
             using Mat frame = new();
             capture.Read(frame);
             frame.Save(imagePath);
-            OnPictureTaken(frame.ToBitmap());
         });
 
         return imagePath;

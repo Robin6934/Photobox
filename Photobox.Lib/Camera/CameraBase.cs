@@ -11,8 +11,6 @@ public abstract class CameraBase : ICamera
 {
     public event NewImageHandler CameraStream = default!;
 
-    public event NewImageHandler PictureTaken = default!;
-
     private readonly ResiliencePipeline pipeline = new ResiliencePipelineBuilder()
         .AddTimeout(new TimeoutStrategyOptions
         {
@@ -43,11 +41,6 @@ public abstract class CameraBase : ICamera
     protected virtual void OnNewStreamImage(Bitmap img)
     {
         CameraStream?.Invoke(this, img);
-    }
-
-    protected virtual void OnPictureTaken(Bitmap img)
-    {
-        PictureTaken?.Invoke(this, img);
     }
 
     public abstract void Dispose();
