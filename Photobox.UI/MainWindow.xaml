@@ -38,13 +38,13 @@
         <Grid x:Name="mainGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.IsSharedSizeScope="True">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition SharedSizeGroup="Column" Width="{Binding ActualWidth, ElementName=GridLiveView, Converter={StaticResource DivideByThreeConverter}}"/>
+                <ColumnDefinition x:Name="GridColumn" SharedSizeGroup="Column" Width="{Binding ActualWidth, ElementName=GridLiveView, Converter={StaticResource DivideByThreeConverter}}"/>
                 <ColumnDefinition SharedSizeGroup="Column"/>
                 <ColumnDefinition SharedSizeGroup="Column"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition SharedSizeGroup="Row" Height="{Binding ActualHeight, ElementName=GridLiveView, Converter={StaticResource DivideByThreeConverter}}"/>
+                <RowDefinition x:Name="GridRow" SharedSizeGroup="Row" Height="{Binding ActualHeight, ElementName=GridLiveView, Converter={StaticResource DivideByThreeConverter}}"/>
                 <RowDefinition SharedSizeGroup="Row"/>
                 <RowDefinition SharedSizeGroup="Row"/>
             </Grid.RowDefinitions>
