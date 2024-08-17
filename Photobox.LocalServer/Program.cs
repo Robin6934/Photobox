@@ -9,11 +9,10 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        // Configure Serilog
         Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-            .Enrich.FromLogContext()
             .WriteTo.Console()
-            .CreateBootstrapLogger();
+            .CreateLogger();
 
         var builder = WebApplication.CreateBuilder(args);
 
@@ -26,11 +25,7 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        builder.Services.AddSerilog((services, lc) => lc
-            .ReadFrom.Configuration(builder.Configuration)
-            .ReadFrom.Services(services)
-            .Enrich.FromLogContext()
-            .WriteTo.Console());
+        builder.Host.UseSerilog();
 
         builder.Services.AddSingleton<ICamera, WebCam>();
         builder.Services.AddSingleton<IIPCServer, IPCNamedPipeServer>();
@@ -44,6 +39,7 @@ public class Program
             app.UseOpenApi();
             app.UseSwaggerUI();
         }
+        app.UseSerilogRequestLogging(); // Log HTTP requests
 
         app.UseHttpsRedirection();
 

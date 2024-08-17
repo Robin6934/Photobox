@@ -5,10 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Photobox.UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1000" Width="1600">
+        Title="MainWindow" Height="1000" Width="1600"
+        SizeChanged="MainWindow_SizeChanged"
+        Loaded="MainWindow_Loaded"
+        Closing="MainWindow_Closing">
 
     <Window.Resources>
-        <local:SplitValueIn3 x:Key="SplitValueIn3" />
+        <local:DivideByThreeConverter x:Key="DivideByThreeConverter"/>
+        
         <Style x:Key="TransparentButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="AliceBlue"/>
@@ -30,35 +34,42 @@
         </Style>
     </Window.Resources>
 
+    <Grid x:Name="GridLiveView" Background="LightGray">
+        <Grid x:Name="mainGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.IsSharedSizeScope="True">
 
-
-    <Canvas x:Name="CanvasLiveView" Margin="0,0,0,0" Background="LightGray"  RenderTransformOrigin="0.5,0.5">
-        <Canvas.RenderTransform>
-            <ScaleTransform ScaleX="-1" />
-        </Canvas.RenderTransform>
-
-        <Grid x:Name="mainGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Width="Auto" RenderTransformOrigin="0.5,0.5">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="{Binding ActualHeight, ElementName=LVCanvas, Converter={StaticResource SplitValueIn3}}"/>
-                <RowDefinition Height="{Binding ActualHeight, ElementName=LVCanvas, Converter={StaticResource SplitValueIn3}}"/>
-                <RowDefinition Height="{Binding ActualHeight, ElementName=LVCanvas, Converter={StaticResource SplitValueIn3}}"/>
-
-            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{Binding ActualWidth, ElementName=LVCanvas, Converter={StaticResource SplitValueIn3}}"/>
-                <ColumnDefinition Width="{Binding ActualWidth, ElementName=LVCanvas, Converter={StaticResource SplitValueIn3}}"/>
-                <ColumnDefinition Width="{Binding ActualWidth, ElementName=LVCanvas, Converter={StaticResource SplitValueIn3}}"/>
+                <ColumnDefinition SharedSizeGroup="Column" Width="{Binding ActualWidth, ElementName=GridLiveView, Converter={StaticResource DivideByThreeConverter}}"/>
+                <ColumnDefinition SharedSizeGroup="Column"/>
+                <ColumnDefinition SharedSizeGroup="Column"/>
             </Grid.ColumnDefinitions>
-            <Grid.RenderTransform>
-                <ScaleTransform ScaleX="-1" />
-            </Grid.RenderTransform>
+
+            <Grid.RowDefinitions>
+                <RowDefinition SharedSizeGroup="Row" Height="{Binding ActualHeight, ElementName=GridLiveView, Converter={StaticResource DivideByThreeConverter}}"/>
+                <RowDefinition SharedSizeGroup="Row"/>
+                <RowDefinition SharedSizeGroup="Row"/>
+            </Grid.RowDefinitions>
+
+            <!--<TextBlock Text="Row 0, Col 0" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="Row 0, Col 1" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="Row 0, Col 2" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+            <TextBlock Text="Row 1, Col 0" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="Row 1, Col 1" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="Row 1, Col 2" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+            <TextBlock Text="Row 2, Col 0" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="Row 2, Col 1" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="Row 2, Col 2" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
+            
             <Border x:Name="BorderText" Background="#80808080" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
                 <TextBlock Text="Bildschirm berühren" FontSize="60" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Border>
         </Grid>
-        <Button x:Name="TakePictureButton" Style="{StaticResource TransparentButtonStyle}" Height="1200" Width="2000" Background="Transparent" Click="TakePictureButton_Click" Canvas.Left="-200" Canvas.Top="-108" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <Button x:Name="TakePictureButton" Style="{StaticResource TransparentButtonStyle}" 
+                Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}" Background="Transparent" 
+                Click="TakePictureButton_Click" 
+                HorizontalAlignment="Center" VerticalAlignment="Top"
+                Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}"/>
 
-    </Canvas>
-
-
+    </Grid>
 </Window>

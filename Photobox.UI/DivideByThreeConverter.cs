@@ -3,21 +3,19 @@ using System.Windows.Data;
 
 namespace Photobox.UI;
 
-public class SplitValueIn3 : IValueConverter
+public class DivideByThreeConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is double canvasWidth)
+        if (value is double doubleValue)
         {
-            // Calculate half of the width as row height
-            return canvasWidth / 3;
+            return doubleValue / 3;
         }
-
-        return value; // Return the original value if it's not a valid width
+        return 0;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        return default!;
+        throw new NotImplementedException();
     }
 }

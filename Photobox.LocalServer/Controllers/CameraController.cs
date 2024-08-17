@@ -2,7 +2,7 @@
 using Photobox.Lib;
 using Photobox.Lib.Camera;
 using Photobox.Lib.IPC;
-using Photobox.Lib.Models;
+using Serilog;
 
 namespace Photobox.LocalServer.Controllers;
 
@@ -24,7 +24,7 @@ public class CameraController(ICamera camera, IIPCServer ipcServer, ILogger<Came
         if (!isStreamStarted)
         {
             await camera.ConnectAsync();
-            await ipcServer.ConnectAsync();
+            ipcServer.ConnectAsync();
 
             camera.CameraStream += async (s, i) => await ipcServer.SendAsync(i);
 
@@ -47,7 +47,7 @@ public class CameraController(ICamera camera, IIPCServer ipcServer, ILogger<Came
     }
 
     [HttpGet]
-    public async Task<IActionResult> TakePicture()
+    public async Task<TakePictureResultModel> TakePicture()
     {
         string imagePath = await camera.TakePictureAsync();
 
@@ -56,7 +56,7 @@ public class CameraController(ICamera camera, IIPCServer ipcServer, ILogger<Came
             ImagePath = imagePath 
         };
 
-        return Ok(result);
+        return result;
     }
 
 
