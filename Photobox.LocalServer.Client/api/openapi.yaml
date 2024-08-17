@@ -1,0 +1,57 @@
+openapi: 3.0.1
+info:
+  title: Photobox.LocalServer
+  version: "1.0"
+servers:
+- url: /
+paths:
+  /api/Application/ShutDown:
+    get:
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Application
+  /api/Camera/Start:
+    get:
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Camera
+  /api/Camera/Stop:
+    get:
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Camera
+  /api/Camera/TakePicture:
+    get:
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/TakePictureResultModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TakePictureResultModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TakePictureResultModel'
+          description: OK
+      tags:
+      - Camera
+components:
+  schemas:
+    TakePictureResultModel:
+      additionalProperties: false
+      example:
+        imagePath: imagePath
+      properties:
+        imagePath:
+          nullable: true
+          type: string
+      type: object
+

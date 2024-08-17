@@ -15,6 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photobox.LocalServer.RestApi.Test", "Photobox.LocalServer.Client\src\Photobox.LocalServer.RestApi.Test\Photobox.LocalServer.RestApi.Test.csproj", "{72B046D0-2008-469F-9D73-8F4D5B9052A7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photobox.LocalServer.RestApi", "Photobox.LocalServer.Client\src\Photobox.LocalServer.RestApi\Photobox.LocalServer.RestApi.csproj", "{FC4AFD9E-B31A-4B21-BB1D-39BA5D69382B}"
+EndProject
 Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {28BFBBEE-8CC8-4CC4-8467-A74581C53028}
@@ -28,6 +32,10 @@ Global
 		{31B2E18F-8E5E-46ED-A600-7C2D96C8FE40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31B2E18F-8E5E-46ED-A600-7C2D96C8FE40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31B2E18F-8E5E-46ED-A600-7C2D96C8FE40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72B046D0-2008-469F-9D73-8F4D5B9052A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72B046D0-2008-469F-9D73-8F4D5B9052A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72B046D0-2008-469F-9D73-8F4D5B9052A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72B046D0-2008-469F-9D73-8F4D5B9052A7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{97D3A4FA-57C9-459F-A6A0-F2C643EA07F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{97D3A4FA-57C9-459F-A6A0-F2C643EA07F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97D3A4FA-57C9-459F-A6A0-F2C643EA07F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -36,6 +44,10 @@ Global
 		{99033AE3-808A-405B-95BA-BF0D615203EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99033AE3-808A-405B-95BA-BF0D615203EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99033AE3-808A-405B-95BA-BF0D615203EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC4AFD9E-B31A-4B21-BB1D-39BA5D69382B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC4AFD9E-B31A-4B21-BB1D-39BA5D69382B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC4AFD9E-B31A-4B21-BB1D-39BA5D69382B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC4AFD9E-B31A-4B21-BB1D-39BA5D69382B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

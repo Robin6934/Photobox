@@ -23,7 +23,7 @@ namespace Photobox.Lib
     using System = global::System;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class Client 
+    public partial class PhotoboxClient 
     {
         #pragma warning disable 8618
         private string _baseUrl;
@@ -34,7 +34,7 @@ namespace Photobox.Lib
         private System.Text.Json.JsonSerializerOptions _instanceSettings;
 
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public Client(string baseUrl, System.Net.Http.HttpClient httpClient)
+        public PhotoboxClient(string baseUrl, System.Net.Http.HttpClient httpClient)
     #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             BaseUrl = baseUrl;
@@ -288,7 +288,7 @@ namespace Photobox.Lib
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task TakePictureAsync()
+        public virtual System.Threading.Tasks.Task<TakePictureResultModel> TakePictureAsync()
         {
             return TakePictureAsync(System.Threading.CancellationToken.None);
         }
@@ -296,7 +296,7 @@ namespace Photobox.Lib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task TakePictureAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<TakePictureResultModel> TakePictureAsync(System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -305,6 +305,7 @@ namespace Photobox.Lib
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
                     request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
@@ -336,7 +337,12 @@ namespace Photobox.Lib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return;
+                            var objectResponse_ = await ReadObjectResponseAsync<TakePictureResultModel>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -467,7 +473,14 @@ namespace Photobox.Lib
         }
     }
 
-    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial record TakePictureResultModel
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("imagePath")]
+        public string ImagePath { get; set; }
+
+    }
 
 
 

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 
 namespace Photobox.UI;
@@ -17,9 +18,12 @@ public partial class MainWindow : Window
 
         camera = cam;
 
-        camera.CameraStream += Camera_CameraStream;
-        Closing += MainWindow_Closing;
-        SizeChanged += MainWindow_SizeChanged;
+        camera.CameraStream += Camera_CameraStream;       
+    }
+
+    private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+        SetCanvasSize();
     }
 
     private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -43,7 +47,7 @@ public partial class MainWindow : Window
     {
         Application.Current.Dispatcher.Invoke(() =>
         {
-            CanvasLiveView.Background = new ImageBrush(img.ToBitmapSource());
+            GridLiveView.Background = new ImageBrush(img.ToBitmapSource());
         });
     }
 
@@ -58,12 +62,15 @@ public partial class MainWindow : Window
     private void SetCanvasSize()
     {
         // Calculate the desired canvas size based on the window's height
-        double windowHeight = this.ActualHeight;
+        double windowHeight = ActualHeight;
         double canvasHeight = windowHeight;
         double canvasWidth = (canvasHeight / 2) * 3; // 3:2 aspect ratio
 
         // Set the canvas size
-        CanvasLiveView.Width = canvasWidth;
-        CanvasLiveView.Height = canvasHeight;
+        GridLiveView.Width = canvasWidth;
+        GridLiveView.Height = canvasHeight;
+
+        GridColumn.Width = new GridLength(ActualWidth / 3);
+        GridRow.Height = new GridLength(ActualHeight / 3);
     }
 }
