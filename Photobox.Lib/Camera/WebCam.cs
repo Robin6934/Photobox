@@ -62,11 +62,8 @@ public class WebCam : CameraBase
         return imagePath;
     }
 
-    public override Task FocusAsync()
+    public override async Task FocusAsync()
     {
-        return Task.Run(() =>
-        {
-            throw new NotImplementedException();
-        });
+        await Task.CompletedTask;
     }
 }
