@@ -8,17 +8,10 @@
  */
 
 
-using Xunit;
-
-using System;
-using System.Linq;
-using System.IO;
-using System.Collections.Generic;
-using Photobox.LocalServer.RestApi.Model;
-using Photobox.LocalServer.RestApi.Client;
-using System.Reflection;
-using Newtonsoft.Json;
 using FluentAssertions;
+using Photobox.LocalServer.RestApi.Model;
+using System;
+using Xunit;
 
 namespace Photobox.LocalServer.RestApi.Test.Model
 {

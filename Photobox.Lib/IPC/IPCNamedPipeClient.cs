@@ -1,12 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using Photobox.Lib.Camera;
+using Photobox.LocalServer.RestApi.Api;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO.Pipes;
-using System.Net.Http.Json;
-using System.Runtime.Serialization;
-using Photobox.LocalServer.RestApi.Client;
-using Photobox.LocalServer.RestApi.Api;
 
 namespace Photobox.Lib.IPC
 {

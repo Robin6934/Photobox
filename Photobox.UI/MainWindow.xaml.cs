@@ -3,8 +3,6 @@ using Photobox.WpfHelpers;
 using System.Drawing;
 using System.Net.Http;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Media;
 
 namespace Photobox.UI;
@@ -18,7 +16,7 @@ public partial class MainWindow : Window
 
         camera = cam;
 
-        camera.CameraStream += Camera_CameraStream;       
+        camera.CameraStream += Camera_CameraStream;
     }
 
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
