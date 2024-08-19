@@ -38,6 +38,7 @@ public partial class App : Application
             {
                 services.AddTransient<MainWindow>();
                 services.AddSingleton<ICamera, IPCNamedPipeClient>();
+                services.AddSingleton<IImageViewer, ImageViewWindow>();
             })
             .ConfigureContainer<ContainerBuilder>(builder =>
             {

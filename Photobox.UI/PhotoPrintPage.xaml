@@ -1,0 +1,70 @@
+﻿<Window x:Class="Photobox.ImageViewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Photobox"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="PhotoPrintPage" Height="1080" Width="1920"
+        WindowStyle="None"
+        WindowState="Maximized"
+        SizeChanged="PhotoPrintPage_SizeChanged"
+        Loaded="MainCanvas_Loaded"
+        Closing="PhotoPrintPage_Closing">
+
+    <Window.Resources>
+        <System:Double x:Key="ButtonWidth">180</System:Double>
+    </Window.Resources>
+
+    <Grid x:Name="MainCanvas">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30*" />
+            <ColumnDefinition Width="15*" />
+            <ColumnDefinition Width="15*" />
+            <ColumnDefinition Width="15*" />
+            <ColumnDefinition Width="30*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <Image x:Name="ImageViewer" Stretch="UniformToFill" 
+           Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" 
+           Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Grid}}"
+           Grid.ColumnSpan="5"
+           Grid.RowSpan="2"/>
+
+        <Border x:Name="BorderSave" 
+                Width="{StaticResource ButtonWidth}" Height="{StaticResource ButtonWidth}" 
+                MouseLeftButtonDown="BorderSave_MouseLeftButtonDown" 
+                Background="Gray" 
+                CornerRadius="1000" 
+                Grid.Row="2" Grid.Column="1">
+            
+            <TextBlock Text="Save" FontSize="60" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+
+        <Border x:Name="BorderPrint" 
+                Width="{StaticResource ButtonWidth}" Height="{StaticResource ButtonWidth}" 
+                MouseLeftButtonDown="BorderPrint_MouseLeftButtonDown" 
+                Background="Gray" 
+                CornerRadius="1000" 
+                Grid.Row="2" Grid.Column="2">
+
+            <TextBlock Text="Print" FontSize="60" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+
+        <Border x:Name="BorderDelete" 
+                Width="{StaticResource ButtonWidth}" Height="{StaticResource ButtonWidth}" 
+                MouseLeftButtonDown="BorderDelete_MouseLeftButtonDown" 
+                Background="Gray" 
+                CornerRadius="1000" 
+                Grid.Row="2" Grid.Column="3">
+
+            <TextBlock Text="Delete" FontSize="60" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+    </Grid>
+</Window>
