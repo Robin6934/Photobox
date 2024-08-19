@@ -1,6 +1,5 @@
 ﻿using Photobox.Lib.Camera;
 using Photobox.WpfHelpers;
-using System.Drawing;
 using System.Net.Http;
 using System.Windows;
 using System.Windows.Media;
@@ -10,13 +9,18 @@ public partial class MainWindow : Window
 {
     private readonly ICamera camera;
 
-    public MainWindow(ICamera cam)
+    private readonly IImageViewer imageViewer;
+
+    public MainWindow(ICamera cam, IImageViewer viewer)
     {
         InitializeComponent();
 
         camera = cam;
 
-        camera.CameraStream += (o, i) => {
+        imageViewer = viewer;
+
+        camera.CameraStream += (o, i) =>
+        {
             Application.Current.Dispatcher.Invoke(() =>
             {
                 GridLiveView.Background = new ImageBrush(i.ToBitmapSource());
@@ -48,7 +52,9 @@ public partial class MainWindow : Window
 
     private async void TakePictureButton_Click(object sender, RoutedEventArgs e)
     {
-        await camera.TakePictureAsync();
+        string imagePath = await camera.TakePictureAsync();
+
+        await imageViewer.ShowImage(imagePath);
     }
 
     /// <summary>
@@ -61,11 +67,19 @@ public partial class MainWindow : Window
         double canvasHeight = windowHeight;
         double canvasWidth = (canvasHeight / 2) * 3; // 3:2 aspect ratio
 
+        // If the calculated canvas width exceeds the window's width, adjust the size
+        if (canvasWidth > ActualWidth)
+        {
+            // Recalculate canvas height based on the actual window width while maintaining the 3:2 aspect ratio
+            canvasWidth = ActualWidth;
+            canvasHeight = (canvasWidth / 3) * 2;
+        }
+
         // Set the canvas size
         GridLiveView.Width = canvasWidth;
         GridLiveView.Height = canvasHeight;
 
-        GridColumn.Width = new GridLength(ActualWidth / 3);
-        GridRow.Height = new GridLength(ActualHeight / 3);
+        GridColumn.Width = new GridLength(ActualWidth / 3.0);
+        GridRow.Height = new GridLength(ActualHeight / 3.0);
     }
 }
