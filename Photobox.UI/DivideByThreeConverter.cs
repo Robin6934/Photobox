@@ -7,15 +7,16 @@ public class DivideByThreeConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
+        double ret = default;
         if (value is double doubleValue)
         {
-            return doubleValue / 3;
+            ret = doubleValue / 3;
         }
-        return 0;
+        return ret;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        throw new NotImplementedException();
+        return default!;
     }
 }
