@@ -13,7 +13,7 @@ public static partial class BitmapToBitmapSource
         System.Drawing.Imaging.ImageLockMode.ReadOnly, source.PixelFormat);
 
         var bitmapSource = BitmapSource.Create(
-           bitmapData.Width, bitmapData.Height, 96, 96, PixelFormats.Bgr24, null,
+           bitmapData.Width, bitmapData.Height, 96.0, 96.0, PixelFormats.Bgr24, null,
            bitmapData.Scan0, bitmapData.Stride * bitmapData.Height, bitmapData.Stride);
 
         source.UnlockBits(bitmapData);
