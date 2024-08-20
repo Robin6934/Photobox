@@ -7,7 +7,7 @@ using System.IO.Pipes;
 
 namespace Photobox.Lib.IPC
 {
-    public class IPCNamedPipeClient(ILogger<IPCNamedPipeClient> logger) : CameraBase
+    public class IPCNamedPipeClient(ILogger<IPCNamedPipeClient> logger, ICameraApi cameraApi) : CameraBase
     {
         private NamedPipeClientStream pipeClientStream = null!;
 
@@ -15,7 +15,7 @@ namespace Photobox.Lib.IPC
 
         private readonly CancellationTokenSource cts = new();
 
-        private readonly ICameraApi cameraApi = new CameraApi("https://localhost:7176");
+        private readonly ICameraApi cameraApi = cameraApi;
 
         public override async Task ConnectAsync()
         {
@@ -37,8 +37,6 @@ namespace Photobox.Lib.IPC
 
             logger.LogDebug("Connected to pipe.");
         }
-
-
 
         public override async Task DisconnectAsync()
         {

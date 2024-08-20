@@ -9,7 +9,7 @@ namespace Photobox
     /// <summary>
     /// Interaction logic for PhotoPrintPage.xaml
     /// </summary>
-    public partial class ImageViewWindow : Window, IImageViewer, IDisposable
+    public partial class ImageViewWindow : Window, IDisposable
     {
         private bool _disposed = false;
 
@@ -20,17 +20,22 @@ namespace Photobox
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageViewWindow"/> class.
         /// </summary>
-		public ImageViewWindow(string showImagePath)
+		public ImageViewWindow(string showImagePath, IPhotoboxApi Api)
         {
+            photoboxApi = Api;
             imagePath = showImagePath;
             InitializeComponent();
-        }
 
-        public ImageViewWindow()
-        {
-            InitializeComponent();
-        }
+            Uri imageUri = new(showImagePath);
 
+            BitmapImage bitmap = new();
+            bitmap.BeginInit();
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.UriSource = imageUri;
+            bitmap.EndInit();
+
+            ImageViewer.Source = bitmap;
+        }
 
         private async void BorderSave_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -59,33 +64,6 @@ namespace Photobox
 		private void MainCanvas_Loaded(object sender, RoutedEventArgs e)
         {
             SetCanvasSize();
-        }
-
-        /// <summary>
-        /// Sets the Picture to be displayed
-        /// </summary>
-        /// <param name="showImagePath">Path of the picture to be shown</param>
-        public async Task ShowImage(string showImagePath)
-        {
-            using var window = new ImageViewWindow(showImagePath);
-
-            var tcs = new TaskCompletionSource<bool>();
-
-            window.Closed += (o, e) => tcs.SetResult(true);
-
-            Uri imageUri = new(showImagePath);
-
-            BitmapImage bitmap = new();
-            bitmap.BeginInit();
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.UriSource = imageUri;
-            bitmap.EndInit();
-
-            window.ImageViewer.Source = bitmap;
-
-            window.Show();
-
-            await tcs.Task;
         }
 
         private void PhotoPrintPage_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
