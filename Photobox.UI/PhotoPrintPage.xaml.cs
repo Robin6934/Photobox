@@ -1,4 +1,5 @@
-﻿using Photobox.UI;
+﻿using Photobox.LocalServer.RestApi.Api;
+using Photobox.UI;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -12,28 +13,44 @@ namespace Photobox
     {
         private bool _disposed = false;
 
+        private readonly string imagePath = default!;
+
+        private readonly IPhotoboxApi photoboxApi = new PhotoboxApi("https://localhost:7176");
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageViewWindow"/> class.
         /// </summary>
-		public ImageViewWindow()
+		public ImageViewWindow(string showImagePath)
+        {
+            imagePath = showImagePath;
+            InitializeComponent();
+        }
+
+        public ImageViewWindow()
         {
             InitializeComponent();
         }
 
 
-        private void BorderSave_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private async void BorderSave_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            Task task = photoboxApi.ApiPhotoboxSaveImagePathGetAsync(imagePath);
             Close();
+            await task;
         }
 
-        private void BorderDelete_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private async void BorderDelete_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            Task task = photoboxApi.ApiPhotoboxDeleteImagePathGetAsync(imagePath);
             Close();
+            await task;
         }
 
-        private void BorderPrint_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private async void BorderPrint_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            Task task = photoboxApi.ApiPhotoboxPrintImagePathGetAsync(imagePath);
             Close();
+            await task;
         }
 
         /// <summary>
@@ -47,16 +64,16 @@ namespace Photobox
         /// <summary>
         /// Sets the Picture to be displayed
         /// </summary>
-        /// <param name="imagePath">Path of the picture to be shown</param>
-        public async Task ShowImage(string imagePath)
+        /// <param name="showImagePath">Path of the picture to be shown</param>
+        public async Task ShowImage(string showImagePath)
         {
-            using var window = new ImageViewWindow();
+            using var window = new ImageViewWindow(showImagePath);
 
             var tcs = new TaskCompletionSource<bool>();
 
             window.Closed += (o, e) => tcs.SetResult(true);
 
-            Uri imageUri = new(imagePath);
+            Uri imageUri = new(showImagePath);
 
             BitmapImage bitmap = new();
             bitmap.BeginInit();

@@ -8,7 +8,6 @@
  */
 
 
-using FluentAssertions;
 using Photobox.LocalServer.RestApi.Model;
 using System;
 using Xunit;

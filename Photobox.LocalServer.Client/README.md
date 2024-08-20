@@ -115,11 +115,15 @@ Class | Method | HTTP request | Description
 *CameraApi* | [**ApiCameraStartGet**](docs/CameraApi.md#apicamerastartget) | **GET** /api/Camera/Start | 
 *CameraApi* | [**ApiCameraStopGet**](docs/CameraApi.md#apicamerastopget) | **GET** /api/Camera/Stop | 
 *CameraApi* | [**ApiCameraTakePictureGet**](docs/CameraApi.md#apicameratakepictureget) | **GET** /api/Camera/TakePicture | 
+*PhotoboxApi* | [**ApiPhotoboxDeleteImagePathGet**](docs/PhotoboxApi.md#apiphotoboxdeleteimagepathget) | **GET** /api/Photobox/Delete/{imagePath} | 
+*PhotoboxApi* | [**ApiPhotoboxPrintImagePathGet**](docs/PhotoboxApi.md#apiphotoboxprintimagepathget) | **GET** /api/Photobox/Print/{imagePath} | 
+*PhotoboxApi* | [**ApiPhotoboxSaveImagePathGet**](docs/PhotoboxApi.md#apiphotoboxsaveimagepathget) | **GET** /api/Photobox/Save/{imagePath} | 
 
 
 <a id="documentation-for-models"></a>
 ## Documentation for Models
 
+ - [Model.ProblemDetails](docs/ProblemDetails.md)
  - [Model.TakePictureResultModel](docs/TakePictureResultModel.md)
 
 

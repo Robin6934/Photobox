@@ -1,5 +1,7 @@
 using Photobox.Lib.Camera;
 using Photobox.Lib.IPC;
+using Photobox.Lib.PhotoManager;
+using Photobox.Lib.Printer;
 using Serilog;
 
 namespace Photobox.LocalServer;
@@ -27,6 +29,8 @@ public class Program
 
         builder.Services.AddSingleton<ICamera, WebCam>();
         builder.Services.AddSingleton<IIPCServer, IPCNamedPipeServer>();
+        builder.Services.AddSingleton<IPrinter, Printer>();
+        builder.Services.AddSingleton<IImageManager, ImageManager>();
 
         var app = builder.Build();
 
