@@ -2,7 +2,7 @@
 
 public static class Folders
 {
-    public static string PhotoBoothBaseDir
+    public static string PhotoboxBaseDir
         => Path.Combine([
             "C:"
             , "Users"
@@ -15,19 +15,30 @@ public static class Folders
 
     public static string Photos => "Photos";
 
-    public static string ShowTemp => "ShowTemp";
-
     public static string Static => "Static";
 
     public static string Temp => "Temp";
 
     public static IEnumerable<string> AllFolders
-        => [Deleted, Photos, ShowTemp, Static, Temp];
+        => [Deleted, Photos, Static, Temp];
 
     public static string GetPath(string folder)
-        => Path.Combine(PhotoBoothBaseDir, folder);
+        => Path.Combine(PhotoboxBaseDir, folder);
 
     public static string NewImagePath
         => Path.Combine(GetPath(Temp), $"{DateTime.Now:yyyyMMdd_HHmmssfff}.jpg");
+
+    public static void CheckIfDirectoriesExistElseCreate()
+    {
+        foreach (string path in AllFolders)
+        {
+            string FullPath = Path.Combine(PhotoboxBaseDir, path);
+
+            if (!Directory.Exists(FullPath))
+            {
+                Directory.CreateDirectory(FullPath);
+            }
+        }
+    }
 
 }

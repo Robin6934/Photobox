@@ -52,6 +52,8 @@ public class WebCam : CameraBase
     {
         string imagePath = Folders.NewImagePath;
 
+        Folders.CheckIfDirectoriesExistElseCreate();
+
         await Task.Run(() =>
         {
             using Mat frame = new();
