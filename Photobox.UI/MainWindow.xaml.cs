@@ -63,8 +63,7 @@ public partial class MainWindow : Window
     private void SetCanvasSize()
     {
         // Calculate the desired canvas size based on the window's height
-        double windowHeight = ActualHeight;
-        double canvasHeight = windowHeight;
+        double canvasHeight = ActualHeight;
         double canvasWidth = (canvasHeight / 2) * 3; // 3:2 aspect ratio
 
         // If the calculated canvas width exceeds the window's width, adjust the size
