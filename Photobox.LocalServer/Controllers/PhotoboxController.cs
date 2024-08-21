@@ -6,8 +6,10 @@ namespace Photobox.LocalServer.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class PhotoboxController(IImageManager imageManager) : Controller
+public class PhotoboxController(ILogger<PhotoboxController> logger, IImageManager imageManager) : Controller
 {
+    private readonly ILogger<PhotoboxController> logger = logger;
+
     private readonly IImageManager imageManager = imageManager;
 
     private static readonly string[] allowedExtensions =
@@ -31,16 +33,21 @@ public class PhotoboxController(IImageManager imageManager) : Controller
     [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
     public async Task<IActionResult> Print(string imagePath)
     {
-        IActionResult result = CheckImage(imagePath);
+        var (success, actionResult) = CheckImage(imagePath);
+        if (!success)
+        {
+            return actionResult;
+        }
 
         if (!allowedExtensions.Contains(Path.GetExtension(imagePath).ToLower()))
         {
-            result = StatusCode(StatusCodes.Status415UnsupportedMediaType, "The File type is not supported");
+            logger.LogError("The file: {imagePath} is not supported", imagePath);
+            return StatusCode(StatusCodes.Status415UnsupportedMediaType, "The File type is not supported");
         }
 
         await imageManager.PrintAndSaveAsync(imagePath);
 
-        return result;
+        return Ok("Image is being printed.");
     }
 
     /// <summary>
@@ -59,11 +66,15 @@ public class PhotoboxController(IImageManager imageManager) : Controller
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Save(string imagePath)
     {
-        IActionResult result = CheckImage(imagePath);
+        var (success, actionResult) = CheckImage(imagePath);
+        if (!success)
+        {
+            return actionResult;
+        }
 
         imageManager.Save(imagePath);
 
-        return result;
+        return Ok("Image saved successfully.");
     }
 
     /// <summary>
@@ -82,32 +93,36 @@ public class PhotoboxController(IImageManager imageManager) : Controller
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Delete(string imagePath)
     {
-        IActionResult result = CheckImage(imagePath);
+        var (success, actionResult) = CheckImage(imagePath);
+        if (!success)
+        {
+            return actionResult;
+        }
 
         imageManager.Delete(imagePath);
 
-        return result;
+        return Ok("Image deleted successfully.");
     }
 
-    private IActionResult CheckImage(string imagePath)
+    private (bool success, IActionResult actionResult) CheckImage(string imagePath)
     {
-        FileInfo info = new(imagePath);
-
         string normalizedPhotoboxDirectory = Folders.PhotoboxBaseDir.TrimEnd(Path.DirectorySeparatorChar);
 
         string normalizedImagePath = Path.GetFullPath(imagePath).TrimEnd(Path.DirectorySeparatorChar);
 
-        if (!info.Exists)
+        if (Path.Exists(imagePath))
         {
-            return NotFound("Image path not found.");
+            logger.LogError("The image: {imagePath} does not exist", imagePath);
+            return (false, NotFound("Image path not found."));
         }
 
         if (!normalizedImagePath.Contains(normalizedPhotoboxDirectory))
         {
-            return StatusCode(StatusCodes.Status403Forbidden, "Access to the specified folder is forbidden.");
+            logger.LogError("The path: {imagePath} is not in the photobox directory", imagePath);
+            return (false, StatusCode(StatusCodes.Status403Forbidden, "Access to the specified folder is forbidden."));
         }
 
-        return Ok("Image is being printed.");
+        return (true, Ok("Image is being printed."));
     }
 
 

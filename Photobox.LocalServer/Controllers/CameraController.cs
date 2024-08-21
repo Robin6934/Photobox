@@ -23,13 +23,14 @@ public class CameraController(ICamera camera, IIPCServer ipcServer, ILogger<Came
         if (!isStreamStarted)
         {
             await camera.ConnectAsync();
-            ipcServer.ConnectAsync();
+            _ = ipcServer.ConnectAsync();
 
             camera.CameraStream += async (s, i) => await ipcServer.SendAsync(i);
 
             _ = camera.StartStreamAsync();
             isStreamStarted = true;
         }
+        logger.LogInformation("Camera stream started succesfully");
         return Ok("Camera stream started.");
     }
 
@@ -42,6 +43,7 @@ public class CameraController(ICamera camera, IIPCServer ipcServer, ILogger<Came
             await camera.StopStreamAsync();
             isStreamStarted = false;
         }
+        logger.LogInformation("Camera stream stopped succesfully");
         return Ok("Camera stream stopped.");
     }
 
@@ -54,6 +56,8 @@ public class CameraController(ICamera camera, IIPCServer ipcServer, ILogger<Came
         {
             ImagePath = imagePath
         };
+
+        logger.LogInformation("New picture taken and stored under {imagePath}", imagePath);
 
         return result;
     }
