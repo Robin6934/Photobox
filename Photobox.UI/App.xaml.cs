@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Photobox.Lib.Camera;
 using Photobox.Lib.IPC;
 using Photobox.LocalServer.RestApi.Api;
+using Serilog;
 using System.Windows;
 
 namespace Photobox.UI;
@@ -15,13 +16,19 @@ public partial class App : Application
 {
     private IHost host = default!;
 
+    private MainWindow mainWindow = default!;
+
+    private LogWindow logWindow = default!;
+
     protected override async void OnStartup(StartupEventArgs e)
     {
         host = CreateHostBuilder(e.Args).Build();
         await host.StartAsync();
 
-        var mainWindow = host.Services.GetRequiredService<MainWindow>();
+        mainWindow = host.Services.GetRequiredService<MainWindow>();
+        logWindow = host.Services.GetRequiredService<LogWindow>();
         await mainWindow.Start();
+        logWindow.Show();
         mainWindow.Show();
     }
 
@@ -40,8 +47,15 @@ public partial class App : Application
                 services.AddSingleton<IPhotoboxApi, PhotoboxApi>((s) => new PhotoboxApi("https://localhost:7176"));
                 services.AddSingleton<ICameraApi, CameraApi>((s) => new CameraApi("https://localhost:7176"));
                 services.AddTransient<MainWindow>();
+                services.AddSingleton<LogWindow>();
                 services.AddSingleton<ICamera, IPCNamedPipeClient>();
                 services.AddSingleton<IImageViewer, ImageViewer>();
+            })
+            .UseSerilog((context, services, configuration) =>
+            {
+                configuration
+                    .Enrich.FromLogContext()
+                    .WriteTo.RichTextBox(services.GetRequiredService<LogWindow>().RichTextBoxLog);
             })
             .ConfigureContainer<ContainerBuilder>(builder =>
             {

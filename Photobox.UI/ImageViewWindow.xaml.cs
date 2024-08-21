@@ -1,5 +1,4 @@
 ﻿using Photobox.LocalServer.RestApi.Api;
-using Photobox.UI;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;

@@ -10,11 +10,6 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        // Configure Serilog
-        Log.Logger = new LoggerConfiguration()
-            .WriteTo.Console()
-            .CreateLogger();
-
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
@@ -25,7 +20,12 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        builder.Host.UseSerilog();
+        builder.Host.UseSerilog((context, services, configuration) =>
+        {
+            configuration
+                .Enrich.FromLogContext()
+                .WriteTo.Console();
+        });
 
         builder.Services.AddSingleton<ICamera, WebCam>();
         builder.Services.AddSingleton<IIPCServer, IPCNamedPipeServer>();

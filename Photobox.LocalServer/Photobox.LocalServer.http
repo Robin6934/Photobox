@@ -1,6 +1,0 @@
-@Photobox.LocalServer_HostAddress = http://localhost:5130
-
-GET {{Photobox.LocalServer_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

@@ -1,4 +1,5 @@
-﻿using Photobox.Lib.Camera;
+﻿using Microsoft.Extensions.Logging;
+using Photobox.Lib.Camera;
 using Photobox.WpfHelpers;
 using System.Net.Http;
 using System.Windows;
@@ -11,13 +12,19 @@ public partial class MainWindow : Window
 
     private readonly IImageViewer imageViewer;
 
-    public MainWindow(ICamera cam, IImageViewer viewer)
+    private readonly ILogger<MainWindow> logger;
+
+    public MainWindow(ICamera cam, IImageViewer viewer, ILogger<MainWindow> log)
     {
         InitializeComponent();
 
         camera = cam;
 
         imageViewer = viewer;
+
+        logger = log;
+
+        logger.LogInformation("Mainwindow created");
 
         camera.CameraStream += (o, i) =>
         {
