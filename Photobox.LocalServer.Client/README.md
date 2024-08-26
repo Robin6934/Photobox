@@ -117,6 +117,7 @@ Class | Method | HTTP request | Description
 *CameraApi* | [**ApiCameraTakePictureGet**](docs/CameraApi.md#apicameratakepictureget) | **GET** /api/Camera/TakePicture | 
 *PhotoboxApi* | [**ApiPhotoboxDeleteImagePathGet**](docs/PhotoboxApi.md#apiphotoboxdeleteimagepathget) | **GET** /api/Photobox/Delete/{imagePath} | 
 *PhotoboxApi* | [**ApiPhotoboxPrintImagePathGet**](docs/PhotoboxApi.md#apiphotoboxprintimagepathget) | **GET** /api/Photobox/Print/{imagePath} | 
+*PhotoboxApi* | [**ApiPhotoboxPrinterConnectedGet**](docs/PhotoboxApi.md#apiphotoboxprinterconnectedget) | **GET** /api/Photobox/PrinterConnected | 
 *PhotoboxApi* | [**ApiPhotoboxSaveImagePathGet**](docs/PhotoboxApi.md#apiphotoboxsaveimagepathget) | **GET** /api/Photobox/Save/{imagePath} | 
 
 

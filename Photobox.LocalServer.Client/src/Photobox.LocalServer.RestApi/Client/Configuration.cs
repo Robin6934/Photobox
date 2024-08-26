@@ -14,8 +14,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Security;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Net.Http;
+using System.Net.Security;
 
 namespace Photobox.LocalServer.RestApi.Client
 {
@@ -180,7 +183,7 @@ namespace Photobox.LocalServer.RestApi.Client
         /// <summary>
         /// Gets or sets the base path for API access.
         /// </summary>
-        public virtual string BasePath
+        public virtual string BasePath 
         {
             get { return _basePath; }
             set { _basePath = value; }
@@ -518,7 +521,7 @@ namespace Photobox.LocalServer.RestApi.Client
 
             return url;
         }
-
+        
         /// <summary>
         /// Gets and Sets the RemoteCertificateValidationCallback
         /// </summary>
@@ -535,7 +538,7 @@ namespace Photobox.LocalServer.RestApi.Client
         {
             string report = "C# SDK (Photobox.LocalServer.RestApi) Debug Report:\n";
             report += "    OS: " + System.Environment.OSVersion + "\n";
-            report += "    .NET Framework Version: " + System.Environment.Version + "\n";
+            report += "    .NET Framework Version: " + System.Environment.Version  + "\n";
             report += "    Version of the API: 1.0\n";
             report += "    SDK Package Version: 1.0.0\n";
 

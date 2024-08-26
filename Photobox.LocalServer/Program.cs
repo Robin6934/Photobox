@@ -27,7 +27,8 @@ public class Program
                 .WriteTo.Console();
         });
 
-        builder.Services.AddSingleton<ICamera, WebCam>();
+        builder.Services.AddSingleton<CameraFactory>();
+        builder.Services.AddSingleton((s) => s.GetRequiredService<CameraFactory>().Create());
         builder.Services.AddSingleton<IIPCServer, IPCNamedPipeServer>();
         builder.Services.AddSingleton<IPrinter, Printer>();
         builder.Services.AddSingleton<IImageManager, ImageManager>();
