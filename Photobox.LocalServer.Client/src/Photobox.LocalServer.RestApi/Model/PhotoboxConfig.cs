@@ -16,25 +16,33 @@ using System.Text;
 namespace Photobox.LocalServer.RestApi.Model
 {
     /// <summary>
-    /// TakePictureResultModel
+    /// PhotoboxConfig
     /// </summary>
-    [DataContract(Name = "TakePictureResultModel")]
-    public partial class TakePictureResultModel : IValidatableObject
+    [DataContract(Name = "PhotoboxConfig")]
+    public partial class PhotoboxConfig : IValidatableObject
     {
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="TakePictureResultModel" /> class.
+        /// Gets or Sets PrintingEnabled
         /// </summary>
-        /// <param name="imagePath">imagePath.</param>
-        public TakePictureResultModel(string imagePath = default(string))
+        [DataMember(Name = "printingEnabled", EmitDefaultValue = false)]
+        public PrinterEnabledOptions? PrintingEnabled { get; set; }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PhotoboxConfig" /> class.
+        /// </summary>
+        /// <param name="printingEnabled">printingEnabled.</param>
+        /// <param name="printerName">printerName.</param>
+        public PhotoboxConfig(PrinterEnabledOptions? printingEnabled = default(PrinterEnabledOptions?), string printerName = default(string))
         {
-            this.ImagePath = imagePath;
+            this.PrintingEnabled = printingEnabled;
+            this.PrinterName = printerName;
         }
 
         /// <summary>
-        /// Gets or Sets ImagePath
+        /// Gets or Sets PrinterName
         /// </summary>
-        [DataMember(Name = "imagePath", EmitDefaultValue = true)]
-        public string ImagePath { get; set; }
+        [DataMember(Name = "printerName", EmitDefaultValue = true)]
+        public string PrinterName { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -43,8 +51,9 @@ namespace Photobox.LocalServer.RestApi.Model
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("class TakePictureResultModel {\n");
-            sb.Append("  ImagePath: ").Append(ImagePath).Append("\n");
+            sb.Append("class PhotoboxConfig {\n");
+            sb.Append("  PrintingEnabled: ").Append(PrintingEnabled).Append("\n");
+            sb.Append("  PrinterName: ").Append(PrinterName).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

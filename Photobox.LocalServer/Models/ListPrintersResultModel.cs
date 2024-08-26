@@ -2,5 +2,5 @@
 
 public record ListPrintersResultModel
 {
-    public string[] Printers { get; set; } = default!;
+    public List<string> Printers { get; set; } = [];
 }

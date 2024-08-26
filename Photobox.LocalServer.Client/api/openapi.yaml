@@ -172,25 +172,128 @@ paths:
           description: Forbidden
       tags:
       - Photobox
-  /api/Photobox/PrinterConnected:
+  /api/Settings/ListPrinters:
     get:
       responses:
         "200":
           content:
             text/plain:
               schema:
-                type: boolean
+                $ref: '#/components/schemas/ListPrintersResultModel'
             application/json:
               schema:
-                type: boolean
+                $ref: '#/components/schemas/ListPrintersResultModel'
             text/json:
               schema:
-                type: boolean
+                $ref: '#/components/schemas/ListPrintersResultModel'
           description: OK
       tags:
-      - Photobox
+      - Settings
+  /api/Settings/GetPhotoboxSettings:
+    get:
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PhotoboxConfig'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhotoboxConfig'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/PhotoboxConfig'
+          description: OK
+      tags:
+      - Settings
+  /api/Settings/SetPrinter/{printerName}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: printerName
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Settings
+  /api/Settings/SetPrinterEnabled/{printerEnabled}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: printerEnabled
+        required: true
+        schema:
+          $ref: '#/components/schemas/PrinterEnabledOptions'
+        style: simple
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Settings
+  /api/Settings/PrintingEnabled:
+    get:
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PrintingEnabledResultModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrintingEnabledResultModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/PrintingEnabledResultModel'
+          description: OK
+      tags:
+      - Settings
 components:
   schemas:
+    ListPrintersResultModel:
+      additionalProperties: false
+      example:
+        printers:
+        - printers
+        - printers
+      properties:
+        printers:
+          items:
+            type: string
+          nullable: true
+          type: array
+      type: object
+    PhotoboxConfig:
+      additionalProperties: false
+      example:
+        printingEnabled: "True"
+        printerName: printerName
+      properties:
+        printingEnabled:
+          $ref: '#/components/schemas/PrinterEnabledOptions'
+        printerName:
+          nullable: true
+          type: string
+      type: object
+    PrinterEnabledOptions:
+      enum:
+      - "True"
+      - "False"
+      - Automatic
+      type: string
+    PrintingEnabledResultModel:
+      additionalProperties: false
+      example:
+        printingEnabled: true
+      properties:
+        printingEnabled:
+          type: boolean
+      type: object
     ProblemDetails:
       additionalProperties: {}
       example:

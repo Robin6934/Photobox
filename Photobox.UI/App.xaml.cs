@@ -44,8 +44,9 @@ public partial class App : Application
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .ConfigureServices((context, services) =>
             {
-                services.AddSingleton<IPhotoboxApi, PhotoboxApi>((s) => new PhotoboxApi("https://localhost:7176"));
-                services.AddSingleton<ICameraApi, CameraApi>((s) => new CameraApi("https://localhost:7176"));
+                services.AddSingleton<IPhotoboxApi, PhotoboxApi>(s => new PhotoboxApi("https://localhost:7176"));
+                services.AddSingleton<ICameraApi, CameraApi>(s => new CameraApi("https://localhost:7176"));
+                services.AddSingleton<ISettingsApi, SettingsApi>(s => new SettingsApi("https://localhost:7176"));
                 services.AddTransient<MainWindow>();
                 services.AddSingleton<LogWindow>();
                 services.AddSingleton<ICamera, IPCNamedPipeClient>();

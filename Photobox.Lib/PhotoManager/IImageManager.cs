@@ -1,7 +1,7 @@
 ﻿namespace Photobox.Lib.PhotoManager;
 public interface IImageManager
 {
-    public Task PrintAndSaveAsync(string imagePath);
+    public Task PrintAndSaveAsync(string imagePath, string printerName);
 
     public void Save(string imagePath);
 

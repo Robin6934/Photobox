@@ -19,11 +19,11 @@ public class ImageManager(IPrinter printer) : IImageManager
         File.Move(imagePath, newImagePath);
     }
 
-    public async Task PrintAndSaveAsync(string imagePath)
+    public async Task PrintAndSaveAsync(string imagePath, string printerName)
     {
         Folders.CheckIfDirectoriesExistElseCreate();
 
-        await printer.PrintAsync(imagePath);
+        await printer.PrintAsync(imagePath, printerName);
 
         Save(imagePath);
     }

@@ -1,13 +1,14 @@
 ﻿using Photobox.LocalServer.RestApi.Api;
+using Photobox.UI;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 namespace Photobox
 {
-    /// <summary>
-    /// Interaction logic for PhotoPrintPage.xaml
-    /// </summary>
+
+    public delegate void ResultHander(object? sender, ImageViewResult r);
+
     public partial class ImageViewWindow : Window, IDisposable
     {
         private bool _disposed = false;
@@ -16,10 +17,13 @@ namespace Photobox
 
         private readonly IPhotoboxApi photoboxApi = new PhotoboxApi("https://localhost:7176");
 
+        public new event ResultHander Closed = default!;
+
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageViewWindow"/> class.
         /// </summary>
-		public ImageViewWindow(string showImagePath, IPhotoboxApi Api)
+		public ImageViewWindow(string showImagePath, IPhotoboxApi Api, bool printingEnabled)
         {
             photoboxApi = Api;
             imagePath = showImagePath;
@@ -34,27 +38,29 @@ namespace Photobox
             bitmap.EndInit();
 
             ImageViewer.Source = bitmap;
+
+            if (!printingEnabled)
+            {
+                BorderPrint.Visibility = Visibility.Hidden;
+            }
         }
 
-        private async void BorderSave_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void BorderSave_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Task task = photoboxApi.ApiPhotoboxSaveImagePathGetAsync(imagePath);
             Close();
-            await task;
+            Closed?.Invoke(this, ImageViewResult.Save);
         }
 
-        private async void BorderDelete_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void BorderDelete_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Task task = photoboxApi.ApiPhotoboxDeleteImagePathGetAsync(imagePath);
             Close();
-            await task;
+            Closed?.Invoke(this, ImageViewResult.Delete);
         }
 
-        private async void BorderPrint_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void BorderPrint_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Task task = photoboxApi.ApiPhotoboxPrintImagePathGetAsync(imagePath);
             Close();
-            await task;
+            Closed?.Invoke(this, ImageViewResult.Print);
         }
 
         /// <summary>
@@ -119,7 +125,6 @@ namespace Photobox
             }
         }
 
-        // Finalizer
         ~ImageViewWindow()
         {
             Dispose(false);
