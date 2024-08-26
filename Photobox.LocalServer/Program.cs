@@ -1,7 +1,9 @@
+using Microsoft.Extensions.Options;
 using Photobox.Lib.Camera;
 using Photobox.Lib.IPC;
 using Photobox.Lib.PhotoManager;
 using Photobox.Lib.Printer;
+using Photobox.LocalServer.ConfigModels;
 using Serilog;
 
 namespace Photobox.LocalServer;
@@ -27,8 +29,13 @@ public class Program
                 .WriteTo.Console();
         });
 
+        builder.Configuration.AddJsonFile("appsettings.json", true, true);
+
+        builder.Services.Configure<PhotoboxConfig>(
+            builder.Configuration.GetSection(PhotoboxConfig.Photobox));
+
         builder.Services.AddSingleton<CameraFactory>();
-        builder.Services.AddSingleton((s) => s.GetRequiredService<CameraFactory>().Create());
+        builder.Services.AddSingleton(s => s.GetRequiredService<CameraFactory>().Create());
         builder.Services.AddSingleton<IIPCServer, IPCNamedPipeServer>();
         builder.Services.AddSingleton<IPrinter, Printer>();
         builder.Services.AddSingleton<IImageManager, ImageManager>();

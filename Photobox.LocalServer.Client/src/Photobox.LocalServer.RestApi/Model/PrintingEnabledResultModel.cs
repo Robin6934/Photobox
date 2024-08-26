@@ -16,25 +16,25 @@ using System.Text;
 namespace Photobox.LocalServer.RestApi.Model
 {
     /// <summary>
-    /// TakePictureResultModel
+    /// PrintingEnabledResultModel
     /// </summary>
-    [DataContract(Name = "TakePictureResultModel")]
-    public partial class TakePictureResultModel : IValidatableObject
+    [DataContract(Name = "PrintingEnabledResultModel")]
+    public partial class PrintingEnabledResultModel : IValidatableObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TakePictureResultModel" /> class.
+        /// Initializes a new instance of the <see cref="PrintingEnabledResultModel" /> class.
         /// </summary>
-        /// <param name="imagePath">imagePath.</param>
-        public TakePictureResultModel(string imagePath = default(string))
+        /// <param name="printingEnabled">printingEnabled.</param>
+        public PrintingEnabledResultModel(bool printingEnabled = default(bool))
         {
-            this.ImagePath = imagePath;
+            this.PrintingEnabled = printingEnabled;
         }
 
         /// <summary>
-        /// Gets or Sets ImagePath
+        /// Gets or Sets PrintingEnabled
         /// </summary>
-        [DataMember(Name = "imagePath", EmitDefaultValue = true)]
-        public string ImagePath { get; set; }
+        [DataMember(Name = "printingEnabled", EmitDefaultValue = true)]
+        public bool PrintingEnabled { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -43,8 +43,8 @@ namespace Photobox.LocalServer.RestApi.Model
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("class TakePictureResultModel {\n");
-            sb.Append("  ImagePath: ").Append(ImagePath).Append("\n");
+            sb.Append("class PrintingEnabledResultModel {\n");
+            sb.Append("  PrintingEnabled: ").Append(PrintingEnabled).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

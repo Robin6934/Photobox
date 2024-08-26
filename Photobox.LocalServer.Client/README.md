@@ -117,13 +117,21 @@ Class | Method | HTTP request | Description
 *CameraApi* | [**ApiCameraTakePictureGet**](docs/CameraApi.md#apicameratakepictureget) | **GET** /api/Camera/TakePicture | 
 *PhotoboxApi* | [**ApiPhotoboxDeleteImagePathGet**](docs/PhotoboxApi.md#apiphotoboxdeleteimagepathget) | **GET** /api/Photobox/Delete/{imagePath} | 
 *PhotoboxApi* | [**ApiPhotoboxPrintImagePathGet**](docs/PhotoboxApi.md#apiphotoboxprintimagepathget) | **GET** /api/Photobox/Print/{imagePath} | 
-*PhotoboxApi* | [**ApiPhotoboxPrinterConnectedGet**](docs/PhotoboxApi.md#apiphotoboxprinterconnectedget) | **GET** /api/Photobox/PrinterConnected | 
 *PhotoboxApi* | [**ApiPhotoboxSaveImagePathGet**](docs/PhotoboxApi.md#apiphotoboxsaveimagepathget) | **GET** /api/Photobox/Save/{imagePath} | 
+*SettingsApi* | [**ApiSettingsGetPhotoboxSettingsGet**](docs/SettingsApi.md#apisettingsgetphotoboxsettingsget) | **GET** /api/Settings/GetPhotoboxSettings | 
+*SettingsApi* | [**ApiSettingsListPrintersGet**](docs/SettingsApi.md#apisettingslistprintersget) | **GET** /api/Settings/ListPrinters | 
+*SettingsApi* | [**ApiSettingsPrintingEnabledGet**](docs/SettingsApi.md#apisettingsprintingenabledget) | **GET** /api/Settings/PrintingEnabled | 
+*SettingsApi* | [**ApiSettingsSetPrinterEnabledPrinterEnabledGet**](docs/SettingsApi.md#apisettingssetprinterenabledprinterenabledget) | **GET** /api/Settings/SetPrinterEnabled/{printerEnabled} | 
+*SettingsApi* | [**ApiSettingsSetPrinterPrinterNameGet**](docs/SettingsApi.md#apisettingssetprinterprinternameget) | **GET** /api/Settings/SetPrinter/{printerName} | 
 
 
 <a id="documentation-for-models"></a>
 ## Documentation for Models
 
+ - [Model.ListPrintersResultModel](docs/ListPrintersResultModel.md)
+ - [Model.PhotoboxConfig](docs/PhotoboxConfig.md)
+ - [Model.PrinterEnabledOptions](docs/PrinterEnabledOptions.md)
+ - [Model.PrintingEnabledResultModel](docs/PrintingEnabledResultModel.md)
  - [Model.ProblemDetails](docs/ProblemDetails.md)
  - [Model.TakePictureResultModel](docs/TakePictureResultModel.md)
 

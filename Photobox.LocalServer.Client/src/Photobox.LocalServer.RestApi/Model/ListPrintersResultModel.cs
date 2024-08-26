@@ -16,25 +16,25 @@ using System.Text;
 namespace Photobox.LocalServer.RestApi.Model
 {
     /// <summary>
-    /// TakePictureResultModel
+    /// ListPrintersResultModel
     /// </summary>
-    [DataContract(Name = "TakePictureResultModel")]
-    public partial class TakePictureResultModel : IValidatableObject
+    [DataContract(Name = "ListPrintersResultModel")]
+    public partial class ListPrintersResultModel : IValidatableObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TakePictureResultModel" /> class.
+        /// Initializes a new instance of the <see cref="ListPrintersResultModel" /> class.
         /// </summary>
-        /// <param name="imagePath">imagePath.</param>
-        public TakePictureResultModel(string imagePath = default(string))
+        /// <param name="printers">printers.</param>
+        public ListPrintersResultModel(List<string> printers = default(List<string>))
         {
-            this.ImagePath = imagePath;
+            this.Printers = printers;
         }
 
         /// <summary>
-        /// Gets or Sets ImagePath
+        /// Gets or Sets Printers
         /// </summary>
-        [DataMember(Name = "imagePath", EmitDefaultValue = true)]
-        public string ImagePath { get; set; }
+        [DataMember(Name = "printers", EmitDefaultValue = true)]
+        public List<string> Printers { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -43,8 +43,8 @@ namespace Photobox.LocalServer.RestApi.Model
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("class TakePictureResultModel {\n");
-            sb.Append("  ImagePath: ").Append(ImagePath).Append("\n");
+            sb.Append("class ListPrintersResultModel {\n");
+            sb.Append("  Printers: ").Append(Printers).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

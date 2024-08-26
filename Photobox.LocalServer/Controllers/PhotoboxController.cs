@@ -1,18 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Photobox.Lib;
 using Photobox.Lib.PhotoManager;
-using System.Management;
-using System.Runtime.InteropServices;
+using Photobox.LocalServer.ConfigModels;
 
 namespace Photobox.LocalServer.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public partial class PhotoboxController(ILogger<PhotoboxController> logger, IImageManager imageManager) : Controller
+public partial class PhotoboxController(
+    ILogger<PhotoboxController> logger,
+    IImageManager imageManager,
+    IOptionsMonitor<PhotoboxConfig> options) : Controller
 {
     private readonly ILogger<PhotoboxController> logger = logger;
 
     private readonly IImageManager imageManager = imageManager;
+
+    private readonly PhotoboxConfig photoboxConfig = options.CurrentValue;
 
     private static readonly string[] allowedExtensions =
         [".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".ico", ".webp"];
@@ -47,7 +52,7 @@ public partial class PhotoboxController(ILogger<PhotoboxController> logger, IIma
             return StatusCode(StatusCodes.Status415UnsupportedMediaType, "The File type is not supported");
         }
 
-        await imageManager.PrintAndSaveAsync(imagePath);
+        await imageManager.PrintAndSaveAsync(imagePath, photoboxConfig.PrinterName);
 
         return Ok("Image is being printed.");
     }
@@ -66,7 +71,7 @@ public partial class PhotoboxController(ILogger<PhotoboxController> logger, IIma
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<IActionResult> Save(string imagePath)
+    public IActionResult Save(string imagePath)
     {
         var (success, actionResult) = CheckImage(imagePath);
         if (!success)
@@ -93,7 +98,7 @@ public partial class PhotoboxController(ILogger<PhotoboxController> logger, IIma
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<IActionResult> Delete(string imagePath)
+    public IActionResult Delete(string imagePath)
     {
         var (success, actionResult) = CheckImage(imagePath);
         if (!success)
@@ -106,37 +111,13 @@ public partial class PhotoboxController(ILogger<PhotoboxController> logger, IIma
         return Ok("Image deleted successfully.");
     }
 
-    [LibraryImport("winspool.drv", EntryPoint = "SetDefaultPrinterW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    public static partial bool SetDefaultPrinter(string Printer);
-
-    [HttpGet]
-    public bool PrinterConnected()
-    {
-        using var searcher = new ManagementObjectSearcher(@"SELECT * FROM Win32_Printer WHERE PortName LIKE 'USB%'");
-        foreach (var printer in searcher.Get())
-        {
-            string printerName = printer["Name"]?.ToString();
-            string portName = printer["PortName"]?.ToString();
-
-            if (!string.IsNullOrEmpty(printerName) && !string.IsNullOrEmpty(portName))
-            {
-                logger.LogInformation("Printer found: {printerName} on port: {portName}", printerName, portName);
-                //SetDefaultPrinter(printerName);
-                return true; // Printer found
-            }
-        }
-        logger.LogError("no printer found");
-        return false;
-    }
-
     private (bool success, IActionResult actionResult) CheckImage(string imagePath)
     {
         string normalizedPhotoboxDirectory = Folders.PhotoboxBaseDir.TrimEnd(Path.DirectorySeparatorChar);
 
         string normalizedImagePath = Path.GetFullPath(imagePath).TrimEnd(Path.DirectorySeparatorChar);
 
-        if (Path.Exists(imagePath))
+        if (!Path.Exists(imagePath))
         {
             logger.LogError("The image: {imagePath} does not exist", imagePath);
             return (false, NotFound("Image path not found."));
