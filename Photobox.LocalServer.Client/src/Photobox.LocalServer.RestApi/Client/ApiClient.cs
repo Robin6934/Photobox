@@ -8,23 +8,28 @@
  */
 
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Photobox.LocalServer.RestApi.Model;
-using Polly;
-using RestSharp;
-using RestSharp.Serializers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters;
+using System.Text;
 using System.Threading;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using FileIO = System.IO.File;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using RestSharp;
+using RestSharp.Serializers;
 using RestSharpMethod = RestSharp.Method;
+using FileIO = System.IO.File;
+using Polly;
+using Photobox.LocalServer.RestApi.Model;
 
 namespace Photobox.LocalServer.RestApi.Client
 {
@@ -457,7 +462,7 @@ namespace Photobox.LocalServer.RestApi.Client
                 RemoteCertificateValidationCallback = configuration.RemoteCertificateValidationCallback
             };
             setOptions(clientOptions);
-
+            
             using (RestClient client = new RestClient(clientOptions,
                 configureSerialization: serializerConfig => serializerConfig.UseSerializer(() => new CustomJsonCodec(SerializerSettings, configuration))))
             {
@@ -530,7 +535,7 @@ namespace Photobox.LocalServer.RestApi.Client
 
         private RestResponse<T> DeserializeRestResponseFromPolicy<T>(RestClient client, RestRequest request, PolicyResult<RestResponse> policyResult)
         {
-            if (policyResult.Outcome == OutcomeType.Successful)
+            if (policyResult.Outcome == OutcomeType.Successful) 
             {
                 return client.Deserialize<T>(policyResult.Result);
             }
@@ -542,7 +547,7 @@ namespace Photobox.LocalServer.RestApi.Client
                 };
             }
         }
-
+                
         private ApiResponse<T> Exec<T>(RestRequest request, RequestOptions options, IReadableConfiguration configuration)
         {
             Action<RestClientOptions> setOptions = (clientOptions) =>

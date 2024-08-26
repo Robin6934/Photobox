@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Photobox.Lib;
 using Photobox.Lib.PhotoManager;
+using System.Management;
+using System.Runtime.InteropServices;
 
 namespace Photobox.LocalServer.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class PhotoboxController(ILogger<PhotoboxController> logger, IImageManager imageManager) : Controller
+public partial class PhotoboxController(ILogger<PhotoboxController> logger, IImageManager imageManager) : Controller
 {
     private readonly ILogger<PhotoboxController> logger = logger;
 
@@ -102,6 +104,30 @@ public class PhotoboxController(ILogger<PhotoboxController> logger, IImageManage
         imageManager.Delete(imagePath);
 
         return Ok("Image deleted successfully.");
+    }
+
+    [LibraryImport("winspool.drv", EntryPoint = "SetDefaultPrinterW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool SetDefaultPrinter(string Printer);
+
+    [HttpGet]
+    public bool PrinterConnected()
+    {
+        using var searcher = new ManagementObjectSearcher(@"SELECT * FROM Win32_Printer WHERE PortName LIKE 'USB%'");
+        foreach (var printer in searcher.Get())
+        {
+            string printerName = printer["Name"]?.ToString();
+            string portName = printer["PortName"]?.ToString();
+
+            if (!string.IsNullOrEmpty(printerName) && !string.IsNullOrEmpty(portName))
+            {
+                logger.LogInformation("Printer found: {printerName} on port: {portName}", printerName, portName);
+                //SetDefaultPrinter(printerName);
+                return true; // Printer found
+            }
+        }
+        logger.LogError("no printer found");
+        return false;
     }
 
     private (bool success, IActionResult actionResult) CheckImage(string imagePath)

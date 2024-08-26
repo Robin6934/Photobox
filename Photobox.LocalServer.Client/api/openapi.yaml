@@ -172,6 +172,23 @@ paths:
           description: Forbidden
       tags:
       - Photobox
+  /api/Photobox/PrinterConnected:
+    get:
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                type: boolean
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+          description: OK
+      tags:
+      - Photobox
 components:
   schemas:
     ProblemDetails:
