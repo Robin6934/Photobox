@@ -26,7 +26,8 @@ public class Program
         {
             configuration
                 .Enrich.FromLogContext()
-                .WriteTo.Console();
+                .WriteTo.Console()
+                .WriteTo.Seq("http://localhost:5341", bufferBaseFilename: "SeqLocalServerBuffer");
         });
 
         builder.Configuration.AddJsonFile("appsettings.json", true, true);

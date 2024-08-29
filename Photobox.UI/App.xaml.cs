@@ -56,7 +56,8 @@ public partial class App : Application
             {
                 configuration
                     .Enrich.FromLogContext()
-                    .WriteTo.RichTextBox(services.GetRequiredService<LogWindow>().RichTextBoxLog);
+                    .WriteTo.RichTextBox(services.GetRequiredService<LogWindow>().RichTextBoxLog)
+                    .WriteTo.Seq("http://localhost:5341", bufferBaseFilename: "SeqUiBuffer");
             })
             .ConfigureContainer<ContainerBuilder>(builder =>
             {
