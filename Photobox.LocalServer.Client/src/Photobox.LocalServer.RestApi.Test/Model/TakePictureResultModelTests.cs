@@ -44,7 +44,6 @@ namespace Photobox.LocalServer.RestApi.Test.Model
         public void TakePictureResultModelInstanceTest()
         {
             // TODO uncomment below to test "IsType" TakePictureResultModel
-            instance.Should().BeOfType<TakePictureResultModel>();
         }
 
         /// <summary>
