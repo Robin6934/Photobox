@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 using Photobox.Lib.Camera;
 using Photobox.Lib.IPC;
 using Photobox.Lib.PhotoManager;
@@ -26,8 +28,11 @@ public class Program
         {
             configuration
                 .Enrich.FromLogContext()
+                .Enrich.WithEnvironmentName()
+                .Enrich.WithMachineName()
+                .Enrich.WithProperty("Source", "LocalServer")
                 .WriteTo.Console()
-                .WriteTo.Seq("http://localhost:5341", bufferBaseFilename: "SeqLocalServerBuffer");
+                .WriteTo.Seq("http://localhost:5341");
         });
 
         builder.Configuration.AddJsonFile("appsettings.json", true, true);
@@ -49,6 +54,7 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
         app.UseSerilogRequestLogging(); // Log HTTP requests
 
         app.UseHttpsRedirection();

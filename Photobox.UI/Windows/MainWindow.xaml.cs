@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using Photobox.Lib.Camera;
+using Photobox.UI.ImageViewer;
 using Photobox.WpfHelpers;
 using System.Net.Http;
 using System.Windows;
 using System.Windows.Media;
 
-namespace Photobox.UI;
+namespace Photobox.UI.Windows;
 public partial class MainWindow : Window
 {
     private readonly ICamera camera;

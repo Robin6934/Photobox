@@ -2,6 +2,7 @@
 using Photobox.Lib;
 using Photobox.Lib.Camera;
 using Photobox.Lib.IPC;
+using Photobox.LocalServer.Models;
 
 namespace Photobox.LocalServer.Controllers;
 

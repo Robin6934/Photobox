@@ -122,7 +122,7 @@ public class SettingsController(ILogger<SettingsController> logger, IOptionsMoni
     /// Checks if a printer is connected via USB.
     /// </summary>
     /// <returns>A boolean value indicating whether a printer is connected via usb.</returns>
-    private bool CheckIfPrinterIsConnected(string printerToCheck)
+    private static bool CheckIfPrinterIsConnected(string printerToCheck)
     {
         // Replace single quotes in printer name to prevent query errors
         string sanitizedPrinterName = printerToCheck.Replace("'", "''");
@@ -144,7 +144,7 @@ public class SettingsController(ILogger<SettingsController> logger, IOptionsMoni
                 // PrinterStatus 3 means it's idle (ready to print)
                 // DetectedErrorState 0 means no error
                 // WorkOffline should be false
-                if (printerStatus == 3 && detectedState == 0 && isPrinterOnline)
+                if (printerStatus == 3 || printerStatus == 2 && detectedState == 0 && isPrinterOnline)
                 {
                     return true; // Printer is available and ready to print
                 }
