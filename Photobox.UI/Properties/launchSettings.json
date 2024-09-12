@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Photobox.UI": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

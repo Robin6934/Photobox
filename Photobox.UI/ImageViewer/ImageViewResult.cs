@@ -1,4 +1,4 @@
-﻿namespace Photobox.UI;
+﻿namespace Photobox.UI.ImageViewer;
 
 public enum ImageViewResult
 {

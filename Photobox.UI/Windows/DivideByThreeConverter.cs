@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows.Data;
 
-namespace Photobox.UI;
+namespace Photobox.UI.Windows;
 
 public class DivideByThreeConverter : IValueConverter
 {

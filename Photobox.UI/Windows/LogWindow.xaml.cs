@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Photobox.UI;
+namespace Photobox.UI.Windows;
 /// <summary>
 /// Interaction logic for LogWindow.xaml
 /// </summary>

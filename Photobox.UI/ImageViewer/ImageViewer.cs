@@ -1,24 +1,19 @@
 ﻿using Photobox.LocalServer.RestApi.Api;
+using Photobox.UI.Windows;
 
-namespace Photobox.UI;
-internal class ImageViewer : IImageViewer
+namespace Photobox.UI.ImageViewer;
+internal class ImageViewer(IPhotoboxApi photobox, ISettingsApi settings) : IImageViewer
 {
-    private readonly IPhotoboxApi photoboxApi = default!;
+    private readonly IPhotoboxApi photoboxApi = photobox;
 
-    private readonly ISettingsApi settingsApi = default!;
+    private readonly ISettingsApi settingsApi = settings;
 
-    private readonly bool printingEnabled = default;
-
-    public ImageViewer(IPhotoboxApi photobox, ISettingsApi settings)
-    {
-        photoboxApi = photobox;
-        settingsApi = settings;
-
-        printingEnabled = settings.ApiSettingsPrintingEnabledGet().PrintingEnabled;
-    }
+    private bool printingEnabled = default;
 
     public async Task ShowImage(string imagePath)
     {
+        printingEnabled = settingsApi.ApiSettingsPrintingEnabledGet().PrintingEnabled;
+
         var window = new ImageViewWindow(imagePath, photoboxApi, printingEnabled);
 
         var tcs = new TaskCompletionSource<ImageViewResult>();
