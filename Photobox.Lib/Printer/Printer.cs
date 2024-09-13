@@ -6,13 +6,14 @@ using System.Drawing.Printing;
 namespace Photobox.Lib.Printer;
 public class Printer(IOptionsMonitor<PhotoboxConfig> options) : IPrinter
 {
-    public async Task PrintAsync(string imagePath, string printerName)
+    readonly PhotoboxConfig config = options.CurrentValue;
+    public async Task PrintAsync(string imagePath)
     {
         Bitmap image = new(imagePath);
 
         PrinterSettings printerSettings = new()
         {
-            PrinterName = printerName,
+            PrinterName = config.PrinterName
         };
 
         using PrintDocument pd = new()
