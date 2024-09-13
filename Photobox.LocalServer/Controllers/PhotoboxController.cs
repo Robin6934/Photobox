@@ -52,7 +52,7 @@ public partial class PhotoboxController(
             return StatusCode(StatusCodes.Status415UnsupportedMediaType, "The File type is not supported");
         }
 
-        await imageManager.PrintAndSaveAsync(imagePath, photoboxConfig.PrinterName);
+        await imageManager.PrintAndSaveAsync(imagePath);
 
         return Ok("Image is being printed.");
     }
