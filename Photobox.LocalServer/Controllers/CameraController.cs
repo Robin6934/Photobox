@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Photobox.Lib;
 using Photobox.Lib.Camera;
 using Photobox.Lib.IPC;
 using Photobox.LocalServer.Models;
@@ -26,7 +25,7 @@ public class CameraController(ICamera camera, IIPCServer ipcServer, ILogger<Came
             await camera.ConnectAsync();
             _ = ipcServer.ConnectAsync();
 
-            camera.CameraStream += async (s, i) => await ipcServer.SendAsync(i);
+            camera.CameraStream += async (o, s) => await ipcServer.SendAsync(s);
 
             _ = camera.StartStreamAsync();
             isStreamStarted = true;

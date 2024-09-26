@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photobox.LocalServer.RestApi", "Photobox.LocalServer.Client\src\Photobox.LocalServer.RestApi\Photobox.LocalServer.RestApi.csproj", "{FC4AFD9E-B31A-4B21-BB1D-39BA5D69382B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photobox.Lib.Test", "Photobox.UI.Test\Photobox.Lib.Test.csproj", "{6CEF3442-A576-4E39-B449-5CC97F118311}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photobox.Lib.Test", "Photobox.Lib.Test\Photobox.Lib.Test.csproj", "{6CEF3442-A576-4E39-B449-5CC97F118311}"
 EndProject
 Global
 	GlobalSection(ExtensibilityGlobals) = postSolution

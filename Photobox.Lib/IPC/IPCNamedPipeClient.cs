@@ -2,7 +2,6 @@
 using Photobox.Lib.Camera;
 using Photobox.LocalServer.RestApi.Api;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO.Pipes;
 
 namespace Photobox.Lib.IPC
@@ -86,11 +85,11 @@ namespace Photobox.Lib.IPC
 
                     try
                     {
-                        using MemoryStream ms = new(dataBuffer);
+                        MemoryStream ms = new(dataBuffer);
+
                         ms.Seek(0, SeekOrigin.Begin);
 
-                        Bitmap bitmap = new(ms);
-                        OnNewStreamImage(bitmap);
+                        OnNewStreamImage(ms);
                     }
                     catch (ArgumentException ex)
                     {

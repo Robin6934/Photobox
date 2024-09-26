@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace Photobox.Lib.Camera;
 
-public delegate void NewImageHandler(object sender, Bitmap img);
+public delegate void NewImageHandler(object sender, Stream img);
 
 public abstract class CameraBase : ICamera
 {
@@ -40,7 +40,18 @@ public abstract class CameraBase : ICamera
 
     protected virtual void OnNewStreamImage(Bitmap img)
     {
-        CameraStream?.Invoke(this, img);
+        MemoryStream stream = new();
+
+        img.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+
+        stream.Seek(0, SeekOrigin.Begin);
+
+        CameraStream?.Invoke(this, stream);
+    }
+
+    protected virtual void OnNewStreamImage(Stream stream)
+    {
+        CameraStream?.Invoke(this, stream);
     }
 
     public abstract void Dispose();

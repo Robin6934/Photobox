@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.HttpLogging;
-using Microsoft.Extensions.Options;
-using Microsoft.Net.Http.Headers;
 using Photobox.Lib.Camera;
 using Photobox.Lib.IPC;
 using Photobox.Lib.PhotoManager;

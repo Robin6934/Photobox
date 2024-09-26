@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace Photobox.Lib.IPC
+﻿namespace Photobox.Lib.IPC
 {
     public interface IIPCServer
     {
@@ -8,6 +6,6 @@ namespace Photobox.Lib.IPC
 
         void Disconnect();
 
-        Task SendAsync(Bitmap bitmap);
+        Task SendAsync(Stream bitmap);
     }
 }

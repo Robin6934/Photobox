@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Serilog.Extensions.Logging;
 
 namespace Photobox.LocalServer.Controllers;
 

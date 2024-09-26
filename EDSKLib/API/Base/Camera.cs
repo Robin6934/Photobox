@@ -546,7 +546,8 @@ namespace EOSDigital.API
         /// Downloads a file to given directory with the filename in the <see cref="DownloadInfo"/>
         /// </summary>
         /// <param name="Info">The <see cref="DownloadInfo"/> that is provided by the <see cref="DownloadReady"/> event</param>
-        /// <param name="directory">The directory where the file will be saved to</param>
+        /// <param name="directory">The directory where the file will be saved to if it ends with a 
+        /// filename then this one will eb choosen else the one created in camera will be used</param>
         /// <exception cref="ObjectDisposedException">Camera is disposed</exception>
         /// <exception cref="CameraSessionException">Session is closed</exception>
         /// <exception cref="SDKStateException">Canon SDK is not initialized</exception>
@@ -557,7 +558,13 @@ namespace EOSDigital.API
             if (Info == null) throw new ArgumentNullException(nameof(Info));
             if (directory == null || string.IsNullOrEmpty(directory.Trim())) directory = ".";
 
-            string currentFile = Path.Combine(directory, Info.FileName);
+            string currentFile = directory;
+
+            if (!Path.HasExtension(directory))
+            {
+                currentFile = Path.Combine(directory, Info.FileName);
+            }
+
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
             DownloadToFile(Info, currentFile);
         }
@@ -1385,10 +1392,9 @@ namespace EOSDigital.API
         /// <exception cref="SDKException">An SDK call failed</exception>
         protected void DownloadToFile(DownloadInfo Info, string filepath)
         {
-            using (var stream = new SDKStream(filepath, FileCreateDisposition.CreateAlways, FileAccess.ReadWrite))
-            {
-                DownloadData(Info, stream.Reference);
-            }
+            using var stream = new SDKStream(filepath, FileCreateDisposition.CreateAlways, FileAccess.ReadWrite);
+
+            DownloadData(Info, stream.Reference);
         }
 
         /// <summary>
