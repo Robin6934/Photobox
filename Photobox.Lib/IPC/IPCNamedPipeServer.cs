@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Drawing;
 using System.IO.Pipes;
 
 namespace Photobox.Lib.IPC
@@ -35,24 +34,24 @@ namespace Photobox.Lib.IPC
             pipeServerStream.Dispose();
         }
 
-        public async Task SendAsync(Bitmap bitmap)
+        public async Task SendAsync(Stream stream)
         {
             if (!cts.Token.IsCancellationRequested)
             {
-                byte[] frameBytes = BitmapToBytes(bitmap);
-                bitmap.Dispose();
+                byte[] buffer = new byte[stream.Length]; // Adjust buffer size as needed
 
-                await pipeServerStream.WriteAsync(BitConverter.GetBytes(frameBytes.Length));
-                await pipeServerStream.WriteAsync(frameBytes);
+                int bytesRead = await stream.ReadAsync(buffer.AsMemory());
+
+                // Send the length of the data (frameBytes.Length)
+                await pipeServerStream.WriteAsync(BitConverter.GetBytes(bytesRead).AsMemory(0, sizeof(int)));
+
+                // Send the actual data
+                await pipeServerStream.WriteAsync(buffer.AsMemory(0, bytesRead));
+
                 await pipeServerStream.FlushAsync();
-            }
-        }
 
-        public static byte[] BitmapToBytes(Bitmap bitmap)
-        {
-            using MemoryStream stream = new();
-            bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
-            return stream.ToArray();
+                await stream.DisposeAsync();
+            }
         }
     }
 }

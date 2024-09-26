@@ -39,6 +39,6 @@ public class ImageManager(IPrinter printer) : IImageManager
 
         Folders.CheckIfDirectoriesExistElseCreate();
 
-        File.Move(imagePath, newImagePath);
+        File.Move(imagePath, newImagePath, false);
     }
 }

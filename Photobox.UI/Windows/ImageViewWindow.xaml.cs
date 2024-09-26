@@ -23,7 +23,7 @@ public partial class ImageViewWindow : Window, IDisposable
     /// <summary>
     /// Initializes a new instance of the <see cref="ImageViewWindow"/> class.
     /// </summary>
-		public ImageViewWindow(string showImagePath, IPhotoboxApi Api, bool printingEnabled)
+    public ImageViewWindow(string showImagePath, IPhotoboxApi Api, bool printingEnabled)
     {
         photoboxApi = Api;
         imagePath = showImagePath;
@@ -66,7 +66,7 @@ public partial class ImageViewWindow : Window, IDisposable
     /// <summary>
     /// Creates all the Buttons and adds them to the MainCanvas
     /// </summary>
-		private void MainCanvas_Loaded(object sender, RoutedEventArgs e)
+    private void MainCanvas_Loaded(object sender, RoutedEventArgs e)
     {
         SetCanvasSize();
     }
@@ -84,7 +84,7 @@ public partial class ImageViewWindow : Window, IDisposable
     /// <summary>
     /// Method to set the canvas to the 3:2 aspect ratio
     /// </summary>
-		private void SetCanvasSize()
+    private void SetCanvasSize()
     {
         // Calculate the desired canvas size based on the window's height
         double windowHeight = this.ActualHeight;

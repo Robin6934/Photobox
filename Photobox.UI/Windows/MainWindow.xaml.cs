@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using Photobox.Lib.Camera;
 using Photobox.UI.ImageViewer;
-using Photobox.WpfHelpers;
+using System.IO;
 using System.Net.Http;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Photobox.UI.Windows;
 public partial class MainWindow : Window
@@ -31,9 +32,26 @@ public partial class MainWindow : Window
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                GridLiveView.Background = new ImageBrush(i.ToBitmapSource());
+                GridLiveView.Background = new ImageBrush(ConvertStreamToBitmapSource(i));
             });
         };
+    }
+
+    public BitmapSource ConvertStreamToBitmapSource(Stream stream)
+    {
+        // Ensure the stream is at the beginning before reading it.
+        stream.Seek(0, SeekOrigin.Begin);
+
+        BitmapImage bitmap = new BitmapImage();
+
+        bitmap.BeginInit();
+        bitmap.CacheOption = BitmapCacheOption.OnLoad; // Load the data immediately, so stream doesn't stay open.
+        bitmap.StreamSource = stream;
+        bitmap.EndInit();
+
+        bitmap.Freeze(); // Freeze the bitmap to make it thread-safe and immutable
+
+        return bitmap;
     }
 
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
