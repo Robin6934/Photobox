@@ -1,6 +1,11 @@
 ﻿using Emgu.CV;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Emgu.CV.Structure;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
+using SixLabors.ImageSharp.PixelFormats;
+using System.Diagnostics;
 
 namespace Photobox.Lib.Camera;
 
@@ -47,12 +52,18 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
             while (!applicationLifetime.ApplicationStopping.IsCancellationRequested)
             {
                 capture.Read(frame);
-                OnNewStreamImage(frame.ToBitmap());
+                Stopwatch sw = Stopwatch.StartNew();
+                Span<byte> data = frame.ToImage<Rgb, byte>(false).ToJpegData();
+                sw.Stop();
+                Debug.WriteLine(sw.Elapsed.TotalMilliseconds);
+                ImageInfo info = Image.Identify(data);
+
+                OnNewStreamImage(new MemoryStream(data.ToArray()));
             }
         }, applicationLifetime.ApplicationStopping);
     }
 
-    public override Task StopStreamAsync()
+    public override async Task StopStreamAsync()
     {
         liveViewActive = false;
         logger.LogInformation("The stream of the WebCam has been stopped}");
