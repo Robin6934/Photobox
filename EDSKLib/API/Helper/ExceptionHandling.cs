@@ -353,7 +353,7 @@ namespace EOSDigital.API
                 else
                 {
                     // Create and initialize an AsyncLocal
-                    AsyncLocal<SDKExceptionHandler> asyncLocalHandler = new AsyncLocal<SDKExceptionHandler>();
+                    AsyncLocal<SDKExceptionHandler> asyncLocalHandler = new();
 
                     // Capture the current delegate and set it in the AsyncLocal
                     asyncLocalHandler.Value = NonSevereErrorHappenedEvent;
@@ -431,7 +431,7 @@ namespace EOSDigital.API
             else
             {
                 // Create and initialize an AsyncLocal
-                AsyncLocal<GeneralExceptionHandler> asyncLocalHandler = new AsyncLocal<GeneralExceptionHandler>();
+                AsyncLocal<GeneralExceptionHandler> asyncLocalHandler = new();
 
                 // Capture the current delegate and set it in the AsyncLocal
                 asyncLocalHandler.Value = SevereErrorHappenedEvent;

@@ -1,5 +1,6 @@
 ﻿using EOSDigital.API;
 using EOSDigital.SDK;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Photobox.Lib.Camera;
@@ -19,9 +20,12 @@ internal class CanonCamera : CameraBase
 
     private readonly ILogger<CanonCamera> logger;
 
-    public CanonCamera(ILogger<CanonCamera> logger)
+    private readonly IHostApplicationLifetime applicationLifetime;
+
+    public CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime applicationLifetime)
     {
         this.logger = logger;
+        this.applicationLifetime = applicationLifetime;
 
         int cnt = 0;
         bool CameraFound = false;
@@ -29,15 +33,23 @@ internal class CanonCamera : CameraBase
 
         while (!CameraFound)
         {
-            try { CamList = api.GetCameraList(); }
-            catch (Exception) { throw new CameraException("No Canon camera is connected!"); }
+            try 
+            {
+                CamList = api.GetCameraList();
+            }
+            catch (Exception ex) 
+            {
+                logger.LogError("Error while retrieving tha connected Canon cameras!", ex);
+            }
             if (CamList.Count > 0)
             {
                 camera = CamList[0];
                 CameraFound = true;
             }
-            if (cnt > 10)
+            if (cnt >= 10)
             {
+                logger.LogCritical("No Canon camera is connected!");
+                applicationLifetime.StopApplication();
                 break;
             }
             Task.Delay(100).Wait();
