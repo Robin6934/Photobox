@@ -1,5 +1,4 @@
 ﻿using EOSDigital.API;
-using EOSDigital.SDK;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
