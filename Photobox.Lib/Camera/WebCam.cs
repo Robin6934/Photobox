@@ -1,51 +1,62 @@
 ﻿using Emgu.CV;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Photobox.Lib.Camera;
 
-public class WebCam : CameraBase
+public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime applicationLifetime) : CameraBase
 {
-    private readonly CancellationTokenSource cancellationTokenSource = new();
     private VideoCapture capture = null!;
+
+    private readonly ILogger<WebCam> logger = logger;
+
+    private readonly IHostApplicationLifetime applicationLifetime = applicationLifetime;
+
+    private bool liveViewActive = false;
 
     public override Task ConnectAsync()
     {
-        return Task.Run(() =>
-        {
-            capture = new VideoCapture();
-            capture.Set(Emgu.CV.CvEnum.CapProp.FrameWidth, 1080);
-            capture.Set(Emgu.CV.CvEnum.CapProp.FrameHeight, 720);
-            capture.Set(Emgu.CV.CvEnum.CapProp.Fps, 60);
-        });
+        capture = new VideoCapture();
+        capture.Set(Emgu.CV.CvEnum.CapProp.FrameWidth, 1080);
+        capture.Set(Emgu.CV.CvEnum.CapProp.FrameHeight, 720);
+        capture.Set(Emgu.CV.CvEnum.CapProp.Fps, 60);
+
+        return Task.CompletedTask;
     }
 
-    public override async Task DisconnectAsync()
+    public override Task DisconnectAsync()
     {
         capture.Dispose();
         capture = null!;
-        await Task.CompletedTask;
+        return Task.CompletedTask;
     }
 
     public override void Dispose()
     {
-        cancellationTokenSource.Dispose();
+        capture.Dispose();
+        capture = null!;
     }
 
     public override Task StartStreamAsync()
     {
+        logger.LogInformation("The stream of the WebCam has been started}");
+        liveViewActive = true;
         return Task.Run(() =>
         {
             using Mat frame = new();
-            while (!cancellationTokenSource.IsCancellationRequested)
+            while (!applicationLifetime.ApplicationStopping.IsCancellationRequested)
             {
                 capture.Read(frame);
                 OnNewStreamImage(frame.ToBitmap());
             }
-        }, cancellationTokenSource.Token);
+        }, applicationLifetime.ApplicationStopping);
     }
 
     public override Task StopStreamAsync()
     {
-        return Task.Run(cancellationTokenSource.Cancel);
+        liveViewActive = false;
+        logger.LogInformation("The stream of the WebCam has been stopped}");
+        return Task.CompletedTask;
     }
 
     public override async Task<string> TakePictureAsync()
@@ -54,18 +65,21 @@ public class WebCam : CameraBase
 
         Folders.CheckIfDirectoriesExistElseCreate();
 
-        await Task.Run(() =>
-        {
-            using Mat frame = new();
-            capture.Read(frame);
-            frame.Save(imagePath);
-        });
+        using Mat frame = new();
+        capture.Read(frame);
+        frame.Save(imagePath);
 
         return imagePath;
     }
 
-    public override async Task FocusAsync()
+    public override Task FocusAsync()
     {
-        await Task.CompletedTask;
+        return Task.CompletedTask;
+    }
+
+    public static bool CameraConnected()
+    {
+        VideoCapture capture = new();
+        return capture.IsOpened;
     }
 }

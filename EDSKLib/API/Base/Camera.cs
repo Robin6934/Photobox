@@ -1320,7 +1320,7 @@ namespace EOSDigital.API
                 ErrorCode err;
 
                 //Create stream
-                using (var stream = new SDKStream(0l))
+                using (var stream = new SDKStream(0L))
                 {
                     IsLiveViewOn = true;
 
@@ -1499,7 +1499,7 @@ namespace EOSDigital.API
         /// <exception cref="SDKException">An SDK call failed</exception>
         protected CameraFileEntry GetAllEntriesSub()
         {
-            CameraFileEntry MainEntry = new CameraFileEntry(IntPtr.Zero, DeviceName, true, false);
+            CameraFileEntry MainEntry = new(IntPtr.Zero, DeviceName, true, false);
             CameraFileEntry[] VolumeEntries = GetAllVolumesSub();
 
             for (int i = 0; i < VolumeEntries.Length; i++) VolumeEntries[i].Entries = GetChildren(VolumeEntries[i].Reference);
@@ -1522,7 +1522,7 @@ namespace EOSDigital.API
             {
                 int ChildCount;
                 lock (STAThread.ExecLock) { ErrorHandler.CheckError(this, CanonSDK.EdsGetChildCount(volumes[i].Reference, out ChildCount)); }
-                CameraFileEntry[] ventries = new CameraFileEntry[0];
+                CameraFileEntry[] ventries = [];
 
                 for (int j = 0; j < ChildCount; j++)
                 {
@@ -1546,7 +1546,7 @@ namespace EOSDigital.API
             int VolumeCount;
             IntPtr ChildPtr;
             VolumeInfo vinfo;
-            List<CameraFileEntry> VolumeEntries = new List<CameraFileEntry>();
+            List<CameraFileEntry> VolumeEntries = [];
 
             MainThread.Invoke(() =>
             {
