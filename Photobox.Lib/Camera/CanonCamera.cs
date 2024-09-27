@@ -33,11 +33,11 @@ internal class CanonCamera : CameraBase
 
         while (!CameraFound)
         {
-            try 
+            try
             {
                 CamList = api.GetCameraList();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 logger.LogError("Error while retrieving tha connected Canon cameras!", ex);
             }
