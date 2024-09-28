@@ -8,6 +8,8 @@
  */
 
 
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
@@ -24,16 +26,26 @@ namespace Photobox.LocalServer.RestApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="TakePictureResultModel" /> class.
         /// </summary>
-        /// <param name="imagePath">imagePath.</param>
+        [JsonConstructorAttribute]
+        protected TakePictureResultModel() { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TakePictureResultModel" /> class.
+        /// </summary>
+        /// <param name="imagePath">imagePath (required).</param>
         public TakePictureResultModel(string imagePath = default(string))
         {
+            // to ensure "imagePath" is required (not null)
+            if (imagePath == null)
+            {
+                throw new ArgumentNullException("imagePath is a required property for TakePictureResultModel and cannot be null");
+            }
             this.ImagePath = imagePath;
         }
 
         /// <summary>
         /// Gets or Sets ImagePath
         /// </summary>
-        [DataMember(Name = "imagePath", EmitDefaultValue = true)]
+        [DataMember(Name = "imagePath", IsRequired = true, EmitDefaultValue = true)]
         public string ImagePath { get; set; }
 
         /// <summary>

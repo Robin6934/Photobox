@@ -39,6 +39,11 @@ namespace Photobox.LocalServer.RestApi.Model
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="PhotoboxConfig" /> class.
+        /// </summary>
+        public PhotoboxConfig() { }
+
+        /// <summary>
         /// Gets or Sets PrinterName
         /// </summary>
         [DataMember(Name = "printerName", EmitDefaultValue = true)]

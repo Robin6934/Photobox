@@ -138,4 +138,10 @@ internal class CanonCamera : CameraBase
 
         return imagePath;
     }
+
+    public static bool Connected()
+    {
+        CanonAPI api = new();
+        return api.GetCameraList().Count != 0;
+    }
 }

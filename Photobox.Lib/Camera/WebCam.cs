@@ -2,8 +2,6 @@
 using Emgu.CV.Structure;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using SixLabors.ImageSharp;
-using System.Diagnostics;
 
 namespace Photobox.Lib.Camera;
 
@@ -20,8 +18,8 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
     public override Task ConnectAsync()
     {
         capture = new VideoCapture();
-        capture.Set(Emgu.CV.CvEnum.CapProp.FrameWidth, 1080);
-        capture.Set(Emgu.CV.CvEnum.CapProp.FrameHeight, 720);
+        capture.Set(Emgu.CV.CvEnum.CapProp.FrameWidth, 1200);
+        capture.Set(Emgu.CV.CvEnum.CapProp.FrameHeight, 800);
         capture.Set(Emgu.CV.CvEnum.CapProp.Fps, 60);
 
         return Task.CompletedTask;
@@ -42,19 +40,17 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
 
     public override Task StartStreamAsync()
     {
-        logger.LogInformation("The stream of the WebCam has been started}");
+        logger.LogInformation("The stream of the WebCam has been started");
         liveViewActive = true;
         return Task.Run(() =>
         {
             using Mat frame = new();
-            while (!applicationLifetime.ApplicationStopping.IsCancellationRequested)
+            while (!applicationLifetime.ApplicationStopping.IsCancellationRequested 
+                && liveViewActive)
             {
                 capture.Read(frame);
-                Stopwatch sw = Stopwatch.StartNew();
+
                 Span<byte> data = frame.ToImage<Rgb, byte>(false).ToJpegData();
-                sw.Stop();
-                Debug.WriteLine(sw.Elapsed.TotalMilliseconds);
-                ImageInfo info = Image.Identify(data);
 
                 OnNewStreamImage(new MemoryStream(data.ToArray()));
             }
@@ -64,7 +60,7 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
     public override Task StopStreamAsync()
     {
         liveViewActive = false;
-        logger.LogInformation("The stream of the WebCam has been stopped}");
+        logger.LogInformation("The stream of the WebCam has been stopped");
         return Task.CompletedTask;
     }
 
@@ -88,7 +84,7 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
         return Task.CompletedTask;
     }
 
-    public static bool CameraConnected()
+    public static bool Connected()
     {
         VideoCapture capture = new();
         return capture.IsOpened;
