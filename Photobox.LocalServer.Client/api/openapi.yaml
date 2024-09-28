@@ -328,5 +328,7 @@ components:
         imagePath:
           nullable: true
           type: string
+      required:
+      - imagePath
       type: object
 

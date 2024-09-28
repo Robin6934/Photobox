@@ -14,11 +14,6 @@ docs/ProblemDetails.md
 docs/SettingsApi.md
 docs/TakePictureResultModel.md
 git_push.sh
-src/Photobox.LocalServer.RestApi.Test/Api/SettingsApiTests.cs
-src/Photobox.LocalServer.RestApi.Test/Model/ListPrintersResultModelTests.cs
-src/Photobox.LocalServer.RestApi.Test/Model/PhotoboxConfigTests.cs
-src/Photobox.LocalServer.RestApi.Test/Model/PrinterEnabledOptionsTests.cs
-src/Photobox.LocalServer.RestApi.Test/Model/PrintingEnabledResultModelTests.cs
 src/Photobox.LocalServer.RestApi.Test/Photobox.LocalServer.RestApi.Test.csproj
 src/Photobox.LocalServer.RestApi/Api/ApplicationApi.cs
 src/Photobox.LocalServer.RestApi/Api/CameraApi.cs

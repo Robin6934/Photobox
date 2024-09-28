@@ -1,20 +1,29 @@
-﻿using EOSDigital.API;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Photobox.Lib.Camera;
-public class CameraFactory(ILoggerFactory loggerFactory, IHostApplicationLifetime applicationLifetime)
+public class CameraFactory(ILogger<CameraFactory> logger,
+    ILoggerFactory loggerFactory,
+    IHostApplicationLifetime applicationLifetime)
 {
     private readonly ILoggerFactory factory = loggerFactory;
 
     private readonly IHostApplicationLifetime applicationLifetime = applicationLifetime;
+
+    private readonly ILogger<CameraFactory> logger = logger;
     public ICamera Create()
     {
-        CanonAPI api = new();
-        if (api.GetCameraList().Count != 0)
+        if (CanonCamera.Connected())
         {
             return new CanonCamera(factory.CreateLogger<CanonCamera>(), applicationLifetime);
         }
-        return new WebCam(factory.CreateLogger<WebCam>(), applicationLifetime);
+        if (WebCam.Connected())
+        {
+            return new WebCam(factory.CreateLogger<WebCam>(), applicationLifetime);
+        }
+
+        logger.LogCritical("No Camera is Connected! Application is shutting down...");
+        applicationLifetime.StopApplication();
+        throw new InvalidOperationException("Failed to create a camera: No camera is connected.");
     }
 }
