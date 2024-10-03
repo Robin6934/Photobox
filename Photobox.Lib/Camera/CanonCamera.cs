@@ -110,13 +110,14 @@ internal class CanonCamera : CameraBase
     public override Task StartStreamAsync()
     {
         camera.StartLiveView();
+        LiveViewActive = true;
         return Task.CompletedTask;
     }
 
     public override Task StopStreamAsync()
     {
-        FocusAsync();
         camera.StopLiveView();
+        LiveViewActive = false;
         return Task.CompletedTask;
     }
 

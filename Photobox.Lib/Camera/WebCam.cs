@@ -13,8 +13,6 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
 
     private readonly IHostApplicationLifetime applicationLifetime = applicationLifetime;
 
-    private bool liveViewActive = false;
-
     public override Task ConnectAsync()
     {
         capture = new VideoCapture();
@@ -41,12 +39,12 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
     public override Task StartStreamAsync()
     {
         logger.LogInformation("The stream of the WebCam has been started");
-        liveViewActive = true;
+        LiveViewActive = true;
         return Task.Run(() =>
         {
             using Mat frame = new();
             while (!applicationLifetime.ApplicationStopping.IsCancellationRequested 
-                && liveViewActive)
+                && LiveViewActive)
             {
                 capture.Read(frame);
 
@@ -59,7 +57,7 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
 
     public override Task StopStreamAsync()
     {
-        liveViewActive = false;
+        LiveViewActive = false;
         logger.LogInformation("The stream of the WebCam has been stopped");
         return Task.CompletedTask;
     }

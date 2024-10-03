@@ -3,6 +3,8 @@
 public interface ICamera : IDisposable
 {
     event NewImageHandler CameraStream;
+
+    public bool LiveViewActive { get; }
     Task ResilientConnectAsync();
     Task ConnectAsync();
     Task StartStreamAsync();

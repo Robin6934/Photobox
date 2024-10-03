@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Photobox.Lib.Camera;
 using Photobox.LocalServer.RestApi.Api;
 using System.Diagnostics;
@@ -6,13 +7,16 @@ using System.IO.Pipes;
 
 namespace Photobox.Lib.IPC
 {
-    public class IPCNamedPipeClient(ILogger<IPCNamedPipeClient> logger, ICameraApi cameraApi) : CameraBase
+    public class IPCNamedPipeClient(
+        ILogger<IPCNamedPipeClient> logger,
+        ICameraApi cameraApi,
+        IHostApplicationLifetime applicationLifetime) : CameraBase
     {
         private NamedPipeClientStream pipeClientStream = null!;
 
         ILogger<IPCNamedPipeClient> logger = logger;
 
-        private readonly CancellationTokenSource cts = new();
+        private readonly IHostApplicationLifetime applicationLifetime = applicationLifetime;
 
         private readonly ICameraApi cameraApi = cameraApi;
 
@@ -46,12 +50,16 @@ namespace Photobox.Lib.IPC
 
         public override async Task StartStreamAsync()
         {
+            LiveViewActive = true;
             try
             {
-                while (!cts.Token.IsCancellationRequested)
+                while (!applicationLifetime.ApplicationStopping.IsCancellationRequested
+                    && LiveViewActive)
                 {
                     byte[] lengthBuffer = new byte[sizeof(int)];
-                    int bytesRead = await pipeClientStream.ReadAsync(lengthBuffer.AsMemory(0, sizeof(int)), cts.Token);
+                    int bytesRead = await pipeClientStream.ReadAsync(
+                        lengthBuffer.AsMemory(0, sizeof(int)),
+                        applicationLifetime.ApplicationStopping);
 
                     if (bytesRead == 0)
                     {
@@ -68,7 +76,9 @@ namespace Photobox.Lib.IPC
                     }
 
                     byte[] dataBuffer = new byte[length];
-                    bytesRead = await pipeClientStream.ReadAsync(dataBuffer.AsMemory(0, length), cts.Token);
+                    bytesRead = await pipeClientStream.ReadAsync(
+                        dataBuffer.AsMemory(0, length),
+                        applicationLifetime.ApplicationStopping);
 
                     if (bytesRead == 0)
                     {
@@ -105,7 +115,7 @@ namespace Photobox.Lib.IPC
 
         public override async Task StopStreamAsync()
         {
-            cts.Cancel();
+            LiveViewActive = false;
 
             await cameraApi.ApiCameraStopGetAsync();
         }
