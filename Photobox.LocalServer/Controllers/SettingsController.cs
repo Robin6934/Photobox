@@ -25,10 +25,14 @@ public class SettingsController(ILogger<SettingsController> logger, IOptionsMoni
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ListPrintersResultModel))]
     public IActionResult ListPrinters()
     {
+        List<string> printers = GetAllPrinters();
+
         ListPrintersResultModel resultModel = new()
         {
-            Printers = GetAllPrinters()
+            Printers = printers
         };
+
+        logger.LogInformation("Found the Printers: {printerlist}", string.Join(";\n", printers));
 
         return Ok(resultModel);
     }

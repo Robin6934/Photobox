@@ -11,6 +11,8 @@ public abstract class CameraBase : ICamera
 {
     public event NewImageHandler CameraStream = default!;
 
+    public virtual bool LiveViewActive { get; set; } = false;
+
     private readonly ResiliencePipeline pipeline = new ResiliencePipelineBuilder()
         .AddTimeout(new TimeoutStrategyOptions
         {
