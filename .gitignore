@@ -398,3 +398,5 @@ FodyWeavers.xsd
 *.sln.iml
 /Photobox.LocalServer/SeqLocalServerBuffer.bookmark
 /Photobox.LocalServer/SeqLocalServerBuffer-20240829.clef
+EDSKLib/EdsImage.dll
+EDSKLib/EDSDK.dll
