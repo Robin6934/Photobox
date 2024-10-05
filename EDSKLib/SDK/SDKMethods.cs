@@ -3,6 +3,8 @@ using System.Runtime.InteropServices;
 
 namespace EOSDigital.SDK
 {
+#pragma warning disable SYSLIB1054
+#pragma warning disable CA1401
     /// <summary>
     /// This class contains all of the native Canon SDK calls and some wrapper methods
     /// </summary>
@@ -27,7 +29,7 @@ namespace EOSDigital.SDK
         /// <summary>
         /// Version of the currently used Canon SDK DLL
         /// </summary>
-        public static Version SDKVersion
+        public static Version? SDKVersion
         {
             get;
             private set;
@@ -71,15 +73,15 @@ namespace EOSDigital.SDK
             var modules = Process.GetCurrentProcess().Modules;
             foreach (var module in modules)
             {
-                var pm = module as ProcessModule;
-                string name = pm?.ModuleName?.ToLower();
+                var processModule = module as ProcessModule;
+                string name = processModule?.ModuleName.ToLower()!;
                 if (name == "edsdk.dll")
                 {
-                    FileVersionInfo vi = pm.FileVersionInfo;
+                    FileVersionInfo vi = processModule!.FileVersionInfo;
                     return new Version(vi.ProductMajorPart, vi.ProductMinorPart, vi.ProductBuildPart, vi.ProductPrivatePart);
                 }
             }
-            return null;
+            return default!;
         }
 
         #endregion
@@ -696,7 +698,7 @@ namespace EOSDigital.SDK
         /// <param name="inCameraRef">Designate the camera object.</param>
         /// <param name="inEvent">Designate one or all events to be supplemented.</param>
         /// <param name="inPropertyEventHandler">Designate the pointer to the callback function for receiving property-related camera events.</param>
-        /// <param name="inContext">Designate application information to be passed by mens of the callback funcion.Any data needed for your application can be passed.</param>
+        /// <param name="inContext">Designate application information to be passed by means of the callback function.Any data needed for your application can be passed.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
         public extern static ErrorCode EdsSetPropertyEventHandler(IntPtr inCameraRef, PropertyEventID inEvent, SDKPropertyEventHandler inPropertyEventHandler, IntPtr inContext);
@@ -782,6 +784,7 @@ namespace EOSDigital.SDK
         #endregion
 
         #region Misc
+#pragma warning disable SYSLIB1054
 
         /// <summary>
         /// Gets camera list objects.
@@ -860,19 +863,21 @@ namespace EOSDigital.SDK
         /// <returns>Any of the SDK errors</returns>
         public static ErrorCode GetDirectoryItemInfo(IntPtr inDirItemRef, out DirectoryItemInfo outDirItemInfo)
         {
-            if (IsVerGE34) { return EdsGetDirectoryItemInfo(inDirItemRef, out outDirItemInfo); }
+            if (IsVerGE34)
+            {
+                return EdsGetDirectoryItemInfo(inDirItemRef, out outDirItemInfo);
+            }
             else
             {
-                DirectoryItemInfo_3_4 tmpValue;
-                ErrorCode err = EdsGetDirectoryItemInfo(inDirItemRef, out tmpValue);
-                if (err == ErrorCode.OK)
+                ErrorCode errorCode = EdsGetDirectoryItemInfo(inDirItemRef, out DirectoryItemInfo_3_4 tmpValue);
+                if (errorCode == ErrorCode.OK)
                 {
                     outDirItemInfo = tmpValue.ToCurrent();
-                    return err;
+                    return errorCode;
                 }
 
-                outDirItemInfo = default(DirectoryItemInfo);
-                return err;
+                outDirItemInfo = default;
+                return errorCode;
             }
         }
 
@@ -889,7 +894,7 @@ namespace EOSDigital.SDK
         #endregion
 
         #region GetPropertyData Wrapper
-
+#pragma warning disable IDE0059
         /// <summary>
         /// Gets property information from the object designated in inRef.
         /// This method takes care of differences between SDK versions.
@@ -902,18 +907,23 @@ namespace EOSDigital.SDK
         /// <returns>Any of the SDK errors</returns>
         public static ErrorCode GetPropertyData<T>(IntPtr inRef, PropertyID inPropertyID, int inParam, out T outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            outPropertyData = default(T);
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            outPropertyData = default!;
 
             if (outPropertyData is PictureStyleDesc)
             {
-                PictureStyleDesc tmpValue;
-                err = GetPropertyData(inRef, inPropertyID, inParam, out tmpValue);
-                if (err == ErrorCode.OK) outPropertyData = (T)(object)tmpValue;
+                errorCode = GetPropertyData(inRef, inPropertyID, inParam, out PictureStyleDesc tmpValue);
+                if (errorCode == ErrorCode.OK)
+                {
+                    outPropertyData = (T)(object)tmpValue;
+                }
             }
-            else { err = GetPropertyDataSub(inRef, inPropertyID, inParam, out outPropertyData); }
+            else
+            {
+                errorCode = GetPropertyDataSub(inRef, inPropertyID, inParam, out outPropertyData);
+            }
 
-            return err;
+            return errorCode;
         }
 
         /// <summary>
@@ -928,26 +938,24 @@ namespace EOSDigital.SDK
         private static ErrorCode GetPropertyDataSub<T>(IntPtr inRef, PropertyID inPropertyID, int inParam, out T outPropertyData)
         {
             IntPtr ptr = IntPtr.Zero;
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            outPropertyData = default(T);
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            outPropertyData = default!;
 
             try
             {
-                DataType dt;
-                int size;
-                err = EdsGetPropertySize(inRef, inPropertyID, inParam, out dt, out size);
+                errorCode = EdsGetPropertySize(inRef, inPropertyID, inParam, out DataType dt, out int size);
 
-                if (err == ErrorCode.OK)
+                if (errorCode == ErrorCode.OK)
                 {
                     ptr = Marshal.AllocHGlobal(size);
-                    err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, ptr);
+                    errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, size, ptr);
 
-                    if (err == ErrorCode.OK) outPropertyData = (T)Marshal.PtrToStructure(ptr, typeof(T));
+                    if (errorCode == ErrorCode.OK) outPropertyData = Marshal.PtrToStructure<T>(ptr)!;
                 }
             }
             finally { if (ptr != IntPtr.Zero) Marshal.FreeHGlobal(ptr); }
 
-            return err;
+            return errorCode;
         }
 
         #region Primitive Types
@@ -962,16 +970,16 @@ namespace EOSDigital.SDK
         /// <returns>Any of the SDK errors</returns>
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out bool outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            int size = Marshal.SizeOf(typeof(bool));
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            int size = Marshal.SizeOf<bool>();
             bool val;
             unsafe
             {
                 bool* ptr = &val;
-                err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
+                errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
             }
             outPropertyData = val;
-            return err;
+            return errorCode;
         }
 
         /// <summary>
@@ -984,16 +992,16 @@ namespace EOSDigital.SDK
         /// <returns>Any of the SDK errors</returns>
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out byte outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            int size = Marshal.SizeOf(typeof(byte));
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            int size = Marshal.SizeOf<byte>();
             byte val;
             unsafe
             {
                 byte* ptr = &val;
-                err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
+                errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
             }
             outPropertyData = val;
-            return err;
+            return errorCode;
         }
 
         /// <summary>
@@ -1006,16 +1014,16 @@ namespace EOSDigital.SDK
         /// <returns>Any of the SDK errors</returns>
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out short outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            int size = Marshal.SizeOf(typeof(short));
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            int size = Marshal.SizeOf<short>();
             short val;
             unsafe
             {
                 short* ptr = &val;
-                err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
+                errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
             }
             outPropertyData = val;
-            return err;
+            return errorCode;
         }
 
         /// <summary>
@@ -1026,19 +1034,18 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        [CLSCompliant(false)]
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out ushort outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            int size = Marshal.SizeOf(typeof(ushort));
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            int size = Marshal.SizeOf<ushort>();
             ushort val;
             unsafe
             {
                 ushort* ptr = &val;
-                err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
+                errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
             }
             outPropertyData = val;
-            return err;
+            return errorCode;
         }
 
         /// <summary>
@@ -1049,19 +1056,18 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        [CLSCompliant(false)]
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out uint outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            int size = Marshal.SizeOf(typeof(uint));
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            int size = Marshal.SizeOf<uint>();
             uint val;
             unsafe
             {
                 uint* ptr = &val;
-                err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
+                errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
             }
             outPropertyData = val;
-            return err;
+            return errorCode;
         }
 
         /// <summary>
@@ -1074,16 +1080,16 @@ namespace EOSDigital.SDK
         /// <returns>Any of the SDK errors</returns>
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out int outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            int size = Marshal.SizeOf(typeof(int));
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            int size = Marshal.SizeOf<int>();
             int val;
             unsafe
             {
                 int* ptr = &val;
-                err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
+                errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
             }
             outPropertyData = val;
-            return err;
+            return errorCode;
         }
 
         /// <summary>
@@ -1097,24 +1103,25 @@ namespace EOSDigital.SDK
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out string outPropertyData)
         {
             IntPtr ptr = IntPtr.Zero;
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             outPropertyData = string.Empty;
             try
             {
-                DataType dt;
-                int size;
-                err = EdsGetPropertySize(inRef, inPropertyID, inParam, out dt, out size);
+                errorCode = EdsGetPropertySize(inRef, inPropertyID, inParam, out DataType dt, out int size);
 
-                if (err == ErrorCode.OK)
+                if (errorCode == ErrorCode.OK)
                 {
                     ptr = Marshal.AllocHGlobal(size);
-                    err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, ptr);
+                    errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, size, ptr);
 
-                    if (err == ErrorCode.OK) outPropertyData = Marshal.PtrToStringAnsi(ptr);
+                    if (errorCode == ErrorCode.OK)
+                    {
+                        outPropertyData = Marshal.PtrToStringAnsi(ptr)!;
+                    }
                 }
             }
             finally { if (ptr != IntPtr.Zero) Marshal.FreeHGlobal(ptr); }
-            return err;
+            return errorCode;
         }
 
         #endregion
@@ -1131,26 +1138,24 @@ namespace EOSDigital.SDK
         /// <returns>Any of the SDK errors</returns>
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out bool[] outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            int tpsize = Marshal.SizeOf(typeof(bool));
-            int propsize;
-            DataType proptype;
-            err = EdsGetPropertySize(inRef, inPropertyID, inParam, out proptype, out propsize);
-            if (err == ErrorCode.OK)
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            int typeSize = Marshal.SizeOf<bool>();
+            errorCode = EdsGetPropertySize(inRef, inPropertyID, inParam, out DataType propType, out int propSize);
+            if (errorCode == ErrorCode.OK)
             {
-                var data = new bool[propsize / tpsize];
+                var data = new bool[propSize / typeSize];
                 unsafe
                 {
                     fixed (bool* dataP = data)
                     {
-                        err = EdsGetPropertyData(inRef, inPropertyID, inParam, propsize, (IntPtr)dataP);
+                        errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, propSize, (IntPtr)dataP);
                     }
                 }
-                if (err == ErrorCode.OK) outPropertyData = data;
-                else outPropertyData = new bool[0];
+                if (errorCode == ErrorCode.OK) outPropertyData = data;
+                else outPropertyData = [];
             }
-            else outPropertyData = new bool[0];
-            return err;
+            else outPropertyData = [];
+            return errorCode;
         }
 
         /// <summary>
@@ -1163,26 +1168,24 @@ namespace EOSDigital.SDK
         /// <returns>Any of the SDK errors</returns>
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out short[] outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            int tpsize = Marshal.SizeOf(typeof(short));
-            int propsize;
-            DataType proptype;
-            err = EdsGetPropertySize(inRef, inPropertyID, inParam, out proptype, out propsize);
-            if (err == ErrorCode.OK)
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            int typeSize = Marshal.SizeOf<short>();
+            errorCode = EdsGetPropertySize(inRef, inPropertyID, inParam, out DataType propType, out int propSize);
+            if (errorCode == ErrorCode.OK)
             {
-                var data = new short[propsize / tpsize];
+                var data = new short[propSize / typeSize];
                 unsafe
                 {
                     fixed (short* dataP = data)
                     {
-                        err = EdsGetPropertyData(inRef, inPropertyID, inParam, propsize, (IntPtr)dataP);
+                        errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, propSize, (IntPtr)dataP);
                     }
                 }
-                if (err == ErrorCode.OK) outPropertyData = data;
-                else outPropertyData = new short[0];
+                if (errorCode == ErrorCode.OK) outPropertyData = data;
+                else outPropertyData = [];
             }
-            else outPropertyData = new short[0];
-            return err;
+            else outPropertyData = [];
+            return errorCode;
         }
 
         /// <summary>
@@ -1195,26 +1198,24 @@ namespace EOSDigital.SDK
         /// <returns>Any of the SDK errors</returns>
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out int[] outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            int tpsize = Marshal.SizeOf(typeof(int));
-            int propsize;
-            DataType proptype;
-            err = EdsGetPropertySize(inRef, inPropertyID, inParam, out proptype, out propsize);
-            if (err == ErrorCode.OK)
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            int typeSize = Marshal.SizeOf<int>();
+            errorCode = EdsGetPropertySize(inRef, inPropertyID, inParam, out DataType propType, out int propSize);
+            if (errorCode == ErrorCode.OK)
             {
-                var data = new int[propsize / tpsize];
+                var data = new int[propSize / typeSize];
                 unsafe
                 {
                     fixed (int* dataP = data)
                     {
-                        err = EdsGetPropertyData(inRef, inPropertyID, inParam, propsize, (IntPtr)dataP);
+                        errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, propSize, (IntPtr)dataP);
                     }
                 }
-                if (err == ErrorCode.OK) outPropertyData = data;
-                else outPropertyData = new int[0];
+                if (errorCode == ErrorCode.OK) outPropertyData = data;
+                else outPropertyData = [];
             }
-            else outPropertyData = new int[0];
-            return err;
+            else outPropertyData = [];
+            return errorCode;
         }
 
         /// <summary>
@@ -1227,26 +1228,24 @@ namespace EOSDigital.SDK
         /// <returns>Any of the SDK errors</returns>
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out byte[] outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            int tpsize = Marshal.SizeOf(typeof(byte));
-            int propsize;
-            DataType proptype;
-            err = EdsGetPropertySize(inRef, inPropertyID, inParam, out proptype, out propsize);
-            if (err == ErrorCode.OK)
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            int typeSize = Marshal.SizeOf<byte>();
+            errorCode = EdsGetPropertySize(inRef, inPropertyID, inParam, out DataType propType, out int propSize);
+            if (errorCode == ErrorCode.OK)
             {
-                var data = new byte[propsize / tpsize];
+                var data = new byte[propSize / typeSize];
                 unsafe
                 {
                     fixed (byte* dataP = data)
                     {
-                        err = EdsGetPropertyData(inRef, inPropertyID, inParam, propsize, (IntPtr)dataP);
+                        errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, propSize, (IntPtr)dataP);
                     }
                 }
-                if (err == ErrorCode.OK) outPropertyData = data;
-                else outPropertyData = new byte[0];
+                if (errorCode == ErrorCode.OK) outPropertyData = data;
+                else outPropertyData = [];
             }
-            else outPropertyData = new byte[0];
-            return err;
+            else outPropertyData = [];
+            return errorCode;
         }
 
         /// <summary>
@@ -1257,29 +1256,26 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        [CLSCompliant(false)]
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out uint[] outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            int tpsize = Marshal.SizeOf(typeof(uint));
-            int propsize;
-            DataType proptype;
-            err = EdsGetPropertySize(inRef, inPropertyID, inParam, out proptype, out propsize);
-            if (err == ErrorCode.OK)
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            int typeSize = Marshal.SizeOf<uint>();
+            errorCode = EdsGetPropertySize(inRef, inPropertyID, inParam, out DataType propType, out int propSize);
+            if (errorCode == ErrorCode.OK)
             {
-                var data = new uint[propsize / tpsize];
+                var data = new uint[propSize / typeSize];
                 unsafe
                 {
                     fixed (uint* dataP = data)
                     {
-                        err = EdsGetPropertyData(inRef, inPropertyID, inParam, propsize, (IntPtr)dataP);
+                        errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, propSize, (IntPtr)dataP);
                     }
                 }
-                if (err == ErrorCode.OK) outPropertyData = data;
-                else outPropertyData = new uint[0];
+                if (errorCode == ErrorCode.OK) outPropertyData = data;
+                else outPropertyData = [];
             }
-            else outPropertyData = new uint[0];
-            return err;
+            else outPropertyData = [];
+            return errorCode;
         }
 
         /// <summary>
@@ -1292,26 +1288,24 @@ namespace EOSDigital.SDK
         /// <returns>Any of the SDK errors</returns>
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out Rational[] outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            int tpsize = Marshal.SizeOf(typeof(Rational));
-            int propsize;
-            DataType proptype;
-            err = EdsGetPropertySize(inRef, inPropertyID, inParam, out proptype, out propsize);
-            if (err == ErrorCode.OK)
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            int typeSize = Marshal.SizeOf<Rational>();
+            errorCode = EdsGetPropertySize(inRef, inPropertyID, inParam, out DataType propType, out int propSize);
+            if (errorCode == ErrorCode.OK)
             {
-                var data = new Rational[propsize / tpsize];
+                var data = new Rational[propSize / typeSize];
                 unsafe
                 {
                     fixed (Rational* dataP = data)
                     {
-                        err = EdsGetPropertyData(inRef, inPropertyID, inParam, propsize, (IntPtr)dataP);
+                        errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, propSize, (IntPtr)dataP);
                     }
                 }
-                if (err == ErrorCode.OK) outPropertyData = data;
-                else outPropertyData = new Rational[0];
+                if (errorCode == ErrorCode.OK) outPropertyData = data;
+                else outPropertyData = [];
             }
-            else outPropertyData = new Rational[0];
-            return err;
+            else outPropertyData = [];
+            return errorCode;
         }
 
         #endregion
@@ -1328,16 +1322,16 @@ namespace EOSDigital.SDK
         /// <returns>Any of the SDK errors</returns>
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out Time outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            int size = Marshal.SizeOf(typeof(Time));
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            int size = Marshal.SizeOf<Time>();
             Time val;
             unsafe
             {
                 Time* ptr = &val;
-                err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
+                errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
             }
             outPropertyData = val;
-            return err;
+            return errorCode;
         }
 
         /// <summary>
@@ -1351,17 +1345,17 @@ namespace EOSDigital.SDK
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out FocusInfo outPropertyData)
         {
             IntPtr ptr = IntPtr.Zero;
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             try
             {
-                int size = Marshal.SizeOf(typeof(FocusInfo));
+                int size = Marshal.SizeOf<FocusInfo>();
                 ptr = Marshal.AllocHGlobal(size);
-                err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, ptr);
+                errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, size, ptr);
 
-                outPropertyData = (FocusInfo)Marshal.PtrToStructure(ptr, typeof(FocusInfo));
+                outPropertyData = Marshal.PtrToStructure<FocusInfo>(ptr);
             }
             finally { if (ptr != IntPtr.Zero) Marshal.FreeHGlobal(ptr); }
-            return err;
+            return errorCode;
         }
 
         /// <summary>
@@ -1374,16 +1368,16 @@ namespace EOSDigital.SDK
         /// <returns>Any of the SDK errors</returns>
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out FocusPoint outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            int size = Marshal.SizeOf(typeof(FocusPoint));
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            int size = Marshal.SizeOf<FocusPoint>();
             FocusPoint val;
             unsafe
             {
                 FocusPoint* ptr = &val;
-                err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
+                errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
             }
             outPropertyData = val;
-            return err;
+            return errorCode;
         }
 
         /// <summary>
@@ -1396,16 +1390,16 @@ namespace EOSDigital.SDK
         /// <returns>Any of the SDK errors</returns>
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out Size outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            int size = Marshal.SizeOf(typeof(Size));
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            int size = Marshal.SizeOf<Size>();
             Size val;
             unsafe
             {
                 Size* ptr = &val;
-                err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
+                errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
             }
             outPropertyData = val;
-            return err;
+            return errorCode;
         }
 
         /// <summary>
@@ -1418,16 +1412,16 @@ namespace EOSDigital.SDK
         /// <returns>Any of the SDK errors</returns>
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out Rectangle outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            int size = Marshal.SizeOf(typeof(Rectangle));
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            int size = Marshal.SizeOf<Rectangle>();
             Rectangle val;
             unsafe
             {
                 Rectangle* ptr = &val;
-                err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
+                errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
             }
             outPropertyData = val;
-            return err;
+            return errorCode;
         }
 
         /// <summary>
@@ -1440,16 +1434,16 @@ namespace EOSDigital.SDK
         /// <returns>Any of the SDK errors</returns>
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out Point outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            int size = Marshal.SizeOf(typeof(Point));
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            int size = Marshal.SizeOf<Point>();
             Point val;
             unsafe
             {
                 Point* ptr = &val;
-                err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
+                errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
             }
             outPropertyData = val;
-            return err;
+            return errorCode;
         }
 
         /// <summary>
@@ -1462,16 +1456,16 @@ namespace EOSDigital.SDK
         /// <returns>Any of the SDK errors</returns>
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out MyMenuItems outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            int size = Marshal.SizeOf(typeof(MyMenuItems));
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            int size = Marshal.SizeOf<MyMenuItems>();
             MyMenuItems val;
             unsafe
             {
                 MyMenuItems* ptr = &val;
-                err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
+                errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, size, (IntPtr)ptr);
             }
             outPropertyData = val;
-            return err;
+            return errorCode;
         }
 
         /// <summary>
@@ -1484,33 +1478,29 @@ namespace EOSDigital.SDK
         /// <returns>Any of the SDK errors</returns>
         public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out PictureStyleDesc outPropertyData)
         {
-            ErrorCode err = ErrorCode.INTERNAL_ERROR;
-            DataType dt;
-            int size;
-            outPropertyData = default(PictureStyleDesc);
+            ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
+            outPropertyData = default;
+            errorCode = EdsGetPropertySize(inRef, inPropertyID, inParam, out _, out int size);
 
-            err = EdsGetPropertySize(inRef, inPropertyID, inParam, out dt, out size);
-
-            if (err == ErrorCode.OK)
+            if (errorCode == ErrorCode.OK)
             {
-                if (size == Marshal.SizeOf(typeof(PictureStyleDesc)))
+                if (size == Marshal.SizeOf<PictureStyleDesc>())
                 {
                     return GetPropertyDataSub(inRef, inPropertyID, inParam, out outPropertyData);
                 }
-                else if (size == Marshal.SizeOf(typeof(PictureStyleDesc_3_2)))
+                else if (size == Marshal.SizeOf<PictureStyleDesc_3_2>())
                 {
-                    PictureStyleDesc_3_2 tmpValue;
-                    err = GetPropertyDataSub(inRef, inPropertyID, inParam, out tmpValue);
-                    if (err == ErrorCode.OK)
+                    errorCode = GetPropertyDataSub(inRef, inPropertyID, inParam, out PictureStyleDesc_3_2 tmpValue);
+                    if (errorCode == ErrorCode.OK)
                     {
                         outPropertyData = tmpValue.ToCurrent();
-                        return err;
+                        return errorCode;
                     }
                 }
                 else throw new InvalidOperationException("Cannot find correct struct size");
             }
 
-            return err;
+            return errorCode;
         }
 
         #endregion

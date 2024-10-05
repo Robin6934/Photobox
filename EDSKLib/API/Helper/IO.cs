@@ -77,19 +77,19 @@ namespace EOSDigital.API
         /// <summary>
         /// The name of the entry. (volume name, folder name or file name)
         /// </summary>
-        public string Name { get; protected set; }
+        public string Name { get; protected set; } = default!;
         /// <summary>
         /// States if the entry is a folder or not
         /// </summary>
-        public bool IsFolder { get; protected set; }
+        public bool IsFolder { get; protected set; } = default!;
         /// <summary>
         /// States if the entry is a volume or not
         /// </summary>
-        public bool IsVolume { get; protected set; }
+        public bool IsVolume { get; protected set; } = default!;
         /// <summary>
         /// If the entry is a volume or folder, these are the subentries it contains. It's null if no subentries are present.
         /// </summary>
-        public CameraFileEntry[] Entries { get; internal protected set; }
+        public CameraFileEntry[] Entries { get; internal protected set; } = default!;
 
         /// <summary>
         /// Pointer to the file entry
@@ -149,8 +149,18 @@ namespace EOSDigital.API
         {
             if (!IsDisposed)
             {
-                if (managed) DisposeThumb();
-                if (Reference != IntPtr.Zero) CanonSDK.EdsRelease(Reference);
+                if (managed)
+                {
+                    DisposeThumb();
+                }
+
+                if (Reference != IntPtr.Zero)
+                {
+#pragma warning disable CA1806
+                    CanonSDK.EdsRelease(Reference);
+#pragma warning restore CA1806
+                }
+
                 IsDisposed = true;
             }
         }
@@ -185,10 +195,16 @@ namespace EOSDigital.API
         public static bool operator ==(CameraFileEntry x, CameraFileEntry y)
         {
             // If both are null, or both are same instance, return true.
-            if (object.ReferenceEquals(x, y)) return true;
+            if (object.ReferenceEquals(x, y))
+            {
+                return true;
+            }
 
             // If one is null, but not both, return false.
-            if ((object)x == null || (object)y == null) return false;
+            if (x is null || y is null)
+            {
+                return false;
+            }
 
             return x.Reference == y.Reference;
         }
@@ -207,16 +223,17 @@ namespace EOSDigital.API
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="CameraFileEntry"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="CameraFileEntry"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            // If objects have different types, return false.
-            if (obj.GetType() != GetType()) return false;
+            if (obj is not CameraFileEntry)
+            {
+                return false;
+            }
 
             // If both are null, or both are same instance, return true.
-            if (object.ReferenceEquals(this, obj)) return true;
+            if (ReferenceEquals(this, obj)) return true;
 
-            CameraFileEntry cv = obj as CameraFileEntry;
-            if (cv == null) return false;
+            if (obj is not CameraFileEntry cv) return false;
 
             return Reference == cv.Reference;
         }
@@ -266,14 +283,12 @@ namespace EOSDigital.API
             {
                 if (CanonSDK.IsVerGE34)
                 {
-                    long length;
-                    CanonSDK.EdsGetLength(Reference, out length);
+                    CanonSDK.EdsGetLength(Reference, out long length);
                     return length;
                 }
                 else
                 {
-                    int length;
-                    CanonSDK.EdsGetLength(Reference, out length);
+                    CanonSDK.EdsGetLength(Reference, out int length);
                     return length;
                 }
             }
@@ -287,14 +302,12 @@ namespace EOSDigital.API
             {
                 if (CanonSDK.IsVerGE34)
                 {
-                    long position;
-                    CanonSDK.EdsGetPosition(Reference, out position);
+                    CanonSDK.EdsGetPosition(Reference, out long position);
                     return position;
                 }
                 else
                 {
-                    int position;
-                    CanonSDK.EdsGetPosition(Reference, out position);
+                    CanonSDK.EdsGetPosition(Reference, out int position);
                     return position;
                 }
             }
@@ -305,8 +318,8 @@ namespace EOSDigital.API
         /// </summary>
         public IntPtr Reference
         {
-            get { return _Reference; }
-            protected set { _Reference = value; }
+            get => _Reference;
+            protected set => _Reference = value;
         }
         private IntPtr _Reference;
 
@@ -324,13 +337,13 @@ namespace EOSDigital.API
         /// <summary>
         /// Creates a new instance of the <see cref="SDKStream"/> class with an underlying SDK file stream
         /// </summary>
-        /// <param name="filepath">Path to the file</param>
+        /// <param name="filePath">Path to the file</param>
         /// <param name="createDisposition">State how to create the stream</param>
         /// <param name="access">File access type</param>
-        public SDKStream(string filepath, FileCreateDisposition createDisposition, FileAccess access)
+        public SDKStream(string filePath, FileCreateDisposition createDisposition, FileAccess access)
         {
-            if (filepath == null) throw new ArgumentNullException(nameof(filepath));
-            ErrorHandler.CheckError(CanonSDK.EdsCreateFileStreamEx(filepath, createDisposition, access, out _Reference));
+            ArgumentNullException.ThrowIfNull(filePath);
+            ErrorHandler.CheckError(CanonSDK.EdsCreateFileStreamEx(filePath, createDisposition, access, out _Reference));
         }
 
         /// <summary>
@@ -353,7 +366,7 @@ namespace EOSDigital.API
         /// <param name="buffer">The memory buffer to use for the stream</param>
         public SDKStream(byte[] buffer)
         {
-            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
+            ArgumentNullException.ThrowIfNull(buffer);
 
             ErrorCode err;
             if (CanonSDK.IsVerGE34) err = CanonSDK.EdsCreateMemoryStreamFromPointer(buffer, buffer.LongLength, out _Reference);
@@ -433,7 +446,7 @@ namespace EOSDigital.API
         /// if the end of the stream has been reached.</returns>
         public unsafe long Read(byte[] buffer, long offset, long count)
         {
-            if (buffer.LongLength < offset + count) throw new ArgumentOutOfRangeException();
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(buffer.LongLength, offset + count);
 
             fixed (byte* bufferPtr = buffer)
             {
@@ -441,14 +454,12 @@ namespace EOSDigital.API
 
                 if (CanonSDK.IsVerGE34)
                 {
-                    long read;
-                    ErrorHandler.CheckError(CanonSDK.EdsRead(_Reference, count, (IntPtr)offsetBufferPtr, out read));
+                    ErrorHandler.CheckError(CanonSDK.EdsRead(_Reference, count, (IntPtr)offsetBufferPtr, out long read));
                     return read;
                 }
                 else
                 {
-                    int read;
-                    ErrorHandler.CheckError(CanonSDK.EdsRead(_Reference, (int)count, (IntPtr)offsetBufferPtr, out read));
+                    ErrorHandler.CheckError(CanonSDK.EdsRead(_Reference, (int)count, (IntPtr)offsetBufferPtr, out int read));
                     return read;
                 }
             }
@@ -463,23 +474,13 @@ namespace EOSDigital.API
         /// <returns>The new position within the current stream.</returns>
         public override long Seek(long offset, SeekOrigin origin)
         {
-            SDK.SeekOrigin sdkOrigin;
-            switch (origin)
+            var sdkOrigin = origin switch
             {
-                case SeekOrigin.Begin:
-                    sdkOrigin = SDK.SeekOrigin.Begin;
-                    break;
-                case SeekOrigin.Current:
-                    sdkOrigin = SDK.SeekOrigin.Current;
-                    break;
-                case SeekOrigin.End:
-                    sdkOrigin = SDK.SeekOrigin.End;
-                    break;
-
-                default:
-                    throw new ArgumentException("Not a valid enum value", nameof(origin));
-            }
-
+                SeekOrigin.Begin => SDK.SeekOrigin.Begin,
+                SeekOrigin.Current => SDK.SeekOrigin.Current,
+                SeekOrigin.End => SDK.SeekOrigin.End,
+                _ => throw new ArgumentException("Not a valid enum value", nameof(origin)),
+            };
             if (CanonSDK.IsVerGE34) ErrorHandler.CheckError(CanonSDK.EdsSeek(_Reference, offset, sdkOrigin));
             else ErrorHandler.CheckError(CanonSDK.EdsSeek(_Reference, (int)offset, sdkOrigin));
 
@@ -504,7 +505,7 @@ namespace EOSDigital.API
         /// <param name="count">The number of bytes to be written to the current stream.</param>
         public override void Write(byte[] buffer, int offset, int count)
         {
-            Write(buffer, (long)offset, count);
+            Write(buffer, offset, count);
         }
 
         /// <summary>
@@ -516,7 +517,7 @@ namespace EOSDigital.API
         /// <param name="count">The number of bytes to be written to the current stream.</param>
         public unsafe void Write(byte[] buffer, long offset, long count)
         {
-            if (buffer.LongLength < offset + count) throw new ArgumentOutOfRangeException();
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(buffer.LongLength, offset + count);
 
             fixed (byte* bufferPtr = buffer)
             {
@@ -524,13 +525,11 @@ namespace EOSDigital.API
 
                 if (CanonSDK.IsVerGE34)
                 {
-                    long written;
-                    ErrorHandler.CheckError(CanonSDK.EdsWrite(_Reference, count, (IntPtr)offsetBufferPtr, out written));
+                    ErrorHandler.CheckError(CanonSDK.EdsWrite(_Reference, count, (IntPtr)offsetBufferPtr, out long written));
                 }
                 else
                 {
-                    int written;
-                    ErrorHandler.CheckError(CanonSDK.EdsWrite(_Reference, (int)count, (IntPtr)offsetBufferPtr, out written));
+                    ErrorHandler.CheckError(CanonSDK.EdsWrite(_Reference, (int)count, (IntPtr)offsetBufferPtr, out int written));
                 }
             }
         }

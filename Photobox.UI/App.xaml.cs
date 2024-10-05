@@ -4,8 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Photobox.Lib.Camera;
-using Photobox.Lib.IPC;
-using Photobox.LocalServer.RestApi.Api;
+using Photobox.Lib.ConfigModels;
+using Photobox.Lib.PhotoManager;
+using Photobox.Lib.Printer;
 using Photobox.UI.ImageViewer;
 using Photobox.UI.Windows;
 using Serilog;
@@ -45,15 +46,22 @@ public partial class App : Application
     private static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+            .ConfigureAppConfiguration(config =>
+            {
+                config.AddEnvironmentVariables();
+                config.AddJsonFile(".\\appsettings.json", true, true);
+            })
             .ConfigureServices((context, services) =>
             {
-                services.AddSingleton<IPhotoboxApi, PhotoboxApi>(s => new PhotoboxApi("https://localhost:7176"));
-                services.AddSingleton<ICameraApi, CameraApi>(s => new CameraApi("https://localhost:7176"));
-                services.AddSingleton<ISettingsApi, SettingsApi>(s => new SettingsApi("https://localhost:7176"));
                 services.AddSingleton<MainWindow>();
                 services.AddSingleton<LogWindow>();
-                services.AddSingleton<ICamera, IPCNamedPipeClient>();
-                services.AddSingleton<IImageViewer, ImageViewer.ImageViewer>();
+                services.AddSingleton<CameraFactory>();
+                services.AddSingleton(c => c.GetRequiredService<CameraFactory>().Create());
+                services.AddSingleton<IImageViewer, ImageViewerLocal>();
+                services.AddSingleton<IImageManager, ImageManager>();
+                services.AddSingleton<IPrinter, Printer>();
+                services.Configure<PhotoboxConfig>(
+                    context.Configuration.GetSection(PhotoboxConfig.Photobox));
             })
             .ConfigureLogging(logging => logging.ClearProviders())
             .UseSerilog((context, services, configuration) =>
@@ -65,7 +73,6 @@ public partial class App : Application
                     .Enrich.WithProperty("Source", "UI")
                     .WriteTo.RichTextBox(services.GetRequiredService<LogWindow>().RichTextBoxLog)
                     .WriteTo.Seq("http://localhost:5341");
-            })
-            .ConfigureAppConfiguration(config => config.AddEnvironmentVariables());
+            });
 }
 

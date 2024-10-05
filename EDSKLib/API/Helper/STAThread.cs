@@ -1,4 +1,6 @@
-﻿namespace EOSDigital.API
+﻿
+
+namespace EOSDigital.API
 {
     /// <summary>
     /// This static class executes things on an STA thread and provides a method to create an STA thread
@@ -10,7 +12,7 @@
         /// <summary>
         /// Object that is used for the lock keyword to ensure only one SDK command is executed at a time
         /// </summary>
-        public static readonly object ExecLock = new object();
+        public static readonly object ExecLock = new();
         /// <summary>
         /// States if the calling thread is in a Single Threaded Apartment or not
         /// </summary>
@@ -37,7 +39,7 @@
         /// <summary>
         /// The main thread where everything will be executed on
         /// </summary>
-        private Thread mainThread;
+        private Thread mainThread = default!;
         /// <summary>
         /// States if the execution thread is currently running
         /// </summary>
@@ -46,19 +48,19 @@
         /// <summary>
         /// Lock object to make sure only one command at a time is executed
         /// </summary>
-        private object runLock = new object();
+        private readonly Lock runLock = new();
         /// <summary>
         /// Lock object to ensure that an action executed on the thread does not invoke on itself
         /// </summary>
-        private object cmdLock = new object();
+        private readonly object cmdLock = new();
         /// <summary>
         /// Lock object to synchronize between execution and calling thread
         /// </summary>
-        protected object threadLock1 = new object();
+        protected readonly object threadLock1 = new();
         /// <summary>
         /// Lock object to synchronize between execution and calling thread
         /// </summary>
-        private object threadLock2 = new object();
+        private readonly object threadLock2 = new();
         /// <summary>
         /// States if the first lock is currently blocking or not
         /// </summary>
@@ -71,11 +73,11 @@
         /// <summary>
         /// The action to be executed
         /// </summary>
-        private Action runAction;
+        private Action runAction = default!;
         /// <summary>
         /// Storage for an exception that might have happened on the execution thread
         /// </summary>
-        private Exception runException;
+        private Exception runException = default!;
 
         #endregion
 
@@ -129,25 +131,38 @@
         /// it will be rethrown as inner exception of this exception</exception>
         public void Invoke(Action action)
         {
-            if (action == null) throw new ArgumentNullException(nameof(action));
+            ArgumentNullException.ThrowIfNull(action);
 
             //If the method is called from the execution thread, directly execute it.
             //This prevents possible deadlocks when trying to acquire the runLock while waiting within for the thread to finish.
             if (Monitor.TryEnter(cmdLock))
             {
-                try { action(); }
-                finally { Monitor.Exit(cmdLock); }
+                try
+                {
+                    action();
+                }
+                finally
+                {
+                    Monitor.Exit(cmdLock);
+                }
             }
             else
             {
                 lock (runLock)
                 {
-                    if (!isRunning) throw new InvalidOperationException("Thread is not running");
+                    if (!isRunning)
+                    {
+                        throw new InvalidOperationException("Thread is not running");
+                    }
 
                     runAction = action;
                     NotifyThread();
                     WaitForThread();
-                    if (runException != null) throw new ExecutionException(runException.Message, runException);
+
+                    if (runException != null)
+                    {
+                        throw new ExecutionException(runException.Message, runException);
+                    }
                 }
             }
         }
@@ -162,9 +177,9 @@
         /// it will be rethrown as inner exception of this exception</exception>
         public T Invoke<T>(Func<T> func)
         {
-            if (func == null) throw new ArgumentNullException(nameof(func));
+            ArgumentNullException.ThrowIfNull(func);
 
-            T result = default(T);
+            T result = default!;
             Invoke(delegate { result = func(); });
             return result;
         }
@@ -193,10 +208,13 @@
         /// <param name="wait">If true, the action is executed synchronously or if false, asynchronously.</param>
         public static void ExecuteThread(Action action, bool wait)
         {
-            Exception runException = null;
-            Thread thread = CreateThread(delegate
+            Exception runException = default!;
+            Thread thread = CreateThread(() =>
             {
-                try { action(); }
+                try
+                {
+                    action();
+                }
                 catch (Exception ex)
                 {
                     if (wait) runException = ex;
@@ -209,7 +227,10 @@
             if (wait)
             {
                 thread.Join();
-                if (runException != null) throw new ExecutionException(runException.Message, runException);
+                if (runException is not null)
+                {
+                    throw new ExecutionException(runException.Message, runException);
+                }
             }
         }
 
@@ -220,8 +241,8 @@
         /// <returns>The return value of the given function</returns>
         public static T ExecuteThread<T>(Func<T> func)
         {
-            Exception runException = null;
-            T result = default(T);
+            Exception runException = default!;
+            T result = default!;
             Thread thread = CreateThread(delegate
             {
                 try { result = func(); }
@@ -301,7 +322,7 @@
                         WaitForNotification();
                         if (!isRunning) return;
 
-                        runException = null;
+                        runException = default!;
                         try { lock (ExecLock) { runAction(); } }
                         catch (Exception ex) { runException = ex; }
 

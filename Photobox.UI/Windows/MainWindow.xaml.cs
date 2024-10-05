@@ -8,7 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace Photobox.UI.Windows;
-public partial class MainWindow : Window
+public partial class MainWindow : Window//, IHostedService
 {
     private readonly ICamera camera;
 

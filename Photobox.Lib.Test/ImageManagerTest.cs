@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Photobox.Lib.PhotoManager;
 using Photobox.Lib.Printer;
@@ -11,9 +12,11 @@ public class ImageManagerTest
     {
         var printer = Substitute.For<IPrinter>();
 
-        IImageManager imageService = new ImageManager(printer);
+        var logger = Substitute.For<ILogger<ImageManager>>();
 
-        string imageName = "testimage.jpg";
+        IImageManager imageService = new ImageManager(logger, printer);
+
+        string imageName = "testImage.jpg";
 
         string newImagePath = Path.Combine(
             Folders.PhotoboxBaseDir,
@@ -24,7 +27,7 @@ public class ImageManagerTest
         {
             DeleteFileIfExists(imageName);
 
-            File.WriteAllText(imageName, "testfilecontent");
+            File.WriteAllText(imageName, "testFileContent");
 
             await imageService.PrintAndSaveAsync(imageName);
 
@@ -42,9 +45,11 @@ public class ImageManagerTest
     {
         var printer = Substitute.For<IPrinter>();
 
-        IImageManager imageService = new ImageManager(printer);
+        var logger = Substitute.For<ILogger<ImageManager>>();
 
-        string imageName = "testimage.jpg";
+        IImageManager imageService = new ImageManager(logger, printer);
+
+        string imageName = "testImage.jpg";
 
         string newImagePath = Path.Combine(
             Folders.PhotoboxBaseDir,
@@ -55,7 +60,7 @@ public class ImageManagerTest
         {
             DeleteFileIfExists(imageName);
 
-            File.WriteAllText(imageName, "testfilecontent");
+            File.WriteAllText(imageName, "testFileContent");
 
             await imageService.PrintAndSaveAsync(imageName);
 
@@ -73,9 +78,11 @@ public class ImageManagerTest
     {
         var printer = Substitute.For<IPrinter>();
 
-        IImageManager imageService = new ImageManager(printer);
+        var logger = Substitute.For<ILogger<ImageManager>>();
 
-        string imageName = "testimage.jpg";
+        IImageManager imageService = new ImageManager(logger, printer);
+
+        string imageName = "testImage.jpg";
 
         string newImagePath = Path.Combine(
             Folders.PhotoboxBaseDir,
@@ -86,7 +93,7 @@ public class ImageManagerTest
         {
             DeleteFileIfExists(imageName);
 
-            File.WriteAllText(imageName, "testfilecontent");
+            File.WriteAllText(imageName, "testFileContent");
 
             imageService.Save(imageName);
 
@@ -104,9 +111,11 @@ public class ImageManagerTest
     {
         var printer = Substitute.For<IPrinter>();
 
-        IImageManager imageService = new ImageManager(printer);
+        var logger = Substitute.For<ILogger<ImageManager>>();
 
-        string imageName = "testimage.jpg";
+        IImageManager imageService = new ImageManager(logger, printer);
+
+        string imageName = "testImage.jpg";
 
         string newImagePath = Path.Combine(
             Folders.PhotoboxBaseDir,
@@ -117,7 +126,7 @@ public class ImageManagerTest
         {
             DeleteFileIfExists(imageName);
 
-            File.WriteAllText(imageName, "testfilecontent");
+            File.WriteAllText(imageName, "testFileContent");
 
             imageService.Delete(imageName);
 

@@ -7,7 +7,7 @@ namespace Photobox.Lib.Camera;
 
 public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime applicationLifetime) : CameraBase
 {
-    private VideoCapture capture = null!;
+    private VideoCapture? capture = default;
 
     private readonly ILogger<WebCam> logger = logger;
 
@@ -25,15 +25,15 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
 
     public override Task DisconnectAsync()
     {
-        capture.Dispose();
-        capture = null!;
+        capture?.Dispose();
+        capture = null;
         return Task.CompletedTask;
     }
 
     public override void Dispose()
     {
-        capture.Dispose();
-        capture = null!;
+        capture?.Dispose();
+        capture = null;
     }
 
     public override Task StartStreamAsync()
@@ -43,10 +43,10 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
         return Task.Run(() =>
         {
             using Mat frame = new();
-            while (!applicationLifetime.ApplicationStopping.IsCancellationRequested 
+            while (!applicationLifetime.ApplicationStopping.IsCancellationRequested
                 && LiveViewActive)
             {
-                capture.Read(frame);
+                capture?.Read(frame);
 
                 Span<byte> data = frame.ToImage<Rgb, byte>(false).ToJpegData();
 
@@ -69,8 +69,10 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
         Folders.CheckIfDirectoriesExistElseCreate();
 
         using Mat frame = new();
-        capture.Read(frame);
+        capture?.Read(frame);
         frame.Save(imagePath);
+
+        logger.LogInformation("New image taken with path {imagePath}", imagePath);
 
         await Task.CompletedTask;
 

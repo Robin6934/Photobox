@@ -8,7 +8,7 @@ internal class CanonCamera : CameraBase
 {
     private readonly CanonAPI api = new();
 
-    private readonly EOSDigital.API.Camera camera;
+    private readonly EOSDigital.API.Camera camera = default!;
 
     private readonly System.Timers.Timer keepAliveTimer = new()
     {
@@ -39,7 +39,7 @@ internal class CanonCamera : CameraBase
             }
             catch (Exception ex)
             {
-                logger.LogError("Error while retrieving tha connected Canon cameras!", ex);
+                logger.LogError(ex, "Error while retrieving tha connected Canon cameras!");
             }
             if (CamList.Count > 0)
             {

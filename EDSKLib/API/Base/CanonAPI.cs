@@ -19,7 +19,7 @@ namespace EOSDigital.API
         /// <summary>
         /// The SDK camera added delegate
         /// </summary>
-        protected static SDKCameraAddedHandler? CameraAddedEvent;
+        private static SDKCameraAddedHandler? CameraAddedEvent;
 
         private ErrorCode CanonAPI_CameraAddedEvent(IntPtr inContext)
         {
@@ -41,7 +41,7 @@ namespace EOSDigital.API
         /// <summary>
         /// The main SDK thread where the event loop runs
         /// </summary>
-        protected static STAThread? MainThread;
+        private static STAThread? MainThread;
 
         /// <summary>
         /// Field for the public <see cref="IsSDKInitialized"/> property
@@ -58,15 +58,15 @@ namespace EOSDigital.API
         /// <summary>
         /// Object to lock on to safely de- and increment the <see cref="RefCount"/> value
         /// </summary>
-        private static readonly object InitLock = new object();
+        private static readonly Lock InitLock = new();
         /// <summary>
         /// List of currently connected cameras (since the last time GetCameraList got called)
         /// </summary>
-        private static List<Camera> CurrentCameras = new List<Camera>();
+        private readonly static List<Camera> CurrentCameras = [];
         /// <summary>
         /// Object to lock on to safely add/remove cameras from the <see cref="CurrentCameras"/> list
         /// </summary>
-        private static readonly object CameraLock = new object();
+        private static readonly Lock CameraLock = new();
 
         #endregion
 
@@ -106,8 +106,9 @@ namespace EOSDigital.API
                         {
                             //Trying to trigger DllNotFoundException so it's not thrown
                             //in the event loop on a different thread:
+#pragma warning disable CA1806
                             CanonSDK.EdsRelease(IntPtr.Zero);
-
+#pragma warning restore CA1806
                             //Start the main thread where SDK will run on
                             MainThread = new ApiThread();
                             MainThread.Start();
@@ -166,7 +167,7 @@ namespace EOSDigital.API
                         _IsSDKInitialized = false;//Set beforehand because if an error happens, the SDK will be in an unstable state anyway
 
                         //Remove event handler for the CameraAdded event
-                        ErrorCode err = CanonSDK.EdsSetCameraAddedHandler(null, IntPtr.Zero);
+                        ErrorCode err = CanonSDK.EdsSetCameraAddedHandler(null!, IntPtr.Zero);
                         if (managed)
                         {
                             ErrorHandler.CheckError(this, err);
@@ -198,14 +199,14 @@ namespace EOSDigital.API
         /// <exception cref="SDKException">An SDK call failed</exception>
         public List<Camera> GetCameraList()
         {
-            if (IsDisposed) throw new ObjectDisposedException(nameof(CanonAPI));
+            ObjectDisposedException.ThrowIf(IsDisposed, this);
 
             //Ensure that only one caller at a time can access the camera list
             lock (CameraLock)
             {
                 //Get a list of camera pointers
                 IEnumerable<IntPtr> ptrList = GetCameraPointerList();
-                List<Camera> camList = new List<Camera>();
+                List<Camera> camList = [];
 
                 //Find cameras that were connected before and add new ones
                 foreach (var ptr in ptrList)
@@ -233,41 +234,36 @@ namespace EOSDigital.API
         /// <exception cref="SDKException">An SDK call failed</exception>
         protected IEnumerable<IntPtr> GetCameraPointerList()
         {
-            if (IsDisposed) throw new ObjectDisposedException(nameof(CanonAPI));
+            ObjectDisposedException.ThrowIf(IsDisposed, this);
 
-            IntPtr camlist;
             //Get camera list
-            ErrorHandler.CheckError(this, CanonSDK.EdsGetCameraList(out camlist));
+            ErrorHandler.CheckError(this, CanonSDK.EdsGetCameraList(out nint camList));
 
             //Get number of connected cameras
-            int camCount;
-            ErrorHandler.CheckError(this, CanonSDK.EdsGetChildCount(camlist, out camCount));
-            List<IntPtr> ptrList = new List<IntPtr>();
+            ErrorHandler.CheckError(this, CanonSDK.EdsGetChildCount(camList, out int camCount));
+            List<IntPtr> ptrList = [];
             for (int i = 0; i < camCount; i++)
             {
                 //Get camera pointer
-                IntPtr cptr;
-                ErrorHandler.CheckError(this, CanonSDK.EdsGetChildAtIndex(camlist, i, out cptr));
+                ErrorHandler.CheckError(this, CanonSDK.EdsGetChildAtIndex(camList, i, out nint cptr));
                 ptrList.Add(cptr);
             }
             //Release the list
-            ErrorHandler.CheckError(this, CanonSDK.EdsRelease(camlist));
+            ErrorHandler.CheckError(CanonSDK.EdsRelease(camList));
             return ptrList;
         }
 
         /// <summary>
         /// Gets a thumbnail from a Raw or Jpg image
         /// </summary>
-        /// <param name="filepath">Path to the image file</param>
+        /// <param name="filePath">Path to the image file</param>
         /// <returns>A <see cref="Bitmap"/> thumbnail from the provided image file</returns>
-        public Bitmap GetFileThumb(string filepath)
+        public Bitmap GetFileThumb(string filePath)
         {
             //create a file stream to given file
-            using (var stream = new SDKStream(filepath, FileCreateDisposition.OpenExisting, EOSDigital.SDK.FileAccess.Read))
-            {
-                //Create a thumbnail Bitmap from the stream
-                return GetImage(stream.Reference, ImageSource.Thumbnail);
-            }
+            using var stream = new SDKStream(filePath, FileCreateDisposition.OpenExisting, EOSDigital.SDK.FileAccess.Read);
+            //Create a thumbnail Bitmap from the stream
+            return GetImage(stream.Reference, ImageSource.Thumbnail);
         }
 
         /// <summary>
@@ -280,53 +276,57 @@ namespace EOSDigital.API
         {
             IntPtr imgRef = IntPtr.Zero;
             IntPtr streamPointer = IntPtr.Zero;
-            ImageInfo imageInfo;
 
             try
             {
                 //create reference and get image info
                 ErrorHandler.CheckError(this, CanonSDK.EdsCreateImageRef(imgStream, out imgRef));
-                ErrorHandler.CheckError(this, CanonSDK.EdsGetImageInfo(imgRef, imageSource, out imageInfo));
+                ErrorHandler.CheckError(this, CanonSDK.EdsGetImageInfo(imgRef, imageSource, out ImageInfo imageInfo));
 
-                Size outputSize = new Size();
-                outputSize.Width = imageInfo.EffectiveRect.Width;
-                outputSize.Height = imageInfo.EffectiveRect.Height;
-                //calculate amount of data
-                int datalength = outputSize.Height * outputSize.Width * 3;
-                //create buffer that stores the image
-                byte[] buffer = new byte[datalength];
-                //create a stream to the buffer
-                using (var stream = new SDKStream(buffer))
+                Size outputSize = new()
                 {
-                    //load image into the buffer
-                    ErrorHandler.CheckError(this, CanonSDK.EdsGetImage(imgRef, imageSource, TargetImageType.RGB, imageInfo.EffectiveRect, outputSize, stream.Reference));
+                    Width = imageInfo.EffectiveRect.Width,
+                    Height = imageInfo.EffectiveRect.Height
+                };
+                //calculate amount of data
+                int dataLength = outputSize.Height * outputSize.Width * 3;
+                //create buffer that stores the image
+                byte[] buffer = new byte[dataLength];
+                //create a stream to the buffer
+                using var stream = new SDKStream(buffer);
+                //load image into the buffer
+                ErrorHandler.CheckError(this, CanonSDK.EdsGetImage(imgRef,
+                    imageSource,
+                    TargetImageType.RGB,
+                    imageInfo.EffectiveRect,
+                    outputSize,
+                    stream.Reference));
 
-                    //make BGR from RGB (System.Drawing (i.e. GDI+) uses BGR)
-                    unsafe
+                //make BGR from RGB (System.Drawing (i.e. GDI+) uses BGR)
+                unsafe
+                {
+                    byte tmp;
+                    fixed (byte* pix = buffer)
                     {
-                        byte tmp;
-                        fixed (byte* pix = buffer)
+                        for (long i = 0; i < dataLength; i += 3)
                         {
-                            for (long i = 0; i < datalength; i += 3)
-                            {
-                                tmp = pix[i];        //Save B value
-                                pix[i] = pix[i + 2]; //Set B value with R value
-                                pix[i + 2] = tmp;    //Set R value with B value
-                            }
+                            tmp = pix[i];        //Save B value
+                            pix[i] = pix[i + 2]; //Set B value with R value
+                            pix[i + 2] = tmp;    //Set R value with B value
                         }
                     }
-
-                    //Get pointer to stream data
-                    ErrorHandler.CheckError(this, CanonSDK.EdsGetPointer(stream.Reference, out streamPointer));
-                    //Create bitmap with the data in the buffer
-                    return new Bitmap(outputSize.Width, outputSize.Height, datalength, PixelFormat.Format24bppRgb, streamPointer);
                 }
+
+                //Get pointer to stream data
+                ErrorHandler.CheckError(this, CanonSDK.EdsGetPointer(stream.Reference, out streamPointer));
+                //Create bitmap with the data in the buffer
+                return new Bitmap(outputSize.Width, outputSize.Height, dataLength, PixelFormat.Format24bppRgb, streamPointer);
             }
             finally
             {
                 //Release all data
-                if (imgStream != IntPtr.Zero) ErrorHandler.CheckError(this, CanonSDK.EdsRelease(imgStream));
-                if (imgRef != IntPtr.Zero) ErrorHandler.CheckError(this, CanonSDK.EdsRelease(imgRef));
+                if (imgStream != IntPtr.Zero) ErrorHandler.CheckError(CanonSDK.EdsRelease(imgStream));
+                if (imgRef != IntPtr.Zero) ErrorHandler.CheckError(CanonSDK.EdsRelease(imgRef));
             }
         }
 
