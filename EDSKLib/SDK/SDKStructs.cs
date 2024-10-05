@@ -5,28 +5,22 @@ namespace EOSDigital.SDK
     /// <summary>
     /// Point
     /// </summary>
+    /// <remarks>
+    /// Creates a new instance of the <see cref="Point"/> struct
+    /// </remarks>
+    /// <param name="X">X Coordinate</param>
+    /// <param name="Y">Y Coordinate</param>
     [StructLayout(LayoutKind.Sequential)]
-    public struct Point
+    public struct Point(int X, int Y)
     {
         /// <summary>
         /// X Coordinate
         /// </summary>
-        public int X;
+        public int X = X;
         /// <summary>
         /// Y Coordinate
         /// </summary>
-        public int Y;
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Point"/> struct
-        /// </summary>
-        /// <param name="X">X Coordinate</param>
-        /// <param name="Y">Y Coordinate</param>
-        public Point(int X, int Y)
-        {
-            this.X = X;
-            this.Y = Y;
-        }
+        public int Y = Y;
 
 
         /// <summary>
@@ -56,16 +50,16 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="Point"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="Point"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object? obj)
         {
-            return obj is Point && this == (Point)obj;
+            return obj is Point point && this == point;
         }
 
         /// <summary>
         /// Serves as a hash function for a <see cref="Point"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="Point"/></returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             unchecked
             {
@@ -80,7 +74,7 @@ namespace EOSDigital.SDK
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns>A string that represents the current object.</returns>
-        public override string ToString()
+        public override readonly string ToString()
         {
             return string.Concat(X, ";", Y);
         }
@@ -89,26 +83,20 @@ namespace EOSDigital.SDK
     /// <summary>
     /// Size
     /// </summary>
+    /// <remarks>
+    /// Creates a new instance of the <see cref="Size"/> struct
+    /// </remarks>
     [StructLayout(LayoutKind.Sequential)]
-    public struct Size
+    public struct Size(int Width, int Height)
     {
         /// <summary>
         /// Width
         /// </summary>
-        public int Width;
+        public int Width = Width;
         /// <summary>
         /// Height
         /// </summary>
-        public int Height;
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Size"/> struct
-        /// </summary>
-        public Size(int Width, int Height)
-        {
-            this.Width = Width;
-            this.Height = Height;
-        }
+        public int Height = Height;
 
 
         /// <summary>
@@ -138,16 +126,16 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="Size"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="Size"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object? obj)
         {
-            return obj is Size && this == (Size)obj;
+            return obj is Size size && this == size;
         }
 
         /// <summary>
         /// Serves as a hash function for a <see cref="Size"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="Size"/></returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             unchecked
             {
@@ -162,7 +150,7 @@ namespace EOSDigital.SDK
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns>A string that represents the current object.</returns>
-        public override string ToString()
+        public override readonly string ToString()
         {
             return string.Concat(Width, ";", Height);
         }
@@ -171,25 +159,32 @@ namespace EOSDigital.SDK
     /// <summary>
     /// Rectangle
     /// </summary>
+    /// <remarks>
+    /// Creates a new instance of the <see cref="Rectangle"/> struct
+    /// </remarks>
+    /// <param name="X">X Coordinate</param>
+    /// <param name="Y">Y Coordinate</param>
+    /// <param name="Width">Width of the rectangle</param>
+    /// <param name="Height">Height of the rectangle</param>
     [StructLayout(LayoutKind.Sequential)]
-    public struct Rectangle
+    public struct Rectangle(int X, int Y, int Width, int Height)
     {
         /// <summary>
         /// X Coordinate
         /// </summary>
-        public int X;
+        public int X = X;
         /// <summary>
         /// Y Coordinate
         /// </summary>
-        public int Y;
+        public int Y = Y;
         /// <summary>
         /// Width of the rectangle
         /// </summary>
-        public int Width;
+        public int Width = Width;
         /// <summary>
         /// Height of the rectangle
         /// </summary>
-        public int Height;
+        public int Height = Height;
 
         /// <summary>
         /// Creates a new instance of the <see cref="Rectangle"/> struct
@@ -199,22 +194,6 @@ namespace EOSDigital.SDK
         public Rectangle(int Width, int Height)
             : this(0, 0, Width, Height)
         { }
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Rectangle"/> struct
-        /// </summary>
-        /// <param name="X">X Coordinate</param>
-        /// <param name="Y">Y Coordinate</param>
-        /// <param name="Width">Width of the rectangle</param>
-        /// <param name="Height">Height of the rectangle</param>
-        public Rectangle(int X, int Y, int Width, int Height)
-        {
-            this.X = X;
-            this.Y = Y;
-            this.Width = Width;
-            this.Height = Height;
-        }
-
 
         /// <summary>
         /// Determines whether the specified <see cref="Rectangle"/>s are equal to each other.
@@ -243,16 +222,16 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="Rectangle"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="Rectangle"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object? obj)
         {
-            return obj is Rectangle && this == (Rectangle)obj;
+            return obj is Rectangle rectangle && this == rectangle;
         }
 
         /// <summary>
         /// Serves as a hash function for a <see cref="Size"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="Size"/></returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             unchecked
             {
@@ -269,7 +248,7 @@ namespace EOSDigital.SDK
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns>A string that represents the current object.</returns>
-        public override string ToString()
+        public override readonly string ToString()
         {
             return string.Concat(X, ";", Y, ";", Width, ";", Height);
         }
@@ -338,16 +317,16 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="Rational"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="Rational"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object? obj)
         {
-            return obj is Rational && this == (Rational)obj;
+            return obj is Rational rational && this == rational;
         }
 
         /// <summary>
         /// Serves as a hash function for a <see cref="Rational"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="Rational"/></returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             unchecked
             {
@@ -362,7 +341,7 @@ namespace EOSDigital.SDK
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns>A string that represents the current object.</returns>
-        public override string ToString()
+        public override readonly string ToString()
         {
             return Numerator + "/" + Denominator;
         }
@@ -371,37 +350,47 @@ namespace EOSDigital.SDK
     /// <summary>
     /// Time
     /// </summary>
+    /// <remarks>
+    /// Creates a new instance of the <see cref="Time"/> struct
+    /// </remarks>
+    /// <param name="Year">Year component</param>
+    /// <param name="Month">Month component</param>
+    /// <param name="Day">Day component</param>
+    /// <param name="Hour">Hour component</param>
+    /// <param name="Minute">Minute component</param>
+    /// <param name="Second">Second component</param>
+    /// <param name="Milliseconds">Milliseconds component</param>
     [StructLayout(LayoutKind.Sequential)]
-    public struct Time
+    public struct Time(int Year, int Month, int Day, int Hour, int Minute, int Second, int Milliseconds)
     {
         /// <summary>
         /// Year component
         /// </summary>
-        public int Year;
+        public int Year = Year;
         /// <summary>
         /// Month component
         /// </summary>
-        public int Month;
+        public int Month = Month;
         /// <summary>
         /// Day component
         /// </summary>
-        public int Day;
+        public int Day = Day;
         /// <summary>
         /// Hour component
         /// </summary>
-        public int Hour;
+        public int Hour = Hour;
         /// <summary>
         /// Minute component
         /// </summary>
-        public int Minute;
+        public int Minute = Minute;
         /// <summary>
         /// Second component
         /// </summary>
-        public int Second;
+        public int Second = Second;
         /// <summary>
         /// Milliseconds component
         /// </summary>
-        public int Milliseconds;
+        public int Milliseconds = Milliseconds;
 
         /// <summary>
         /// Creates a new instance of the <see cref="Time"/> struct
@@ -448,27 +437,6 @@ namespace EOSDigital.SDK
         public Time(int Year, int Month, int Day, int Hour, int Minute, int Second)
             : this(Year, Month, Day, Hour, Minute, Second, 0)
         { }
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Time"/> struct
-        /// </summary>
-        /// <param name="Year">Year component</param>
-        /// <param name="Month">Month component</param>
-        /// <param name="Day">Day component</param>
-        /// <param name="Hour">Hour component</param>
-        /// <param name="Minute">Minute component</param>
-        /// <param name="Second">Second component</param>
-        /// <param name="Milliseconds">Milliseconds component</param>
-        public Time(int Year, int Month, int Day, int Hour, int Minute, int Second, int Milliseconds)
-        {
-            this.Year = Year;
-            this.Month = Month;
-            this.Day = Day;
-            this.Hour = Hour;
-            this.Minute = Minute;
-            this.Second = Second;
-            this.Milliseconds = Milliseconds;
-        }
 
 
         /// <summary>
@@ -519,16 +487,16 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="Time"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="Time"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object? obj)
         {
-            return obj is Time && this == (Time)obj;
+            return obj is Time time && this == time;
         }
 
         /// <summary>
         /// Serves as a hash function for a <see cref="Time"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="Time"/></returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             unchecked
             {
@@ -548,7 +516,7 @@ namespace EOSDigital.SDK
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns>A string that represents the current object.</returns>
-        public override string ToString()
+        public override readonly string ToString()
         {
             return ((DateTime)this).ToString();
         }
@@ -574,7 +542,7 @@ namespace EOSDigital.SDK
         /// Device Sub-type
         /// </summary>
         public DeviceSubType DeviceSubType;
-        private uint Reserved;
+        private readonly uint Reserved;
 
         /// <summary>
         /// Determines whether the specified <see cref="DeviceInfo"/>s are equal to each other.
@@ -603,16 +571,16 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="DeviceInfo"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="DeviceInfo"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object? obj)
         {
-            return obj is DeviceInfo && this == (DeviceInfo)obj;
+            return obj is DeviceInfo info && this == info;
         }
 
         /// <summary>
         /// Serves as a hash function for a <see cref="DeviceInfo"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="DeviceInfo"/></returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             unchecked
             {
@@ -681,16 +649,16 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="VolumeInfo"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="VolumeInfo"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object? obj)
         {
-            return obj is VolumeInfo && this == (VolumeInfo)obj;
+            return obj is VolumeInfo info && this == info;
         }
 
         /// <summary>
         /// Serves as a hash function for a <see cref="VolumeInfo"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="VolumeInfo"/></returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             unchecked
             {
@@ -714,10 +682,7 @@ namespace EOSDigital.SDK
         /// <summary>
         /// Size of directory item
         /// </summary>
-        public int Size
-        {
-            get { return (int)Size64; }
-        }
+        public readonly int Size => (int)Size64;
 
         /// <summary>
         /// Size of directory item (as long)
@@ -777,16 +742,16 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="DirectoryItemInfo"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="DirectoryItemInfo"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object? obj)
         {
-            return obj is DirectoryItemInfo && this == (DirectoryItemInfo)obj;
+            return obj is DirectoryItemInfo info && this == info;
         }
 
         /// <summary>
         /// Serves as a hash function for a <see cref="DirectoryItemInfo"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="DirectoryItemInfo"/></returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             unchecked
             {
@@ -851,15 +816,15 @@ namespace EOSDigital.SDK
         /// </summary>
         public int NumOfComponents;
         /// <summary>
-        /// Bitdepth of channels
+        /// BitDepth of channels
         /// </summary>
         public int ComponentDepth;
         /// <summary>
         /// Effective size of image
         /// </summary>
         public Rectangle EffectiveRect;
-        private uint Reserved1;
-        private uint Reserved2;
+        private readonly uint Reserved1;
+        private readonly uint Reserved2;
 
 
         /// <summary>
@@ -890,16 +855,16 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="ImageInfo"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="ImageInfo"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object? obj)
         {
-            return obj is ImageInfo && this == (ImageInfo)obj;
+            return obj is ImageInfo info && this == info;
         }
 
         /// <summary>
         /// Serves as a hash function for a <see cref="ImageInfo"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="ImageInfo"/></returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             unchecked
             {
@@ -928,7 +893,7 @@ namespace EOSDigital.SDK
         /// Pointer to ICC profile stream
         /// </summary>
         public IntPtr ICCProfileStream;
-        private uint Reserved;
+        private readonly uint Reserved;
 
 
         /// <summary>
@@ -958,16 +923,16 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="SaveImageSetting"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="SaveImageSetting"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object? obj)
         {
-            return obj is SaveImageSetting && this == (SaveImageSetting)obj;
+            return obj is SaveImageSetting setting && this == setting;
         }
 
         /// <summary>
         /// Serves as a hash function for a <see cref="SaveImageSetting"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="SaveImageSetting"/></returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             unchecked
             {
@@ -1031,16 +996,16 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="PropertyDesc"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="PropertyDesc"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object? obj)
         {
-            return obj is PropertyDesc && this == (PropertyDesc)obj;
+            return obj is PropertyDesc desc && this == desc;
         }
 
         /// <summary>
         /// Serves as a hash function for a <see cref="Time"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="Time"/></returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             unchecked
             {
@@ -1057,62 +1022,50 @@ namespace EOSDigital.SDK
     /// <summary>
     /// Picture Style Description
     /// </summary>
+    /// <remarks>
+    /// Creates a new instance of the <see cref="PictureStyleDesc"/> struct
+    /// </remarks>
+    /// <param name="Contrast">Range: -4 to 4</param>
+    /// <param name="Sharpness">Range: 0 to 7</param>
+    /// <param name="Saturation">Range: -4 to 4</param>
+    /// <param name="ColorTone">Range: -4 to 4</param>
+    /// <param name="FilterEffect">Filter Effect</param>
+    /// <param name="ToningEffect">Toning Effect</param>
     [StructLayout(LayoutKind.Sequential)]
-    public struct PictureStyleDesc
+    public struct PictureStyleDesc(int Contrast, int Sharpness, int Saturation, int ColorTone, int FilterEffect, int ToningEffect)
     {
         /// <summary>
         /// Contrast; Range: -4 to 4
         /// </summary>
-        public int Contrast;
+        public int Contrast = Math.Min(4, Math.Max(-4, Contrast));
         /// <summary>
         /// Sharpness; Range: 0 to 7
         /// </summary>
-        public int Sharpness;
+        public int Sharpness = Math.Min(7, Math.Max(0, Sharpness));
         /// <summary>
         /// Saturation; Range: -4 to 4
         /// </summary>
-        public int Saturation;
+        public int Saturation = Math.Min(4, Math.Max(-4, Saturation));
         /// <summary>
         /// ColorTone; Range: -4 to 4
         /// </summary>
-        public int ColorTone;
+        public int ColorTone = Math.Min(4, Math.Max(-4, ColorTone));
         /// <summary>
         /// Filter Effect
         /// </summary>
-        public FilterEffect FilterEffect;
+        public FilterEffect FilterEffect = (FilterEffect)FilterEffect;
         /// <summary>
         /// Toning Effect
         /// </summary>
-        public ToningEffect ToningEffect;
+        public ToningEffect ToningEffect = (ToningEffect)ToningEffect;
         /// <summary>
         /// Sharp Fineness
         /// </summary>
-        public int SharpFineness;
+        public int SharpFineness = 0;
         /// <summary>
         /// Sharp Threshold
         /// </summary>
-        public int SharpThreshold;
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="PictureStyleDesc"/> struct
-        /// </summary>
-        /// <param name="Contrast">Range: -4 to 4</param>
-        /// <param name="Sharpness">Range: 0 to 7</param>
-        /// <param name="Saturation">Range: -4 to 4</param>
-        /// <param name="ColorTone">Range: -4 to 4</param>
-        /// <param name="FilterEffect">Filter Effect</param>
-        /// <param name="ToningEffect">Toning Effect</param>
-        public PictureStyleDesc(int Contrast, int Sharpness, int Saturation, int ColorTone, int FilterEffect, int ToningEffect)
-        {
-            this.Contrast = Math.Min(4, Math.Max(-4, Contrast));
-            this.Sharpness = Math.Min(7, Math.Max(0, Sharpness));
-            this.Saturation = Math.Min(4, Math.Max(-4, Saturation));
-            this.ColorTone = Math.Min(4, Math.Max(-4, ColorTone));
-            this.FilterEffect = (FilterEffect)FilterEffect;
-            this.ToningEffect = (ToningEffect)ToningEffect;
-            SharpFineness = 0;
-            SharpThreshold = 0;
-        }
+        public int SharpThreshold = 0;
 
 
         /// <summary>
@@ -1143,16 +1096,16 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="PictureStyleDesc"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="PictureStyleDesc"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object? obj)
         {
-            return obj is PictureStyleDesc && this == (PictureStyleDesc)obj;
+            return obj is PictureStyleDesc desc && this == desc;
         }
 
         /// <summary>
         /// Serves as a hash function for a <see cref="PictureStyleDesc"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="PictureStyleDesc"/></returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             unchecked
             {
@@ -1223,7 +1176,7 @@ namespace EOSDigital.SDK
         /// Upper-left and lower-right coordinates of the AF frame
         /// </summary>
         public Rectangle Rectangle;
-        private uint Reserved;
+        private readonly uint Reserved;
 
 
         /// <summary>
@@ -1253,16 +1206,16 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="FocusPoint"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="FocusPoint"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object? obj)
         {
-            return obj is FocusPoint && this == (FocusPoint)obj;
+            return obj is FocusPoint point && this == point;
         }
 
         /// <summary>
         /// Serves as a hash function for a <see cref="Time"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="Time"/></returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             unchecked
             {
@@ -1329,16 +1282,16 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="FocusInfo"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="FocusInfo"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object? obj)
         {
-            return obj is FocusInfo && this == (FocusInfo)obj;
+            return obj is FocusInfo info && this == info;
         }
 
         /// <summary>
         /// Serves as a hash function for a <see cref="FocusInfo"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="FocusInfo"/></returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             unchecked
             {
@@ -1405,16 +1358,16 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="UsersetData"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="UsersetData"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object? obj)
         {
-            return obj is UsersetData && this == (UsersetData)obj;
+            return obj is UsersetData data && this == data;
         }
 
         /// <summary>
         /// Serves as a hash function for a <see cref="UsersetData"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="UsersetData"/></returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             unchecked
             {
@@ -1431,34 +1384,27 @@ namespace EOSDigital.SDK
     /// <summary>
     /// Capacity
     /// </summary>
+    /// <remarks>
+    /// Creates a new instance of the <see cref="Capacity"/> struct
+    /// </remarks>
+    /// <param name="BytesPerSector">Bytes per HD sector</param>
+    /// <param name="NumberOfFreeClusters">Number of free clusters on the HD</param>
+    /// <param name="Reset"></param>
     [StructLayout(LayoutKind.Sequential, Pack = 2)]
-    public struct Capacity
+    public struct Capacity(int NumberOfFreeClusters, int BytesPerSector, bool Reset)
     {
         /// <summary>
         /// Number of free clusters on the HD
         /// </summary>
-        public int NumberOfFreeClusters;
+        public int NumberOfFreeClusters = NumberOfFreeClusters;
         /// <summary>
         /// Bytes per HD sector
         /// </summary>
-        public int BytesPerSector;
+        public int BytesPerSector = BytesPerSector;
         /// <summary>
         /// Reset flag
         /// </summary>
-        public bool Reset;
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Capacity"/> struct
-        /// </summary>
-        /// <param name="BytesPerSector">Bytes per HD sector</param>
-        /// <param name="NumberOfFreeClusters">Number of free clusters on the HD</param>
-        /// <param name="Reset"></param>
-        public Capacity(int NumberOfFreeClusters, int BytesPerSector, bool Reset)
-        {
-            this.NumberOfFreeClusters = NumberOfFreeClusters;
-            this.BytesPerSector = BytesPerSector;
-            this.Reset = Reset;
-        }
+        public bool Reset = Reset;
 
 
         /// <summary>
@@ -1488,16 +1434,16 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="Capacity"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="Capacity"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object? obj)
         {
-            return obj is Capacity && this == (Capacity)obj;
+            return obj is Capacity capacity && this == capacity;
         }
 
         /// <summary>
         /// Serves as a hash function for a <see cref="Capacity"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="Capacity"/></returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             unchecked
             {
@@ -1548,7 +1494,7 @@ namespace EOSDigital.SDK
         /// <exception cref="ArgumentNullException">The array of given items is null</exception>
         public MyMenuItems(params MyMenuID[] items)
         {
-            if (items == null) throw new ArgumentNullException(nameof(items));
+            ArgumentNullException.ThrowIfNull(items);
 
             MenuItem1 = MenuItem2 = MenuItem3 = MenuItem4 = MenuItem5 = MenuItem6 = MyMenuID.NotSet;
 
@@ -1593,16 +1539,16 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="MyMenuItems"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="MyMenuItems"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object? obj)
         {
-            return obj is MyMenuItems && this == (MyMenuItems)obj;
+            return obj is MyMenuItems items && this == items;
         }
 
         /// <summary>
         /// Serves as a hash function for a <see cref="MyMenuItems"/>.
         /// </summary>
         /// <returns>A hash code for the current <see cref="MyMenuItems"/></returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             unchecked
             {

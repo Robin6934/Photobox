@@ -18,11 +18,12 @@
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.4" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.8" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="System.Text.Json" Version="8.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EDSKLib\EDSKLib.csproj" />
-    <ProjectReference Include="..\Photobox.LocalServer.Client\src\Photobox.LocalServer.RestApi\Photobox.LocalServer.RestApi.csproj" />
   </ItemGroup>
 
 </Project>

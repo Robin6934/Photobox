@@ -1,8 +1,8 @@
-﻿using Photobox.LocalServer.Enums;
+﻿using Photobox.Lib.Printer;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
-namespace Photobox.LocalServer.ConfigModels;
+namespace Photobox.Lib.ConfigModels;
 
 public class PhotoboxConfig
 {
@@ -18,11 +18,11 @@ public class PhotoboxConfig
 
         string jsonString = File.ReadAllText(fileName);
 
-        JsonObject jsonObject = JsonNode.Parse(jsonString).AsObject();
+        JsonObject jsonObject = JsonNode.Parse(jsonString)!.AsObject();
 
-        JsonObject photoboxJsonObject = JsonSerializer.SerializeToNode(this).AsObject();
+        JsonObject photoBoxJsonObject = JsonSerializer.SerializeToNode(this)!.AsObject();
 
-        jsonObject[Photobox] = photoboxJsonObject;
+        jsonObject[Photobox] = photoBoxJsonObject;
 
         JsonSerializerOptions options = new() { WriteIndented = true };
         File.WriteAllText(fileName, jsonObject.ToJsonString(options));

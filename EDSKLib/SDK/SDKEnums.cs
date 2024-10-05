@@ -1,5 +1,4 @@
 ﻿//To disable all the compiler warnings about the missing documentation of enum members
-#pragma warning disable 1591
 
 namespace EOSDigital.SDK
 {
@@ -400,10 +399,10 @@ namespace EOSDigital.SDK
         Shoot_WO_Card = 9,
         ReviewTime = 7,
         AEB = 13,
-        Whitebalance = 0,
+        WhiteBalance = 0,
         CustomWB = 15,
         WBShift_BKT = 2,
-        Colorspace = 3,
+        ColorSpace = 3,
         PictureStyle = 4,
         DustDeleteData = 10,
         ProtectImages = 65536,
@@ -420,10 +419,10 @@ namespace EOSDigital.SDK
         AutoRotate = 131076,
         InfoButton = 131091,
         Format = 131093,
-        LCDBrigthness = 131078,
+        LCDBrightness = 131078,
         DateTime = 131079,
         Language = 131080,
-        Videosystem = 131081,
+        VideoSystem = 131081,
         SensorCleaning = 131088,
         LiveViewFunctionSettings = 131083,
         FlashControl = 131094,
@@ -1241,7 +1240,7 @@ namespace EOSDigital.SDK
     }
 
     /// <summary>
-    /// Whitebalance
+    /// WhiteBalance
     /// </summary>
     public enum WhiteBalance : int
     {
@@ -1362,13 +1361,13 @@ namespace EOSDigital.SDK
     {
         Exposure = 0x01,
         ISO = 0x02,
-        Whitebalance = 0x04,
+        WhiteBalance = 0x04,
         FlashExposure = 0x08,
         Unknown = unchecked((int)0xFFFFFFFF),
     }
 
     /// <summary>
-    /// Liveview Output Device
+    /// LiveView Output Device
     /// </summary>
     public enum EvfOutputDevice : int
     {
@@ -1381,7 +1380,7 @@ namespace EOSDigital.SDK
     }
 
     /// <summary>
-    /// Liveview Zoom Level
+    /// LiveView Zoom Level
     /// </summary>
     public enum EvfZoom : int
     {
@@ -1391,7 +1390,7 @@ namespace EOSDigital.SDK
     }
 
     /// <summary>
-    /// Liveview Autofocus Mode
+    /// LiveView Autofocus Mode
     /// </summary>
     public enum EvfAFMode : int
     {

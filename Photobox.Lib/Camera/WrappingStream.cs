@@ -38,7 +38,7 @@ namespace System.IO
             set => Base.Position = value;
         }
 
-        private Stream Base = inStream;
+        private readonly Stream Base = inStream;
 
         /// <summary>
         /// reads a sequence of bytes from the current stream and advances

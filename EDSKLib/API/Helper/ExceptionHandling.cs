@@ -1,13 +1,10 @@
 ﻿using EOSDigital.SDK;
-using System.Runtime.Serialization;
-using System.Security.Permissions;
 
 namespace EOSDigital.API
 {
     /// <summary>
     /// An Exception that happened while handling the Canon SDK
     /// </summary>
-    [Serializable]
     public sealed class SDKException : Exception
     {
         /// <summary>
@@ -82,44 +79,11 @@ namespace EOSDigital.API
         {
             this.Error = Error;
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SDKException"/> class with serialized data.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized 
-        /// object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="StreamingContext"/>  that contains contextual
-        /// information about the source or destination.</param>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        private SDKException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            Error = (ErrorCode)info.GetUInt32("Error");
-        }
-
-        /// <summary>
-        /// When overridden in a derived class, sets the <see cref="SerializationInfo"/>
-        /// with information about the exception.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/>
-        /// that holds the serialized object data about the exception being thrown</param>
-        /// <param name="context">The <see cref="StreamingContext"/>
-        /// that contains contextual information about the source or destination.</param>
-        /// <exception cref="ArgumentNullException">The info parameter is a null reference</exception>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null) throw new ArgumentNullException(nameof(info));
-            info.AddValue("Error", Error);
-
-            base.GetObjectData(info, context);
-        }
     }
 
     /// <summary>
     /// An Exception that states a problem with the session state of the camera
     /// </summary>
-    [Serializable]
     public sealed class CameraSessionException : Exception
     {
         /// <summary>
@@ -147,40 +111,11 @@ namespace EOSDigital.API
         public CameraSessionException(string message, Exception innerException)
             : base(message, innerException)
         { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CameraSessionException"/> class with serialized data.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized 
-        /// object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="StreamingContext"/>  that contains contextual
-        /// information about the source or destination.</param>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        private CameraSessionException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        { }
-
-        /// <summary>
-        /// When overridden in a derived class, sets the <see cref="SerializationInfo"/>
-        /// with information about the exception.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/>
-        /// that holds the serialized object data about the exception being thrown</param>
-        /// <param name="context">The <see cref="StreamingContext"/>
-        /// that contains contextual information about the source or destination.</param>
-        /// <exception cref="ArgumentNullException">The info parameter is a null reference</exception>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null) throw new ArgumentNullException(nameof(info));
-            base.GetObjectData(info, context);
-        }
     }
 
     /// <summary>
     /// An Exception that states a problem with the state of the Canon SDK
     /// </summary>
-    [Serializable]
     public sealed class SDKStateException : Exception
     {
         /// <summary>
@@ -208,40 +143,11 @@ namespace EOSDigital.API
         public SDKStateException(string message, Exception innerException)
             : base(message, innerException)
         { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SDKStateException"/> class with serialized data.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized 
-        /// object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="StreamingContext"/>  that contains contextual
-        /// information about the source or destination.</param>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        private SDKStateException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        { }
-
-        /// <summary>
-        /// When overridden in a derived class, sets the <see cref="SerializationInfo"/>
-        /// with information about the exception.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/>
-        /// that holds the serialized object data about the exception being thrown</param>
-        /// <param name="context">The <see cref="StreamingContext"/>
-        /// that contains contextual information about the source or destination.</param>
-        /// <exception cref="ArgumentNullException">The info parameter is a null reference</exception>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null) throw new ArgumentNullException(nameof(info));
-            base.GetObjectData(info, context);
-        }
     }
 
     /// <summary>
     /// An Exception that happened while executing on an STA thread
     /// </summary>
-    [Serializable]
     public sealed class ExecutionException : Exception
     {
         /// <summary>
@@ -262,34 +168,6 @@ namespace EOSDigital.API
         public ExecutionException(string message, Exception innerException)
             : base(message, innerException)
         { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExecutionException"/> class with serialized data.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized 
-        /// object data about the exception being thrown.</param>
-        /// <param name="context">The <see cref="StreamingContext"/>  that contains contextual
-        /// information about the source or destination.</param>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        private ExecutionException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        { }
-
-        /// <summary>
-        /// When overridden in a derived class, sets the <see cref="SerializationInfo"/>
-        /// with information about the exception.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/>
-        /// that holds the serialized object data about the exception being thrown</param>
-        /// <param name="context">The <see cref="StreamingContext"/>
-        /// that contains contextual information about the source or destination.</param>
-        /// <exception cref="ArgumentNullException">The info parameter is a null reference</exception>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null) throw new ArgumentNullException(nameof(info));
-            base.GetObjectData(info, context);
-        }
     }
 
     /// <summary>
@@ -300,20 +178,15 @@ namespace EOSDigital.API
         /// <summary>
         /// If an error happened, that does not break the program, this event is fired (e.g. a focus error)
         /// </summary>
-        public static event SDKExceptionHandler NonSevereErrorHappened;
+        public static event SDKExceptionHandler NonSevereErrorHappened = default!;
         /// <summary>
         /// If an error happened on a thread that does not fall into the non-severe category, this event is fired
         /// </summary>
-        public static event GeneralExceptionHandler SevereErrorHappened;
+        public static event GeneralExceptionHandler SevereErrorHappened = default!;
         /// <summary>
         /// List of all non-severe errors. Items can be added or removed.
         /// </summary>
-        public static List<ErrorCode> NonSevereErrors { get; private set; }
-
-        static ErrorHandler()
-        {
-            NonSevereErrors = new List<ErrorCode>()
-            {
+        public static List<ErrorCode> NonSevereErrors { get; private set; } = [
                 ErrorCode.TAKE_PICTURE_AF_NG,
                 ErrorCode.TAKE_PICTURE_CARD_NG,
                 ErrorCode.TAKE_PICTURE_CARD_PROTECT_NG,
@@ -327,9 +200,8 @@ namespace EOSDigital.API
                 ErrorCode.TAKE_PICTURE_SPECIAL_MOVIE_MODE_NG,
                 ErrorCode.TAKE_PICTURE_STROBO_CHARGE_NG,
                 ErrorCode.LENS_COVER_CLOSE,
-                ErrorCode.DEVICE_BUSY,
-            };
-        }
+                ErrorCode.DEVICE_BUSY
+            ];
 
         /// <summary>
         /// Checks for an error in SDK calls and checks how to treat it
@@ -353,36 +225,16 @@ namespace EOSDigital.API
                 else
                 {
                     // Create and initialize an AsyncLocal
-                    AsyncLocal<SDKExceptionHandler> asyncLocalHandler = new();
-
-                    // Capture the current delegate and set it in the AsyncLocal
-                    asyncLocalHandler.Value = NonSevereErrorHappenedEvent;
+                    AsyncLocal<SDKExceptionHandler> asyncLocalHandler = new()
+                    {
+                        // Capture the current delegate and set it in the AsyncLocal
+                        Value = NonSevereErrorHappenedEvent!
+                    };
 
                     asyncLocalHandler.Value(sender, errorCode); // Invoke the delegate stored in AsyncLocal
                 }
             }
         }
-
-
-        //public static void CheckError(object sender, ErrorCode errorCode)
-        //{
-        //    if (errorCode == ErrorCode.OK) return;
-        //    else
-        //    {
-        //        bool Severe = !NonSevereErrors.Any(t => t == errorCode);
-
-        //        var NonSevereErrorHappenedEvent = NonSevereErrorHappened;
-        //        if (!Severe) Severe = NonSevereErrorHappenedEvent == null;
-
-        //        if (Severe) throw new SDKException(errorCode);
-        //        else NonSevereErrorHappenedEvent.BeginInvoke(sender, errorCode, (a) =>
-        //        {
-        //            var ar = a as AsyncResult;
-        //            var invokedMethod = ar.AsyncDelegate as SDKExceptionHandler;
-        //            invokedMethod.EndInvoke(a);
-        //        }, null);
-        //    }
-        //}
 
         /// <summary>
         /// Checks for an error in SDK calls and throws an exception if it's not <see cref="ErrorCode.OK"/>
@@ -407,18 +259,6 @@ namespace EOSDigital.API
         }
 
         /// <summary>
-        /// Checks for an error in <see cref="CanonSDK.EdsRetain"/> and <see cref="CanonSDK.EdsRelease"/> calls
-        /// and throws an exception if it's not valid
-        /// </summary>
-        /// <param name="sender">The calling object instance. This is currently not used and is ignored.</param>
-        /// <param name="countOrError">The return code of the SDK call</param>
-        /// <returns>The number of references for the pointer that was used for the SDK call</returns>
-        public static int CheckError(object sender, int countOrError)
-        {
-            return CheckError(countOrError);
-        }
-
-        /// <summary>
         /// Reports an error that happened in a threading environment
         /// </summary>
         /// <param name="sender">The sender object</param>
@@ -431,33 +271,16 @@ namespace EOSDigital.API
             else
             {
                 // Create and initialize an AsyncLocal
-                AsyncLocal<GeneralExceptionHandler> asyncLocalHandler = new();
-
-                // Capture the current delegate and set it in the AsyncLocal
-                asyncLocalHandler.Value = SevereErrorHappenedEvent;
+                AsyncLocal<GeneralExceptionHandler> asyncLocalHandler = new()
+                {
+                    // Capture the current delegate and set it in the AsyncLocal
+                    Value = SevereErrorHappenedEvent
+                };
 
                 asyncLocalHandler.Value(sender, ex); // Invoke the delegate stored in AsyncLocal
 
                 return true;
             }
         }
-
-
-
-        //public static bool ReportError(object sender, Exception ex)
-        //{
-        //    var SevereErrorHappenedEvent = SevereErrorHappened;
-        //    if (SevereErrorHappenedEvent == null) return false;
-        //    else
-        //    {
-        //        SevereErrorHappenedEvent.BeginInvoke(sender, ex, (a) =>
-        //        {
-        //            var ar = a as AsyncResult;
-        //            var invokedMethod = ar.AsyncDelegate as GeneralExceptionHandler;
-        //            invokedMethod.EndInvoke(a);
-        //        }, null);
-        //        return true;
-        //    }
-        //}
     }
 }

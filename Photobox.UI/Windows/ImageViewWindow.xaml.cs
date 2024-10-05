@@ -1,5 +1,4 @@
-﻿using Photobox.LocalServer.RestApi.Api;
-using Photobox.UI.ImageViewer;
+﻿using Photobox.UI.ImageViewer;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -15,17 +14,14 @@ public partial class ImageViewWindow : Window, IDisposable
 
     private readonly string imagePath = default!;
 
-    private readonly IPhotoboxApi photoboxApi = new PhotoboxApi("https://localhost:7176");
-
     public new event ResultHander Closed = default!;
 
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ImageViewWindow"/> class.
     /// </summary>
-    public ImageViewWindow(string showImagePath, IPhotoboxApi Api, bool printingEnabled)
+    public ImageViewWindow(string showImagePath, bool printingEnabled)
     {
-        photoboxApi = Api;
         imagePath = showImagePath;
         InitializeComponent();
 

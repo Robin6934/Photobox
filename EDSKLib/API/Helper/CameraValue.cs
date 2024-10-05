@@ -190,10 +190,16 @@ namespace EOSDigital.API
         public static bool operator ==(CameraValue x, CameraValue y)
         {
             // If both are null, or both are same instance, return true.
-            if (object.ReferenceEquals(x, y)) return true;
+            if (ReferenceEquals(x, y))
+            {
+                return true;
+            }
 
             // If one is null, but not both, return false.
-            if ((object)x == null || (object)y == null) return false;
+            if (x is null || y is null)
+            {
+                return false;
+            }
 
             return x.IntValue == y.IntValue && x.ValueType == y.ValueType;
         }
@@ -212,16 +218,17 @@ namespace EOSDigital.API
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="CameraValue"/></param>
         /// <returns>true if the specified <see cref="object"/> is equal to the current <see cref="CameraValue"/>; otherwise, false.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            // If objects have different types, return false.
-            if (obj.GetType() != GetType()) return false;
+            if (obj is not CameraValue)
+            {
+                return false;
+            }
 
             // If both are null, or both are same instance, return true.
-            if (object.ReferenceEquals(this, obj)) return true;
+            if (ReferenceEquals(this, obj)) return true;
 
-            CameraValue cv = obj as CameraValue;
-            if (cv == null) return false;
+            if (obj is not CameraValue cv) return false;
 
             return IntValue == cv.IntValue && ValueType == cv.ValueType;
         }

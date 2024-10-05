@@ -1,9 +1,12 @@
-﻿using Photobox.Lib.Printer;
+﻿using Microsoft.Extensions.Logging;
+using Photobox.Lib.Printer;
 
 namespace Photobox.Lib.PhotoManager;
-public class ImageManager(IPrinter printer) : IImageManager
+public class ImageManager(ILogger<ImageManager> logger, IPrinter printer) : IImageManager
 {
-    private IPrinter printer = printer;
+    private readonly ILogger<ImageManager> logger = logger;
+
+    private readonly IPrinter printer = printer;
 
     public void Delete(string imagePath)
     {
