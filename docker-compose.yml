@@ -23,7 +23,7 @@ services:
     ports:
         - "3306:3306"
     volumes:
-        - ./data:/var/lib/mysql
+        - ./data/db:/var/lib/mysql
     networks:
         - "internal"
     
@@ -40,3 +40,17 @@ services:
       - "8080:80"
     depends_on:
       - mariadb
+  
+  seq:
+    image: datalust/seq
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_ADMINPASSWORDHASH=
+    ports:
+      - "5341:80"
+    networks:
+      - "internal"
+    volumes:
+      - ./data/seq:/data
+    
