@@ -1,13 +1,42 @@
-name: seq
+networks:
+  internal:
+
 services:
-    seq:
-        container_name: seq
-        restart: unless-stopped
-        environment:
-            - ACCEPT_EULA=Y
-            - SEQ_FIRSTRUN_ADMINPASSWORDHASH=$PH
-        volumes:
-            - ../../seq:/data
-        ports:
-            - 5341:80
-        image: datalust/seq
+  photobox.web:
+    image: ${DOCKER_REGISTRY-}photoboxweb
+    build:
+      context: .
+      dockerfile: Photobox.Web/Photobox.Web/Dockerfile
+    networks:
+      - "internal"
+    depends_on:
+      - mariadb
+
+  mariadb:
+    image: mariadb
+    restart: always
+    environment:
+        MYSQL_ROOT_PASSWORD: (K"k3Db>+cJE5)r22!Yo
+        MYSQL_USER: photobox
+        MYSQL_PASSWORD: (K"k3Db>+cJE5)r22!Yo
+        MYSQL_DATABASE: PhotoboxDB
+    ports:
+        - "3306:3306"
+    volumes:
+        - ./data:/var/lib/mysql
+    networks:
+        - "internal"
+    
+  phpMyAdmin:
+    image: phpmyadmin
+    restart: always
+    environment:
+    - PMA_HOST=mariadb
+    - PMA_USER=photobox
+    - PMA_PASSWORD=(K"k3Db>+cJE5)r22!Yo
+    networks:
+        - "internal"
+    ports:
+      - "8080:80"
+    depends_on:
+      - mariadb

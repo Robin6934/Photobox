@@ -13,5 +13,6 @@
       Foreground="LightGray"
       FontFamily="Cascadia Mono, Consolas, Courier New, monospace"
       VerticalScrollBarVisibility="Auto"
+        IsReadOnly="True"
   />
 </Window>

@@ -7,6 +7,7 @@ using Photobox.Lib.Camera;
 using Photobox.Lib.ConfigModels;
 using Photobox.Lib.PhotoManager;
 using Photobox.Lib.Printer;
+using Photobox.UI.CountDown;
 using Photobox.UI.ImageViewer;
 using Photobox.UI.Windows;
 using Serilog;
@@ -20,20 +21,11 @@ public partial class App : Application
 {
     private IHost host = default!;
 
-    private MainWindow mainWindow = default!;
-
-    private LogWindow logWindow = default!;
-
     protected override async void OnStartup(StartupEventArgs e)
     {
         host = CreateHostBuilder(e.Args).Build();
-        await host.StartAsync();
 
-        mainWindow = host.Services.GetRequiredService<MainWindow>();
-        logWindow = host.Services.GetRequiredService<LogWindow>();
-        await mainWindow.Start();
-        logWindow.Show();
-        mainWindow.Show();
+        await host.StartAsync();
     }
 
     protected override async void OnExit(ExitEventArgs e)
@@ -49,12 +41,12 @@ public partial class App : Application
             .ConfigureAppConfiguration(config =>
             {
                 config.AddEnvironmentVariables();
-                config.AddJsonFile(".\\appsettings.json", true, true);
+                config.AddJsonFile("appsettings.json", true, true);
             })
             .ConfigureServices((context, services) =>
             {
-                services.AddSingleton<MainWindow>();
-                services.AddSingleton<LogWindow>();
+                services.AddHostedService<MainWindow>();
+                services.AddHostedService<LogWindow>();
                 services.AddSingleton<CameraFactory>();
                 services.AddSingleton(c => c.GetRequiredService<CameraFactory>().Create());
                 services.AddSingleton<IImageViewer, ImageViewerLocal>();
@@ -62,6 +54,7 @@ public partial class App : Application
                 services.AddSingleton<IPrinter, Printer>();
                 services.Configure<PhotoboxConfig>(
                     context.Configuration.GetSection(PhotoboxConfig.Photobox));
+                services.AddSingleton<ICountDown, CountDownCircle>();
             })
             .ConfigureLogging(logging => logging.ClearProviders())
             .UseSerilog((context, services, configuration) =>
@@ -71,7 +64,6 @@ public partial class App : Application
                     .Enrich.WithEnvironmentName()
                     .Enrich.WithMachineName()
                     .Enrich.WithProperty("Source", "UI")
-                    .WriteTo.RichTextBox(services.GetRequiredService<LogWindow>().RichTextBoxLog)
                     .WriteTo.Seq("http://localhost:5341");
             });
 }

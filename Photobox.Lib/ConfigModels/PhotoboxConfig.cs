@@ -12,6 +12,8 @@ public class PhotoboxConfig
 
     public string PrinterName { get; set; } = default!;
 
+    public CountDownConfig CountDown { get; set; } = default!;
+
     public void Save()
     {
         string fileName = "appsettings.json";
