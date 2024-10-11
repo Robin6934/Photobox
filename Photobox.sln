@@ -15,6 +15,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photobox.Lib.Test", "Photobox.Lib.Test\Photobox.Lib.Test.csproj", "{6CEF3442-A576-4E39-B449-5CC97F118311}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photobox.Web", "Photobox.Web\Photobox.Web\Photobox.Web.csproj", "{BA3FFAB3-DAAD-4449-A938-7FFD199A64C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photobox.Web.Client", "Photobox.Web\Photobox.Web.Client\Photobox.Web.Client.csproj", "{C203F3A2-20C3-47A9-845C-A93A32D817EE}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{723813D7-C6BB-4046-B405-6085EE6400A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +43,18 @@ Global
 		{6CEF3442-A576-4E39-B449-5CC97F118311}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CEF3442-A576-4E39-B449-5CC97F118311}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CEF3442-A576-4E39-B449-5CC97F118311}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA3FFAB3-DAAD-4449-A938-7FFD199A64C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA3FFAB3-DAAD-4449-A938-7FFD199A64C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA3FFAB3-DAAD-4449-A938-7FFD199A64C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA3FFAB3-DAAD-4449-A938-7FFD199A64C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C203F3A2-20C3-47A9-845C-A93A32D817EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C203F3A2-20C3-47A9-845C-A93A32D817EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C203F3A2-20C3-47A9-845C-A93A32D817EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C203F3A2-20C3-47A9-845C-A93A32D817EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{723813D7-C6BB-4046-B405-6085EE6400A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{723813D7-C6BB-4046-B405-6085EE6400A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{723813D7-C6BB-4046-B405-6085EE6400A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{723813D7-C6BB-4046-B405-6085EE6400A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

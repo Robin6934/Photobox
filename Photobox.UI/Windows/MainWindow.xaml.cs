@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Photobox.Lib.Camera;
+using Photobox.UI.CountDown;
 using Photobox.UI.ImageViewer;
 using System.IO;
 using System.Net.Http;
@@ -8,7 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace Photobox.UI.Windows;
-public partial class MainWindow : Window//, IHostedService
+public partial class MainWindow : Window, IHostedService
 {
     private readonly ICamera camera;
 
@@ -16,7 +18,11 @@ public partial class MainWindow : Window//, IHostedService
 
     private readonly ILogger<MainWindow> logger;
 
-    public MainWindow(ICamera cam, IImageViewer viewer, ILogger<MainWindow> log)
+    private readonly ICountDown countDown;
+
+    private readonly IHostApplicationLifetime applicationLifetime;
+
+    public MainWindow(ICamera cam, IImageViewer viewer, ILogger<MainWindow> log, ICountDown countDown, IHostApplicationLifetime applicationLifetime)
     {
         InitializeComponent();
 
@@ -25,6 +31,19 @@ public partial class MainWindow : Window//, IHostedService
         imageViewer = viewer;
 
         logger = log;
+
+        this.countDown = countDown;
+
+        this.applicationLifetime = applicationLifetime;
+
+        countDown.Panel = GridLiveView;
+
+        countDown.CountDownEarly += async (s) =>
+        {
+            string imagePath = await camera.TakePictureAsync();
+
+            await imageViewer.ShowImage(imagePath);
+        };
 
         logger.LogInformation("Mainwindow created");
 
@@ -35,6 +54,19 @@ public partial class MainWindow : Window//, IHostedService
                 GridLiveView.Background = new ImageBrush(ConvertStreamToBitmapSource(i));
             });
         };
+    }
+
+    public async Task StartAsync(CancellationToken cancellationToken)
+    {
+        await Start();
+        Show();
+        applicationLifetime.ApplicationStopping.Register(Close);
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        Close();
+        return Task.CompletedTask;
     }
 
     public BitmapSource ConvertStreamToBitmapSource(Stream stream)
@@ -67,7 +99,7 @@ public partial class MainWindow : Window//, IHostedService
     private async void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
     {
         await camera.StopStreamAsync();
-        await new HttpClient().GetAsync("https://localhost:7176/api/Application/ShutDown");
+        applicationLifetime.StopApplication();
     }
 
     public async Task Start()
@@ -76,11 +108,9 @@ public partial class MainWindow : Window//, IHostedService
         _ = camera.StartStreamAsync();
     }
 
-    private async void TakePictureButton_Click(object sender, RoutedEventArgs e)
+    private void TakePictureButton_Click(object sender, RoutedEventArgs e)
     {
-        string imagePath = await camera.TakePictureAsync();
-
-        await imageViewer.ShowImage(imagePath);
+        countDown.StartCountDown();
     }
 
     /// <summary>
