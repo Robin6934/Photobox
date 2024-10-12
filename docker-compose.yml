@@ -1,6 +1,7 @@
 networks:
   internal:
 
+
 services:
   photobox.web:
     image: ${DOCKER_REGISTRY-}photoboxweb
@@ -16,31 +17,31 @@ services:
     image: mariadb
     restart: always
     environment:
-        MYSQL_ROOT_PASSWORD: (K"k3Db>+cJE5)r22!Yo
-        MYSQL_USER: photobox
-        MYSQL_PASSWORD: (K"k3Db>+cJE5)r22!Yo
-        MYSQL_DATABASE: PhotoboxDB
+      MYSQL_ROOT_PASSWORD: (K"k3Db>+cJE5)r22!Yo
+      MYSQL_USER: photobox
+      MYSQL_PASSWORD: (K"k3Db>+cJE5)r22!Yo
+      MYSQL_DATABASE: PhotoboxDB
     ports:
-        - "3306:3306"
+      - "3306:3306"
     volumes:
-        - ./data/db:/var/lib/mysql
+      - ./data/db:/var/lib/mysql
     networks:
-        - "internal"
-    
+      - "internal"
+
   phpMyAdmin:
     image: phpmyadmin
     restart: always
     environment:
-    - PMA_HOST=mariadb
-    - PMA_USER=photobox
-    - PMA_PASSWORD=(K"k3Db>+cJE5)r22!Yo
+      - PMA_HOST=mariadb
+      - PMA_USER=photobox
+      - PMA_PASSWORD=(K"k3Db>+cJE5)r22!Yo
     networks:
-        - "internal"
+      - "internal"
     ports:
       - "8080:80"
     depends_on:
       - mariadb
-  
+
   seq:
     image: datalust/seq
     restart: always
@@ -53,4 +54,26 @@ services:
       - "internal"
     volumes:
       - ./data/seq:/data
-    
+
+  # loki:
+  #   image: grafana/loki:master
+  #   ports:
+  #     - 3100:3100
+  #   command: -config.file=/etc/loki/local-config.yaml
+  #   healthcheck:
+  #     test: wget -q --tries=1 -O- http://localhost:3100/ready
+  #     interval: 3s
+  #     timeout: 3s
+  #     retries: 10
+  #     start_period: 10s
+
+  # grafana:
+  #   image: grafana/grafana:master
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     loki:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ./data/grafana:/var/lib/grafana
+  #     - ./data/grafana:/certs
