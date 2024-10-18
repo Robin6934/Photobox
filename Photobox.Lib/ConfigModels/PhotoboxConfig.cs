@@ -1,4 +1,5 @@
-﻿using Photobox.Lib.Printer;
+﻿using Photobox.Lib.Camera;
+using Photobox.Lib.Printer;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -11,6 +12,8 @@ public class PhotoboxConfig
     public PrinterEnabledOptions PrintingEnabled { get; set; }
 
     public string PrinterName { get; set; } = default!;
+
+    public CameraType Camera { get; set; }
 
     public CountDownConfig CountDown { get; set; } = default!;
 
