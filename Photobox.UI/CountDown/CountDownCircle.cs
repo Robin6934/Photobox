@@ -8,7 +8,7 @@ using System.Windows.Threading;
 
 namespace Photobox.UI.CountDown
 {
-    public class CountDownCircle: ICountDown
+    public class CountDownCircle : ICountDown
     {
         public event TimerCallback? CountDownExpired;
 
@@ -17,6 +17,10 @@ namespace Photobox.UI.CountDown
         private readonly TextBlock _textBlockCountdown = new();
 
         private readonly DispatcherTimer _timer = new();
+
+        private readonly DispatcherTimer _earlyTimer = new();
+
+        private readonly DispatcherTimer _expiredTimer = new();
 
         private readonly double _circumference = 0;
 
@@ -39,12 +43,9 @@ namespace Photobox.UI.CountDown
         private long _timerTicks = 0;
 
         private readonly double _earlySeconds = 0;
-
-        private Panel _panel = default!;
-
-        public Panel Panel 
+        public Panel Panel
         {
-            set 
+            set
             {
                 value.Loaded += (o, a) =>
                 {
@@ -53,10 +54,12 @@ namespace Photobox.UI.CountDown
                     Convert.ToInt32(value.Height / 2)
                     );
                 };
-
-                _panel = value;
+                field = value;
             }
+
+            get => field;
         }
+
 
         /// <summary>
         /// This class is used to create a countdown which will be displayed on the screen
@@ -82,8 +85,16 @@ namespace Photobox.UI.CountDown
             _countDownTotal = time;
             _earlySeconds = early;
 
-            _circumference = 1.0d;
+            _circumference = 200.0d;
             _timer.Tick += Timer_Tick;
+
+            _earlyTimer.Interval = TimeSpan.FromSeconds(early);
+            _expiredTimer.Interval = TimeSpan.FromSeconds(time);
+
+            _earlyTimer.Tick += (s, e) => { CountDownEarly?.Invoke(this); };
+
+            _expiredTimer.Tick += (s, e) => { CountDownExpired?.Invoke(this); };
+
             _timer.Interval = TimeSpan.FromSeconds(time / _angle);
             _totalTicks = (int)(TimeSpan.TicksPerSecond * time);
         }
@@ -96,25 +107,17 @@ namespace Photobox.UI.CountDown
                 _textBlockCountdown.Text = _countDownTime.ToString();
             }
 
-            if (_timerTicks <= _totalTicks - (TimeSpan.TicksPerSecond * _earlySeconds - _timer.Interval.Ticks / 2) &&
-               _timerTicks >= _totalTicks - (TimeSpan.TicksPerSecond * _earlySeconds + _timer.Interval.Ticks / 2) &&
-               _earlySeconds != 0)
-            {
-                if (CountDownEarly is not null) { CountDownEarly(new ()); }
-            }
-
             SetAngleMinusOne();
 
             if (_timerTicks >= _totalTicks)
             {
                 _timer.Stop();
-                if (CountDownExpired is not null) { CountDownExpired(new ()); }
-                _panel.Children.Remove(_textBlockCountdown);
-                _panel.Children.Remove(_path);
+                CountDownExpired?.Invoke(this);
+                Panel.Children.Remove(_textBlockCountdown);
+                Panel.Children.Remove(_path);
             }
 
             _timerTicks += _timer.Interval.Ticks;
-
         }
 
         /// <summary>
@@ -122,7 +125,7 @@ namespace Photobox.UI.CountDown
         /// </summary>
         public void StartCountDown()
         {
-            ArgumentNullException.ThrowIfNull(_panel);
+            ArgumentNullException.ThrowIfNull(Panel);
 
             _timerTicks = 0;
 
@@ -139,52 +142,58 @@ namespace Photobox.UI.CountDown
 
         private void CreateArc()
         {
-            var endPoint = new Point(
-                _circumference * -Math.Sin(_angle * Math.PI / 180),
-                _circumference * -Math.Cos(_angle * Math.PI / 180));
+            // Define the start point on the perimeter of the circle, at the top center position relative to _point.
+            var startPoint = new Point(_point.X, _point.Y - _circumference);
 
+            // Calculate the end point of the arc based on the current angle
+            var endPoint = new Point(
+                _point.X + _circumference * -Math.Sin(_angle * Math.PI / 180),
+                _point.Y + _circumference * -Math.Cos(_angle * Math.PI / 180));
+
+            // Update the ArcSegment properties
             _arc.Point = endPoint;
             _arc.Size = new Size(_circumference, _circumference);
             _arc.RotationAngle = 0;
-            _arc.IsLargeArc = _angle >= 180;
+            _arc.IsLargeArc = _angle >= 180; // Determines if the arc is greater than 180 degrees
             _arc.SweepDirection = SweepDirection.Counterclockwise;
             _arc.IsStroked = true;
 
-            var figure = new PathFigure { StartPoint = new Point(0, -_circumference) };
+            // Update the PathFigure with the calculated start and end points
+            var figure = new PathFigure { StartPoint = startPoint };
             figure.Segments.Add(_arc);
 
+            // Create and set the path geometry
             var geometry = new PathGeometry();
             geometry.Figures.Add(figure);
 
             _path.Data = geometry;
 
             // Set the stroke (outline) color and thickness
-            _path.Stroke = Brushes.Black;      // You can change this color as needed
+            _path.Stroke = Brushes.Black; // You can change this color as needed
+            _path.StrokeThickness = 20;   // You can change this thickness as needed
 
-            _path.StrokeThickness = 20;  // You can change this thickness as needed
-
-            // Set the position of the path
-            Canvas.SetLeft(_path, _point.X);
-            Canvas.SetTop(_path, _point.Y);
+            // Position the path so it's centered on _point
+            Canvas.SetLeft(_path, _point.X - _circumference);
+            Canvas.SetTop(_path, _point.Y - _circumference);
 
             // Add the Path element to the canvas
-            _panel.Children.Add(_path);
-
+            Panel.Children.Add(_path);
         }
+
 
         private void SetAngleMinusOne()
         {
             _angle--;
 
             var endPoint = new Point(
-                _circumference * -Math.Sin(_angle * Math.PI / 180),
-                _circumference * -Math.Cos(_angle * Math.PI / 180));
+               _point.X + _circumference * -Math.Sin(_angle * Math.PI / 180),
+               _point.Y + _circumference * -Math.Cos(_angle * Math.PI / 180));
 
             _arc.Point = endPoint;
 
             _arc.IsLargeArc = _angle >= 180;
 
-            _panel.UpdateLayout();
+            Panel.UpdateLayout();
         }
 
         private void DrawTextBoxCountdown()
@@ -201,7 +210,7 @@ namespace Photobox.UI.CountDown
 
             _textBlockCountdown.Loaded += TextBlockCountdown_Loaded;
 
-            _panel.Children.Add(_textBlockCountdown);
+            Panel.Children.Add(_textBlockCountdown);
         }
 
         private void TextBlockCountdown_Loaded(object sender, RoutedEventArgs e)

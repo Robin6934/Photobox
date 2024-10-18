@@ -46,7 +46,7 @@ public partial class App : Application
             .ConfigureServices((context, services) =>
             {
                 services.AddHostedService<MainWindow>();
-                services.AddHostedService<LogWindow>();
+                //services.AddHostedService<LogWindow>();
                 services.AddSingleton<CameraFactory>();
                 services.AddSingleton(c => c.GetRequiredService<CameraFactory>().Create());
                 services.AddSingleton<IImageViewer, ImageViewerLocal>();
