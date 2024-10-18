@@ -1,6 +1,9 @@
 using Microsoft.OpenApi.Models;
 using Photobox.Web.Client.Pages;
 using Photobox.Web.Components;
+using Serilog.AspNetCore;
+using Serilog;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +17,21 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
+builder.Host.UseSerilog((context, services, configuration) =>
+{
+    configuration
+        .Enrich.FromLogContext()
+        .Enrich.WithEnvironmentName()
+        .Enrich.WithMachineName()
+        .Enrich.WithProperty("Source", "Server")
+        .WriteTo.Console()
+        .WriteTo.Seq("http://seq:80");
+
+});
+
 var app = builder.Build();
+
+app.UseSerilogRequestLogging();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -36,6 +53,7 @@ else
 
 app.UseHttpsRedirection();
 
+app.MapControllers();
 
 app.UseAntiforgery();
 
