@@ -26,4 +26,19 @@ public class CameraFactory(ILogger<CameraFactory> logger,
         applicationLifetime.StopApplication();
         throw new InvalidOperationException("Failed to create a camera: No camera is connected.");
     }
+
+    public ICamera Create(CameraType cameraType)
+    {
+        switch (cameraType)
+        {
+            case CameraType.Auto:
+                return Create();
+            case CameraType.WebCam:
+                return new WebCam(factory.CreateLogger<WebCam>(), applicationLifetime);
+            case CameraType.Canon:
+                break;
+            default:
+                break;
+        }
+    }
 }
