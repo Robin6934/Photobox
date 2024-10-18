@@ -27,6 +27,7 @@ public class PhotoboxConfig
         jsonObject[Photobox] = photoBoxJsonObject;
 
         JsonSerializerOptions options = new() { WriteIndented = true };
+
         File.WriteAllText(fileName, jsonObject.ToJsonString(options));
     }
 }
