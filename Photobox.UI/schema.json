@@ -1,0 +1,52 @@
+{
+  "$id": "root",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "anyOf": [
+    {
+      "$ref": "https://json.schemastore.org/appsettings.json" // Imports the base appsettings.json schema
+    },
+    {
+      "type": "object",
+      "properties": {
+        "Photobox": { // Custom properties specific to your application
+          "type": "object",
+          "properties": {
+            "PrintingEnabled": {
+              "type": "string",
+              "default": "False",
+              "enum": [ "True", "False", "Automatic" ]
+            },
+            "PrinterName": {
+              "type": "string",
+              "default": "Brother MFC-9142CDN Printer"
+            },
+            "Camera": {
+              "type": "string",
+              "default": "WebCam",
+              "enum": [ "Auto", "WebCam", "Canon" ]
+            },
+            "CountDown": {
+              "type": "object",
+              "properties": {
+                "TotalSeconds": {
+                  "type": "integer",
+                  "default": 1
+                },
+                "EarlySeconds": {
+                  "type": "integer",
+                  "default": 0
+                }
+              },
+              "required": [ "TotalSeconds", "EarlySeconds" ],
+              "additionalProperties": false
+            }
+          },
+          "required": [ "PrintingEnabled", "PrinterName", "Camera", "CountDown" ],
+          "additionalProperties": false
+        }
+      },
+      "required": [ "Photobox" ],
+      "additionalProperties": false
+    }
+  ]
+}

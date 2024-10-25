@@ -44,4 +44,6 @@
     </None>
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="schema.json" /></VisualStudio></ProjectExtensions>
+
 </Project>
