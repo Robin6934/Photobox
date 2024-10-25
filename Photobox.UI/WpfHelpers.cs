@@ -1,11 +1,10 @@
-﻿using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp;
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.PixelFormats;
 using System.Drawing;
+using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.IO;
-using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp.Formats.Jpeg;
 
 namespace Photobox.WpfHelpers;
 

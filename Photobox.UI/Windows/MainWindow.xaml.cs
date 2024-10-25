@@ -1,5 +1,4 @@
-﻿using Emgu.CV.Structure;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Photobox.Lib.Camera;
 using Photobox.UI.CountDown;
@@ -7,7 +6,6 @@ using Photobox.UI.ImageViewer;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System.IO;
-using System.Net.Http;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;

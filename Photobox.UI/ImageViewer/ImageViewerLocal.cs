@@ -4,8 +4,8 @@ using Photobox.Lib.ConfigModels;
 using Photobox.Lib.PhotoManager;
 using Photobox.Lib.Printer;
 using Photobox.UI.Windows;
-using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.UI.ImageViewer;
 public class ImageViewerLocal(ILogger<ImageViewerLocal> logger, IOptionsMonitor<PhotoboxConfig> monitor, IImageManager imageManager, IPrinter printer) : IImageViewer

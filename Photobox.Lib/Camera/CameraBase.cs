@@ -1,12 +1,9 @@
-﻿using EOSDigital.API;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Polly;
-using Polly.CircuitBreaker;
 using Polly.Retry;
 using Polly.Timeout;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Drawing;
 
 namespace Photobox.Lib.Camera;
 

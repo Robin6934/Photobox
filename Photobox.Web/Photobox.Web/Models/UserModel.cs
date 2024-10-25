@@ -2,6 +2,6 @@
 
 namespace Photobox.Web.Models;
 
-public class UserModel: IdentityUser<long>
+public class UserModel : IdentityUser<long>
 {
 }
