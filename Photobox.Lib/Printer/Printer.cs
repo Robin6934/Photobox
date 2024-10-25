@@ -11,7 +11,7 @@ public class Printer(ILogger<Printer> logger, IOptionsMonitor<PhotoboxConfig> op
 {
     private readonly ILogger<Printer> logger = logger;
 
-    private readonly PhotoboxConfig photoboxConfig = options.CurrentValue;
+    private readonly IOptionsMonitor<PhotoboxConfig> photoboxOptionsMonitor = options;
 
     public bool Enabled => PrintingEnabled();
 
@@ -37,16 +37,17 @@ public class Printer(ILogger<Printer> logger, IOptionsMonitor<PhotoboxConfig> op
             return false;
         }
 
-        photoboxConfig.PrinterName = printerName;
+        photoboxOptionsMonitor.CurrentValue.PrinterName = printerName;
 
-        photoboxConfig.Save();
+        photoboxOptionsMonitor.CurrentValue.Save();
+
         return true;
     }
 
     public void SetPrinterEnabled(PrinterEnabledOptions printerEnabled)
     {
-        photoboxConfig.PrintingEnabled = printerEnabled;
-        photoboxConfig.Save();
+        photoboxOptionsMonitor.CurrentValue.PrintingEnabled = printerEnabled;
+        photoboxOptionsMonitor.CurrentValue.Save();
     }
 
     public Task PrintAsync(SixLabors.ImageSharp.Image<Rgb24> image)
@@ -61,7 +62,7 @@ public class Printer(ILogger<Printer> logger, IOptionsMonitor<PhotoboxConfig> op
 
         PrinterSettings printerSettings = new()
         {
-            PrinterName = photoboxConfig.PrinterName
+            PrinterName = photoboxOptionsMonitor.CurrentValue.PrinterName
         };
 
         using PrintDocument pd = new()
@@ -90,11 +91,12 @@ public class Printer(ILogger<Printer> logger, IOptionsMonitor<PhotoboxConfig> op
 
     private bool PrintingEnabled()
     {
-        return photoboxConfig.PrintingEnabled switch
+        return photoboxOptionsMonitor.CurrentValue.PrintingEnabled switch
         {
             PrinterEnabledOptions.True => true,
             PrinterEnabledOptions.False => false,
-            PrinterEnabledOptions.Automatic => CheckIfPrinterIsConnected(photoboxConfig.PrinterName), // Example method to check printer status
+            PrinterEnabledOptions.Automatic => 
+            CheckIfPrinterIsConnected(photoboxOptionsMonitor.CurrentValue.PrinterName), // Example method to check printer status
             _ => false // Default case, if necessary
         };
     }
