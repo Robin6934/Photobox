@@ -4,6 +4,8 @@ using Photobox.Lib.ConfigModels;
 using Photobox.Lib.PhotoManager;
 using Photobox.Lib.Printer;
 using Photobox.UI.Windows;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp;
 
 namespace Photobox.UI.ImageViewer;
 public class ImageViewerLocal(ILogger<ImageViewerLocal> logger, IOptionsMonitor<PhotoboxConfig> monitor, IImageManager imageManager, IPrinter printer) : IImageViewer
@@ -16,9 +18,9 @@ public class ImageViewerLocal(ILogger<ImageViewerLocal> logger, IOptionsMonitor<
 
     private readonly bool printerEnabled = printer.Enabled;
 
-    public async Task ShowImage(string imagePath)
+    public async Task ShowImage(Image<Rgb24> image)
     {
-        var window = new ImageViewWindow(imagePath, printerEnabled);
+        var window = new ImageViewWindow(image, printerEnabled);
 
         var tcs = new TaskCompletionSource<ImageViewResult>();
 
@@ -31,15 +33,15 @@ public class ImageViewerLocal(ILogger<ImageViewerLocal> logger, IOptionsMonitor<
         switch (result)
         {
             case ImageViewResult.Save:
-                imageManager.Save(imagePath);
+                imageManager.Save(image);
                 break;
 
             case ImageViewResult.Print:
-                await imageManager.PrintAndSaveAsync(imagePath);
+                await imageManager.PrintAndSaveAsync(image);
                 break;
 
             case ImageViewResult.Delete:
-                imageManager.Delete(imagePath);
+                imageManager.Delete(image);
                 break;
 
             default:

@@ -1,4 +1,7 @@
-﻿namespace Photobox.Lib.Printer;
+﻿using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp;
+
+namespace Photobox.Lib.Printer;
 public interface IPrinter
 {
     public bool Enabled { get; }
@@ -9,5 +12,5 @@ public interface IPrinter
 
     public void SetPrinterEnabled(PrinterEnabledOptions printerEnabled);
 
-    public Task PrintAsync(string imagePath);
+    public Task PrintAsync(Image<Rgb24> imagePath);
 }

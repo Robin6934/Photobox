@@ -1,4 +1,7 @@
-﻿namespace Photobox.Lib.Camera;
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+
+namespace Photobox.Lib.Camera;
 
 public interface ICamera : IDisposable
 {
@@ -10,6 +13,6 @@ public interface ICamera : IDisposable
     void StartStream();
     void StopStream();
     void Focus();
-    string TakePicture();
+    Image<Rgb24> TakePicture();
     void Disconnect();
 }

@@ -15,18 +15,19 @@ public static class Folders
 
     public static string Photos => "Photos";
 
-    public static string Static => "Static";
-
     public static string Temp => "Temp";
 
     public static IEnumerable<string> AllFolders
-        => [Deleted, Photos, Static, Temp];
+        => [Deleted, Photos, Temp];
 
     public static string GetPath(string folder)
         => Path.Combine(PhotoboxBaseDir, folder);
 
     public static string NewImagePath
-        => Path.Combine(GetPath(Temp), $"{DateTime.Now:yyyyMMdd_HHmmssfff}.jpg");
+        => Path.Combine(GetPath(Temp), NewImageName);
+
+    public static string NewImageName
+        => $"{DateTime.Now:yyyyMMdd_HHmmssfff}.jpg";
 
     public static void CheckIfDirectoriesExistElseCreate()
     {

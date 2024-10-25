@@ -1,4 +1,7 @@
 ﻿using Photobox.UI.ImageViewer;
+using Photobox.WpfHelpers;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -12,7 +15,7 @@ public partial class ImageViewWindow : Window, IDisposable
 {
     private bool _disposed = false;
 
-    private readonly string imagePath = default!;
+    private readonly Image<Rgb24> image = default!;
 
     public new event ResultHander Closed = default!;
 
@@ -20,20 +23,12 @@ public partial class ImageViewWindow : Window, IDisposable
     /// <summary>
     /// Initializes a new instance of the <see cref="ImageViewWindow"/> class.
     /// </summary>
-    public ImageViewWindow(string showImagePath, bool printingEnabled)
+    public ImageViewWindow(Image<Rgb24> showImage, bool printingEnabled)
     {
-        imagePath = showImagePath;
+        image = showImage;
         InitializeComponent();
 
-        Uri imageUri = new(showImagePath);
-
-        BitmapImage bitmap = new();
-        bitmap.BeginInit();
-        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-        bitmap.UriSource = imageUri;
-        bitmap.EndInit();
-
-        ImageViewer.Source = bitmap;
+        ImageViewer.Source = showImage.ToBitmapSource();
 
         if (!printingEnabled)
         {
@@ -112,7 +107,6 @@ public partial class ImageViewWindow : Window, IDisposable
                 {
                     bitmapImage.StreamSource?.Close();
                     bitmapImage.StreamSource?.Dispose();
-                    bitmapImage.StreamSource = null;
                 }
                 ImageViewer.Source = null;
             }

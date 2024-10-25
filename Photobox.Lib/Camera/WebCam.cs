@@ -2,10 +2,12 @@
 using Emgu.CV.Structure;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.Lib.Camera;
 
-public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime applicationLifetime) : CameraBase
+public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime applicationLifetime) : CameraBase(logger)
 {
     private VideoCapture? capture = default;
 
@@ -19,23 +21,25 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
         capture.Set(Emgu.CV.CvEnum.CapProp.FrameWidth, 1200);
         capture.Set(Emgu.CV.CvEnum.CapProp.FrameHeight, 800);
         capture.Set(Emgu.CV.CvEnum.CapProp.Fps, 60);
+        logger.LogInformation("[WebCam] has been connected.");
     }
 
     public override void Disconnect()
     {
         capture?.Dispose();
         capture = null;
+        logger.LogInformation("[WebCam] has been disconnected.");
     }
 
     public override void Dispose()
     {
         capture?.Dispose();
         capture = null;
+        logger.LogInformation("[WebCam] has been disposed.");
     }
 
     public override void StartStream()
     {
-        logger.LogInformation("The stream of the WebCam has been started");
         LiveViewActive = true;
         Task.Run(() =>
         {
@@ -50,32 +54,30 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
                 OnNewStreamImage(new MemoryStream(data.ToArray()));
             }
         }, applicationLifetime.ApplicationStopping);
+        logger.LogInformation("[WebCam] liveView started.");
     }
 
     public override void StopStream()
     {
         LiveViewActive = false;
-        logger.LogInformation("The stream of the WebCam has been stopped");
+        logger.LogInformation("[WebCam] liveView stopped.");
     }
 
-    public override string TakePicture()
+    public override Image<Rgb24> TakePicture()
     {
-        string imagePath = Folders.NewImagePath;
-
         Folders.CheckIfDirectoriesExistElseCreate();
 
         using Mat frame = new();
         capture?.Read(frame);
-        frame.Save(imagePath);
 
-        logger.LogInformation("New image taken with path {imagePath}", imagePath);
+        logger.LogInformation("[WebCam] picture has been taken.");
 
-        return imagePath;
+        return Image.Load<Rgb24>(frame.ToImage<Rgb, byte>(false).ToJpegData());
     }
 
     public override void Focus()
     {
-        // blub
+        logger.LogInformation("[WebCam] has focused.");
     }
 
     public static bool Connected()

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Photobox.Lib.ConfigModels;
+using SixLabors.ImageSharp.PixelFormats;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Management;
@@ -48,11 +49,15 @@ public class Printer(ILogger<Printer> logger, IOptionsMonitor<PhotoboxConfig> op
         photoboxConfig.Save();
     }
 
-    public Task PrintAsync(string imagePath)
+    public Task PrintAsync(SixLabors.ImageSharp.Image<Rgb24> image)
     {
         var tcs = new TaskCompletionSource<bool>();
 
-        Bitmap image = new(imagePath);
+        byte[] data = new byte[image.PixelType.BitsPerPixel * image.Height * image.Width];
+
+        image.CopyPixelDataTo(data);
+
+        Bitmap bitmap = new(new MemoryStream(data));
 
         PrinterSettings printerSettings = new()
         {
@@ -68,7 +73,7 @@ public class Printer(ILogger<Printer> logger, IOptionsMonitor<PhotoboxConfig> op
         {
             float width = e.PageSettings.PrintableArea.Width;
             float height = e.PageSettings.PrintableArea.Height;
-            e.Graphics?.DrawImage(image, 0.0f, 0.0f, height, width);
+            e.Graphics?.DrawImage(bitmap, 0.0f, 0.0f, height, width);
             e.HasMorePages = false;
         };
 
