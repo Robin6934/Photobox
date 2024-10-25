@@ -2,6 +2,14 @@
 
 public static class Folders
 {
+    /// <summary>
+    /// Gets executed, when the class is used for the first time, only once.
+    /// </summary>
+    static Folders()
+    {
+        CheckIfDirectoriesExistElseCreate();
+    }
+
     public static string PhotoboxBaseDir
         => Path.Combine([
             "C:"
@@ -33,7 +41,7 @@ public static class Folders
     {
         foreach (string path in AllFolders)
         {
-            string FullPath = Path.Combine(PhotoboxBaseDir, path);
+            string FullPath = GetPath(path);
 
             if (!Directory.Exists(FullPath))
             {

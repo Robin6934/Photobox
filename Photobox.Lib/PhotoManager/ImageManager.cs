@@ -3,10 +3,8 @@ using Microsoft.Extensions.Options;
 using Photobox.Lib.ConfigModels;
 using Photobox.Lib.Printer;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Data;
 using System.Diagnostics;
 
 namespace Photobox.Lib.PhotoManager;
@@ -18,9 +16,9 @@ public class ImageManager(ILogger<ImageManager> logger, IOptionsMonitor<Photobox
 
     private readonly IOptionsMonitor<PhotoboxConfig> photoboxConfigMonitor = options;
 
-    public void Delete(Image<Rgb24> image)
+    public async Task DeletaAsync(Image<Rgb24> image)
     {
-        if(photoboxConfigMonitor.CurrentValue.StoreDeletedImages)
+        if (photoboxConfigMonitor.CurrentValue.StoreDeletedImages)
         {
             string imageName = Folders.NewImageName;
 
@@ -29,24 +27,20 @@ public class ImageManager(ILogger<ImageManager> logger, IOptionsMonitor<Photobox
                 Folders.Deleted,
                 imageName);
 
-            Folders.CheckIfDirectoriesExistElseCreate();
+            await image.SaveAsync(newImagePath, new JpegEncoder());
 
-            image.Save(newImagePath, new JpegEncoder());
-
-            logger.LogInformation("Stored Deleted image under path{imagePath}", imageName);
+            logger.LogInformation("Stored Deleted image under path {imagePath}", imageName);
         }
     }
 
     public async Task PrintAndSaveAsync(Image<Rgb24> image)
     {
-        Folders.CheckIfDirectoriesExistElseCreate();
-
-        Save(image);
+        await SaveAsync(image);
 
         await printer.PrintAsync(image);
     }
 
-    public void Save(Image<Rgb24> image)
+    public async Task SaveAsync(Image<Rgb24> image)
     {
         string imageName = Folders.NewImageName;
 
@@ -55,11 +49,8 @@ public class ImageManager(ILogger<ImageManager> logger, IOptionsMonitor<Photobox
             Folders.Photos,
             imageName);
 
-        Folders.CheckIfDirectoriesExistElseCreate();
+        await image.SaveAsync(newImagePath, new JpegEncoder());
 
-        image.Save(newImagePath, new JpegEncoder());
-
-        logger.LogInformation("Stored Saved image under path{imagePath}", imageName);
-
+        logger.LogInformation("Stored Saved image under path {imagePath}", imageName);
     }
 }
