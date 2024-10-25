@@ -25,6 +25,14 @@
               "default": "WebCam",
               "enum": [ "Auto", "WebCam", "Canon" ]
             },
+            "StoreDeletedImages": {
+              "type": "boolean",
+              "default": true,
+              "examples": [
+                true,
+                false
+              ]
+            },
             "CountDown": {
               "type": "object",
               "properties": {

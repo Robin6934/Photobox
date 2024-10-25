@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
@@ -75,7 +74,7 @@ namespace Photobox.UI.CountDown
         {
 
             totalTime = TimeSpan.FromSeconds(config.CurrentValue.CountDown.TotalSeconds);
-            
+
             earlyTime = totalTime - TimeSpan.FromSeconds(config.CurrentValue.CountDown.EarlySeconds);
 
             if (earlyTime > totalTime)
@@ -91,7 +90,7 @@ namespace Photobox.UI.CountDown
 
             timer.Tick += (s, e) =>
             {
-                if (stopwatch.Elapsed.Seconds !=  totalTime.Seconds - countDownTime)
+                if (stopwatch.Elapsed.Seconds != totalTime.Seconds - countDownTime)
                 {
                     stopwatch.Stop();
                     countDownTime--;

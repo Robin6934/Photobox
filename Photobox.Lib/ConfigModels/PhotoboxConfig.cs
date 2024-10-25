@@ -17,6 +17,8 @@ public class PhotoboxConfig
 
     public CountDownConfig CountDown { get; set; } = default!;
 
+    public bool StoreDeletedImages { get; set; }
+
     public void Save()
     {
         string fileName = "appsettings.json";
