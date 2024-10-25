@@ -112,8 +112,6 @@ internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime
 
         camera.TakePhoto();
 
-        Folders.CheckIfDirectoriesExistElseCreate();
-
         camera.DownloadReady += (s, i) => tcs.SetResult(i);
 
         DownloadInfo info = tcs.Task.Result;

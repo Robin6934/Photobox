@@ -33,7 +33,7 @@ public class ImageViewerLocal(ILogger<ImageViewerLocal> logger, IOptionsMonitor<
         switch (result)
         {
             case ImageViewResult.Save:
-                imageManager.Save(image);
+                await imageManager.SaveAsync(image);
                 break;
 
             case ImageViewResult.Print:
@@ -41,7 +41,7 @@ public class ImageViewerLocal(ILogger<ImageViewerLocal> logger, IOptionsMonitor<
                 break;
 
             case ImageViewResult.Delete:
-                imageManager.Delete(image);
+                await imageManager.DeleteAsync(image);
                 break;
 
             default:

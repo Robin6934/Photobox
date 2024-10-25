@@ -65,8 +65,6 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
 
     public override Image<Rgb24> TakePicture()
     {
-        Folders.CheckIfDirectoriesExistElseCreate();
-
         using Mat frame = new();
         capture?.Read(frame);
 
