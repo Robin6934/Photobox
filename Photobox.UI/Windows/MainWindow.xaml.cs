@@ -40,7 +40,7 @@ public partial class MainWindow : Window, IHostedService
 
         countDown.CountDownEarly += async (s) =>
         {
-            string imagePath = await camera.TakePictureAsync();
+            string imagePath = camera.TakePicture();
 
             await imageViewer.ShowImage(imagePath);
         };
@@ -56,11 +56,12 @@ public partial class MainWindow : Window, IHostedService
         };
     }
 
-    public async Task StartAsync(CancellationToken cancellationToken)
+    public Task StartAsync(CancellationToken cancellationToken)
     {
-        await Start();
+        Start();
         Show();
         applicationLifetime.ApplicationStopping.Register(Close);
+        return Task.CompletedTask;
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -96,16 +97,16 @@ public partial class MainWindow : Window, IHostedService
         SetCanvasSize();
     }
 
-    private async void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+    private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
     {
-        await camera.StopStreamAsync();
+        camera.StopStream();
         applicationLifetime.StopApplication();
     }
 
-    public async Task Start()
+    public void Start()
     {
-        await camera.ConnectAsync();
-        _ = camera.StartStreamAsync();
+        camera.ResilientConnect();
+        camera.StartStream();
     }
 
     private void TakePictureButton_Click(object sender, RoutedEventArgs e)

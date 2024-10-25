@@ -1,4 +1,6 @@
-﻿using Polly;
+﻿using EOSDigital.API;
+using Polly;
+using Polly.CircuitBreaker;
 using Polly.Retry;
 using Polly.Timeout;
 using System.Drawing;
@@ -21,24 +23,28 @@ public abstract class CameraBase : ICamera
         .AddRetry(new RetryStrategyOptions
         {
             Delay = TimeSpan.FromSeconds(1),
-            MaxRetryAttempts = 3
+            MaxRetryAttempts = 5,
+            ShouldHandle = args => args.Outcome switch
+            {
+                { Exception: CameraNotFoundException } => PredicateResult.True(),
+                _ => PredicateResult.False()
+            }
         })
         .Build();
 
-    public virtual Task ResilientConnectAsync() => pipeline.Execute(ConnectAsync);
+    public virtual void ResilientConnect() => pipeline.Execute(Connect);
 
+    public abstract void Connect();
 
-    public abstract Task ConnectAsync();
+    public abstract void StartStream();
 
-    public abstract Task StartStreamAsync();
+    public abstract void StopStream();
 
-    public abstract Task StopStreamAsync();
+    public abstract void Focus();
 
-    public abstract Task FocusAsync();
+    public abstract string TakePicture();
 
-    public abstract Task<string> TakePictureAsync();
-
-    public abstract Task DisconnectAsync();
+    public abstract void Disconnect();
 
     protected virtual void OnNewStreamImage(Bitmap img)
     {

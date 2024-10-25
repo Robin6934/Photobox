@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Photobox.Lib.Camera;
 using Photobox.Lib.ConfigModels;
 using Photobox.Lib.PhotoManager;
@@ -48,7 +49,9 @@ public partial class App : Application
                 services.AddHostedService<MainWindow>();
                 //services.AddHostedService<LogWindow>();
                 services.AddSingleton<CameraFactory>();
-                services.AddSingleton(c => c.GetRequiredService<CameraFactory>().Create());
+                services.AddSingleton(
+                    c => c.GetRequiredService<CameraFactory>()
+                    .Create(c.GetRequiredService<IOptions<PhotoboxConfig>>().Value.Camera));
                 services.AddSingleton<IImageViewer, ImageViewerLocal>();
                 services.AddSingleton<IImageManager, ImageManager>();
                 services.AddSingleton<IPrinter, Printer>();

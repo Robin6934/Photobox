@@ -13,21 +13,18 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
 
     private readonly IHostApplicationLifetime applicationLifetime = applicationLifetime;
 
-    public override Task ConnectAsync()
+    public override void Connect()
     {
         capture = new VideoCapture();
         capture.Set(Emgu.CV.CvEnum.CapProp.FrameWidth, 1200);
         capture.Set(Emgu.CV.CvEnum.CapProp.FrameHeight, 800);
         capture.Set(Emgu.CV.CvEnum.CapProp.Fps, 60);
-
-        return Task.CompletedTask;
     }
 
-    public override Task DisconnectAsync()
+    public override void Disconnect()
     {
         capture?.Dispose();
         capture = null;
-        return Task.CompletedTask;
     }
 
     public override void Dispose()
@@ -36,11 +33,11 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
         capture = null;
     }
 
-    public override Task StartStreamAsync()
+    public override void StartStream()
     {
         logger.LogInformation("The stream of the WebCam has been started");
         LiveViewActive = true;
-        return Task.Run(() =>
+        Task.Run(() =>
         {
             using Mat frame = new();
             while (!applicationLifetime.ApplicationStopping.IsCancellationRequested
@@ -55,14 +52,13 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
         }, applicationLifetime.ApplicationStopping);
     }
 
-    public override Task StopStreamAsync()
+    public override void StopStream()
     {
         LiveViewActive = false;
         logger.LogInformation("The stream of the WebCam has been stopped");
-        return Task.CompletedTask;
     }
 
-    public override async Task<string> TakePictureAsync()
+    public override string TakePicture()
     {
         string imagePath = Folders.NewImagePath;
 
@@ -74,19 +70,17 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
 
         logger.LogInformation("New image taken with path {imagePath}", imagePath);
 
-        await Task.CompletedTask;
-
         return imagePath;
     }
 
-    public override Task FocusAsync()
+    public override void Focus()
     {
-        return Task.CompletedTask;
+        // blub
     }
 
     public static bool Connected()
     {
-        VideoCapture capture = new();
+        using VideoCapture capture = new();
         return capture.IsOpened;
     }
 }
