@@ -1,9 +1,7 @@
-using Microsoft.OpenApi.Models;
-using Photobox.Web.Client.Pages;
+using Microsoft.EntityFrameworkCore;
 using Photobox.Web.Components;
-using Serilog.AspNetCore;
+using Photobox.Web.DbContext;
 using Serilog;
-using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,9 +22,14 @@ builder.Host.UseSerilog((context, services, configuration) =>
         .Enrich.WithEnvironmentName()
         .Enrich.WithMachineName()
         .Enrich.WithProperty("Source", "Server")
-        .WriteTo.Console()
-        .WriteTo.Seq("http://seq:80");
+    .WriteTo.Console()
+    .WriteTo.Seq("http://seq:80");
+});
 
+builder.Services.AddDbContext<MariaDbContext>(options =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("PhotoboxConnectionString");
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
 var app = builder.Build();

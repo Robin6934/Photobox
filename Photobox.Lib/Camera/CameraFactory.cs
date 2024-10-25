@@ -36,9 +36,9 @@ public class CameraFactory(ILogger<CameraFactory> logger,
             case CameraType.WebCam:
                 return new WebCam(factory.CreateLogger<WebCam>(), applicationLifetime);
             case CameraType.Canon:
-                break;
+                return new CanonCamera(factory.CreateLogger<CanonCamera>(), applicationLifetime);
             default:
-                break;
+                throw new InvalidOperationException("The Cameratype is not supported!");
         }
     }
 }

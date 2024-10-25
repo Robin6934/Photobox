@@ -4,11 +4,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Photobox.Lib.Camera;
-internal class CanonCamera : CameraBase
+internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime applicationLifetime) : CameraBase
 {
     private readonly CanonAPI api = new();
 
-    private readonly EOSDigital.API.Camera camera = default!;
+    private EOSDigital.API.Camera camera = default!;
 
     private readonly System.Timers.Timer keepAliveTimer = new()
     {
@@ -18,51 +18,9 @@ internal class CanonCamera : CameraBase
 
     private bool secondTick = false;
 
-    private readonly ILogger<CanonCamera> logger;
+    private readonly ILogger<CanonCamera> logger = logger;
 
-    private readonly IHostApplicationLifetime applicationLifetime;
-
-    public CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime applicationLifetime)
-    {
-        this.logger = logger;
-        this.applicationLifetime = applicationLifetime;
-
-        int cnt = 0;
-        bool CameraFound = false;
-        List<EOSDigital.API.Camera> CamList = [];
-
-        while (!CameraFound)
-        {
-            try
-            {
-                CamList = api.GetCameraList();
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error while retrieving tha connected Canon cameras!");
-            }
-            if (CamList.Count > 0)
-            {
-                camera = CamList[0];
-                CameraFound = true;
-            }
-            if (cnt >= 10)
-            {
-                logger.LogCritical("No Canon camera is connected!");
-                applicationLifetime.StopApplication();
-                break;
-            }
-            Task.Delay(100).Wait();
-            cnt++;
-        }
-
-        if (CameraFound)
-        {
-            camera.LiveViewUpdated += Camera_LiveViewUpdated;
-
-            keepAliveTimer.Elapsed += KeepAliveTimer_Elapsed;
-        }
-    }
+    private readonly IHostApplicationLifetime applicationLifetime = applicationLifetime;
 
     private void KeepAliveTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
     {
@@ -84,16 +42,32 @@ internal class CanonCamera : CameraBase
         OnNewStreamImage(wrapStream);
     }
 
-    public override Task ConnectAsync()
+    public override void Connect()
     {
-        camera.OpenSession();
-        return Task.CompletedTask;
+        List<EOSDigital.API.Camera> CamList = api.GetCameraList();
+
+        if (CamList.Count > 0)
+        {
+            camera = CamList.FirstOrDefault()!;
+        }
+        else
+        {
+            throw new CameraNotFoundException("No Canon camera has been found.");
+        }
+
+        if (camera is not null)
+        {
+            camera.LiveViewUpdated += Camera_LiveViewUpdated;
+
+            keepAliveTimer.Elapsed += KeepAliveTimer_Elapsed;
+
+            camera.OpenSession();
+        }
     }
 
-    public override Task DisconnectAsync()
+    public override void Disconnect()
     {
         camera.CloseSession();
-        return Task.CompletedTask;
     }
 
     public override void Dispose()
@@ -101,39 +75,36 @@ internal class CanonCamera : CameraBase
         camera.Dispose();
     }
 
-    public override Task FocusAsync()
+    public override void Focus()
     {
         camera.SendCommand(CameraCommand.DoEvfAf);
-        return Task.CompletedTask;
     }
 
-    public override Task StartStreamAsync()
+    public override void StartStream()
     {
         camera.StartLiveView();
         LiveViewActive = true;
-        return Task.CompletedTask;
     }
 
-    public override Task StopStreamAsync()
+    public override void StopStream()
     {
         camera.StopLiveView();
         LiveViewActive = false;
-        return Task.CompletedTask;
     }
 
-    public override async Task<string> TakePictureAsync()
+    public override string TakePicture()
     {
         TaskCompletionSource<DownloadInfo> tcs = new();
 
         string imagePath = Folders.NewImagePath;
 
-        await camera.TakePhotoAsync();
+        camera.TakePhoto();
 
         Folders.CheckIfDirectoriesExistElseCreate();
 
         camera.DownloadReady += (s, i) => tcs.SetResult(i);
 
-        DownloadInfo info = await tcs.Task;
+        DownloadInfo info = tcs.Task.Result;
 
         camera.DownloadFile(info, imagePath);
 

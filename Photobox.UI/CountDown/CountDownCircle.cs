@@ -78,7 +78,7 @@ namespace Photobox.UI.CountDown
             
             earlyTime = totalTime - TimeSpan.FromSeconds(config.CurrentValue.CountDown.EarlySeconds);
 
-            if (earlyTime >= totalTime)
+            if (earlyTime > totalTime)
             {
                 throw new ArgumentException("Early seconds cant be lager than the total countdown time!!");
             }

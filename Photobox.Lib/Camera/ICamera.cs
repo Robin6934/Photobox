@@ -5,11 +5,11 @@ public interface ICamera : IDisposable
     event NewImageHandler CameraStream;
 
     public bool LiveViewActive { get; }
-    Task ResilientConnectAsync();
-    Task ConnectAsync();
-    Task StartStreamAsync();
-    Task StopStreamAsync();
-    Task FocusAsync();
-    Task<string> TakePictureAsync();
-    Task DisconnectAsync();
+    void ResilientConnect();
+    void Connect();
+    void StartStream();
+    void StopStream();
+    void Focus();
+    string TakePicture();
+    void Disconnect();
 }
