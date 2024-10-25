@@ -1,8 +1,11 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Emgu.CV.Structure;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Photobox.Lib.Camera;
 using Photobox.UI.CountDown;
 using Photobox.UI.ImageViewer;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using System.IO;
 using System.Net.Http;
 using System.Windows;
@@ -40,9 +43,9 @@ public partial class MainWindow : Window, IHostedService
 
         countDown.CountDownEarly += async (s) =>
         {
-            string imagePath = camera.TakePicture();
+            Image<Rgb24> image = camera.TakePicture();
 
-            await imageViewer.ShowImage(imagePath);
+            await imageViewer.ShowImage(image);
         };
 
         logger.LogInformation("Mainwindow created");

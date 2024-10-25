@@ -2,9 +2,11 @@
 using EOSDigital.SDK;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.Lib.Camera;
-internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime applicationLifetime) : CameraBase
+internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime applicationLifetime) : CameraBase(logger)
 {
     private readonly CanonAPI api = new();
 
@@ -38,8 +40,11 @@ internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime
 
     private void Camera_LiveViewUpdated(EOSDigital.API.Camera sender, Stream img)
     {
-        WrapStream wrapStream = new(img);
-        OnNewStreamImage(wrapStream);
+        if (LiveViewActive)
+        {
+            WrapStream wrapStream = new(img);
+            OnNewStreamImage(wrapStream);
+        }
     }
 
     public override void Connect()
@@ -57,46 +62,53 @@ internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime
 
         if (camera is not null)
         {
-            camera.LiveViewUpdated += Camera_LiveViewUpdated;
-
             keepAliveTimer.Elapsed += KeepAliveTimer_Elapsed;
 
             camera.OpenSession();
+
+            logger.LogInformation("[Canon] has been connected.");
         }
     }
 
     public override void Disconnect()
     {
         camera.CloseSession();
+        logger.LogInformation("[Canon] has been disconnected.");
     }
 
     public override void Dispose()
     {
         camera.Dispose();
+        logger.LogInformation("[Canon] has been disposed.");
     }
 
     public override void Focus()
     {
         camera.SendCommand(CameraCommand.DoEvfAf);
+        logger.LogInformation("[Canon] has focused.");
     }
 
     public override void StartStream()
     {
-        camera.StartLiveView();
         LiveViewActive = true;
+        camera.LiveViewUpdated += Camera_LiveViewUpdated;
+        camera.StartLiveView();
+        logger.LogInformation("[Canon] liveView started.");
     }
 
     public override void StopStream()
     {
-        camera.StopLiveView();
         LiveViewActive = false;
+        camera.LiveViewUpdated -= Camera_LiveViewUpdated;
+        camera.StopLiveView();
+        logger.LogInformation("[Canon] liveView stopped.");
     }
 
-    public override string TakePicture()
+    public override Image<Rgb24> TakePicture()
     {
         TaskCompletionSource<DownloadInfo> tcs = new();
 
-        string imagePath = Folders.NewImagePath;
+        string imagePath = ".\\Temp\\Temp.jpg";
 
         camera.TakePhoto();
 
@@ -106,9 +118,9 @@ internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime
 
         DownloadInfo info = tcs.Task.Result;
 
-        camera.DownloadFile(info, imagePath);
+        logger.LogInformation("[Canon] picture has been taken under path {path}", imagePath);
 
-        return imagePath;
+        return Image.Load<Rgb24>(camera.DownloadToStream(info));
     }
 
     public static bool Connected()

@@ -1397,7 +1397,7 @@ namespace EOSDigital.API
         /// <param name="Info">The info about the object that will get downloaded</param>
         /// <returns>A <see cref="Stream"/> containing the downloaded data</returns>
         /// <exception cref="SDKException">An SDK call failed</exception>
-        protected Stream DownloadToStream(DownloadInfo Info)
+        public Stream DownloadToStream(DownloadInfo Info)
         {
             SDKStream stream = new(Info.Size64);
             DownloadData(Info, stream.Reference);

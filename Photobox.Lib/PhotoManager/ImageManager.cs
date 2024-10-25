@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using Photobox.Lib.Printer;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.Lib.PhotoManager;
 public class ImageManager(ILogger<ImageManager> logger, IPrinter printer) : IImageManager
@@ -8,9 +11,9 @@ public class ImageManager(ILogger<ImageManager> logger, IPrinter printer) : IIma
 
     private readonly IPrinter printer = printer;
 
-    public void Delete(string imagePath)
+    public void Delete(Image<Rgb24> image)
     {
-        string imageName = Path.GetFileName(imagePath);
+        string imageName = Folders.NewImageName;
 
         string newImagePath = Path.Combine(
             Folders.PhotoboxBaseDir,
@@ -19,21 +22,21 @@ public class ImageManager(ILogger<ImageManager> logger, IPrinter printer) : IIma
 
         Folders.CheckIfDirectoriesExistElseCreate();
 
-        File.Move(imagePath, newImagePath);
+        image.Save(newImagePath, new JpegEncoder());
     }
 
-    public async Task PrintAndSaveAsync(string imagePath)
+    public async Task PrintAndSaveAsync(Image<Rgb24> image)
     {
         Folders.CheckIfDirectoriesExistElseCreate();
 
-        await printer.PrintAsync(imagePath);
+        Save(image);
 
-        Save(imagePath);
+        await printer.PrintAsync(image);
     }
 
-    public void Save(string imagePath)
+    public void Save(Image<Rgb24> image)
     {
-        string imageName = Path.GetFileName(imagePath);
+        string imageName = Folders.NewImageName;
 
         string newImagePath = Path.Combine(
             Folders.PhotoboxBaseDir,
@@ -42,6 +45,6 @@ public class ImageManager(ILogger<ImageManager> logger, IPrinter printer) : IIma
 
         Folders.CheckIfDirectoriesExistElseCreate();
 
-        File.Move(imagePath, newImagePath, false);
+        image.Save(newImagePath, new JpegEncoder());
     }
 }
