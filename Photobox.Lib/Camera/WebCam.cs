@@ -63,12 +63,14 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
         logger.LogInformation("[WebCam] liveView stopped.");
     }
 
-    public override Image<Rgb24> TakePicture()
+    public override async Task<Image<Rgb24>> TakePictureAsync()
     {
         using Mat frame = new();
         capture?.Read(frame);
 
         logger.LogInformation("[WebCam] picture has been taken.");
+
+        await Task.CompletedTask;
 
         return Image.Load<Rgb24>(frame.ToImage<Rgb, byte>(false).ToJpegData());
     }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Photobox.Lib.Camera;
 using Photobox.Lib.ConfigModels;
+using Photobox.Lib.ImageHandler;
 using Photobox.Lib.PhotoManager;
 using Photobox.Lib.Printer;
 using Photobox.UI.CountDown;
@@ -13,6 +14,7 @@ using Photobox.UI.ImageViewer;
 using Photobox.UI.Windows;
 using Serilog;
 using System.Windows;
+using System.Windows.Media;
 
 namespace Photobox.UI;
 /// <summary>
@@ -24,6 +26,9 @@ public partial class App : Application
 
     protected override async void OnStartup(StartupEventArgs e)
     {
+        var i = new ImageHandler(null, null);
+
+        i.DrawOnImage(null);
         host = CreateHostBuilder(e.Args).Build();
 
         await host.StartAsync();

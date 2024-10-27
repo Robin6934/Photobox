@@ -16,7 +16,7 @@ public class ImageManager(ILogger<ImageManager> logger, IOptionsMonitor<Photobox
 
     private readonly IOptionsMonitor<PhotoboxConfig> photoboxConfigMonitor = options;
 
-    public async Task DeletaAsync(Image<Rgb24> image)
+    public async Task DeleteAsync(Image<Rgb24> image)
     {
         if (photoboxConfigMonitor.CurrentValue.StoreDeletedImages)
         {

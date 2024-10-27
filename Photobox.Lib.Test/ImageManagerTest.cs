@@ -1,7 +1,11 @@
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NSubstitute;
+using Photobox.Lib.ConfigModels;
 using Photobox.Lib.PhotoManager;
 using Photobox.Lib.Printer;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.Lib.Test;
 
@@ -14,9 +18,9 @@ public class ImageManagerTest
 
         var logger = Substitute.For<ILogger<ImageManager>>();
 
-        IImageManager imageService = new ImageManager(logger, printer);
+        IImageManager imageService = new ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer);
 
-        string imageName = "testImage.jpg";
+        string imageName = Folders.NewImageName;
 
         string newImagePath = Path.Combine(
             Folders.PhotoboxBaseDir,
@@ -25,13 +29,11 @@ public class ImageManagerTest
 
         try
         {
-            DeleteFileIfExists(imageName);
+            Image<Rgb24> image = new(200, 200);
 
-            File.WriteAllText(imageName, "testFileContent");
+            await imageService.PrintAndSaveAsync(image);
 
-            await imageService.PrintAndSaveAsync(imageName);
-
-            await printer.Received(1).PrintAsync(Arg.Any<string>());
+            await printer.Received(1).PrintAsync(image);
         }
         finally
         {
@@ -47,9 +49,9 @@ public class ImageManagerTest
 
         var logger = Substitute.For<ILogger<ImageManager>>();
 
-        IImageManager imageService = new ImageManager(logger, printer);
+        IImageManager imageService = new ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer);
 
-        string imageName = "testImage.jpg";
+        string imageName = Folders.NewImageName;
 
         string newImagePath = Path.Combine(
             Folders.PhotoboxBaseDir,
@@ -60,9 +62,9 @@ public class ImageManagerTest
         {
             DeleteFileIfExists(imageName);
 
-            File.WriteAllText(imageName, "testFileContent");
+            Image<Rgb24> image = new(200, 200);
 
-            await imageService.PrintAndSaveAsync(imageName);
+            await imageService.PrintAndSaveAsync(image);
 
             CheckIfFileExists(newImagePath);
         }
@@ -74,15 +76,15 @@ public class ImageManagerTest
     }
 
     [Fact]
-    public void SaveImage()
+    public async Task SaveImage()
     {
         var printer = Substitute.For<IPrinter>();
 
         var logger = Substitute.For<ILogger<ImageManager>>();
 
-        IImageManager imageService = new ImageManager(logger, printer);
+        IImageManager imageService = new ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer);
 
-        string imageName = "testImage.jpg";
+        string imageName = Folders.NewImageName;
 
         string newImagePath = Path.Combine(
             Folders.PhotoboxBaseDir,
@@ -93,9 +95,9 @@ public class ImageManagerTest
         {
             DeleteFileIfExists(imageName);
 
-            File.WriteAllText(imageName, "testFileContent");
+            Image<Rgb24> image = new(200, 200);
 
-            imageService.Save(imageName);
+            await imageService.SaveAsync(image);
 
             CheckIfFileExists(newImagePath);
         }
@@ -113,9 +115,11 @@ public class ImageManagerTest
 
         var logger = Substitute.For<ILogger<ImageManager>>();
 
-        IImageManager imageService = new ImageManager(logger, printer);
+        IImageManager imageService = new ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer);
 
-        string imageName = "testImage.jpg";
+        string imageName = Folders.NewImageName;
+
+        Folders.NewImageName.Returns(imageName);
 
         string newImagePath = Path.Combine(
             Folders.PhotoboxBaseDir,
@@ -126,9 +130,9 @@ public class ImageManagerTest
         {
             DeleteFileIfExists(imageName);
 
-            File.WriteAllText(imageName, "testFileContent");
+            Image<Rgb24> image = new(200, 200);
 
-            imageService.Delete(imageName);
+            imageService.DeleteAsync(image);
 
             CheckIfFileExists(newImagePath);
         }
