@@ -24,6 +24,8 @@ internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime
 
     private readonly IHostApplicationLifetime applicationLifetime = applicationLifetime;
 
+    private readonly Lock @lock = new();
+
     private void KeepAliveTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
     {
         if (secondTick)
@@ -66,6 +68,10 @@ internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime
 
             camera.OpenSession();
 
+            camera.SetSetting(PropertyID.SaveTo, (int)SaveTo.Both);
+
+            camera.SetCapacity(4096, int.MaxValue);
+
             logger.LogInformation("[Canon] has been connected.");
         }
     }
@@ -84,7 +90,10 @@ internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime
 
     public override void Focus()
     {
-        camera.SendCommand(CameraCommand.DoEvfAf);
+        lock (@lock)
+        {
+            camera.SendCommand(CameraCommand.DoEvfAf, (int)EvfAFMode.Live);
+        }
         logger.LogInformation("[Canon] has focused.");
     }
 
@@ -104,19 +113,19 @@ internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime
         logger.LogInformation("[Canon] liveView stopped.");
     }
 
-    public override Image<Rgb24> TakePicture()
+    public override async Task<Image<Rgb24>> TakePictureAsync()
     {
         TaskCompletionSource<DownloadInfo> tcs = new();
 
-        string imagePath = ".\\Temp\\Temp.jpg";
-
+        lock (@lock)
+        {
+            
+        }
         camera.TakePhoto();
 
         camera.DownloadReady += (s, i) => tcs.SetResult(i);
 
-        DownloadInfo info = tcs.Task.Result;
-
-        logger.LogInformation("[Canon] picture has been taken under path {path}", imagePath);
+        DownloadInfo info = await tcs.Task;
 
         return Image.Load<Rgb24>(camera.DownloadToStream(info));
     }

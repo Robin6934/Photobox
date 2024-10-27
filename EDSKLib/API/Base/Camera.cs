@@ -356,7 +356,10 @@ namespace EOSDigital.API
                         DownloadReadyEvent(this, new DownloadInfo(inRef));
                     }
                 }
-                catch (Exception ex) { if (!IsDisposed && !ErrorHandler.ReportError(this, ex)) throw; }
+                catch (Exception ex) when (!IsDisposed && ! ErrorHandler.ReportError(this, ex))
+                { 
+                    throw;
+                }
 
                 ObjectChanged?.Invoke(this, inEvent, inRef);
             });
@@ -367,8 +370,14 @@ namespace EOSDigital.API
         {
             ThreadPool.QueueUserWorkItem((state) =>
             {
-                try { ProgressChanged?.Invoke(this, inPercent); }
-                catch (Exception ex) { if (!IsDisposed && !ErrorHandler.ReportError(this, ex)) throw; }
+                try 
+                { 
+                    ProgressChanged?.Invoke(this, inPercent);
+                }
+                catch (Exception ex) when (!IsDisposed && !ErrorHandler.ReportError(this, ex))
+                {
+                    throw;
+                }
             });
             return ErrorCode.OK;
         }

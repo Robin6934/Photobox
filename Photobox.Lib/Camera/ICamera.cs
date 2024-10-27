@@ -13,6 +13,6 @@ public interface ICamera : IDisposable
     void StartStream();
     void StopStream();
     void Focus();
-    Image<Rgb24> TakePicture();
+    Task<Image<Rgb24>> TakePictureAsync();
     void Disconnect();
 }

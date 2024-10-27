@@ -446,7 +446,7 @@ namespace EOSDigital.API
         /// if the end of the stream has been reached.</returns>
         public unsafe long Read(byte[] buffer, long offset, long count)
         {
-            ArgumentOutOfRangeException.ThrowIfGreaterThan(buffer.LongLength, offset + count);
+            //ArgumentOutOfRangeException.ThrowIfGreaterThan(buffer.LongLength, offset + count);
 
             fixed (byte* bufferPtr = buffer)
             {

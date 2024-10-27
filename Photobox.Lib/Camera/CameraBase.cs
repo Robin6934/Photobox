@@ -51,7 +51,7 @@ public abstract class CameraBase(ILogger logger) : ICamera
 
     public abstract void Focus();
 
-    public abstract Image<Rgb24> TakePicture();
+    public abstract Task<Image<Rgb24>> TakePictureAsync();
 
     public abstract void Disconnect();
 

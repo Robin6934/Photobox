@@ -39,9 +39,14 @@ public partial class MainWindow : Window, IHostedService
 
         countDown.Panel = GridLiveView;
 
-        countDown.CountDownEarly += async (s) =>
+        countDown.CountDownEarly += (s) =>
         {
-            Image<Rgb24> image = camera.TakePicture();
+            //camera.Focus();
+        };
+
+        countDown.CountDownExpired += async (s) =>
+        {
+            Image<Rgb24> image = await camera.TakePictureAsync();
 
             await imageViewer.ShowImage(image);
         };

@@ -52,7 +52,7 @@ namespace EOSDigital.API
         /// <summary>
         /// Lock object to ensure that an action executed on the thread does not invoke on itself
         /// </summary>
-        private readonly object cmdLock = new();
+        private readonly Lock cmdLock = new();
         /// <summary>
         /// Lock object to synchronize between execution and calling thread
         /// </summary>
@@ -135,7 +135,7 @@ namespace EOSDigital.API
 
             //If the method is called from the execution thread, directly execute it.
             //This prevents possible deadlocks when trying to acquire the runLock while waiting within for the thread to finish.
-            if (Monitor.TryEnter(cmdLock))
+            if (cmdLock.TryEnter())
             {
                 try
                 {
@@ -143,7 +143,7 @@ namespace EOSDigital.API
                 }
                 finally
                 {
-                    Monitor.Exit(cmdLock);
+                    cmdLock.Exit();
                 }
             }
             else
