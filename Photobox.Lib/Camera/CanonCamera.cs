@@ -26,6 +26,8 @@ internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime
 
     private readonly Lock @lock = new();
 
+    public override SixLabors.ImageSharp.Rectangle PictureSize => new(0, 0, 960, 540);
+
     private void KeepAliveTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
     {
         if (secondTick)

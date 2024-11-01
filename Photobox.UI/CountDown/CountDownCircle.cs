@@ -99,17 +99,10 @@ namespace Photobox.UI.CountDown
                 }
 
                 SetAngleBasedOnTime();
-
-                if (stopwatch.Elapsed >= totalTime)
-                {
-                    timer.Stop();
-                    CountDownExpired?.Invoke(this);
-                    Panel.Children.Remove(textBlockCountdown);
-                    Panel.Children.Remove(path);
-                }
             };
 
             earlyTimer.Interval = earlyTime;
+
             earlyTimer.Tick += (s, e) =>
             {
                 CountDownEarly?.Invoke(this);
@@ -120,8 +113,10 @@ namespace Photobox.UI.CountDown
 
             expiredTimer.Tick += (s, e) =>
             {
-                CountDownExpired?.Invoke(this);
                 ((DispatcherTimer)s!).Stop();
+                CountDownExpired?.Invoke(this);
+                Panel.Children.Remove(textBlockCountdown);
+                Panel.Children.Remove(path);
             };
         }
 

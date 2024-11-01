@@ -1,7 +1,44 @@
 ﻿@page "/picturegallery"
 
-<h3>PictureGallery</h3>
+<h3>Picture Gallery</h3>
+
+@if (imagePaths?.Any() == true)
+{
+    <div class="gallery">
+        @foreach (var imagePath in imagePaths)
+        {
+            <img src="@imagePath" alt="Picture" class="gallery-image" />
+        }
+    </div>
+}
+else
+{
+    <p>No images found.</p>
+}
 
 @code {
+    private List<string> imagePaths;
 
+    protected override async Task OnInitializedAsync()
+    {
+        // Load the image paths
+        imagePaths = await LoadImagePathsAsync();
+    }
+
+    private async Task<List<string>> LoadImagePathsAsync()
+    {
+        // For demo purposes, assume images are stored in wwwroot/images folder
+        var imageDirectory = Path.Combine("wwwroot", "images");
+
+        if (!Directory.Exists(imageDirectory))
+        {
+            return new List<string>();
+        }
+
+        // Get all image file paths in the directory
+        var files = Directory.GetFiles(imageDirectory, "*.jpg"); // Adjust extension as needed
+
+        // Convert to web-accessible paths
+        return files.Select(f => $"/images/{Path.GetFileName(f)}").ToList();
+    }
 }

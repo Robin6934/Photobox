@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Photobox.Lib.ConfigModels;
+using Photobox.Lib.ImageHandler;
 using Photobox.Lib.Printer;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;

@@ -5,5 +5,5 @@ namespace Photobox.Lib.ImageHandler;
 
 public interface IImageHandler
 {
-    public void DrawOnImage(Image<Rgb24> image);
+    public Image<Rgb24> DrawOnImage(Image<Rgb24> image);
 }

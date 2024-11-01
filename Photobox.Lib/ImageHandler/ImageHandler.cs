@@ -19,9 +19,9 @@ public class ImageHandler(ILogger<ImageHandler> logger, IOptionsMonitor<Photobox
 
     private readonly IOptionsMonitor<PhotoboxConfig> optionsMonitor = optionsMonitor;
 
-    public void DrawOnImage(Image<Rgb24> image)
+    public Image<Rgb24> DrawOnImage(Image<Rgb24> image)
     {
-        const string text = "Sample Text";
+        string text = optionsMonitor.CurrentValue.TextOnPicture;
         const float TextPadding = 18f;
         const string TextFont = "Arial";
         const float TextFontSize = 64f;
@@ -40,7 +40,7 @@ public class ImageHandler(ILogger<ImageHandler> logger, IOptionsMonitor<Photobox
         var rect = TextMeasurer.MeasureSize(text, options);
 
         // Create an image with RGBA32 for transparency support
-        using Image<Rgba32> imageWithText = new((int)rect.Width, (int)rect.Height);
+        using Image<Rgba32> imageWithText = new(image.Width, image.Height);
         imageWithText.Mutate(x => x.BackgroundColor(Color.Transparent));
 
         // Draw the text with RGBA color (including transparency)
@@ -52,7 +52,9 @@ public class ImageHandler(ILogger<ImageHandler> logger, IOptionsMonitor<Photobox
                     imageWithText.Height - rect.Height - TextPadding)));
 
         // Save the image as PNG to preserve transparency
-        imageWithText.SaveAsPng("output-filename.png");
+        image.Mutate(x => x.DrawImage(imageWithText, 1.0f));
+
+        return image;
     }
 
 }

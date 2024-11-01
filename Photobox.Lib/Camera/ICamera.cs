@@ -8,6 +8,8 @@ public interface ICamera : IDisposable
     event NewImageHandler CameraStream;
 
     public bool LiveViewActive { get; }
+
+    public Rectangle PictureSize { get; }
     void ResilientConnect();
     void Connect();
     void StartStream();

@@ -26,9 +26,6 @@ public partial class App : Application
 
     protected override async void OnStartup(StartupEventArgs e)
     {
-        var i = new ImageHandler(null, null);
-
-        i.DrawOnImage(null);
         host = CreateHostBuilder(e.Args).Build();
 
         await host.StartAsync();
@@ -63,6 +60,7 @@ public partial class App : Application
                 services.Configure<PhotoboxConfig>(
                     context.Configuration.GetSection(PhotoboxConfig.Photobox));
                 services.AddSingleton<ICountDown, CountDownCircle>();
+                services.AddSingleton<IImageHandler, ImageHandler>();
             })
             .ConfigureLogging(logging => logging.ClearProviders())
             .UseSerilog((context, services, configuration) =>

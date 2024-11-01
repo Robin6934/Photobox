@@ -1,4 +1,5 @@
 ﻿using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -15,12 +16,13 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
 
     private readonly IHostApplicationLifetime applicationLifetime = applicationLifetime;
 
+    public override Rectangle PictureSize => new Rectangle(0, 0, (int)capture.Get(CapProp.FrameWidth), (int)capture.Get(CapProp.FrameHeight));
+
     public override void Connect()
     {
         capture = new VideoCapture();
         capture.Set(Emgu.CV.CvEnum.CapProp.FrameWidth, 1200);
         capture.Set(Emgu.CV.CvEnum.CapProp.FrameHeight, 800);
-        capture.Set(Emgu.CV.CvEnum.CapProp.Fps, 60);
         logger.LogInformation("[WebCam] has been connected.");
     }
 

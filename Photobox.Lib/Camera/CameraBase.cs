@@ -14,7 +14,10 @@ public abstract class CameraBase(ILogger logger) : ICamera
     public event NewImageHandler CameraStream = default!;
 
     private readonly ILogger logger = logger;
+
     public virtual bool LiveViewActive { get; set; } = false;
+
+    public virtual Rectangle PictureSize { get; }
 
     private readonly ResiliencePipeline pipeline = new ResiliencePipelineBuilder()
         .AddTimeout(new TimeoutStrategyOptions
