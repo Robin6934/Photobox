@@ -17,6 +17,8 @@ public class PhotoboxConfig
 
     public CountDownConfig CountDown { get; set; } = default!;
 
+    public string TextOnPicture { get; set; } = "";
+
     public bool StoreDeletedImages { get; set; }
 
     public void Save()

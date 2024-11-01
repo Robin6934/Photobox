@@ -45,4 +45,21 @@ public static partial class BitmapToBitmapSource
 
         return bitmapImage;
     }
+
+    public static ImageBrush ToBitmapSource(this Stream stream)
+    {
+        // Ensure the stream is at the beginning before reading it.
+        stream.Seek(0, SeekOrigin.Begin);
+
+        BitmapImage bitmap = new();
+
+        bitmap.BeginInit();
+        bitmap.CacheOption = BitmapCacheOption.OnLoad; // Load the data immediately, so stream doesn't stay open.
+        bitmap.StreamSource = stream;
+        bitmap.EndInit();
+
+        bitmap.Freeze(); // Freeze the bitmap to make it thread-safe and immutable
+
+        return new ImageBrush(bitmap);
+    }
 }

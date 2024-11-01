@@ -8,7 +8,8 @@
         Title="MainWindow" Height="1080" Width="1920"
         SizeChanged="MainWindow_SizeChanged"
         Loaded="MainWindow_Loaded"
-        Closing="MainWindow_Closing">
+        Closing="MainWindow_Closing"
+        Closed="Window_Closed">
 
     <Window.Resources>
         <local:DivideByThreeConverter x:Key="DivideByThreeConverter"/>

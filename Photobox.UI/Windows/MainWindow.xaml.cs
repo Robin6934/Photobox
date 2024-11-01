@@ -1,14 +1,13 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Photobox.Lib.Camera;
+using Photobox.Lib.ImageHandler;
 using Photobox.UI.CountDown;
 using Photobox.UI.ImageViewer;
+using Photobox.WpfHelpers;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System.IO;
 using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace Photobox.UI.Windows;
 public partial class MainWindow : Window, IHostedService
@@ -23,19 +22,23 @@ public partial class MainWindow : Window, IHostedService
 
     private readonly IHostApplicationLifetime applicationLifetime;
 
-    public MainWindow(ICamera cam, IImageViewer viewer, ILogger<MainWindow> log, ICountDown countDown, IHostApplicationLifetime applicationLifetime)
+    private readonly IImageHandler imageHandler;
+
+    public MainWindow(ICamera camera, IImageViewer imageViewer, ILogger<MainWindow> logger, ICountDown countDown, IHostApplicationLifetime applicationLifetime, IImageHandler imageHandler)
     {
         InitializeComponent();
 
-        camera = cam;
+        this.camera = camera;
 
-        imageViewer = viewer;
+        this.imageViewer = imageViewer;
 
-        logger = log;
+        this.logger = logger;
 
         this.countDown = countDown;
 
         this.applicationLifetime = applicationLifetime;
+
+        this.imageHandler = imageHandler;
 
         countDown.Panel = GridLiveView;
 
@@ -46,18 +49,18 @@ public partial class MainWindow : Window, IHostedService
 
         countDown.CountDownExpired += async (s) =>
         {
-            Image<Rgb24> image = await camera.TakePictureAsync();
+            Image<Rgb24> image = await this.camera.TakePictureAsync();
 
-            await imageViewer.ShowImage(image);
+            await this.imageViewer.ShowImage(image);
         };
 
-        logger.LogInformation("Mainwindow created");
+        this.logger.LogInformation("Mainwindow created");
 
-        camera.CameraStream += (o, i) =>
+        this.camera.CameraStream += (o, i) =>
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                GridLiveView.Background = new ImageBrush(ConvertStreamToBitmapSource(i));
+                GridLiveView.Background = i.ToBitmapSource();
             });
         };
     }
@@ -67,34 +70,20 @@ public partial class MainWindow : Window, IHostedService
         Start();
         Show();
         applicationLifetime.ApplicationStopping.Register(Close);
+        logger.LogInformation("The main window has started.");
         return Task.CompletedTask;
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
         Close();
+        logger.LogInformation("The main window has been closed.");
         return Task.CompletedTask;
-    }
-
-    public BitmapSource ConvertStreamToBitmapSource(Stream stream)
-    {
-        // Ensure the stream is at the beginning before reading it.
-        stream.Seek(0, SeekOrigin.Begin);
-
-        BitmapImage bitmap = new BitmapImage();
-
-        bitmap.BeginInit();
-        bitmap.CacheOption = BitmapCacheOption.OnLoad; // Load the data immediately, so stream doesn't stay open.
-        bitmap.StreamSource = stream;
-        bitmap.EndInit();
-
-        bitmap.Freeze(); // Freeze the bitmap to make it thread-safe and immutable
-
-        return bitmap;
     }
 
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
+        logger.LogInformation("The main window has been loaded.");
         SetCanvasSize();
     }
 
@@ -107,6 +96,12 @@ public partial class MainWindow : Window, IHostedService
     {
         camera.StopStream();
         applicationLifetime.StopApplication();
+        logger.LogInformation("The main window is closing.");
+    }
+
+    private void Window_Closed(object sender, EventArgs e)
+    {
+        logger.LogInformation("The main window has been closed.");
     }
 
     public void Start()
@@ -125,23 +120,32 @@ public partial class MainWindow : Window, IHostedService
     /// </summary>
     private void SetCanvasSize()
     {
-        // Calculate the desired canvas size based on the window's height
-        double canvasHeight = ActualHeight;
-        double canvasWidth = (canvasHeight / 2) * 3; // 3:2 aspect ratio
+        // Actual image dimensions from the camera
+        Rectangle rectangle = camera.PictureSize;
+        double imageAspectRatio = (double)rectangle.Width / rectangle.Height;
 
-        // If the calculated canvas width exceeds the window's width, adjust the size
-        if (canvasWidth > ActualWidth)
+        // Available window dimensions
+        double availableHeight = ActualHeight;
+        double availableWidth = ActualWidth;
+
+        // Set initial canvas size based on window height and image aspect ratio
+        double canvasHeight = availableHeight;
+        double canvasWidth = canvasHeight * imageAspectRatio;
+
+        // Adjust if the canvas width exceeds available width
+        if (canvasWidth > availableWidth)
         {
-            // Recalculate canvas height based on the actual window width while maintaining the 3:2 aspect ratio
-            canvasWidth = ActualWidth;
-            canvasHeight = (canvasWidth / 3) * 2;
+            // Recalculate canvas height based on available width while maintaining the aspect ratio
+            canvasWidth = availableWidth;
+            canvasHeight = canvasWidth / imageAspectRatio;
         }
 
-        // Set the canvas size
+        // Set the canvas size to fit the image
         GridLiveView.Width = canvasWidth;
         GridLiveView.Height = canvasHeight;
 
-        GridColumn.Width = new GridLength(ActualWidth / 3.0);
-        GridRow.Height = new GridLength(ActualHeight / 3.0);
+        // Optional: Adjust the grid column and row to take a third of the available space if required
+        GridColumn.Width = new GridLength(availableWidth / 3.0);
+        GridRow.Height = new GridLength(availableHeight / 3.0);
     }
 }
