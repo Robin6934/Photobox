@@ -14,8 +14,8 @@ using Photobox.UI.ImageViewer;
 using Photobox.UI.Windows;
 using Serilog;
 using System.Windows;
-using System.Windows.Media;
-
+using Photobox.Web.RestApi;
+using Photobox.Web.RestApi.Api;
 namespace Photobox.UI;
 /// <summary>
 /// Interaction logic for App.xaml
@@ -61,6 +61,7 @@ public partial class App : Application
                     context.Configuration.GetSection(PhotoboxConfig.Photobox));
                 services.AddSingleton<ICountDown, CountDownCircle>();
                 services.AddSingleton<IImageHandler, ImageHandler>();
+                services.AddSingleton<IPictureApi, PictureApi>((IServiceProvider s) => new PictureApi("https://localhost:59836"));
             })
             .ConfigureLogging(logging => logging.ClearProviders())
             .UseSerilog((context, services, configuration) =>

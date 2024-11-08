@@ -2,8 +2,10 @@
 using Microsoft.Extensions.Logging;
 using Photobox.Lib.Camera;
 using Photobox.Lib.ImageHandler;
+using Photobox.Lib.PhotoManager;
 using Photobox.UI.CountDown;
 using Photobox.UI.ImageViewer;
+using Photobox.Web.RestApi.Api;
 using Photobox.WpfHelpers;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -24,7 +26,19 @@ public partial class MainWindow : Window, IHostedService
 
     private readonly IImageHandler imageHandler;
 
-    public MainWindow(ICamera camera, IImageViewer imageViewer, ILogger<MainWindow> logger, ICountDown countDown, IHostApplicationLifetime applicationLifetime, IImageHandler imageHandler)
+    private readonly IImageManager imageManager;
+
+    private readonly IPictureApi pictureApi;
+
+    public MainWindow(
+        ICamera camera,
+        IImageViewer imageViewer,
+        ILogger<MainWindow> logger,
+        ICountDown countDown,
+        IHostApplicationLifetime applicationLifetime,
+        IImageHandler imageHandler,
+        IImageManager imageManager,
+        IPictureApi pictureApi)
     {
         InitializeComponent();
 
@@ -40,6 +54,10 @@ public partial class MainWindow : Window, IHostedService
 
         this.imageHandler = imageHandler;
 
+        this.imageManager = imageManager;
+
+        this.pictureApi = pictureApi;
+
         countDown.Panel = GridLiveView;
 
         countDown.CountDownEarly += (s) =>
@@ -47,11 +65,27 @@ public partial class MainWindow : Window, IHostedService
             //camera.Focus();
         };
 
-        countDown.CountDownExpired += async (s) =>
+        countDown.CountDownExpired += async (o) =>
         {
             Image<Rgb24> image = await this.camera.TakePictureAsync();
 
-            await this.imageViewer.ShowImage(image);
+            ImageViewResult result = await this.imageViewer.ShowImage(image);
+
+            switch (result)
+            {
+                case ImageViewResult.Save:
+                    await imageManager.SaveAsync(image);
+                    pictureApi.ApiPictureTestGetAsync
+                    break;
+                case ImageViewResult.Print:
+                    await imageManager.PrintAndSaveAsync(image);
+                    break;
+                case ImageViewResult.Delete:
+                    await imageManager.DeleteAsync(image);
+                    break;
+                default:
+                    break;
+            }
         };
 
         this.logger.LogInformation("Mainwindow created");

@@ -1,0 +1,69 @@
+openapi: 3.0.1
+info:
+  title: Photobox.Web
+  version: "1.0"
+servers:
+- url: /
+paths:
+  /api/Picture/UploadPicture:
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            encoding:
+              formFile:
+                style: form
+            schema:
+              $ref: '#/components/schemas/_api_Picture_UploadPicture_post_request'
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Picture
+  /api/Picture/ListPictures:
+    get:
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                items:
+                  type: string
+                type: array
+            application/json:
+              schema:
+                items:
+                  type: string
+                type: array
+            text/json:
+              schema:
+                items:
+                  type: string
+                type: array
+          description: OK
+      tags:
+      - Picture
+  /api/Picture/Test:
+    get:
+      parameters:
+      - explode: true
+        in: query
+        name: filePath
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Picture
+components:
+  schemas:
+    _api_Picture_UploadPicture_post_request:
+      properties:
+        formFile:
+          format: binary
+          type: string
+      type: object
+

@@ -1,12 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Photobox.Lib.ConfigModels;
-using Photobox.Lib.ImageHandler;
 using Photobox.Lib.Printer;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Diagnostics;
 
 namespace Photobox.Lib.PhotoManager;
 public class ImageManager(ILogger<ImageManager> logger, IOptionsMonitor<PhotoboxConfig> options, IPrinter printer) : IImageManager
@@ -28,7 +26,7 @@ public class ImageManager(ILogger<ImageManager> logger, IOptionsMonitor<Photobox
                 Folders.Deleted,
                 imageName);
 
-            await image.SaveAsync(newImagePath, new JpegEncoder());
+            await image.SaveAsJpegAsync(newImagePath);
 
             logger.LogInformation("Stored Deleted image under path {imagePath}", imageName);
         }
@@ -50,7 +48,7 @@ public class ImageManager(ILogger<ImageManager> logger, IOptionsMonitor<Photobox
             Folders.Photos,
             imageName);
 
-        await image.SaveAsync(newImagePath, new JpegEncoder());
+        await image.SaveAsJpegAsync(newImagePath);
 
         logger.LogInformation("Stored Saved image under path {imagePath}", imageName);
     }
