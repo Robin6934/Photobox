@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Emgu.CV;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Photobox.Lib.Camera;
 using Photobox.Lib.ImageHandler;
@@ -9,6 +10,9 @@ using Photobox.Web.RestApi.Api;
 using Photobox.WpfHelpers;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Windows;
 
 namespace Photobox.UI.Windows;
@@ -28,8 +32,7 @@ public partial class MainWindow : Window, IHostedService
 
     private readonly IImageManager imageManager;
 
-    private readonly IPictureApi pictureApi;
-
+    private readonly IImageApi imageApi;
     public MainWindow(
         ICamera camera,
         IImageViewer imageViewer,
@@ -38,7 +41,7 @@ public partial class MainWindow : Window, IHostedService
         IHostApplicationLifetime applicationLifetime,
         IImageHandler imageHandler,
         IImageManager imageManager,
-        IPictureApi pictureApi)
+        IImageApi imageApi)
     {
         InitializeComponent();
 
@@ -56,7 +59,7 @@ public partial class MainWindow : Window, IHostedService
 
         this.imageManager = imageManager;
 
-        this.pictureApi = pictureApi;
+        this.imageApi = imageApi;
 
         countDown.Panel = GridLiveView;
 
@@ -71,11 +74,16 @@ public partial class MainWindow : Window, IHostedService
 
             ImageViewResult result = await this.imageViewer.ShowImage(image);
 
+            MemoryStream stream = new();
+            await image.SaveAsJpegAsync(stream);
+
+            stream.Position = 0;
+
             switch (result)
             {
                 case ImageViewResult.Save:
                     await imageManager.SaveAsync(image);
-                    pictureApi.ApiPictureTestGetAsync
+                    await imageApi.ApiImageUploadImagePostAsync("image.jpg", stream);
                     break;
                 case ImageViewResult.Print:
                     await imageManager.PrintAndSaveAsync(image);

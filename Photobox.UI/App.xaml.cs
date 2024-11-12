@@ -16,6 +16,7 @@ using Serilog;
 using System.Windows;
 using Photobox.Web.RestApi;
 using Photobox.Web.RestApi.Api;
+
 namespace Photobox.UI;
 /// <summary>
 /// Interaction logic for App.xaml
@@ -49,7 +50,6 @@ public partial class App : Application
             .ConfigureServices((context, services) =>
             {
                 services.AddHostedService<MainWindow>();
-                //services.AddHostedService<LogWindow>();
                 services.AddSingleton<CameraFactory>();
                 services.AddSingleton(
                     c => c.GetRequiredService<CameraFactory>()
@@ -61,7 +61,7 @@ public partial class App : Application
                     context.Configuration.GetSection(PhotoboxConfig.Photobox));
                 services.AddSingleton<ICountDown, CountDownCircle>();
                 services.AddSingleton<IImageHandler, ImageHandler>();
-                services.AddSingleton<IPictureApi, PictureApi>((IServiceProvider s) => new PictureApi("https://localhost:59836"));
+                services.AddSingleton<IImageApi, ImageApi>((IServiceProvider s) => new ImageApi("https://localhost:54829"));
             })
             .ConfigureLogging(logging => logging.ClearProviders())
             .UseSerilog((context, services, configuration) =>

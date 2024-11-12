@@ -5,8 +5,16 @@ info:
 servers:
 - url: /
 paths:
-  /api/Picture/UploadPicture:
+  /api/Image/UploadImage:
     post:
+      parameters:
+      - explode: true
+        in: query
+        name: imageName
+        required: false
+        schema:
+          type: string
+        style: form
       requestBody:
         content:
           multipart/form-data:
@@ -14,13 +22,28 @@ paths:
               formFile:
                 style: form
             schema:
-              $ref: '#/components/schemas/_api_Picture_UploadPicture_post_request'
+              $ref: '#/components/schemas/_api_Image_UploadImage_post_request'
       responses:
         "200":
           description: OK
       tags:
-      - Picture
-  /api/Picture/ListPictures:
+      - Image
+  /api/Image/GetImage/{imageName}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: imageName
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Image
+  /api/Image/ListImages:
     get:
       responses:
         "200":
@@ -42,25 +65,17 @@ paths:
                 type: array
           description: OK
       tags:
-      - Picture
-  /api/Picture/Test:
-    get:
-      parameters:
-      - explode: true
-        in: query
-        name: filePath
-        required: false
-        schema:
-          type: string
-        style: form
+      - Image
+  /api/Image/DeleteImages:
+    delete:
       responses:
         "200":
           description: OK
       tags:
-      - Picture
+      - Image
 components:
   schemas:
-    _api_Picture_UploadPicture_post_request:
+    _api_Image_UploadImage_post_request:
       properties:
         formFile:
           format: binary

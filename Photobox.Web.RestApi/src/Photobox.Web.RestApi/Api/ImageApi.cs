@@ -22,7 +22,7 @@ namespace Photobox.Web.RestApi.Api
     /// <summary>
     /// Represents a collection of functions to interact with the API endpoints
     /// </summary>
-    public interface IPictureApiSync : IApiAccessor
+    public interface IImageApiSync : IApiAccessor
     {
         #region Synchronous Operations
         /// <summary>
@@ -30,8 +30,46 @@ namespace Photobox.Web.RestApi.Api
         /// </summary>
         /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns></returns>
+        void ApiImageDeleteImagesDelete(int operationIndex = 0);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of Object(void)</returns>
+        ApiResponse<Object> ApiImageDeleteImagesDeleteWithHttpInfo(int operationIndex = 0);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="imageName"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns></returns>
+        void ApiImageGetImageImageNameGet(string imageName, int operationIndex = 0);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="imageName"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of Object(void)</returns>
+        ApiResponse<Object> ApiImageGetImageImageNameGetWithHttpInfo(string imageName, int operationIndex = 0);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>List&lt;string&gt;</returns>
-        List<string> ApiPictureListPicturesGet(int operationIndex = 0);
+        List<string> ApiImageListImagesGet(int operationIndex = 0);
 
         /// <summary>
         /// 
@@ -42,15 +80,16 @@ namespace Photobox.Web.RestApi.Api
         /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;string&gt;</returns>
-        ApiResponse<List<string>> ApiPictureListPicturesGetWithHttpInfo(int operationIndex = 0);
+        ApiResponse<List<string>> ApiImageListImagesGetWithHttpInfo(int operationIndex = 0);
         /// <summary>
         /// 
         /// </summary>
         /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="filePath"> (optional)</param>
+        /// <param name="imageName"> (optional)</param>
+        /// <param name="formFile"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns></returns>
-        void ApiPictureTestGet(string filePath = default(string), int operationIndex = 0);
+        void ApiImageUploadImagePost(string imageName = default(string), System.IO.Stream formFile = default(System.IO.Stream), int operationIndex = 0);
 
         /// <summary>
         /// 
@@ -59,37 +98,18 @@ namespace Photobox.Web.RestApi.Api
         /// 
         /// </remarks>
         /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="filePath"> (optional)</param>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> ApiPictureTestGetWithHttpInfo(string filePath = default(string), int operationIndex = 0);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="formFile"> (optional)</param>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns></returns>
-        void ApiPictureUploadPicturePost(System.IO.Stream formFile = default(System.IO.Stream), int operationIndex = 0);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <remarks>
-        /// 
-        /// </remarks>
-        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="imageName"> (optional)</param>
         /// <param name="formFile"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> ApiPictureUploadPicturePostWithHttpInfo(System.IO.Stream formFile = default(System.IO.Stream), int operationIndex = 0);
+        ApiResponse<Object> ApiImageUploadImagePostWithHttpInfo(string imageName = default(string), System.IO.Stream formFile = default(System.IO.Stream), int operationIndex = 0);
         #endregion Synchronous Operations
     }
 
     /// <summary>
     /// Represents a collection of functions to interact with the API endpoints
     /// </summary>
-    public interface IPictureApiAsync : IApiAccessor
+    public interface IImageApiAsync : IApiAccessor
     {
         #region Asynchronous Operations
         /// <summary>
@@ -101,8 +121,56 @@ namespace Photobox.Web.RestApi.Api
         /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of void</returns>
+        System.Threading.Tasks.Task ApiImageDeleteImagesDeleteAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken));
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse</returns>
+        System.Threading.Tasks.Task<ApiResponse<Object>> ApiImageDeleteImagesDeleteWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="imageName"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of void</returns>
+        System.Threading.Tasks.Task ApiImageGetImageImageNameGetAsync(string imageName, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken));
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="imageName"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse</returns>
+        System.Threading.Tasks.Task<ApiResponse<Object>> ApiImageGetImageImageNameGetWithHttpInfoAsync(string imageName, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;string&gt;</returns>
-        System.Threading.Tasks.Task<List<string>> ApiPictureListPicturesGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<List<string>> ApiImageListImagesGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken));
 
         /// <summary>
         /// 
@@ -114,7 +182,7 @@ namespace Photobox.Web.RestApi.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;string&gt;)</returns>
-        System.Threading.Tasks.Task<ApiResponse<List<string>>> ApiPictureListPicturesGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<ApiResponse<List<string>>> ApiImageListImagesGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken));
         /// <summary>
         /// 
         /// </summary>
@@ -122,11 +190,12 @@ namespace Photobox.Web.RestApi.Api
         /// 
         /// </remarks>
         /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="filePath"> (optional)</param>
+        /// <param name="imageName"> (optional)</param>
+        /// <param name="formFile"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task ApiPictureTestGetAsync(string filePath = default(string), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken));
+        System.Threading.Tasks.Task ApiImageUploadImagePostAsync(string imageName = default(string), System.IO.Stream formFile = default(System.IO.Stream), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken));
 
         /// <summary>
         /// 
@@ -135,43 +204,19 @@ namespace Photobox.Web.RestApi.Api
         /// 
         /// </remarks>
         /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="filePath"> (optional)</param>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> ApiPictureTestGetWithHttpInfoAsync(string filePath = default(string), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken));
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <remarks>
-        /// 
-        /// </remarks>
-        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="formFile"> (optional)</param>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task ApiPictureUploadPicturePostAsync(System.IO.Stream formFile = default(System.IO.Stream), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken));
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <remarks>
-        /// 
-        /// </remarks>
-        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="imageName"> (optional)</param>
         /// <param name="formFile"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> ApiPictureUploadPicturePostWithHttpInfoAsync(System.IO.Stream formFile = default(System.IO.Stream), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<ApiResponse<Object>> ApiImageUploadImagePostWithHttpInfoAsync(string imageName = default(string), System.IO.Stream formFile = default(System.IO.Stream), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken));
         #endregion Asynchronous Operations
     }
 
     /// <summary>
     /// Represents a collection of functions to interact with the API endpoints
     /// </summary>
-    public interface IPictureApi : IPictureApiSync, IPictureApiAsync
+    public interface IImageApi : IImageApiSync, IImageApiAsync
     {
 
     }
@@ -179,23 +224,23 @@ namespace Photobox.Web.RestApi.Api
     /// <summary>
     /// Represents a collection of functions to interact with the API endpoints
     /// </summary>
-    public partial class PictureApi : IPictureApi
+    public partial class ImageApi : IImageApi
     {
         private Photobox.Web.RestApi.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PictureApi"/> class.
+        /// Initializes a new instance of the <see cref="ImageApi"/> class.
         /// </summary>
         /// <returns></returns>
-        public PictureApi() : this((string)null)
+        public ImageApi() : this((string)null)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PictureApi"/> class.
+        /// Initializes a new instance of the <see cref="ImageApi"/> class.
         /// </summary>
         /// <returns></returns>
-        public PictureApi(string basePath)
+        public ImageApi(string basePath)
         {
             this.Configuration = Photobox.Web.RestApi.Client.Configuration.MergeConfigurations(
                 Photobox.Web.RestApi.Client.GlobalConfiguration.Instance,
@@ -207,12 +252,12 @@ namespace Photobox.Web.RestApi.Api
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PictureApi"/> class
+        /// Initializes a new instance of the <see cref="ImageApi"/> class
         /// using Configuration object
         /// </summary>
         /// <param name="configuration">An instance of Configuration</param>
         /// <returns></returns>
-        public PictureApi(Photobox.Web.RestApi.Client.Configuration configuration)
+        public ImageApi(Photobox.Web.RestApi.Client.Configuration configuration)
         {
             if (configuration == null) throw new ArgumentNullException("configuration");
 
@@ -226,13 +271,13 @@ namespace Photobox.Web.RestApi.Api
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PictureApi"/> class
+        /// Initializes a new instance of the <see cref="ImageApi"/> class
         /// using a Configuration object and client instance.
         /// </summary>
         /// <param name="client">The client interface for synchronous API access.</param>
         /// <param name="asyncClient">The client interface for asynchronous API access.</param>
         /// <param name="configuration">The configuration object.</param>
-        public PictureApi(Photobox.Web.RestApi.Client.ISynchronousClient client, Photobox.Web.RestApi.Client.IAsynchronousClient asyncClient, Photobox.Web.RestApi.Client.IReadableConfiguration configuration)
+        public ImageApi(Photobox.Web.RestApi.Client.ISynchronousClient client, Photobox.Web.RestApi.Client.IAsynchronousClient asyncClient, Photobox.Web.RestApi.Client.IReadableConfiguration configuration)
         {
             if (client == null) throw new ArgumentNullException("client");
             if (asyncClient == null) throw new ArgumentNullException("asyncClient");
@@ -290,10 +335,272 @@ namespace Photobox.Web.RestApi.Api
         /// </summary>
         /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>List&lt;string&gt;</returns>
-        public List<string> ApiPictureListPicturesGet(int operationIndex = 0)
+        /// <returns></returns>
+        public void ApiImageDeleteImagesDelete(int operationIndex = 0)
         {
-            Photobox.Web.RestApi.Client.ApiResponse<List<string>> localVarResponse = ApiPictureListPicturesGetWithHttpInfo();
+            ApiImageDeleteImagesDeleteWithHttpInfo();
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of Object(void)</returns>
+        public Photobox.Web.RestApi.Client.ApiResponse<Object> ApiImageDeleteImagesDeleteWithHttpInfo(int operationIndex = 0)
+        {
+            Photobox.Web.RestApi.Client.RequestOptions localVarRequestOptions = new Photobox.Web.RestApi.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+            };
+
+            var localVarContentType = Photobox.Web.RestApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = Photobox.Web.RestApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+
+            localVarRequestOptions.Operation = "ImageApi.ApiImageDeleteImagesDelete";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Delete<Object>("/api/Image/DeleteImages", localVarRequestOptions, this.Configuration);
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("ApiImageDeleteImagesDelete", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of void</returns>
+        public async System.Threading.Tasks.Task ApiImageDeleteImagesDeleteAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+        {
+            await ApiImageDeleteImagesDeleteWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse</returns>
+        public async System.Threading.Tasks.Task<Photobox.Web.RestApi.Client.ApiResponse<Object>> ApiImageDeleteImagesDeleteWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+        {
+
+            Photobox.Web.RestApi.Client.RequestOptions localVarRequestOptions = new Photobox.Web.RestApi.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+            };
+
+            var localVarContentType = Photobox.Web.RestApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = Photobox.Web.RestApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+
+            localVarRequestOptions.Operation = "ImageApi.ApiImageDeleteImagesDelete";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+
+            // make the HTTP request
+            var localVarResponse = await this.AsynchronousClient.DeleteAsync<Object>("/api/Image/DeleteImages", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("ApiImageDeleteImagesDelete", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="imageName"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns></returns>
+        public void ApiImageGetImageImageNameGet(string imageName, int operationIndex = 0)
+        {
+            ApiImageGetImageImageNameGetWithHttpInfo(imageName);
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="imageName"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>ApiResponse of Object(void)</returns>
+        public Photobox.Web.RestApi.Client.ApiResponse<Object> ApiImageGetImageImageNameGetWithHttpInfo(string imageName, int operationIndex = 0)
+        {
+            // verify the required parameter 'imageName' is set
+            if (imageName == null)
+            {
+                throw new Photobox.Web.RestApi.Client.ApiException(400, "Missing required parameter 'imageName' when calling ImageApi->ApiImageGetImageImageNameGet");
+            }
+
+            Photobox.Web.RestApi.Client.RequestOptions localVarRequestOptions = new Photobox.Web.RestApi.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+            };
+
+            var localVarContentType = Photobox.Web.RestApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = Photobox.Web.RestApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.PathParameters.Add("imageName", Photobox.Web.RestApi.Client.ClientUtils.ParameterToString(imageName)); // path parameter
+
+            localVarRequestOptions.Operation = "ImageApi.ApiImageGetImageImageNameGet";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Get<Object>("/api/Image/GetImage/{imageName}", localVarRequestOptions, this.Configuration);
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("ApiImageGetImageImageNameGet", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="imageName"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of void</returns>
+        public async System.Threading.Tasks.Task ApiImageGetImageImageNameGetAsync(string imageName, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+        {
+            await ApiImageGetImageImageNameGetWithHttpInfoAsync(imageName, operationIndex, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="imageName"></param>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse</returns>
+        public async System.Threading.Tasks.Task<Photobox.Web.RestApi.Client.ApiResponse<Object>> ApiImageGetImageImageNameGetWithHttpInfoAsync(string imageName, int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+        {
+            // verify the required parameter 'imageName' is set
+            if (imageName == null)
+            {
+                throw new Photobox.Web.RestApi.Client.ApiException(400, "Missing required parameter 'imageName' when calling ImageApi->ApiImageGetImageImageNameGet");
+            }
+
+
+            Photobox.Web.RestApi.Client.RequestOptions localVarRequestOptions = new Photobox.Web.RestApi.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+            };
+
+            var localVarContentType = Photobox.Web.RestApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+            }
+
+            var localVarAccept = Photobox.Web.RestApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null)
+            {
+                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+            }
+
+            localVarRequestOptions.PathParameters.Add("imageName", Photobox.Web.RestApi.Client.ClientUtils.ParameterToString(imageName)); // path parameter
+
+            localVarRequestOptions.Operation = "ImageApi.ApiImageGetImageImageNameGet";
+            localVarRequestOptions.OperationIndex = operationIndex;
+
+
+            // make the HTTP request
+            var localVarResponse = await this.AsynchronousClient.GetAsync<Object>("/api/Image/GetImage/{imageName}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("ApiImageGetImageImageNameGet", localVarResponse);
+                if (_exception != null)
+                {
+                    throw _exception;
+                }
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="operationIndex">Index associated with the operation.</param>
+        /// <returns>List&lt;string&gt;</returns>
+        public List<string> ApiImageListImagesGet(int operationIndex = 0)
+        {
+            Photobox.Web.RestApi.Client.ApiResponse<List<string>> localVarResponse = ApiImageListImagesGetWithHttpInfo();
             return localVarResponse.Data;
         }
 
@@ -303,7 +610,7 @@ namespace Photobox.Web.RestApi.Api
         /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of List&lt;string&gt;</returns>
-        public Photobox.Web.RestApi.Client.ApiResponse<List<string>> ApiPictureListPicturesGetWithHttpInfo(int operationIndex = 0)
+        public Photobox.Web.RestApi.Client.ApiResponse<List<string>> ApiImageListImagesGetWithHttpInfo(int operationIndex = 0)
         {
             Photobox.Web.RestApi.Client.RequestOptions localVarRequestOptions = new Photobox.Web.RestApi.Client.RequestOptions();
 
@@ -330,15 +637,15 @@ namespace Photobox.Web.RestApi.Api
             }
 
 
-            localVarRequestOptions.Operation = "PictureApi.ApiPictureListPicturesGet";
+            localVarRequestOptions.Operation = "ImageApi.ApiImageListImagesGet";
             localVarRequestOptions.OperationIndex = operationIndex;
 
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<List<string>>("/api/Picture/ListPictures", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<List<string>>("/api/Image/ListImages", localVarRequestOptions, this.Configuration);
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiPictureListPicturesGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("ApiImageListImagesGet", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;
@@ -355,9 +662,9 @@ namespace Photobox.Web.RestApi.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;string&gt;</returns>
-        public async System.Threading.Tasks.Task<List<string>> ApiPictureListPicturesGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<List<string>> ApiImageListImagesGetAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
         {
-            Photobox.Web.RestApi.Client.ApiResponse<List<string>> localVarResponse = await ApiPictureListPicturesGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
+            Photobox.Web.RestApi.Client.ApiResponse<List<string>> localVarResponse = await ApiImageListImagesGetWithHttpInfoAsync(operationIndex, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -368,7 +675,7 @@ namespace Photobox.Web.RestApi.Api
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;string&gt;)</returns>
-        public async System.Threading.Tasks.Task<Photobox.Web.RestApi.Client.ApiResponse<List<string>>> ApiPictureListPicturesGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<Photobox.Web.RestApi.Client.ApiResponse<List<string>>> ApiImageListImagesGetWithHttpInfoAsync(int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
         {
 
             Photobox.Web.RestApi.Client.RequestOptions localVarRequestOptions = new Photobox.Web.RestApi.Client.RequestOptions();
@@ -396,16 +703,16 @@ namespace Photobox.Web.RestApi.Api
             }
 
 
-            localVarRequestOptions.Operation = "PictureApi.ApiPictureListPicturesGet";
+            localVarRequestOptions.Operation = "ImageApi.ApiImageListImagesGet";
             localVarRequestOptions.OperationIndex = operationIndex;
 
 
             // make the HTTP request
-            var localVarResponse = await this.AsynchronousClient.GetAsync<List<string>>("/api/Picture/ListPictures", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<List<string>>("/api/Image/ListImages", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiPictureListPicturesGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("ApiImageListImagesGet", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;
@@ -419,156 +726,24 @@ namespace Photobox.Web.RestApi.Api
         ///  
         /// </summary>
         /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="filePath"> (optional)</param>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns></returns>
-        public void ApiPictureTestGet(string filePath = default(string), int operationIndex = 0)
-        {
-            ApiPictureTestGetWithHttpInfo(filePath);
-        }
-
-        /// <summary>
-        ///  
-        /// </summary>
-        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="filePath"> (optional)</param>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <returns>ApiResponse of Object(void)</returns>
-        public Photobox.Web.RestApi.Client.ApiResponse<Object> ApiPictureTestGetWithHttpInfo(string filePath = default(string), int operationIndex = 0)
-        {
-            Photobox.Web.RestApi.Client.RequestOptions localVarRequestOptions = new Photobox.Web.RestApi.Client.RequestOptions();
-
-            string[] _contentTypes = new string[] {
-            };
-
-            // to determine the Accept header
-            string[] _accepts = new string[] {
-            };
-
-            var localVarContentType = Photobox.Web.RestApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
-            if (localVarContentType != null)
-            {
-                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
-            }
-
-            var localVarAccept = Photobox.Web.RestApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
-            if (localVarAccept != null)
-            {
-                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
-            }
-
-            if (filePath != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(Photobox.Web.RestApi.Client.ClientUtils.ParameterToMultiMap("", "filePath", filePath));
-            }
-
-            localVarRequestOptions.Operation = "PictureApi.ApiPictureTestGet";
-            localVarRequestOptions.OperationIndex = operationIndex;
-
-
-            // make the HTTP request
-            var localVarResponse = this.Client.Get<Object>("/api/Picture/Test", localVarRequestOptions, this.Configuration);
-            if (this.ExceptionFactory != null)
-            {
-                Exception _exception = this.ExceptionFactory("ApiPictureTestGet", localVarResponse);
-                if (_exception != null)
-                {
-                    throw _exception;
-                }
-            }
-
-            return localVarResponse;
-        }
-
-        /// <summary>
-        ///  
-        /// </summary>
-        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="filePath"> (optional)</param>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task ApiPictureTestGetAsync(string filePath = default(string), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-        {
-            await ApiPictureTestGetWithHttpInfoAsync(filePath, operationIndex, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        ///  
-        /// </summary>
-        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
-        /// <param name="filePath"> (optional)</param>
-        /// <param name="operationIndex">Index associated with the operation.</param>
-        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<Photobox.Web.RestApi.Client.ApiResponse<Object>> ApiPictureTestGetWithHttpInfoAsync(string filePath = default(string), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-        {
-
-            Photobox.Web.RestApi.Client.RequestOptions localVarRequestOptions = new Photobox.Web.RestApi.Client.RequestOptions();
-
-            string[] _contentTypes = new string[] {
-            };
-
-            // to determine the Accept header
-            string[] _accepts = new string[] {
-            };
-
-            var localVarContentType = Photobox.Web.RestApi.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
-            if (localVarContentType != null)
-            {
-                localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
-            }
-
-            var localVarAccept = Photobox.Web.RestApi.Client.ClientUtils.SelectHeaderAccept(_accepts);
-            if (localVarAccept != null)
-            {
-                localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
-            }
-
-            if (filePath != null)
-            {
-                localVarRequestOptions.QueryParameters.Add(Photobox.Web.RestApi.Client.ClientUtils.ParameterToMultiMap("", "filePath", filePath));
-            }
-
-            localVarRequestOptions.Operation = "PictureApi.ApiPictureTestGet";
-            localVarRequestOptions.OperationIndex = operationIndex;
-
-
-            // make the HTTP request
-            var localVarResponse = await this.AsynchronousClient.GetAsync<Object>("/api/Picture/Test", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
-
-            if (this.ExceptionFactory != null)
-            {
-                Exception _exception = this.ExceptionFactory("ApiPictureTestGet", localVarResponse);
-                if (_exception != null)
-                {
-                    throw _exception;
-                }
-            }
-
-            return localVarResponse;
-        }
-
-        /// <summary>
-        ///  
-        /// </summary>
-        /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="imageName"> (optional)</param>
         /// <param name="formFile"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns></returns>
-        public void ApiPictureUploadPicturePost(System.IO.Stream formFile = default(System.IO.Stream), int operationIndex = 0)
+        public void ApiImageUploadImagePost(string imageName = default(string), System.IO.Stream formFile = default(System.IO.Stream), int operationIndex = 0)
         {
-            ApiPictureUploadPicturePostWithHttpInfo(formFile);
+            ApiImageUploadImagePostWithHttpInfo(imageName, formFile);
         }
 
         /// <summary>
         ///  
         /// </summary>
         /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="imageName"> (optional)</param>
         /// <param name="formFile"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public Photobox.Web.RestApi.Client.ApiResponse<Object> ApiPictureUploadPicturePostWithHttpInfo(System.IO.Stream formFile = default(System.IO.Stream), int operationIndex = 0)
+        public Photobox.Web.RestApi.Client.ApiResponse<Object> ApiImageUploadImagePostWithHttpInfo(string imageName = default(string), System.IO.Stream formFile = default(System.IO.Stream), int operationIndex = 0)
         {
             Photobox.Web.RestApi.Client.RequestOptions localVarRequestOptions = new Photobox.Web.RestApi.Client.RequestOptions();
 
@@ -592,20 +767,24 @@ namespace Photobox.Web.RestApi.Api
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
+            if (imageName != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(Photobox.Web.RestApi.Client.ClientUtils.ParameterToMultiMap("", "imageName", imageName));
+            }
             if (formFile != null)
             {
                 localVarRequestOptions.FileParameters.Add("formFile", formFile);
             }
 
-            localVarRequestOptions.Operation = "PictureApi.ApiPictureUploadPicturePost";
+            localVarRequestOptions.Operation = "ImageApi.ApiImageUploadImagePost";
             localVarRequestOptions.OperationIndex = operationIndex;
 
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<Object>("/api/Picture/UploadPicture", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<Object>("/api/Image/UploadImage", localVarRequestOptions, this.Configuration);
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiPictureUploadPicturePost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("ApiImageUploadImagePost", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;
@@ -619,24 +798,26 @@ namespace Photobox.Web.RestApi.Api
         ///  
         /// </summary>
         /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="imageName"> (optional)</param>
         /// <param name="formFile"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task ApiPictureUploadPicturePostAsync(System.IO.Stream formFile = default(System.IO.Stream), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task ApiImageUploadImagePostAsync(string imageName = default(string), System.IO.Stream formFile = default(System.IO.Stream), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
         {
-            await ApiPictureUploadPicturePostWithHttpInfoAsync(formFile, operationIndex, cancellationToken).ConfigureAwait(false);
+            await ApiImageUploadImagePostWithHttpInfoAsync(imageName, formFile, operationIndex, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
         ///  
         /// </summary>
         /// <exception cref="Photobox.Web.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="imageName"> (optional)</param>
         /// <param name="formFile"> (optional)</param>
         /// <param name="operationIndex">Index associated with the operation.</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<Photobox.Web.RestApi.Client.ApiResponse<Object>> ApiPictureUploadPicturePostWithHttpInfoAsync(System.IO.Stream formFile = default(System.IO.Stream), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<Photobox.Web.RestApi.Client.ApiResponse<Object>> ApiImageUploadImagePostWithHttpInfoAsync(string imageName = default(string), System.IO.Stream formFile = default(System.IO.Stream), int operationIndex = 0, System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
         {
 
             Photobox.Web.RestApi.Client.RequestOptions localVarRequestOptions = new Photobox.Web.RestApi.Client.RequestOptions();
@@ -661,21 +842,25 @@ namespace Photobox.Web.RestApi.Api
                 localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
             }
 
+            if (imageName != null)
+            {
+                localVarRequestOptions.QueryParameters.Add(Photobox.Web.RestApi.Client.ClientUtils.ParameterToMultiMap("", "imageName", imageName));
+            }
             if (formFile != null)
             {
                 localVarRequestOptions.FileParameters.Add("formFile", formFile);
             }
 
-            localVarRequestOptions.Operation = "PictureApi.ApiPictureUploadPicturePost";
+            localVarRequestOptions.Operation = "ImageApi.ApiImageUploadImagePost";
             localVarRequestOptions.OperationIndex = operationIndex;
 
 
             // make the HTTP request
-            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/api/Picture/UploadPicture", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/api/Image/UploadImage", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiPictureUploadPicturePost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("ApiImageUploadImagePost", localVarResponse);
                 if (_exception != null)
                 {
                     throw _exception;
