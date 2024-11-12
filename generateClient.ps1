@@ -5,6 +5,6 @@
 
 openapi-generator-cli generate `
     -g csharp `
-    -i https://localhost:59836/swagger/v1/swagger.json `
+    -i https://localhost:51582/swagger/v1/swagger.json `
     --additional-properties "packageName=Photobox.Web.RestApi,targetFramework=netstandard2.1" `
     -o "Photobox.Web.RestApi"
