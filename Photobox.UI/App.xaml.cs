@@ -4,18 +4,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Photobox.Lib.Camera;
-using Photobox.Lib.ConfigModels;
-using Photobox.Lib.ImageHandler;
-using Photobox.Lib.PhotoManager;
-using Photobox.Lib.Printer;
 using Photobox.UI.CountDown;
 using Photobox.UI.ImageViewer;
+using Photobox.UI.Lib.Camera;
+using Photobox.UI.Lib.ConfigModels;
+using Photobox.UI.Lib.ImageHandler;
+using Photobox.UI.Lib.ImageManager;
+using Photobox.UI.Lib.Printer;
 using Photobox.UI.Windows;
+using Photobox.Web.RestApi.Api;
 using Serilog;
 using System.Windows;
-using Photobox.Web.RestApi;
-using Photobox.Web.RestApi.Api;
 
 namespace Photobox.UI;
 /// <summary>

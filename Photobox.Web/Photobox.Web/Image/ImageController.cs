@@ -1,10 +1,6 @@
-﻿using Amazon.S3;
-using Amazon.S3.Model;
-using Microsoft.AspNetCore.Mvc;
-using Photobox.Web.DbContext;
-using Photobox.Web.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Photobox.Lib.Extensions;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Photobox.Web.Image;
 [ApiController]
@@ -29,7 +25,7 @@ public class ImageController(ImageService imageService) : Controller
 
         var image = await SixLabors.ImageSharp.Image.LoadAsync<Rgb24>(formFile.OpenReadStream());
 
-        if(image is null)
+        if (image is null)
         {
             return BadRequest("File has wrong format.");
         }
@@ -42,9 +38,17 @@ public class ImageController(ImageService imageService) : Controller
     [HttpGet("{imageName}")]
     public async Task<FileResult> GetImage(string imageName)
     {
-        var image = await imageService.GetImageAsStreamAsync(imageName);
+        var image = await imageService.GetImageAsync(imageName);
 
-        return File(image, "image/jpeg", imageName);
+        return File(await image.ToJpegStreamAsync(), "image/jpeg", imageName);
+    }
+
+    [HttpGet("{imageName}")]
+    public async Task<FileResult> GetPreviewImage(string imageName)
+    {
+        var image = await imageService.GetPreviewImageAsync(imageName);
+
+        return File(await image.ToJpegStreamAsync(), "image/jpeg", imageName);
     }
 
     [HttpGet]

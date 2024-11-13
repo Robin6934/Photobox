@@ -1,18 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Photobox.Lib.ConfigModels;
+using Photobox.UI.Lib.ConfigModels;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Photobox.Lib.ImageHandler;
+namespace Photobox.UI.Lib.ImageHandler;
 public class ImageHandler(ILogger<ImageHandler> logger, IOptionsMonitor<PhotoboxConfig> optionsMonitor) : IImageHandler
 {
     private readonly ILogger<ImageHandler> logger = logger;

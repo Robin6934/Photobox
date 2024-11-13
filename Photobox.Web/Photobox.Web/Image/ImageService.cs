@@ -1,7 +1,4 @@
-﻿using Amazon.S3;
-using Amazon.S3.Model;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Photobox.Web.DbContext;
 using Photobox.Web.Models;
 using Photobox.Web.StorageProvider;
@@ -37,17 +34,22 @@ public class ImageService(MariaDbContext dbContext, IStorageProvider storageProv
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task<Stream> GetImageAsStreamAsync(string imageName)
+    public async Task<Image<Rgb24>> GetImageAsync(string imageName)
     {
         var imageModel = await dbContext.ImageModels.Where(model => model.ImageName == imageName).FirstAsync();
 
         var image = await storageProvider.GetImageAsync(imageModel.UniqeImageName);
 
-        var imageStream = new MemoryStream();
+        return image;
+    }
 
-        await image.SaveAsJpegAsync(imageStream);
+    public async Task<Image<Rgb24>> GetPreviewImageAsync(string imageName)
+    {
+        var imageModel = await dbContext.ImageModels.Where(model => model.ImageName == imageName).FirstAsync();
 
-        return imageStream;
+        var image = await storageProvider.GetImageAsync(imageModel.DownscaledImageName);
+
+        return image;
     }
 
     public Task<List<string>> ListImagesAsync()
@@ -59,7 +61,7 @@ public class ImageService(MariaDbContext dbContext, IStorageProvider storageProv
     {
         var images = dbContext.ImageModels.ToList();
 
-        foreach(var image in images)
+        foreach (var image in images)
         {
             await storageProvider.DeleteImageAsync(image.UniqeImageName);
 

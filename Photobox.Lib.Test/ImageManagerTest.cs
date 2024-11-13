@@ -1,9 +1,10 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NSubstitute;
-using Photobox.Lib.ConfigModels;
-using Photobox.Lib.PhotoManager;
-using Photobox.Lib.Printer;
+using Photobox.UI.Lib;
+using Photobox.UI.Lib.ConfigModels;
+using Photobox.UI.Lib.ImageManager;
+using Photobox.UI.Lib.Printer;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 

@@ -1,7 +1,7 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace Photobox.Lib.ImageHandler;
+namespace Photobox.UI.Lib.ImageHandler;
 
 public interface IImageHandler
 {

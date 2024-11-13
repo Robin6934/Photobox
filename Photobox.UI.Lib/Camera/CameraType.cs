@@ -1,4 +1,4 @@
-﻿namespace Photobox.Lib.Camera;
+﻿namespace Photobox.UI.Lib.Camera;
 public enum CameraType
 {
     Auto,

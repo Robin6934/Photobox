@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
-using Photobox.Lib.ConfigModels;
+using Photobox.UI.Lib.ConfigModels;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;

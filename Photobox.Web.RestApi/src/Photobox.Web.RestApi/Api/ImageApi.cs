@@ -8,13 +8,9 @@
  */
 
 
+using Photobox.Web.RestApi.Client;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net;
-using System.Net.Mime;
-using Photobox.Web.RestApi.Client;
 
 namespace Photobox.Web.RestApi.Api
 {

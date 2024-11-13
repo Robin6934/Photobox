@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Photobox.Lib\Photobox.Lib.csproj" />
+    <ProjectReference Include="..\Photobox.UI.Lib\Photobox.UI.Lib.csproj" />
     <ProjectReference Include="..\Photobox.Web.RestApi\src\Photobox.Web.RestApi\Photobox.Web.RestApi.csproj" />
   </ItemGroup>
 

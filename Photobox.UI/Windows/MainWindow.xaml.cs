@@ -1,18 +1,15 @@
-﻿using Emgu.CV;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Photobox.Lib.Camera;
-using Photobox.Lib.ImageHandler;
-using Photobox.Lib.PhotoManager;
 using Photobox.UI.CountDown;
 using Photobox.UI.ImageViewer;
+using Photobox.UI.Lib.Camera;
+using Photobox.UI.Lib.ImageHandler;
+using Photobox.UI.Lib.ImageManager;
 using Photobox.Web.RestApi.Api;
 using Photobox.WpfHelpers;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Windows;
 
 namespace Photobox.UI.Windows;
