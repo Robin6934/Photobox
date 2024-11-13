@@ -23,7 +23,7 @@ public class ImageController(ImageService imageService) : Controller
             return BadRequest("No file uploaded.");
         }
 
-        var image = await SixLabors.ImageSharp.Image.LoadAsync<Rgb24>(formFile.OpenReadStream());
+        using var image = await SixLabors.ImageSharp.Image.LoadAsync<Rgb24>(formFile.OpenReadStream());
 
         if (image is null)
         {

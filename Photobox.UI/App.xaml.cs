@@ -60,7 +60,7 @@ public partial class App : Application
                     context.Configuration.GetSection(PhotoboxConfig.Photobox));
                 services.AddSingleton<ICountDown, CountDownCircle>();
                 services.AddSingleton<IImageHandler, ImageHandler>();
-                services.AddSingleton<IImageApi, ImageApi>((IServiceProvider s) => new ImageApi("https://localhost:54829"));
+                services.AddSingleton<IImageApi, ImageApi>((IServiceProvider s) => new ImageApi("https://localhost:63722"));
             })
             .ConfigureLogging(logging => logging.ClearProviders())
             .UseSerilog((context, services, configuration) =>
