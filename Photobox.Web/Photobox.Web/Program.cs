@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Photobox.Web.Components;
 using Photobox.Web.DbContext;
 using Photobox.Web.Image;
+using Photobox.Web.RestApi.Api;
 using Photobox.Web.StorageProvider;
 using Serilog;
 
@@ -41,7 +42,6 @@ builder.Services.AddScoped<ImageService>();
 builder.Services.AddSingleton<IStorageProvider, AwsStorageProvider>();
 
 ConfigureAws(builder.Configuration, builder.Services);
-
 
 
 var app = builder.Build();
