@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Photobox.Lib.Printer;
+namespace Photobox.UI.Lib.Printer;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum PrinterEnabledOptions

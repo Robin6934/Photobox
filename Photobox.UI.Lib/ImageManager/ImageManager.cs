@@ -1,12 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Photobox.Lib.ConfigModels;
-using Photobox.Lib.Printer;
+using Photobox.UI.Lib.ConfigModels;
+using Photobox.UI.Lib.Printer;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace Photobox.Lib.PhotoManager;
+namespace Photobox.UI.Lib.ImageManager;
 public class ImageManager(ILogger<ImageManager> logger, IOptionsMonitor<PhotoboxConfig> options, IPrinter printer) : IImageManager
 {
     private readonly ILogger<ImageManager> logger = logger;

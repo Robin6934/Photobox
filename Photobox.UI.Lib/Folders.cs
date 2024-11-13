@@ -1,4 +1,4 @@
-﻿namespace Photobox.Lib;
+﻿namespace Photobox.UI.Lib;
 
 public static class Folders
 {

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace Photobox.Lib.Camera;
+namespace Photobox.UI.Lib.Camera;
 internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime applicationLifetime) : CameraBase(logger)
 {
     private readonly CanonAPI api = new();
@@ -121,7 +121,7 @@ internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime
 
         lock (@lock)
         {
-            
+
         }
         camera.TakePhoto();
 

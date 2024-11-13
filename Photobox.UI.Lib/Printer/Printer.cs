@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Photobox.Lib.ConfigModels;
+using Photobox.UI.Lib.ConfigModels;
 using SixLabors.ImageSharp.PixelFormats;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Management;
 
-namespace Photobox.Lib.Printer;
+namespace Photobox.UI.Lib.Printer;
 public class Printer(ILogger<Printer> logger, IOptionsMonitor<PhotoboxConfig> options) : IPrinter
 {
     private readonly ILogger<Printer> logger = logger;
@@ -95,7 +95,7 @@ public class Printer(ILogger<Printer> logger, IOptionsMonitor<PhotoboxConfig> op
         {
             PrinterEnabledOptions.True => true,
             PrinterEnabledOptions.False => false,
-            PrinterEnabledOptions.Automatic => 
+            PrinterEnabledOptions.Automatic =>
             CheckIfPrinterIsConnected(photoboxOptionsMonitor.CurrentValue.PrinterName), // Example method to check printer status
             _ => false // Default case, if necessary
         };

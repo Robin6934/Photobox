@@ -5,7 +5,7 @@ using Polly.Timeout;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace Photobox.Lib.Camera;
+namespace Photobox.UI.Lib.Camera;
 
 public delegate void NewImageHandler(object sender, Stream img);
 

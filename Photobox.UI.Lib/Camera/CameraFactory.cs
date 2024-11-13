@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Photobox.Lib.Camera;
+namespace Photobox.UI.Lib.Camera;
 public class CameraFactory(ILogger<CameraFactory> logger,
     ILoggerFactory loggerFactory,
     IHostApplicationLifetime applicationLifetime)

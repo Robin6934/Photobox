@@ -1,14 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Photobox.Lib.ConfigModels;
-using Photobox.Lib.ImageHandler;
-using Photobox.Lib.PhotoManager;
-using Photobox.Lib.Printer;
+using Photobox.UI.Lib.Printer;
 using Photobox.UI.Windows;
-using Photobox.Web.RestApi.Api;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System.IO;
 
 namespace Photobox.UI.ImageViewer;
 public class ImageViewerLocal(

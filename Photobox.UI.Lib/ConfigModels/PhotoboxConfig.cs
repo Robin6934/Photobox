@@ -1,9 +1,9 @@
-﻿using Photobox.Lib.Camera;
-using Photobox.Lib.Printer;
+﻿using Photobox.UI.Lib.Camera;
+using Photobox.UI.Lib.Printer;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
-namespace Photobox.Lib.ConfigModels;
+namespace Photobox.UI.Lib.ConfigModels;
 
 public class PhotoboxConfig
 {

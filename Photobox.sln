@@ -4,7 +4,7 @@ VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDSKLib", "EDSKLib\EDSKLib.csproj", "{31B2E18F-8E5E-46ED-A600-7C2D96C8FE40}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photobox.Lib", "Photobox.Lib\Photobox.Lib.csproj", "{99033AE3-808A-405B-95BA-BF0D615203EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photobox.UI.Lib", "Photobox.UI.Lib\Photobox.UI.Lib.csproj", "{99033AE3-808A-405B-95BA-BF0D615203EB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photobox.UI", "Photobox.UI\Photobox.UI.csproj", "{97D3A4FA-57C9-459F-A6A0-F2C643EA07F5}"
 EndProject
@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Photobox.Web.RestApi\src\Photobox.Web.RestApi\Photobox.Web.RestApi.csproj = Photobox.Web.RestApi\src\Photobox.Web.RestApi\Photobox.Web.RestApi.csproj
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photobox.Lib.Test", "Photobox.Lib.Test\Photobox.Lib.Test.csproj", "{6CEF3442-A576-4E39-B449-5CC97F118311}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photobox.UI.Lib.Test", "Photobox.Lib.Test\Photobox.UI.Lib.Test.csproj", "{6CEF3442-A576-4E39-B449-5CC97F118311}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photobox.Web", "Photobox.Web\Photobox.Web\Photobox.Web.csproj", "{BA3FFAB3-DAAD-4449-A938-7FFD199A64C8}"
 EndProject
@@ -24,6 +24,8 @@ EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{723813D7-C6BB-4046-B405-6085EE6400A1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photobox.Web.RestApi", "Photobox.Web.RestApi\src\Photobox.Web.RestApi\Photobox.Web.RestApi.csproj", "{AE10C1D3-FE8C-4448-8C51-C72B9784CCA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photobox.Lib", "Photobox.Lib\Photobox.Lib.csproj", "{5414EE34-E520-4DF6-80DD-72FDE11F4CC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{AE10C1D3-FE8C-4448-8C51-C72B9784CCA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE10C1D3-FE8C-4448-8C51-C72B9784CCA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE10C1D3-FE8C-4448-8C51-C72B9784CCA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5414EE34-E520-4DF6-80DD-72FDE11F4CC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5414EE34-E520-4DF6-80DD-72FDE11F4CC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5414EE34-E520-4DF6-80DD-72FDE11F4CC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5414EE34-E520-4DF6-80DD-72FDE11F4CC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

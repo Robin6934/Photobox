@@ -1,5 +1,4 @@
-﻿
-namespace System.IO
+﻿namespace Photobox.UI.Lib.Camera
 {
     /// <summary>
     /// A stream that does nothing more but wrap another stream (needed for a WPF memory leak)

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace Photobox.Lib.Camera;
+namespace Photobox.UI.Lib.Camera;
 
 public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime applicationLifetime) : CameraBase(logger)
 {
@@ -21,8 +21,8 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
     public override void Connect()
     {
         capture = new VideoCapture();
-        capture.Set(Emgu.CV.CvEnum.CapProp.FrameWidth, 1200);
-        capture.Set(Emgu.CV.CvEnum.CapProp.FrameHeight, 800);
+        capture.Set(CapProp.FrameWidth, 1200);
+        capture.Set(CapProp.FrameHeight, 800);
         logger.LogInformation("[WebCam] has been connected.");
     }
 

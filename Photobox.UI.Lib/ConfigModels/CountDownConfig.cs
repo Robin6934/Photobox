@@ -1,4 +1,4 @@
-﻿namespace Photobox.Lib.ConfigModels;
+﻿namespace Photobox.UI.Lib.ConfigModels;
 public class CountDownConfig
 {
     public static readonly string CountDown = "CountDown";
