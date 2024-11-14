@@ -1,5 +1,4 @@
-﻿using Autofac.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -40,7 +39,6 @@ public partial class App : Application
 
     private static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
-            .UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .ConfigureAppConfiguration(config =>
             {
                 config.AddEnvironmentVariables();
@@ -60,7 +58,7 @@ public partial class App : Application
                     context.Configuration.GetSection(PhotoboxConfig.Photobox));
                 services.AddSingleton<ICountDown, CountDownCircle>();
                 services.AddSingleton<IImageHandler, ImageHandler>();
-                services.AddSingleton<IImageApi, ImageApi>((IServiceProvider s) => new ImageApi("https://localhost:63722"));
+                services.AddSingleton<IImageApi, ImageApi>((IServiceProvider s) => new ImageApi("https://localhost"));
             })
             .ConfigureLogging(logging => logging.ClearProviders())
             .UseSerilog((context, services, configuration) =>
