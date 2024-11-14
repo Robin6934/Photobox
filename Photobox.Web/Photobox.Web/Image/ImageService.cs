@@ -35,7 +35,9 @@ public class ImageService(MariaDbContext dbContext, IStorageProvider storageProv
             DownscaledImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}"
         };
 
-        using var downScaledImage = image.Clone(i => i.Resize(image.Width / 4, 0));
+        int newWidth = image.Width < 1000 ? image.Width : 1000;
+
+        using var downScaledImage = image.Clone(i => i.Resize(newWidth, 0));
 
         var saveLocallyTask = downScaledImage.SaveAsJpegAsync(imagePath);
 

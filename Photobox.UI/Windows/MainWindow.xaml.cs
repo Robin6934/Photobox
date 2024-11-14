@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Photobox.UI.CountDown;
 using Photobox.UI.ImageViewer;
+using Photobox.UI.Lib;
 using Photobox.UI.Lib.Camera;
 using Photobox.UI.Lib.ImageHandler;
 using Photobox.UI.Lib.ImageManager;
@@ -80,7 +81,7 @@ public partial class MainWindow : Window, IHostedService
             {
                 case ImageViewResult.Save:
                     await imageManager.SaveAsync(image);
-                    await imageApi.ApiImageUploadImagePostAsync("image.jpg", stream);
+                    await imageApi.ApiImageUploadImagePostAsync(Folders.NewImageName, stream);
                     break;
                 case ImageViewResult.Print:
                     await imageManager.PrintAndSaveAsync(image);
