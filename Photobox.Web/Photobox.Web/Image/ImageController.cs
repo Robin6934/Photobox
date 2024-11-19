@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Photobox.Lib.Extensions;
 using SixLabors.ImageSharp.PixelFormats;
+using System.Net;
 
 namespace Photobox.Web.Image;
 [ApiController]
@@ -36,7 +37,8 @@ public class ImageController(ImageService imageService) : Controller
     }
 
     [HttpGet("{imageName}")]
-    public async Task<FileResult> GetImage(string imageName)
+    [ProducesResponseType(typeof(FileStreamResult), (int)HttpStatusCode.OK)]
+    public async Task<FileStreamResult> GetImage(string imageName)
     {
         var image = await imageService.GetImageAsync(imageName);
 
@@ -44,7 +46,8 @@ public class ImageController(ImageService imageService) : Controller
     }
 
     [HttpGet("{imageName}")]
-    public async Task<FileResult> GetPreviewImage(string imageName)
+    [ProducesResponseType(typeof(FileStreamResult), (int)HttpStatusCode.OK)]
+    public async Task<FileStreamResult> GetPreviewImage(string imageName)
     {
         var image = await imageService.GetPreviewImageAsync(imageName);
 
@@ -61,5 +64,11 @@ public class ImageController(ImageService imageService) : Controller
     public Task DeleteImages()
     {
         return imageService.DeleteImagesAsync();
+    }
+
+    [HttpDelete]
+    public Task DeleteImage(string imageName)
+    {
+        return imageService.DeleteImageAsync(imageName);
     }
 }

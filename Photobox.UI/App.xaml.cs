@@ -9,6 +9,7 @@ using Photobox.UI.Lib.Camera;
 using Photobox.UI.Lib.ConfigModels;
 using Photobox.UI.Lib.ImageHandler;
 using Photobox.UI.Lib.ImageManager;
+using Photobox.UI.Lib.ImageSyncService;
 using Photobox.UI.Lib.Printer;
 using Photobox.UI.Windows;
 using Photobox.Web.RestApi.Api;
@@ -37,38 +38,39 @@ public partial class App : Application
         base.OnExit(e);
     }
 
-    private static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration(config =>
-            {
-                config.AddEnvironmentVariables();
-                config.AddJsonFile("appsettings.json", true, true);
-            })
-            .ConfigureServices((context, services) =>
-            {
-                services.AddHostedService<MainWindow>();
-                services.AddSingleton<CameraFactory>();
-                services.AddSingleton(
-                    c => c.GetRequiredService<CameraFactory>()
+    private static HostApplicationBuilder CreateHostBuilder(string[] args)
+    {
+        var builder = Host.CreateApplicationBuilder(args);
+
+        builder.Services.AddHostedService<MainWindow>();
+        builder.Services.AddHostedService<ImageSyncService>();
+
+        builder.Services.AddSingleton<CameraFactory>();
+        builder.Services.AddSingleton(
+            c => c.GetRequiredService<CameraFactory>()
                     .Create(c.GetRequiredService<IOptions<PhotoboxConfig>>().Value.Camera));
-                services.AddSingleton<IImageViewer, ImageViewerLocal>();
-                services.AddSingleton<IImageManager, ImageManager>();
-                services.AddSingleton<IPrinter, Printer>();
-                services.Configure<PhotoboxConfig>(
-                    context.Configuration.GetSection(PhotoboxConfig.Photobox));
-                services.AddSingleton<ICountDown, CountDownCircle>();
-                services.AddSingleton<IImageHandler, ImageHandler>();
-                services.AddSingleton<IImageApi, ImageApi>((IServiceProvider s) => new ImageApi("https://localhost"));
-            })
-            .ConfigureLogging(logging => logging.ClearProviders())
-            .UseSerilog((context, services, configuration) =>
-            {
-                configuration
-                    .Enrich.FromLogContext()
-                    .Enrich.WithEnvironmentName()
-                    .Enrich.WithMachineName()
-                    .Enrich.WithProperty("Source", "UI")
-                    .WriteTo.Seq("http://localhost:5341");
-            });
+        builder.Services.AddSingleton<IImageViewer, ImageViewerLocal>();
+        builder.Services.AddSingleton<IImageManager, ImageManager>();
+        builder.Services.AddSingleton<IPrinter, Printer>();
+        builder.Services.Configure<PhotoboxConfig>(
+            builder.Configuration.GetSection(PhotoboxConfig.Photobox));
+        builder.Services.AddSingleton<ICountDown, CountDownCircle>();
+        builder.Services.AddSingleton<IImageHandler, ImageHandler>();
+        builder.Services.AddSingleton<IImageApi, ImageApi>((IServiceProvider s) => new ImageApi("https://localhost"));
+
+        builder.Logging.ClearProviders();
+
+        var logger = new LoggerConfiguration()
+            .Enrich.FromLogContext()
+            .Enrich.WithEnvironmentName()
+            .Enrich.WithMachineName()
+            .Enrich.WithProperty("Source", "UI")
+            .WriteTo.Seq("http://localhost:5341")
+            .CreateLogger();
+
+        builder.Logging.AddSerilog(logger);
+
+        return builder;
+    }
 }
 

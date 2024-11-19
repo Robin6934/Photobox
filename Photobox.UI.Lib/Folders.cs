@@ -28,8 +28,8 @@ public static class Folders
     public static IEnumerable<string> AllFolders
         => [Deleted, Photos, Temp];
 
-    public static string GetPath(string folder)
-        => Path.Combine(PhotoboxBaseDir, folder);
+    public static string GetPath(params string[] path)
+        => Path.Combine(PhotoboxBaseDir,  Path.Combine(path));
 
     public static string NewImagePath
         => Path.Combine(GetPath(Temp), NewImageName);

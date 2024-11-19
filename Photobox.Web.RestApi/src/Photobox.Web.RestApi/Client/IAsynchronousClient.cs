@@ -8,6 +8,7 @@
  */
 
 
+using System;
 using System.Threading.Tasks;
 
 namespace Photobox.Web.RestApi.Client

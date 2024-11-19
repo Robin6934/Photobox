@@ -2,11 +2,9 @@
 using Microsoft.Extensions.Logging;
 using Photobox.UI.CountDown;
 using Photobox.UI.ImageViewer;
-using Photobox.UI.Lib;
 using Photobox.UI.Lib.Camera;
 using Photobox.UI.Lib.ImageHandler;
 using Photobox.UI.Lib.ImageManager;
-using Photobox.Web.RestApi.Api;
 using Photobox.WpfHelpers;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -30,7 +28,6 @@ public partial class MainWindow : Window, IHostedService
 
     private readonly IImageManager imageManager;
 
-    private readonly IImageApi imageApi;
     public MainWindow(
         ICamera camera,
         IImageViewer imageViewer,
@@ -38,8 +35,7 @@ public partial class MainWindow : Window, IHostedService
         ICountDown countDown,
         IHostApplicationLifetime applicationLifetime,
         IImageHandler imageHandler,
-        IImageManager imageManager,
-        IImageApi imageApi)
+        IImageManager imageManager)
     {
         InitializeComponent();
 
@@ -57,8 +53,6 @@ public partial class MainWindow : Window, IHostedService
 
         this.imageManager = imageManager;
 
-        this.imageApi = imageApi;
-
         countDown.Panel = GridLiveView;
 
         countDown.CountDownEarly += (s) =>
@@ -68,11 +62,14 @@ public partial class MainWindow : Window, IHostedService
 
         countDown.CountDownExpired += async (o) =>
         {
+            camera.Focus();
+
             Image<Rgb24> image = await this.camera.TakePictureAsync();
 
             ImageViewResult result = await this.imageViewer.ShowImage(image);
 
             MemoryStream stream = new();
+
             await image.SaveAsJpegAsync(stream);
 
             stream.Position = 0;
@@ -81,7 +78,6 @@ public partial class MainWindow : Window, IHostedService
             {
                 case ImageViewResult.Save:
                     await imageManager.SaveAsync(image);
-                    await imageApi.ApiImageUploadImagePostAsync(Folders.NewImageName, stream);
                     break;
                 case ImageViewResult.Print:
                     await imageManager.PrintAndSaveAsync(image);
@@ -96,13 +92,15 @@ public partial class MainWindow : Window, IHostedService
 
         this.logger.LogInformation("Mainwindow created");
 
-        this.camera.CameraStream += (o, i) =>
+        this.camera.CameraStream += (o, s) =>
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                GridLiveView.Background = i.ToBitmapSource();
+                GridLiveView.Background = s.ToBitmapSource();
             });
         };
+
+        Closing += (o, i) => camera.Dispose();
     }
 
     public Task StartAsync(CancellationToken cancellationToken)

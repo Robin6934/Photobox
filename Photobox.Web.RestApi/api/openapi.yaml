@@ -40,6 +40,47 @@ paths:
         style: simple
       responses:
         "200":
+          content:
+            text/plain:
+              schema:
+                format: binary
+                type: string
+            application/json:
+              schema:
+                format: binary
+                type: string
+            text/json:
+              schema:
+                format: binary
+                type: string
+          description: OK
+      tags:
+      - Image
+  /api/Image/GetPreviewImage/{imageName}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: imageName
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                format: binary
+                type: string
+            application/json:
+              schema:
+                format: binary
+                type: string
+            text/json:
+              schema:
+                format: binary
+                type: string
           description: OK
       tags:
       - Image
@@ -68,6 +109,21 @@ paths:
       - Image
   /api/Image/DeleteImages:
     delete:
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Image
+  /api/Image/DeleteImage:
+    delete:
+      parameters:
+      - explode: true
+        in: query
+        name: imageName
+        required: false
+        schema:
+          type: string
+        style: form
       responses:
         "200":
           description: OK
