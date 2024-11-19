@@ -8,6 +8,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System.Diagnostics;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Photobox.Web.Image;
 
@@ -77,21 +78,28 @@ public class ImageService(MariaDbContext dbContext, IStorageProvider storageProv
 
     public async Task DeleteImagesAsync()
     {
-        var images = dbContext.ImageModels.ToList();
+        var images = dbContext.ImageModels.Select((image, i) => image.ImageName);
 
         foreach (var image in images)
         {
-            string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", image.ImageName);
-
-            await storageProvider.DeleteImageAsync(image.UniqeImageName);
-
-            await storageProvider.DeleteImageAsync(image.DownscaledImageName);
-
-            File.Delete(imagePath);
-
-            dbContext.ImageModels.Remove(image);
-
-            await dbContext.SaveChangesAsync();
+            await DeleteImageAsync(image);
         }
+    }
+
+    public async Task DeleteImageAsync(string imageName)
+    {
+        var imageModel = dbContext.ImageModels.Where(image => image.ImageName == imageName).First();
+
+        string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageName);
+
+        await storageProvider.DeleteImageAsync(imageName);
+
+        await storageProvider.DeleteImageAsync(imageName);
+
+        File.Delete(imagePath);
+
+        dbContext.ImageModels.Remove(imageModel);
+
+        await dbContext.SaveChangesAsync();
     }
 }

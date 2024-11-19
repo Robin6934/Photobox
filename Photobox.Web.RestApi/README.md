@@ -75,14 +75,15 @@ namespace Example
             Configuration config = new Configuration();
             config.BasePath = "http://localhost";
             var apiInstance = new ImageApi(config);
+            var imageName = "imageName_example";  // string |  (optional) 
 
             try
             {
-                apiInstance.ApiImageDeleteImagesDelete();
+                apiInstance.ApiImageDeleteImageDelete(imageName);
             }
             catch (ApiException e)
             {
-                Debug.Print("Exception when calling ImageApi.ApiImageDeleteImagesDelete: " + e.Message );
+                Debug.Print("Exception when calling ImageApi.ApiImageDeleteImageDelete: " + e.Message );
                 Debug.Print("Status Code: "+ e.ErrorCode);
                 Debug.Print(e.StackTrace);
             }
@@ -99,8 +100,10 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*ImageApi* | [**ApiImageDeleteImageDelete**](docs/ImageApi.md#apiimagedeleteimagedelete) | **DELETE** /api/Image/DeleteImage | 
 *ImageApi* | [**ApiImageDeleteImagesDelete**](docs/ImageApi.md#apiimagedeleteimagesdelete) | **DELETE** /api/Image/DeleteImages | 
 *ImageApi* | [**ApiImageGetImageImageNameGet**](docs/ImageApi.md#apiimagegetimageimagenameget) | **GET** /api/Image/GetImage/{imageName} | 
+*ImageApi* | [**ApiImageGetPreviewImageImageNameGet**](docs/ImageApi.md#apiimagegetpreviewimageimagenameget) | **GET** /api/Image/GetPreviewImage/{imageName} | 
 *ImageApi* | [**ApiImageListImagesGet**](docs/ImageApi.md#apiimagelistimagesget) | **GET** /api/Image/ListImages | 
 *ImageApi* | [**ApiImageUploadImagePost**](docs/ImageApi.md#apiimageuploadimagepost) | **POST** /api/Image/UploadImage | 
 

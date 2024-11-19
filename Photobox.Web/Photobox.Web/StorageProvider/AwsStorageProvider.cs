@@ -2,6 +2,10 @@
 using Amazon.S3.Model;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using static System.Net.Mime.MediaTypeNames;
+using System.Xml.Linq;
+using System.Collections.Concurrent;
+using System.Diagnostics.Eventing.Reader;
 
 namespace Photobox.Web.StorageProvider;
 
@@ -9,21 +13,42 @@ public class AwsStorageProvider(IAmazonS3 amazonS3) : IStorageProvider
 {
     private readonly IAmazonS3 amazonS3 = amazonS3;
 
-    public async Task StoreImageAsync(Image<Rgb24> image, string name)
+    private readonly ConcurrentDictionary<string, Image<Rgb24>> imageBuffer = [];
+
+    public Task StoreImageAsync(Image<Rgb24> image, string name)
     {
-        var imageStream = new MemoryStream();
+        imageBuffer.TryAdd(name, image);
 
-        await image.SaveAsJpegAsync(imageStream);
+        return UploadImagesAsync();
+    }
 
-        var request = new PutObjectRequest
+    private async Task UploadImagesAsync()
+    {
+        foreach(var (imageName, image) in imageBuffer)
         {
-            BucketName = "fotos",
-            DisablePayloadSigning = true,
-            Key = name,
-            InputStream = imageStream
-        };
+            var imageStream = new MemoryStream();
 
-        await amazonS3.PutObjectAsync(request);
+            await image.SaveAsJpegAsync(imageStream);
+
+            var request = new PutObjectRequest
+            {
+                BucketName = "fotos",
+                DisablePayloadSigning = true,
+                Key = imageName,
+                InputStream = imageStream
+            };
+
+            try
+            {
+                await amazonS3.PutObjectAsync(request);
+
+                imageBuffer.Remove(imageName, out _);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 
     public async Task<Image<Rgb24>> GetImageAsync(string name)
@@ -31,12 +56,19 @@ public class AwsStorageProvider(IAmazonS3 amazonS3) : IStorageProvider
         var request = new GetObjectRequest
         {
             BucketName = "fotos",
-            Key = name,
+            Key = name
         };
 
-        var response = await amazonS3.GetObjectAsync(request);
+        if (imageBuffer.TryGetValue(name, out var image))
+        {
+            return image;
+        }
+        else
+        {
+            var response = await amazonS3.GetObjectAsync(request);
 
-        return await SixLabors.ImageSharp.Image.LoadAsync<Rgb24>(response.ResponseStream);
+            return await SixLabors.ImageSharp.Image.LoadAsync<Rgb24>(response.ResponseStream);
+        }
     }
 
     public Task DeleteImageAsync(string name)

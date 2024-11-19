@@ -5,6 +5,7 @@ using Photobox.UI.Lib;
 using Photobox.UI.Lib.ConfigModels;
 using Photobox.UI.Lib.ImageManager;
 using Photobox.UI.Lib.Printer;
+using Photobox.Web.RestApi.Api;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -19,7 +20,7 @@ public class ImageManagerTest
 
         var logger = Substitute.For<ILogger<ImageManager>>();
 
-        IImageManager imageService = new ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer);
+        IImageManager imageService = new ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer, Substitute.For<IImageApi>());
 
         string imageName = Folders.NewImageName;
 
@@ -50,7 +51,7 @@ public class ImageManagerTest
 
         var logger = Substitute.For<ILogger<ImageManager>>();
 
-        IImageManager imageService = new ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer);
+        IImageManager imageService = new ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer, Substitute.For<IImageApi>());
 
         string imageName = Folders.NewImageName;
 
@@ -83,7 +84,7 @@ public class ImageManagerTest
 
         var logger = Substitute.For<ILogger<ImageManager>>();
 
-        IImageManager imageService = new ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer);
+        IImageManager imageService = new ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer, Substitute.For<IImageApi>());
 
         string imageName = Folders.NewImageName;
 
@@ -116,7 +117,7 @@ public class ImageManagerTest
 
         var logger = Substitute.For<ILogger<ImageManager>>();
 
-        IImageManager imageService = new ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer);
+        IImageManager imageService = new ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer, Substitute.For<IImageApi>());
 
         string imageName = Folders.NewImageName;
 

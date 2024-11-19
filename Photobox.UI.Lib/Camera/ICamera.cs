@@ -10,11 +10,18 @@ public interface ICamera : IDisposable
     public bool LiveViewActive { get; }
 
     public Rectangle PictureSize { get; }
+
     void ResilientConnect();
+
     void Connect();
+
     void StartStream();
+
     void StopStream();
+
     void Focus();
+
     Task<Image<Rgb24>> TakePictureAsync();
+
     void Disconnect();
 }
