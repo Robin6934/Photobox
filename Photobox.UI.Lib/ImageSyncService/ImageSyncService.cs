@@ -18,6 +18,11 @@ public class ImageSyncService(ILogger<ImageSyncService> logger, IImageApi imageA
 
         List<string> localImages = [.. Directory.GetFiles(Folders.GetPath(Folders.Photos))];
 
+        if(uploadedImages is null)
+        {
+            return;
+        }
+
         //both lists contain the same data
         if (uploadedImages.Count == localImages.Count
             && !uploadedImages.Except(localImages).Any()

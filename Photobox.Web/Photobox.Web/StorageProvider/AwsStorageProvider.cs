@@ -32,7 +32,7 @@ public class AwsStorageProvider(IAmazonS3 amazonS3) : IStorageProvider
 
             var request = new PutObjectRequest
             {
-                BucketName = "fotos",
+                BucketName = Aws.Aws.BucketName,
                 DisablePayloadSigning = true,
                 Key = imageName,
                 InputStream = imageStream
@@ -55,7 +55,7 @@ public class AwsStorageProvider(IAmazonS3 amazonS3) : IStorageProvider
     {
         var request = new GetObjectRequest
         {
-            BucketName = "fotos",
+            BucketName = Aws.Aws.BucketName,
             Key = name
         };
 
@@ -75,7 +75,7 @@ public class AwsStorageProvider(IAmazonS3 amazonS3) : IStorageProvider
     {
         var request = new DeleteObjectRequest()
         {
-            BucketName = "fotos",
+            BucketName = Aws.Aws.BucketName,
             Key = name
         };
 

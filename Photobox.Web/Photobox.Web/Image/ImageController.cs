@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Photobox.Lib.Extensions;
 using SixLabors.ImageSharp.PixelFormats;
+using System.Diagnostics;
 using System.Net;
 
 namespace Photobox.Web.Image;
@@ -25,7 +26,7 @@ public class ImageController(ImageService imageService) : Controller
         }
 
         using var image = await SixLabors.ImageSharp.Image.LoadAsync<Rgb24>(formFile.OpenReadStream());
-
+        ReadMetadata(image);
         if (image is null)
         {
             return BadRequest("File has wrong format.");
@@ -34,6 +35,15 @@ public class ImageController(ImageService imageService) : Controller
         await imageService.StoreImageAsync(image, imageName);
 
         return Ok();
+    }
+
+    private static void ReadMetadata(SixLabors.ImageSharp.Image<Rgb24> image)
+    {
+        if (image.Metadata.ExifProfile?.Values?.Any() ?? false)
+        {
+            foreach (var prop in image.Metadata.ExifProfile.Values)
+                Debug.WriteLine($"{prop.Tag}: {prop.DataType}, {prop.GetValue()}");
+        }
     }
 
     [HttpGet("{imageName}")]
