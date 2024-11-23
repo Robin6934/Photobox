@@ -12,4 +12,6 @@ public class ImageModel
     public required string UniqeImageName { get; set; }
 
     public required string DownscaledImageName { get; set; }
+
+    public required DateTime TakenAt { get; set; }
 }

@@ -1,4 +1,6 @@
 ﻿using Amazon.S3.Model;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Photobox.Lib.Extensions;
 using Photobox.Web.DbContext;
@@ -33,7 +35,8 @@ public class ImageService(MariaDbContext dbContext, IStorageProvider storageProv
         {
             UniqeImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}",
             ImageName = imageName,
-            DownscaledImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}"
+            DownscaledImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}",
+            TakenAt = DateTime.Now
         };
 
         int newWidth = image.Width < 1000 ? image.Width : 1000;
@@ -88,7 +91,12 @@ public class ImageService(MariaDbContext dbContext, IStorageProvider storageProv
 
     public async Task DeleteImageAsync(string imageName)
     {
-        var imageModel = dbContext.ImageModels.Where(image => image.ImageName == imageName).First();
+        var imageModel = await dbContext.ImageModels.Where(image => image.ImageName == imageName).FirstOrDefaultAsync();
+
+        if(imageModel is null)
+        { 
+            return;
+        }
 
         string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageName);
 

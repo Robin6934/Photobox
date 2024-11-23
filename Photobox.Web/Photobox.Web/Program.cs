@@ -1,11 +1,17 @@
 using Amazon.Runtime;
 using Amazon.S3;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Photobox.Web.Components;
 using Photobox.Web.DbContext;
+using Photobox.Web.HealthCheck;
 using Photobox.Web.Image;
 using Photobox.Web.StorageProvider;
 using Serilog;
+using SixLabors.ImageSharp.Web.DependencyInjection;
+using Photobox.Web.Aws;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +20,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddImageSharp();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -40,12 +48,26 @@ builder.Services.AddScoped<ImageService>();
 
 builder.Services.AddSingleton<IStorageProvider, AwsStorageProvider>();
 
-ConfigureAws(builder.Configuration, builder.Services);
+builder.Services.ConfigureAws(builder.Configuration);
 
+builder.Services.ConfigureHealthChecks(builder.Configuration);
 
 var app = builder.Build();
 
 app.UseSerilogRequestLogging();
+
+//HealthCheck Middleware
+app.MapHealthChecks("/api/health", new HealthCheckOptions()
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.UseHealthChecksUI(options => 
+{
+    options.UIPath = "/healthcheck-ui";
+    //options.AddCustomStylesheet("HealthCheck/Custom.css");
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -65,6 +87,8 @@ else
     app.UseHsts();
 }
 
+app.UseImageSharp();
+
 app.UseHttpsRedirection();
 
 app.MapControllers();
@@ -78,22 +102,4 @@ app.MapRazorComponents<App>()
     .AddAdditionalAssemblies(typeof(Photobox.Web.Client._Imports).Assembly);
 
 app.Run();
-
-
-void ConfigureAws(IConfiguration configuration, IServiceCollection services)
-{
-    var serviceUrl = configuration["AWS:ServiceURL"];
-    var accessKey = configuration["AWS:AccessKey"];
-    var secretKey = configuration["AWS:SecretKey"];
-
-    var credentials = new BasicAWSCredentials(accessKey, secretKey);
-    var s3Config = new AmazonS3Config
-    {
-        ServiceURL = serviceUrl,
-        ForcePathStyle = true // Ensure compatibility with Cloudflare R2
-    };
-
-    // Directly register IAmazonS3 with specified config
-    services.AddSingleton<IAmazonS3>(new AmazonS3Client(credentials, s3Config));
-}
 
