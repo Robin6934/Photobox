@@ -2,13 +2,14 @@
 using Microsoft.Extensions.Options;
 using Photobox.Lib.Extensions;
 using Photobox.UI.Lib.ConfigModels;
+using Photobox.UI.Lib.ImageUploadService;
 using Photobox.UI.Lib.Printer;
 using Photobox.Web.RestApi.Api;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.UI.Lib.ImageManager;
-public class ImageManager(ILogger<ImageManager> logger, IOptionsMonitor<PhotoboxConfig> options, IPrinter printer, IImageApi imageApi) : IImageManager
+public class ImageManager(ILogger<ImageManager> logger, IOptionsMonitor<PhotoboxConfig> options, IPrinter printer, IImageUploadService imageUploadService) : IImageManager
 {
     private readonly ILogger<ImageManager> logger = logger;
 
@@ -16,7 +17,7 @@ public class ImageManager(ILogger<ImageManager> logger, IOptionsMonitor<Photobox
 
     private readonly IOptionsMonitor<PhotoboxConfig> photoboxConfigMonitor = options;
 
-    private readonly IImageApi imageApi = imageApi;
+    private readonly IImageUploadService imageUploadService = imageUploadService;
 
     public async Task DeleteAsync(Image<Rgb24> image)
     {
@@ -53,7 +54,7 @@ public class ImageManager(ILogger<ImageManager> logger, IOptionsMonitor<Photobox
 
         await image.SaveAsJpegAsync(newImagePath);
 
-        await imageApi.ApiImageUploadImagePostAsync(imageName, await image.ToJpegStreamAsync());
+        await imageUploadService.UploadImageAsync(imageName, image);
 
         logger.LogInformation("Stored Saved image under path {imagePath}", imageName);
     }

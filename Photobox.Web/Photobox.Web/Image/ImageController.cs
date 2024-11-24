@@ -16,8 +16,10 @@ public class ImageController(ImageService imageService) : Controller
     /// </summary>
     /// <param name="formFile">The picture file to upload.</param>
     /// <param name="imageName">The Name of the Picture to upload.</param>
-    /// <returns>Returns a 200 OK response if successful or a 400 Bad Request if no file is provided.</returns>
+    /// <response code="200">Image has ben uploaded successfully</response>
+    /// <response code=""></response>
     [HttpPost]
+    [ProducesResponseType<IActionResult>((int)HttpStatusCode.OK)]
     public async Task<IActionResult> UploadImage(IFormFile formFile, string imageName)
     {
         if (formFile == null || formFile.Length == 0)

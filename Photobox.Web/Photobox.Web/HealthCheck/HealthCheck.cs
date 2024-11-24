@@ -10,16 +10,13 @@ public static class HealthCheck
         .AddMySql(connectionString: configuration.GetConnectionString("PhotoboxConnectionString"))
         .AddCheck<MemoryHealthCheck>($"Photobox Service Memory Check", failureStatus: HealthStatus.Unhealthy, tags: ["Photobox Service"]);
 
-
-        //services.AddHealthChecksUI();
-        services.AddHealthChecksUI(opt =>
-        {
-            opt.SetEvaluationTimeInSeconds(10); //time in seconds between check    
-            opt.MaximumHistoryEntriesPerEndpoint(60); //maximum history of checks    
-            opt.SetApiMaxActiveRequests(1); //api requests concurrency    
-            opt.AddHealthCheckEndpoint("photobox api", "/api/health"); //map health check api    
-
-        })
-            .AddInMemoryStorage();
+        //services.AddHealthChecksUI(opt =>
+        //{
+        //    opt.SetEvaluationTimeInSeconds(10); //time in seconds between check    
+        //    opt.MaximumHistoryEntriesPerEndpoint(60); //maximum history of checks    
+        //    opt.SetApiMaxActiveRequests(1); //api requests concurrency    
+        //    opt.AddHealthCheckEndpoint("photobox api", "https://localhost/api/health"); //map health check api    
+        //})
+        //.AddInMemoryStorage();
     }
 }
