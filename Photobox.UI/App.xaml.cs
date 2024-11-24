@@ -9,7 +9,7 @@ using Photobox.UI.Lib.Camera;
 using Photobox.UI.Lib.ConfigModels;
 using Photobox.UI.Lib.ImageHandler;
 using Photobox.UI.Lib.ImageManager;
-using Photobox.UI.Lib.ImageSyncService;
+using Photobox.UI.Lib.ImageUploadService;
 using Photobox.UI.Lib.Printer;
 using Photobox.UI.Windows;
 using Photobox.Web.RestApi.Api;
@@ -43,8 +43,8 @@ public partial class App : Application
         var builder = Host.CreateApplicationBuilder(args);
 
         builder.Services.AddHostedService<MainWindow>();
-        builder.Services.AddHostedService<ImageSyncService>();
 
+        builder.Services.AddSingleton<IImageUploadService, ImageUploadService>();
         builder.Services.AddSingleton<CameraFactory>();
         builder.Services.AddSingleton(
             c => c.GetRequiredService<CameraFactory>()

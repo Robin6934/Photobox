@@ -61,6 +61,7 @@ public abstract class CameraBase(ILogger logger) : ICamera
     protected virtual void OnNewStreamImage(Stream stream)
     {
         CameraStream?.Invoke(this, stream);
+        stream.Dispose();
     }
 
     public abstract void Dispose();

@@ -63,11 +63,6 @@ app.MapHealthChecks("/api/health", new HealthCheckOptions()
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
-app.UseHealthChecksUI(options => 
-{
-    options.UIPath = "/healthcheck-ui";
-    //options.AddCustomStylesheet("HealthCheck/Custom.css");
-});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

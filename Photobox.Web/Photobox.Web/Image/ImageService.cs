@@ -81,11 +81,11 @@ public class ImageService(MariaDbContext dbContext, IStorageProvider storageProv
 
     public async Task DeleteImagesAsync()
     {
-        var images = dbContext.ImageModels.Select((image, i) => image.ImageName);
+        var images = await dbContext.ImageModels.ToArrayAsync();
 
         foreach (var image in images)
         {
-            await DeleteImageAsync(image);
+            await DeleteImageAsync(image.ImageName);
         }
     }
 

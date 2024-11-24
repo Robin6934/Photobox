@@ -51,9 +51,9 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
             {
                 capture?.Read(frame);
 
-                Span<byte> data = frame.ToImage<Rgb, byte>(false).ToJpegData();
+                byte[] data = frame.ToImage<Rgb, byte>(false).ToJpegData();
 
-                OnNewStreamImage(new MemoryStream(data.ToArray()));
+                OnNewStreamImage(new MemoryStream(data));
             }
         }, applicationLifetime.ApplicationStopping);
         logger.LogInformation("[WebCam] liveView started.");
