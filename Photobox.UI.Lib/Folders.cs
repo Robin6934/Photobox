@@ -29,7 +29,7 @@ public static class Folders
         => [Deleted, Photos, Temp];
 
     public static string GetPath(params string[] path)
-        => Path.Combine(PhotoboxBaseDir,  Path.Combine(path));
+        => Path.Combine(PhotoboxBaseDir, Path.Combine(path));
 
     public static string NewImagePath
         => Path.Combine(GetPath(Temp), NewImageName);

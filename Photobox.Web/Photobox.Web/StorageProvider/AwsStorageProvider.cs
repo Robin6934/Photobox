@@ -1,11 +1,8 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
-using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using static System.Net.Mime.MediaTypeNames;
-using System.Xml.Linq;
 using System.Collections.Concurrent;
-using System.Diagnostics.Eventing.Reader;
+using System.Xml.Linq;
 
 namespace Photobox.Web.StorageProvider;
 
@@ -24,7 +21,7 @@ public class AwsStorageProvider(IAmazonS3 amazonS3) : IStorageProvider
 
     private async Task UploadImagesAsync()
     {
-        foreach(var (imageName, image) in imageBuffer)
+        foreach (var (imageName, image) in imageBuffer)
         {
             var imageStream = new MemoryStream();
 

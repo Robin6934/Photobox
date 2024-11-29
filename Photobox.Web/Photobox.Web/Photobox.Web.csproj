@@ -10,8 +10,21 @@
     <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
+    <!-- Defines the build process to execute post build events defined below. -->
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent> 
   </PropertyGroup>
 
+  <!-- Defines the Target for post build event and condition to be met inorder to be executed. --><!--
+  <Target Name="NSwag" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' == 'Debug' ">
+    --><!-- A good practice to restore the project nuget packages to make sure the next step doesn't fail. --><!--
+    <Exec Command="dotnet tool restore"></Exec>
+    --><!-- An exec command to generate swagger.json file as part of the build process.
+  EnvironmentVariables = allows you to set the project environment variable
+  WorkingDirectory = holds the directory path from which the command has to be executed
+  Command = holds the command to be executed when this exec block is executed during post build process
+  . --><!--
+    <Exec WorkingDirectory="$(ProjectDir)" EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development" Command="$(NSwagExe_Net80) run nswag.json" />
+  </Target>-->
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.Aws.S3" Version="8.0.1" />
@@ -25,9 +38,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="NSwag.AspNetCore" Version="14.2.0" />
+    <PackageReference Include="NSwag.MSBuild" Version="13.20.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="SixLabors.ImageSharp.Web" Version="3.1.3" />
     <ProjectReference Include="..\..\Photobox.Lib\Photobox.Lib.csproj" />
-    <ProjectReference Include="..\..\Photobox.Web.RestApi\src\Photobox.Web.RestApi\Photobox.Web.RestApi.csproj" />
     <ProjectReference Include="..\Photobox.Web.Client\Photobox.Web.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.0-rc.1.24452.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />

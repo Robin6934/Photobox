@@ -1,9 +1,7 @@
-using Amazon.Runtime;
-using Amazon.S3;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Photobox.Web.Aws;
 using Photobox.Web.Components;
 using Photobox.Web.DbContext;
 using Photobox.Web.HealthCheck;
@@ -11,7 +9,6 @@ using Photobox.Web.Image;
 using Photobox.Web.StorageProvider;
 using Serilog;
 using SixLabors.ImageSharp.Web.DependencyInjection;
-using Photobox.Web.Aws;
 
 var builder = WebApplication.CreateBuilder(args);
 

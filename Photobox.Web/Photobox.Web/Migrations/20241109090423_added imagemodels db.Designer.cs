@@ -13,7 +13,7 @@ namespace Photobox.Web.Migrations
 {
     [DbContext(typeof(MariaDbContext))]
     [Migration("20241109090423_added imagemodels db")]
-    partial class addedimagemodelsdb
+    partial class AddedImageModelsDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

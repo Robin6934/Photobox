@@ -1,15 +1,14 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NSubstitute;
-using Photobox.UI.Lib;
 using Photobox.UI.Lib.ConfigModels;
 using Photobox.UI.Lib.ImageManager;
+using Photobox.UI.Lib.ImageUploadService;
 using Photobox.UI.Lib.Printer;
-using Photobox.Web.RestApi.Api;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace Photobox.Lib.Test;
+namespace Photobox.UI.Lib.Test;
 
 public class ImageManagerTest
 {
@@ -18,9 +17,9 @@ public class ImageManagerTest
     {
         var printer = Substitute.For<IPrinter>();
 
-        var logger = Substitute.For<ILogger<ImageManager>>();
+        var logger = Substitute.For<ILogger<ImageManager.ImageManager>>();
 
-        IImageManager imageService = new ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer, Substitute.For<IImageApi>());
+        IImageManager imageService = new ImageManager.ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer, Substitute.For<IImageUploadService>());
 
         string imageName = Folders.NewImageName;
 
@@ -49,9 +48,9 @@ public class ImageManagerTest
     {
         var printer = Substitute.For<IPrinter>();
 
-        var logger = Substitute.For<ILogger<ImageManager>>();
+        var logger = Substitute.For<ILogger<ImageManager.ImageManager>>();
 
-        IImageManager imageService = new ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer, Substitute.For<IImageApi>());
+        IImageManager imageService = new ImageManager.ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer, Substitute.For<IImageUploadService>());
 
         string imageName = Folders.NewImageName;
 
@@ -82,9 +81,9 @@ public class ImageManagerTest
     {
         var printer = Substitute.For<IPrinter>();
 
-        var logger = Substitute.For<ILogger<ImageManager>>();
+        var logger = Substitute.For<ILogger<ImageManager.ImageManager>>();
 
-        IImageManager imageService = new ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer, Substitute.For<IImageApi>());
+        IImageManager imageService = new ImageManager.ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer, Substitute.For<IImageUploadService>());
 
         string imageName = Folders.NewImageName;
 
@@ -115,9 +114,9 @@ public class ImageManagerTest
     {
         var printer = Substitute.For<IPrinter>();
 
-        var logger = Substitute.For<ILogger<ImageManager>>();
+        var logger = Substitute.For<ILogger<ImageManager.ImageManager>>();
 
-        IImageManager imageService = new ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer, Substitute.For<IImageApi>());
+        IImageManager imageService = new ImageManager.ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer, Substitute.For<IImageUploadService>());
 
         string imageName = Folders.NewImageName;
 

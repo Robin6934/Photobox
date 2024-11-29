@@ -1,26 +1,18 @@
-﻿using Amazon.S3.Model;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Photobox.Lib.Extensions;
+﻿using Microsoft.EntityFrameworkCore;
 using Photobox.Web.DbContext;
 using Photobox.Web.Models;
 using Photobox.Web.StorageProvider;
-using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
-using System.Diagnostics;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Photobox.Web.Image;
 
 public class ImageService(MariaDbContext dbContext, IStorageProvider storageProvider, ILogger<ImageService> logger)
 {
-    private readonly MariaDbContext dbContext = dbContext;
+    private readonly MariaDbContext _dbContext = dbContext;
 
-    private readonly IStorageProvider storageProvider = storageProvider;
+    private readonly IStorageProvider _storageProvider = storageProvider;
 
-    private readonly ILogger<ImageService> logger = logger;
+    private readonly ILogger<ImageService> _logger = logger;
 
     public async Task StoreImageAsync(Image<Rgb24> image, string imageName)
     {
@@ -28,7 +20,7 @@ public class ImageService(MariaDbContext dbContext, IStorageProvider storageProv
 
         if (!Directory.Exists(Path.GetDirectoryName(imagePath)))
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(imagePath));
+            Directory.CreateDirectory(Path.GetDirectoryName(imagePath)!);
         }
 
         ImageModel imageModel = new()
@@ -45,43 +37,43 @@ public class ImageService(MariaDbContext dbContext, IStorageProvider storageProv
 
         var saveLocallyTask = downScaledImage.SaveAsJpegAsync(imagePath);
 
-        var storeDownscaledTask = storageProvider.StoreImageAsync(downScaledImage, imageModel.DownscaledImageName);
+        var storeDownscaledTask = _storageProvider.StoreImageAsync(downScaledImage, imageModel.DownscaledImageName);
 
-        var storeFullsizeTask = storageProvider.StoreImageAsync(image, imageModel.UniqeImageName);
+        var fullSizeTask = _storageProvider.StoreImageAsync(image, imageModel.UniqeImageName);
 
-        var dbTask = dbContext.ImageModels.AddAsync(imageModel);
+        var dbTask = _dbContext.ImageModels.AddAsync(imageModel);
 
-        await Task.WhenAll(saveLocallyTask, storeDownscaledTask, storeFullsizeTask, dbTask.AsTask());
+        await Task.WhenAll(saveLocallyTask, storeDownscaledTask, fullSizeTask, dbTask.AsTask());
 
-        await dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task<Image<Rgb24>> GetImageAsync(string imageName)
     {
-        var imageModel = await dbContext.ImageModels.Where(model => model.ImageName == imageName).FirstAsync();
+        var imageModel = await _dbContext.ImageModels.Where(model => model.ImageName == imageName).FirstAsync();
 
-        var image = await storageProvider.GetImageAsync(imageModel.UniqeImageName);
+        var image = await _storageProvider.GetImageAsync(imageModel.UniqeImageName);
 
         return image;
     }
 
     public async Task<Image<Rgb24>> GetPreviewImageAsync(string imageName)
     {
-        var imageModel = await dbContext.ImageModels.Where(model => model.ImageName == imageName).FirstAsync();
+        var imageModel = await _dbContext.ImageModels.Where(model => model.ImageName == imageName).FirstAsync();
 
-        var image = await storageProvider.GetImageAsync(imageModel.DownscaledImageName);
+        var image = await _storageProvider.GetImageAsync(imageModel.DownscaledImageName);
 
         return image;
     }
 
     public Task<List<string>> ListImagesAsync()
     {
-        return dbContext.ImageModels.Select(image => image.ImageName).ToListAsync();
+        return _dbContext.ImageModels.Select(image => image.ImageName).ToListAsync();
     }
 
     public async Task DeleteImagesAsync()
     {
-        var images = await dbContext.ImageModels.ToArrayAsync();
+        var images = await _dbContext.ImageModels.ToArrayAsync();
 
         foreach (var image in images)
         {
@@ -91,23 +83,23 @@ public class ImageService(MariaDbContext dbContext, IStorageProvider storageProv
 
     public async Task DeleteImageAsync(string imageName)
     {
-        var imageModel = await dbContext.ImageModels.Where(image => image.ImageName == imageName).FirstOrDefaultAsync();
+        var imageModel = await _dbContext.ImageModels.Where(image => image.ImageName == imageName).FirstOrDefaultAsync();
 
-        if(imageModel is null)
-        { 
+        if (imageModel is null)
+        {
             return;
         }
 
         string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageName);
 
-        await storageProvider.DeleteImageAsync(imageName);
+        await _storageProvider.DeleteImageAsync(imageName);
 
-        await storageProvider.DeleteImageAsync(imageName);
+        await _storageProvider.DeleteImageAsync(imageName);
 
         File.Delete(imagePath);
 
-        dbContext.ImageModels.Remove(imageModel);
+        _dbContext.ImageModels.Remove(imageModel);
 
-        await dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
     }
 }

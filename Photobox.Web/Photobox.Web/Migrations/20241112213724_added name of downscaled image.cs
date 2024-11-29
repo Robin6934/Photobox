@@ -5,7 +5,7 @@
 namespace Photobox.Web.Migrations
 {
     /// <inheritdoc />
-    public partial class addednameofdownscaledimage : Migration
+    public partial class AddedNameOfDownscaledImage : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

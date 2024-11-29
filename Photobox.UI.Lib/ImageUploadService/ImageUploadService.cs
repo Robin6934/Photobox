@@ -1,18 +1,17 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Photobox.Lib.Extensions;
-using Photobox.Web.RestApi.Api;
+using Photobox.Lib.RestApi;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System.Collections.Concurrent;
 
 namespace Photobox.UI.Lib.ImageUploadService;
 
-public class ImageUploadService(ILogger<ImageUploadService> logger, IImageApi imageApi) : IImageUploadService
+public class ImageUploadService(ILogger<ImageUploadService> logger, IClient client) : IImageUploadService
 {
     private readonly ILogger<ImageUploadService> logger = logger;
 
-    private readonly IImageApi imageApi = imageApi;
+    private readonly IClient client = client;
 
     private ConcurrentDictionary<string, Image<Rgb24>> images = [];
 
@@ -25,16 +24,26 @@ public class ImageUploadService(ILogger<ImageUploadService> logger, IImageApi im
 
     private async Task UploadImages()
     {
-        foreach((string name, Image<Rgb24> image) in images)
+        foreach ((string name, Image<Rgb24> image) in images)
         {
-            using var imageStream = await image.ToJpegStreamAsync();
+            await using var imageStream = await image.ToJpegStreamAsync();
 
-            var result = await imageApi.ApiImageUploadImagePostWithHttpInfoAsync(name, imageStream);
+            string mimeType = image.Metadata.DecodedImageFormat?.DefaultMimeType ?? "image/jpeg";
 
-            if (result.ErrorText is null)
+            var fileParameter = new FileParameter(imageStream, name, mimeType);
+
+            try
             {
+                var result = await client.UploadImageAsync("test.jpg", fileParameter);
+                
                 images.Remove(name, out _);
             }
+            catch (System.Exception)
+            {
+                // Do nothing, as the image will retry the upload next round only stop the loop
+                break;
+            }
+
         }
     }
 }

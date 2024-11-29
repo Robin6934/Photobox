@@ -37,8 +37,7 @@ public class MemoryHealthCheck(IOptionsMonitor<MemoryCheckOptions> options) : IH
 }
 public class MemoryCheckOptions
 {
-    public string Memorystatus { get; set; }
-    //public int Threshold { get; set; }
-    // Failure threshold (in bytes)
+    public string? Memorystatus { get; set; }
+
     public long Threshold { get; set; } = (long)ByteSize.FromGigabytes(1).Bytes;
 }
