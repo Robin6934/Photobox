@@ -14,9 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddOpenApiDocument();
 
 builder.Services.AddImageSharp();
 
@@ -65,12 +63,8 @@ app.MapHealthChecks("/api/health", new HealthCheckOptions()
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
-
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Blazor API V1");
-    });
+    app.UseOpenApi();
+    app.UseSwaggerUI();
 }
 else
 {
