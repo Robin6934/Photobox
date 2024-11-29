@@ -12,7 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		Directory.Build.props = Directory.Build.props
-		Photobox.Web.RestApi\src\Photobox.Web.RestApi\Photobox.Web.RestApi.csproj = Photobox.Web.RestApi\src\Photobox.Web.RestApi\Photobox.Web.RestApi.csproj
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photobox.UI.Lib.Test", "Photobox.Lib.Test\Photobox.UI.Lib.Test.csproj", "{6CEF3442-A576-4E39-B449-5CC97F118311}"
@@ -22,8 +21,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photobox.Web.Client", "Photobox.Web\Photobox.Web.Client\Photobox.Web.Client.csproj", "{C203F3A2-20C3-47A9-845C-A93A32D817EE}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{723813D7-C6BB-4046-B405-6085EE6400A1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photobox.Web.RestApi", "Photobox.Web.RestApi\src\Photobox.Web.RestApi\Photobox.Web.RestApi.csproj", "{AE10C1D3-FE8C-4448-8C51-C72B9784CCA6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photobox.Lib", "Photobox.Lib\Photobox.Lib.csproj", "{5414EE34-E520-4DF6-80DD-72FDE11F4CC2}"
 EndProject
@@ -61,10 +58,6 @@ Global
 		{723813D7-C6BB-4046-B405-6085EE6400A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{723813D7-C6BB-4046-B405-6085EE6400A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{723813D7-C6BB-4046-B405-6085EE6400A1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AE10C1D3-FE8C-4448-8C51-C72B9784CCA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AE10C1D3-FE8C-4448-8C51-C72B9784CCA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AE10C1D3-FE8C-4448-8C51-C72B9784CCA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AE10C1D3-FE8C-4448-8C51-C72B9784CCA6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5414EE34-E520-4DF6-80DD-72FDE11F4CC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5414EE34-E520-4DF6-80DD-72FDE11F4CC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5414EE34-E520-4DF6-80DD-72FDE11F4CC2}.Release|Any CPU.ActiveCfg = Release|Any CPU

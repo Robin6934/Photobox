@@ -43,7 +43,6 @@ namespace Photobox.UI.CountDown
 
         private readonly TimeSpan totalTime;
 
-        private readonly TimeSpan earlyTime;
         public Panel Panel
         {
             set
@@ -72,10 +71,9 @@ namespace Photobox.UI.CountDown
         /// <param name="canvas">The canvas on which the Countdown will be drawn</param>
         public CountDownCircle(IOptionsMonitor<PhotoboxConfig> config)
         {
-
             totalTime = TimeSpan.FromSeconds(config.CurrentValue.CountDown.TotalSeconds);
 
-            earlyTime = totalTime - TimeSpan.FromSeconds(config.CurrentValue.CountDown.EarlySeconds);
+            TimeSpan earlyTime = totalTime - TimeSpan.FromSeconds(config.CurrentValue.CountDown.EarlySeconds);
 
             if (earlyTime > totalTime)
             {

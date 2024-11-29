@@ -98,7 +98,7 @@ internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime
 
     public override void StopStream()
     {
-        if(LiveViewActive)
+        if (LiveViewActive)
         {
             LiveViewActive = false;
             camera.LiveViewUpdated -= Camera_LiveViewUpdated;

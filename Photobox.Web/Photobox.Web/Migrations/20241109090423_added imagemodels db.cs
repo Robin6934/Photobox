@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Photobox.Web.Migrations
 {
     /// <inheritdoc />
-    public partial class addedimagemodelsdb : Migration
+    public partial class AddedImageModelsDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

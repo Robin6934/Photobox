@@ -13,7 +13,7 @@ namespace Photobox.Web.Migrations
 {
     [DbContext(typeof(MariaDbContext))]
     [Migration("20241112213724_added name of downscaled image")]
-    partial class addednameofdownscaledimage
+    partial class AddedNameOfDownscaledImage
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

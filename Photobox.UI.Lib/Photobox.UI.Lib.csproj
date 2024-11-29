@@ -28,7 +28,6 @@
   <ItemGroup>
     <ProjectReference Include="..\EDSKLib\EDSKLib.csproj" />
     <ProjectReference Include="..\Photobox.Lib\Photobox.Lib.csproj" />
-    <ProjectReference Include="..\Photobox.Web.RestApi\src\Photobox.Web.RestApi\Photobox.Web.RestApi.csproj" />
   </ItemGroup>
 
 </Project>

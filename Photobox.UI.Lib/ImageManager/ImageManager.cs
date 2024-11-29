@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Photobox.Lib.Extensions;
 using Photobox.UI.Lib.ConfigModels;
 using Photobox.UI.Lib.ImageUploadService;
 using Photobox.UI.Lib.Printer;
-using Photobox.Web.RestApi.Api;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 

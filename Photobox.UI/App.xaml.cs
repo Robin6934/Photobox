@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Photobox.Lib.RestApi;
 using Photobox.UI.CountDown;
 using Photobox.UI.ImageViewer;
 using Photobox.UI.Lib.Camera;
@@ -12,7 +12,6 @@ using Photobox.UI.Lib.ImageManager;
 using Photobox.UI.Lib.ImageUploadService;
 using Photobox.UI.Lib.Printer;
 using Photobox.UI.Windows;
-using Photobox.Web.RestApi.Api;
 using Serilog;
 using System.Windows;
 
@@ -47,8 +46,8 @@ public partial class App : Application
         builder.Services.AddSingleton<IImageUploadService, ImageUploadService>();
         builder.Services.AddSingleton<CameraFactory>();
         builder.Services.AddSingleton(
-            c => c.GetRequiredService<CameraFactory>()
-                    .Create(c.GetRequiredService<IOptions<PhotoboxConfig>>().Value.Camera));
+            s => s.GetRequiredService<CameraFactory>()
+                    .Create(s.GetRequiredService<IOptions<PhotoboxConfig>>().Value.Camera));
         builder.Services.AddSingleton<IImageViewer, ImageViewerLocal>();
         builder.Services.AddSingleton<IImageManager, ImageManager>();
         builder.Services.AddSingleton<IPrinter, Printer>();
@@ -56,7 +55,7 @@ public partial class App : Application
             builder.Configuration.GetSection(PhotoboxConfig.Photobox));
         builder.Services.AddSingleton<ICountDown, CountDownCircle>();
         builder.Services.AddSingleton<IImageHandler, ImageHandler>();
-        builder.Services.AddSingleton<IImageApi, ImageApi>((IServiceProvider s) => new ImageApi("https://localhost"));
+        builder.Services.AddSingleton<IClient, Client>(_ => new Client("https://localhost"));
 
         builder.Logging.ClearProviders();
 
