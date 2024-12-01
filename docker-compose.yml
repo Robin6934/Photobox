@@ -11,38 +11,39 @@ services:
     networks:
       - "internal"
     depends_on:
-      - mariadb
+      - postgres
     ports:
       - 443:8081
 
-  mariadb:
-    image: mariadb
+  postgres:
+    image: postgres:latest
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: (K"k3Db>+cJE5)r22!Yo
-      MYSQL_USER: photobox
-      MYSQL_PASSWORD: (K"k3Db>+cJE5)r22!Yo
-      MYSQL_DATABASE: PhotoboxDB
     ports:
-      - "3306:3306"
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: photobox
+      POSTGRES_PASSWORD: (Kk3Db>+cJE5)r22!Yo
+      POSTGRES_DB: PhotoboxDB
     volumes:
-      - ./data/db:/var/lib/mysql
+      - local_pgdata:/var/lib/postgresql/data
     networks:
       - "internal"
 
-  phpMyAdmin:
-    image: phpmyadmin
+  pgadmin:
+    image: dpage/pgadmin4
     restart: always
+    ports:
+      - "8888:80"
     environment:
-      - PMA_HOST=mariadb
-      - PMA_USER=photobox
-      - PMA_PASSWORD=(K"k3Db>+cJE5)r22!Yo
+      PGADMIN_DEFAULT_EMAIL: fotobox@muntafu.eu
+      PGADMIN_DEFAULT_PASSWORD: (Kk3Db>+cJE5)r22!Yo
+      PGADMIN_CONFIG_MAX_LOGIN_ATTEMPTS: 10
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - postgres
     networks:
       - "internal"
-    ports:
-      - "8080:80"
-    depends_on:
-      - mariadb
 
   seq:
     image: datalust/seq
@@ -56,6 +57,10 @@ services:
       - "internal"
     volumes:
       - ./data/seq:/data
+
+volumes:
+  local_pgdata:
+  pgadmin-data:
 
   # loki:
   #   image: grafana/loki:master

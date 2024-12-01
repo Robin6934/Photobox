@@ -6,9 +6,9 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.Web.Image;
 
-public class ImageService(MariaDbContext dbContext, IStorageProvider storageProvider, ILogger<ImageService> logger)
+public class ImageService(AppDbContext dbContext, IStorageProvider storageProvider, ILogger<ImageService> logger)
 {
-    private readonly MariaDbContext _dbContext = dbContext;
+    private readonly AppDbContext _dbContext = dbContext;
 
     private readonly IStorageProvider _storageProvider = storageProvider;
 
@@ -28,7 +28,8 @@ public class ImageService(MariaDbContext dbContext, IStorageProvider storageProv
             UniqeImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}",
             ImageName = imageName,
             DownscaledImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}",
-            TakenAt = DateTime.Now
+            //TODO: 1.12.2024 cant use dateTime.now with postgress need to fix later
+            TakenAt = DateTime.UtcNow
         };
 
         int newWidth = image.Width < 1000 ? image.Width : 1000;

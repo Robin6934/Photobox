@@ -7,8 +7,8 @@ public static class HealthCheck
     public static void ConfigureHealthChecks(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHealthChecks()
-        .AddMySql(connectionString: configuration.GetConnectionString("PhotoboxConnectionString")!)
-        .AddCheck<MemoryHealthCheck>($"Photobox Service Memory Check", failureStatus: HealthStatus.Unhealthy, tags: ["Photobox Service"]);
+            .AddNpgSql(connectionString: configuration.GetConnectionString("PhotoboxConnectionString")!)
+            .AddCheck<MemoryHealthCheck>($"Photobox Service Memory Check", failureStatus: HealthStatus.Unhealthy, tags: ["Photobox Service"]);
 
         //services.AddHealthChecksUI(opt =>
         //{
