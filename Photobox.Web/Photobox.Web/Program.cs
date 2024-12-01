@@ -33,10 +33,10 @@ builder.Host.UseSerilog((context, services, configuration) =>
     .WriteTo.Seq("http://seq:80");
 });
 
-builder.Services.AddDbContextPool<MariaDbContext>(options =>
+builder.Services.AddDbContextPool<AppDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("PhotoboxConnectionString");
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+    options.UseNpgsql(connectionString);
 });
 
 builder.Services.AddScoped<ImageService>();
