@@ -19,21 +19,21 @@ namespace Photobox.UI;
 /// <summary>
 /// Interaction logic for App.xaml
 /// </summary>
-public partial class App : Application
+public partial class App
 {
-    private IHost host = default!;
+    private IHost _host = default!;
 
     protected override async void OnStartup(StartupEventArgs e)
     {
-        host = CreateHostBuilder(e.Args).Build();
+        _host = CreateHostBuilder(e.Args).Build();
 
-        await host.StartAsync();
+        await _host.StartAsync();
     }
 
     protected override async void OnExit(ExitEventArgs e)
     {
-        await host.StopAsync();
-        host.Dispose();
+        await _host.StopAsync();
+        _host.Dispose();
         base.OnExit(e);
     }
 
@@ -55,7 +55,7 @@ public partial class App : Application
             builder.Configuration.GetSection(PhotoboxConfig.Photobox));
         builder.Services.AddSingleton<ICountDown, CountDownCircle>();
         builder.Services.AddSingleton<IImageHandler, ImageHandler>();
-        builder.Services.AddSingleton<IClient, Client>(_ => new Client("https://localhost"));
+        builder.Services.AddSingleton<IImageClient, ImageClient>(_ => new ImageClient { BaseUrl = "https://localhost" });
 
         builder.Logging.ClearProviders();
 

@@ -1,6 +1,8 @@
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor.Services;
 using Photobox.Web.Aws;
 using Photobox.Web.Components;
 using Photobox.Web.DbContext;
@@ -9,6 +11,8 @@ using Photobox.Web.Image;
 using Photobox.Web.StorageProvider;
 using Serilog;
 using SixLabors.ImageSharp.Web.DependencyInjection;
+using Microsoft.OpenApi.Models;
+using Photobox.Web.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +25,8 @@ builder.Services.AddImageSharp();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
+
+builder.Services.AddMudServices();
 
 builder.Host.UseSerilog((context, services, configuration) =>
 {
@@ -88,4 +94,3 @@ app.MapRazorComponents<App>()
     .AddAdditionalAssemblies(typeof(Photobox.Web.Client._Imports).Assembly);
 
 app.Run();
-

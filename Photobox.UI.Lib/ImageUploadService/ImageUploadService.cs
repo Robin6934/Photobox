@@ -7,24 +7,24 @@ using System.Collections.Concurrent;
 
 namespace Photobox.UI.Lib.ImageUploadService;
 
-public class ImageUploadService(ILogger<ImageUploadService> logger, IClient client) : IImageUploadService
+public class ImageUploadService(ILogger<ImageUploadService> logger, IImageClient client) : IImageUploadService
 {
-    private readonly ILogger<ImageUploadService> logger = logger;
+    private readonly ILogger<ImageUploadService> _logger = logger;
 
-    private readonly IClient client = client;
+    private readonly IImageClient _client = client;
 
-    private ConcurrentDictionary<string, Image<Rgb24>> images = [];
+    private ConcurrentDictionary<string, Image<Rgb24>> _images = [];
 
     public async Task UploadImageAsync(string name, Image<Rgb24> image)
     {
-        images.TryAdd(name, image);
+        _images.TryAdd(name, image);
 
         await UploadImages();
     }
 
     private async Task UploadImages()
     {
-        foreach ((string name, Image<Rgb24> image) in images)
+        foreach ((string name, Image<Rgb24> image) in _images)
         {
             await using var imageStream = await image.ToJpegStreamAsync();
 
@@ -34,9 +34,11 @@ public class ImageUploadService(ILogger<ImageUploadService> logger, IClient clie
 
             try
             {
-                var result = await client.UploadImageAsync("test.jpg", fileParameter);
-                
-                images.Remove(name, out _);
+                var result = await _client.UploadImageAsync(fileParameter);
+
+                _logger.LogDebug("Uploaded image with name {imageName}.", result.FileName);
+
+                _images.Remove(name, out _);
             }
             catch (System.Exception)
             {

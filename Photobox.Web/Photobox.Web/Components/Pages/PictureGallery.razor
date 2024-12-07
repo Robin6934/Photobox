@@ -1,24 +1,30 @@
 ﻿@page "/"
 
-@using Photobox.Web.Image;
+@using global::Photobox.Web.Image
+@using MudBlazor;
 
 @inject ImageService imageService;
 
 <PageTitle>PictureGallery</PageTitle>
 
-<h1>Gallery</h1>
+<h1 class="heading">Gallery</h1>
 
 
-@if (imageNames.Count > 0)
+@if (_imageNames.Count > 0)
 {
     <div class="gallery">
-        @foreach (var imageName in imageNames)
+        @foreach (var imageName in _imageNames)
         {
-            <div class="image-container">
-                <img src="images/@imageName" alt="Picture" class="image" />
-                <a href="/api/Image/GetImage/@imageName" class="download-button" download>
-                    Download
-                </a>
+            <div class="container">
+                <MudImage Src="@GetImagePath(@imageName)" Alt="Description" Class="image"/>
+
+                <div class="button-left">
+                    <MudButton Variant="Variant.Filled" Href="@GetDownloadLink(@imageName)" Size="Size.Large" StartIcon="@Icons.Material.Filled.Download" Color="Color.Info">Download</MudButton>
+                </div>
+
+                <div class="button-right">
+                    <MudButton Variant="Variant.Filled" Href="@GetPrintLink(@imageName)" Size="Size.Large" StartIcon="@Icons.Material.Filled.Print" Color="Color.Info">Print</MudButton>
+                </div>
             </div>
         }
     </div>
@@ -29,12 +35,28 @@ else
 }
 
 @code {
-    private List<string> imageNames = [];
+    private List<string> _imageNames = [];
 
     protected override async Task OnInitializedAsync()
     {
-        imageNames = await imageService.ListImagesAsync();
+        _imageNames = await imageService.ListImagesAsync();
 
-        imageNames.Reverse();
+        _imageNames.Reverse();
+
+    }
+
+    private static string GetImagePath(string imageName)
+    {
+	    return $"images/{imageName}";
+    }
+
+    private static string GetDownloadLink(string imageName)
+    {
+	    return $"/api/Image/GetImage/{imageName}";
+    }
+
+    private static string GetPrintLink(string imageName)
+    {
+	    return $"/api/Image/PrintImage/{imageName}";
     }
 }

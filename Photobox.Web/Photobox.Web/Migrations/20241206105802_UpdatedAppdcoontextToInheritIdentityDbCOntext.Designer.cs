@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Photobox.Web.DbContext;
@@ -11,9 +12,11 @@ using Photobox.Web.DbContext;
 namespace Photobox.Web.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241206105802_UpdatedAppdcoontextToInheritIdentityDbCOntext")]
+    partial class UpdatedAppdcoontextToInheritIdentityDbCOntext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,39 +157,6 @@ namespace Photobox.Web.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Photobox.Web.Image.ImageModel", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("DownscaledImageName")
-                        .IsRequired()
-                        .HasMaxLength(45)
-                        .HasColumnType("character varying(45)");
-
-                    b.Property<string>("ImageName")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
-
-                    b.Property<DateTime>("TakenAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UniqueImageName")
-                        .IsRequired()
-                        .HasMaxLength(45)
-                        .HasColumnType("character varying(45)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ImageName");
-
-                    b.ToTable("ImageModels");
-                });
-
             modelBuilder.Entity("Photobox.Web.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -251,20 +221,32 @@ namespace Photobox.Web.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Photobox.Web.Photobox.PhotoBoxModel", b =>
+            modelBuilder.Entity("Photobox.Web.Models.ImageModel", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("DownscaledImageName")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("ImageName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("TakenAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UniqeImageName")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("PhotoBoxModels");
+                    b.ToTable("ImageModels");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -316,22 +298,6 @@ namespace Photobox.Web.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Photobox.Web.Photobox.PhotoBoxModel", b =>
-                {
-                    b.HasOne("Photobox.Web.Models.ApplicationUser", "User")
-                        .WithMany("PhotoBoxes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Photobox.Web.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("PhotoBoxes");
                 });
 #pragma warning restore 612, 618
         }
