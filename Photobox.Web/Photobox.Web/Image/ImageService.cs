@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Photobox.Web.DbContext;
-using Photobox.Web.Models;
 using Photobox.Web.StorageProvider;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -8,10 +7,6 @@ namespace Photobox.Web.Image;
 
 public class ImageService(AppDbContext dbContext, IStorageProvider storageProvider, ILogger<ImageService> logger)
 {
-    private readonly AppDbContext _dbContext = dbContext;
-
-    private readonly IStorageProvider _storageProvider = storageProvider;
-
     private readonly ILogger<ImageService> _logger = logger;
 
     public async Task StoreImageAsync(Image<Rgb24> image, string imageName)
@@ -25,7 +20,7 @@ public class ImageService(AppDbContext dbContext, IStorageProvider storageProvid
 
         ImageModel imageModel = new()
         {
-            UniqeImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}",
+            UniqueImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}",
             ImageName = imageName,
             DownscaledImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}",
             //TODO: 1.12.2024 cant use dateTime.now with postgress need to fix later
@@ -38,43 +33,43 @@ public class ImageService(AppDbContext dbContext, IStorageProvider storageProvid
 
         var saveLocallyTask = downScaledImage.SaveAsJpegAsync(imagePath);
 
-        var storeDownscaledTask = _storageProvider.StoreImageAsync(downScaledImage, imageModel.DownscaledImageName);
+        var storeDownscaledTask = storageProvider.StoreImageAsync(downScaledImage, imageModel.DownscaledImageName);
 
-        var fullSizeTask = _storageProvider.StoreImageAsync(image, imageModel.UniqeImageName);
+        var fullSizeTask = storageProvider.StoreImageAsync(image, imageModel.UniqueImageName);
 
-        var dbTask = _dbContext.ImageModels.AddAsync(imageModel);
+        var dbTask = dbContext.ImageModels.AddAsync(imageModel);
 
         await Task.WhenAll(saveLocallyTask, storeDownscaledTask, fullSizeTask, dbTask.AsTask());
 
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task<Image<Rgb24>> GetImageAsync(string imageName)
     {
-        var imageModel = await _dbContext.ImageModels.Where(model => model.ImageName == imageName).FirstAsync();
+        var imageModel = await dbContext.ImageModels.Where(model => model.ImageName == imageName).FirstAsync();
 
-        var image = await _storageProvider.GetImageAsync(imageModel.UniqeImageName);
+        var image = await storageProvider.GetImageAsync(imageModel.UniqueImageName);
 
         return image;
     }
 
     public async Task<Image<Rgb24>> GetPreviewImageAsync(string imageName)
     {
-        var imageModel = await _dbContext.ImageModels.Where(model => model.ImageName == imageName).FirstAsync();
+        var imageModel = await dbContext.ImageModels.Where(model => model.ImageName == imageName).FirstAsync();
 
-        var image = await _storageProvider.GetImageAsync(imageModel.DownscaledImageName);
+        var image = await storageProvider.GetImageAsync(imageModel.DownscaledImageName);
 
         return image;
     }
 
     public Task<List<string>> ListImagesAsync()
     {
-        return _dbContext.ImageModels.Select(image => image.ImageName).ToListAsync();
+        return dbContext.ImageModels.Select(image => image.ImageName).ToListAsync();
     }
 
     public async Task DeleteImagesAsync()
     {
-        var images = await _dbContext.ImageModels.ToArrayAsync();
+        var images = await dbContext.ImageModels.ToArrayAsync();
 
         foreach (var image in images)
         {
@@ -84,7 +79,7 @@ public class ImageService(AppDbContext dbContext, IStorageProvider storageProvid
 
     public async Task DeleteImageAsync(string imageName)
     {
-        var imageModel = await _dbContext.ImageModels.Where(image => image.ImageName == imageName).FirstOrDefaultAsync();
+        var imageModel = await dbContext.ImageModels.Where(image => image.ImageName == imageName).FirstOrDefaultAsync();
 
         if (imageModel is null)
         {
@@ -93,14 +88,14 @@ public class ImageService(AppDbContext dbContext, IStorageProvider storageProvid
 
         string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageName);
 
-        await _storageProvider.DeleteImageAsync(imageName);
+        await storageProvider.DeleteImageAsync(imageName);
 
-        await _storageProvider.DeleteImageAsync(imageName);
+        await storageProvider.DeleteImageAsync(imageName);
 
         File.Delete(imagePath);
 
-        _dbContext.ImageModels.Remove(imageModel);
+        dbContext.ImageModels.Remove(imageModel);
 
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
     }
 }

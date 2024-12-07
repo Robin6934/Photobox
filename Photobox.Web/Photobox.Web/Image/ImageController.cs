@@ -1,26 +1,25 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using NSwag.Annotations;
 using Photobox.Lib.Extensions;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Diagnostics;
 using System.Net;
 
 namespace Photobox.Web.Image;
+
 [ApiController]
 [Route("api/[controller]/[action]")]
 public class ImageController(ImageService imageService) : Controller
 {
-    private readonly ImageService imageService = imageService;
-
     /// <summary>
     /// Uploads a picture to the server.
     /// </summary>
     /// <param name="formFile">The picture file to upload.</param>
-    /// <param name="imageName">The Name of the Picture to upload.</param>
     /// <response code="200">Image has been uploaded successfully</response>
-    /// <response code=""></response>
     [HttpPost]
     [ProducesResponseType<ImageUploadResult>((int)HttpStatusCode.OK)]
-    public async Task<IActionResult> UploadImage(IFormFile formFile, string imageName)
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    public async Task<IActionResult> UploadImage(IFormFile formFile)
     {
         if (formFile == null || formFile.Length == 0)
         {
@@ -34,9 +33,9 @@ public class ImageController(ImageService imageService) : Controller
             return BadRequest("File has wrong format.");
         }
 
-        await imageService.StoreImageAsync(image, imageName);
+        await imageService.StoreImageAsync(image, formFile.FileName);
 
-        return Ok(new ImageUploadResult{FileName = imageName});
+        return Ok(new ImageUploadResult { FileName = formFile.FileName });
     }
 
     [HttpGet("{imageName}")]

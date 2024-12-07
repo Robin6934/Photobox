@@ -15,33 +15,31 @@ namespace Photobox.UI.CountDown
 
         public event TimerCallback? CountDownEarly;
 
-        private readonly TextBlock textBlockCountdown = new();
+        private readonly TextBlock _textBlockCountdown = new();
 
-        private readonly DispatcherTimer timer = new();
+        private readonly DispatcherTimer _timer = new();
 
-        private readonly DispatcherTimer earlyTimer = new();
+        private readonly DispatcherTimer _earlyTimer = new();
 
-        private readonly DispatcherTimer expiredTimer = new();
+        private readonly DispatcherTimer _expiredTimer = new();
 
-        private readonly double circumference = 0;
+        private readonly double _circumference = 0;
 
-        private double countDownTime = 0;
+        private double _countDownTime = 0;
 
-        private Point point;
+        private Point _point;
 
-        private readonly ArcSegment arc = new();
+        private readonly ArcSegment _arc = new();
 
-        private readonly Path path = new();
+        private readonly Path _path = new();
 
-        private const double startAngle = 359;
+        private const double StartAngle = 359;
 
-        private double angle = 0;
+        private double _angle = 0;
 
-        private readonly double earlySeconds = 0;
+        private readonly Stopwatch _stopwatch = new();
 
-        private readonly Stopwatch stopwatch = new();
-
-        private readonly TimeSpan totalTime;
+        private readonly TimeSpan _totalTime;
 
         public Panel Panel
         {
@@ -49,7 +47,7 @@ namespace Photobox.UI.CountDown
             {
                 value.Loaded += (o, a) =>
                 {
-                    point = new Point(
+                    _point = new Point(
                     Convert.ToInt32(value.Width / 2),
                     Convert.ToInt32(value.Height / 2)
                     );
@@ -71,50 +69,50 @@ namespace Photobox.UI.CountDown
         /// <param name="canvas">The canvas on which the Countdown will be drawn</param>
         public CountDownCircle(IOptionsMonitor<PhotoboxConfig> config)
         {
-            totalTime = TimeSpan.FromSeconds(config.CurrentValue.CountDown.TotalSeconds);
+            _totalTime = TimeSpan.FromSeconds(config.CurrentValue.CountDown.TotalSeconds);
 
-            TimeSpan earlyTime = totalTime - TimeSpan.FromSeconds(config.CurrentValue.CountDown.EarlySeconds);
+            TimeSpan earlyTime = _totalTime - TimeSpan.FromSeconds(config.CurrentValue.CountDown.EarlySeconds);
 
-            if (earlyTime > totalTime)
+            if (earlyTime > _totalTime)
             {
                 throw new ArgumentException("Early seconds cant be lager than the total countdown time!!");
             }
 
-            angle = startAngle;
+            _angle = StartAngle;
 
-            circumference = 200.0d;
+            _circumference = 200.0d;
 
-            timer.Interval = TimeSpan.FromSeconds(totalTime.TotalSeconds / angle);
+            _timer.Interval = TimeSpan.FromSeconds(_totalTime.TotalSeconds / _angle);
 
-            timer.Tick += (s, e) =>
+            _timer.Tick += (s, e) =>
             {
-                if (stopwatch.Elapsed.Seconds != totalTime.Seconds - countDownTime)
+                if (_stopwatch.Elapsed.Seconds != _totalTime.Seconds - _countDownTime)
                 {
-                    stopwatch.Stop();
-                    countDownTime--;
-                    textBlockCountdown.Text = countDownTime.ToString();
-                    stopwatch.Start();
+                    _stopwatch.Stop();
+                    _countDownTime--;
+                    _textBlockCountdown.Text = _countDownTime.ToString();
+                    _stopwatch.Start();
                 }
 
                 SetAngleBasedOnTime();
             };
 
-            earlyTimer.Interval = earlyTime;
+            _earlyTimer.Interval = earlyTime;
 
-            earlyTimer.Tick += (s, e) =>
+            _earlyTimer.Tick += (s, e) =>
             {
                 CountDownEarly?.Invoke(this);
                 ((DispatcherTimer)s!).Stop();
             };
 
-            expiredTimer.Interval = totalTime;
+            _expiredTimer.Interval = _totalTime;
 
-            expiredTimer.Tick += (s, e) =>
+            _expiredTimer.Tick += (s, e) =>
             {
                 ((DispatcherTimer)s!).Stop();
                 CountDownExpired?.Invoke(this);
-                Panel.Children.Remove(textBlockCountdown);
-                Panel.Children.Remove(path);
+                Panel.Children.Remove(_textBlockCountdown);
+                Panel.Children.Remove(_path);
             };
         }
 
@@ -125,9 +123,9 @@ namespace Photobox.UI.CountDown
         {
             ArgumentNullException.ThrowIfNull(Panel);
 
-            angle = startAngle;
+            _angle = StartAngle;
 
-            countDownTime = totalTime.TotalSeconds;
+            _countDownTime = _totalTime.TotalSeconds;
 
             DrawTextBoxCountdown();
 
@@ -135,98 +133,98 @@ namespace Photobox.UI.CountDown
 
             StartTimers();
 
-            stopwatch.Restart();
+            _stopwatch.Restart();
         }
 
         private void StartTimers()
         {
-            timer.Start();
-            earlyTimer.Start();
-            expiredTimer.Start();
+            _timer.Start();
+            _earlyTimer.Start();
+            _expiredTimer.Start();
         }
 
         private void CreateArc()
         {
             // Define the start point on the perimeter of the circle, at the top center position relative to _point.
-            var startPoint = new Point(point.X, point.Y - circumference);
+            var startPoint = new Point(_point.X, _point.Y - _circumference);
 
             // Calculate the end point of the arc based on the current angle
             var endPoint = new Point(
-                point.X + circumference * -Math.Sin(angle * Math.PI / 180),
-                point.Y + circumference * -Math.Cos(angle * Math.PI / 180));
+                _point.X + _circumference * -Math.Sin(_angle * Math.PI / 180),
+                _point.Y + _circumference * -Math.Cos(_angle * Math.PI / 180));
 
             // Update the ArcSegment properties
-            arc.Point = endPoint;
-            arc.Size = new Size(circumference, circumference);
-            arc.RotationAngle = 0;
-            arc.IsLargeArc = angle >= 180; // Determines if the arc is greater than 180 degrees
-            arc.SweepDirection = SweepDirection.Counterclockwise;
-            arc.IsStroked = true;
+            _arc.Point = endPoint;
+            _arc.Size = new Size(_circumference, _circumference);
+            _arc.RotationAngle = 0;
+            _arc.IsLargeArc = _angle >= 180; // Determines if the arc is greater than 180 degrees
+            _arc.SweepDirection = SweepDirection.Counterclockwise;
+            _arc.IsStroked = true;
 
             // Update the PathFigure with the calculated start and end points
             var figure = new PathFigure { StartPoint = startPoint };
-            figure.Segments.Add(arc);
+            figure.Segments.Add(_arc);
 
             // Create and set the path geometry
             var geometry = new PathGeometry();
             geometry.Figures.Add(figure);
 
-            path.Data = geometry;
+            _path.Data = geometry;
 
             // Set the stroke (outline) color and thickness
-            path.Stroke = Brushes.Black; // You can change this color as needed
-            path.StrokeThickness = 20;   // You can change this thickness as needed
+            _path.Stroke = Brushes.Black; // You can change this color as needed
+            _path.StrokeThickness = 20;   // You can change this thickness as needed
 
             // Position the path so it's centered on _point
-            Canvas.SetLeft(path, point.X - circumference);
-            Canvas.SetTop(path, point.Y - circumference);
+            Canvas.SetLeft(_path, _point.X - _circumference);
+            Canvas.SetTop(_path, _point.Y - _circumference);
 
             // Add the Path element to the canvas
-            Panel.Children.Add(path);
+            Panel.Children.Add(_path);
         }
 
         private void SetAngleBasedOnTime()
         {
             // Calculate the elapsed time as a fraction of the total time
-            double elapsedTime = stopwatch.Elapsed.TotalSeconds;
-            double progress = elapsedTime / totalTime.TotalSeconds;
+            double elapsedTime = _stopwatch.Elapsed.TotalSeconds;
+            double progress = elapsedTime / _totalTime.TotalSeconds;
 
             // Calculate the new angle based on the progress (from 359 to 0 degrees)
-            angle = startAngle * (1 - progress);
+            _angle = StartAngle * (1 - progress);
 
             // Calculate the end point based on the new angle
             var endPoint = new Point(
-               point.X + circumference * -Math.Sin(angle * Math.PI / 180),
-               point.Y + circumference * -Math.Cos(angle * Math.PI / 180));
+               _point.X + _circumference * -Math.Sin(_angle * Math.PI / 180),
+               _point.Y + _circumference * -Math.Cos(_angle * Math.PI / 180));
 
             // Update the arc properties
-            arc.Point = endPoint;
-            arc.IsLargeArc = angle >= 180;
+            _arc.Point = endPoint;
+            _arc.IsLargeArc = _angle >= 180;
 
             Panel.UpdateLayout();
         }
 
         private void DrawTextBoxCountdown()
         {
-            textBlockCountdown.VerticalAlignment = VerticalAlignment.Center;
+            _textBlockCountdown.VerticalAlignment = VerticalAlignment.Center;
 
-            textBlockCountdown.HorizontalAlignment = HorizontalAlignment.Center;
+            _textBlockCountdown.HorizontalAlignment = HorizontalAlignment.Center;
 
-            textBlockCountdown.FontSize = 150;
+            _textBlockCountdown.FontSize = 150;
 
-            textBlockCountdown.TextAlignment = TextAlignment.Center;
+            _textBlockCountdown.TextAlignment = TextAlignment.Center;
 
-            textBlockCountdown.Text = countDownTime.ToString();
+            _textBlockCountdown.Text = _countDownTime.ToString();
 
-            textBlockCountdown.Loaded += TextBlockCountdown_Loaded;
+            _textBlockCountdown.Loaded += TextBlockCountdown_Loaded;
 
-            Panel.Children.Add(textBlockCountdown);
+            Panel.Children.Add(_textBlockCountdown);
         }
 
         private void TextBlockCountdown_Loaded(object sender, RoutedEventArgs e)
         {
-            Canvas.SetLeft(textBlockCountdown, point.X - textBlockCountdown.ActualWidth / 2);
-            Canvas.SetTop(textBlockCountdown, point.Y - textBlockCountdown.ActualHeight / 2);
+            Canvas.SetLeft(_textBlockCountdown, _point.X - _textBlockCountdown.ActualWidth / 2);
+            Canvas.SetTop(_textBlockCountdown, _point.Y - _textBlockCountdown.ActualHeight / 2);
         }
     }
 }

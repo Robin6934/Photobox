@@ -1,59 +1,31 @@
-﻿body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    margin: 0;
-    padding: 20px;
-    background-color: #f4f4f9;
-}
-
-h1{
-    text-align: center;
-}
-
-.gallery {
-    display: flex; 
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    max-width: 1200px;
+﻿.heading {
+    text-align: center
 }
 
 .image {
-    width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s, box-shadow 0.2s;
-    object-fit: cover;
-    cursor: pointer;
-}
-.gallery {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
+    max-width: 100vw;
+    height: auto;
+    max-height: 100vh;
+    width: auto;
 }
 
-.image-container {
+.container {
     position: relative;
-    display: inline-block;
-}
-
-.download-button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 10px 20px;
-    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
-    color: #fff;
     text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    color: white;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-.image-container:hover .download-button {
-    opacity: 1; /* Show button on hover */
+/* Bottom left text */
+.button-left {
+    position: absolute;
+    bottom: 7%;
+    left: 30%;
+}
+/* Bottom left text */
+.button-right {
+    position: absolute;
+    bottom: 8%;
+    right: 30%;
 }
