@@ -49,6 +49,7 @@
     <PackageReference Include="System.Text.Json" Version="9.0.0">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
+    <PackageReference Include="WPF-UI" Version="3.0.5" />
   </ItemGroup>
 
   <ItemGroup>

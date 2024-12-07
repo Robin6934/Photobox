@@ -8,9 +8,16 @@ public class PhotoBoxModel
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    public string Id { get; set; } = Guid.CreateVersion7().ToString();
+    public Guid Id { get; set; } = Guid.CreateVersion7();
 
-    public string UserId { get; set; } = default!;
+    [Required]
+    public required string Name { get; set; }
 
-    public ApplicationUser User { get; set; } = default!;
+    [Required]
+    public required string SerialNumber { get; set; }
+
+    public string ApplicationUserId { get; set; }
+
+    [ForeignKey(nameof(ApplicationUserId))]
+    public ApplicationUser ApplicationUser { get; set; }
 }

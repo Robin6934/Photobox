@@ -2,5 +2,5 @@
 
 public class CreatePhotoBoxDto
 {
-    public string PhotoBoxId { get; set; }
+    public Guid PhotoBoxId { get; set; }
 }
