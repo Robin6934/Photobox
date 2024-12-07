@@ -7,6 +7,7 @@ namespace Photobox.Web.Photobox;
 [Route("api/[controller]/[action]")]
 public class PhotoBoxController : Controller
 {
+    [HttpGet]
     public IActionResult Create(CreatePhotoBoxDto createPhotoBox)
     {
         return Ok();

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
 using Photobox.Lib.Extensions;
 using SixLabors.ImageSharp.PixelFormats;
 using System.Net;
@@ -18,7 +17,6 @@ public class ImageController(ImageService imageService) : Controller
     /// <response code="200">Image has been uploaded successfully</response>
     [HttpPost]
     [ProducesResponseType<ImageUploadResult>((int)HttpStatusCode.OK)]
-    [Authorize(AuthenticationSchemes = "Bearer")]
     public async Task<IActionResult> UploadImage(IFormFile formFile)
     {
         if (formFile == null || formFile.Length == 0)

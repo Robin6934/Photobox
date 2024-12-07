@@ -11,16 +11,25 @@ using Photobox.Web.Image;
 using Photobox.Web.StorageProvider;
 using Serilog;
 using SixLabors.ImageSharp.Web.DependencyInjection;
-using Microsoft.OpenApi.Models;
 using Photobox.Web.Models;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
 builder.Services.AddOpenApiDocument();
+builder.Services.AddOpenApi();
 
 builder.Services.AddImageSharp();
+
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme)
+    .AddBearerToken(IdentityConstants.BearerScheme);
+
+builder.Services.AddIdentityCore<ApplicationUser>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddApiEndpoints();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -64,6 +73,14 @@ app.MapHealthChecks("/api/health", new HealthCheckOptions()
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
+app.MapGet("users/me", async (ClaimsPrincipal claims, AppDbContext context) =>
+{
+    string userId = claims.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+    return await context.Users.FindAsync(userId);
+})
+.RequireAuthorization(IdentityConstants.BearerScheme);
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -71,6 +88,7 @@ if (app.Environment.IsDevelopment())
     app.UseWebAssemblyDebugging();
     app.UseOpenApi();
     app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
 }
 else
 {
@@ -89,8 +107,12 @@ app.UseAntiforgery();
 
 app.MapStaticAssets();
 
+app.UseStaticFiles();
+
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Photobox.Web.Client._Imports).Assembly);
+
+app.MapIdentityApi<ApplicationUser>();
 
 app.Run();
