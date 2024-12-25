@@ -37,7 +37,7 @@ public class ImageController(ImageService imageService) : Controller
     }
 
     [HttpGet("{imageName}")]
-    [ProducesResponseType(typeof(FileStreamResult), (int)HttpStatusCode.OK)]
+    [ProducesResponseType<FileStreamResult>((int)HttpStatusCode.OK)]
     public async Task<FileStreamResult> GetImage(string imageName)
     {
         var image = await imageService.GetImageAsync(imageName);
@@ -46,12 +46,19 @@ public class ImageController(ImageService imageService) : Controller
     }
 
     [HttpGet("{imageName}")]
-    [ProducesResponseType(typeof(FileStreamResult), (int)HttpStatusCode.OK)]
+    [ProducesResponseType<FileStreamResult>((int)HttpStatusCode.OK)]
     public async Task<FileStreamResult> GetPreviewImage(string imageName)
     {
         var image = await imageService.GetPreviewImageAsync(imageName);
 
         return File(await image.ToJpegStreamAsync(), "image/jpeg", imageName);
+    }
+
+    [HttpGet("{imageName}")]
+    public string GetPreviewImagePreSignedUrl(string imageName)
+    {
+
+        return imageService.GetPreviewImagePreSignedUrl(imageName, TimeSpan.FromMinutes(30));
     }
 
     [HttpGet]

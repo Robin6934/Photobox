@@ -9,4 +9,6 @@ public interface IStorageProvider
     public Task<Image<Rgb24>> GetImageAsync(string name);
 
     public Task DeleteImageAsync(string name);
+
+    public string GetPreSignedUrl(string name, TimeSpan validFor);
 }

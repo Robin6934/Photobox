@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Photobox.Web.Photobox.DTOs;
 
 namespace Photobox.Web.Photobox;
@@ -8,8 +10,10 @@ namespace Photobox.Web.Photobox;
 public class PhotoBoxController : Controller
 {
     [HttpGet]
-    public IActionResult Create(CreatePhotoBoxDto createPhotoBox)
+    public IActionResult Register(CreatePhotoBoxDto createPhotoBox)
     {
+
+
         return Ok();
     }
 }

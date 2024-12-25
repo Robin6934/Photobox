@@ -1,4 +1,5 @@
-﻿using Amazon.S3;
+﻿using Amazon;
+using Amazon.S3;
 using Amazon.S3.Model;
 using SixLabors.ImageSharp.PixelFormats;
 using System.Collections.Concurrent;
@@ -77,5 +78,20 @@ public class AwsStorageProvider(IAmazonS3 amazonS3) : IStorageProvider
         };
 
         return amazonS3.DeleteObjectAsync(request);
+    }
+
+    public string GetPreSignedUrl(string name, TimeSpan validFor)
+    {
+        AWSConfigsS3.UseSignatureVersion4 = true;
+
+        var request = new GetPreSignedUrlRequest()
+        {
+            BucketName = Aws.Aws.BucketName,
+            Expires = DateTime.Now.Add(validFor),
+            Key = name,
+            Verb = HttpVerb.GET,
+        };
+
+        return amazonS3.GetPreSignedURL(request);
     }
 }
