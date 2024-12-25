@@ -14,10 +14,13 @@ public static class Aws
         var secretKey = configuration["AWS:SecretKey"];
 
         var credentials = new BasicAWSCredentials(accessKey, secretKey);
+
         var s3Config = new AmazonS3Config
         {
             ServiceURL = serviceUrl,
-            ForcePathStyle = true // Ensure compatibility with Cloudflare R2
+            ForcePathStyle = true, // Ensure compatibility with Cloudflare R2
+            AuthenticationRegion = "auto",
+            
         };
 
         // Directly register IAmazonS3 with specified config

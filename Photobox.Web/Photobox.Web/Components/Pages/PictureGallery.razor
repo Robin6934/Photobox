@@ -16,7 +16,7 @@
         @foreach (var imageName in _imageNames)
         {
             <div class="container">
-                <MudImage Src="@GetImagePath(@imageName)" Alt="Description" Class="image"/>
+                <MudImage Src="@GetImagePath(imageName)" Alt="Description" Class="image" />
 
                 <div class="button-left">
                     <MudButton Variant="Variant.Filled" Href="@GetDownloadLink(@imageName)" Size="Size.Large" StartIcon="@Icons.Material.Filled.Download" Color="Color.Info">Download</MudButton>
@@ -45,9 +45,9 @@ else
 
     }
 
-    private static string GetImagePath(string imageName)
+    private string GetImagePath(string imageName)
     {
-	    return $"images/{imageName}";
+	    return imageService.GetPreviewImagePreSignedUrl(imageName);
     }
 
     private static string GetDownloadLink(string imageName)

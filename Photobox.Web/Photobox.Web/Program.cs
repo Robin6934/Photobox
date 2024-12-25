@@ -3,22 +3,36 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
+using NSwag;
+using NSwag.Generation.Processors.Security;
 using Photobox.Web.Aws;
 using Photobox.Web.Components;
 using Photobox.Web.DbContext;
 using Photobox.Web.HealthCheck;
 using Photobox.Web.Image;
+using Photobox.Web.Models;
 using Photobox.Web.StorageProvider;
 using Serilog;
 using SixLabors.ImageSharp.Web.DependencyInjection;
-using Photobox.Web.Models;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddOpenApiDocument();
+builder.Services.AddOpenApiDocument(doc =>
+{
+    doc.AddSecurity("bearer", new OpenApiSecurityScheme
+    {
+        Type = OpenApiSecuritySchemeType.ApiKey,
+        Name = "Authorization",
+        In = OpenApiSecurityApiKeyLocation.Header,
+        Description = "Bearer token authorization header",
+    });
+
+    doc.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("bearer"));
+});
+
 builder.Services.AddOpenApi();
 
 builder.Services.AddImageSharp();
@@ -36,6 +50,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddMudServices();
+
+builder.Services.AddMemoryCache();
 
 builder.Host.UseSerilog((context, services, configuration) =>
 {
@@ -79,7 +95,7 @@ app.MapGet("users/me", async (ClaimsPrincipal claims, AppDbContext context) =>
 
     return await context.Users.FindAsync(userId);
 })
-.RequireAuthorization(IdentityConstants.BearerScheme);
+.RequireAuthorization();
 
 
 // Configure the HTTP request pipeline.

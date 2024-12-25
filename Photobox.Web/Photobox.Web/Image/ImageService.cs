@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Photobox.Web.DbContext;
 using Photobox.Web.StorageProvider;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.Web.Image;
 
-public class ImageService(AppDbContext dbContext, IStorageProvider storageProvider, ILogger<ImageService> logger)
+public class ImageService(AppDbContext dbContext, IStorageProvider storageProvider, ILogger<ImageService> logger, IMemoryCache memoryCache)
 {
     private readonly ILogger<ImageService> _logger = logger;
 
@@ -97,5 +98,25 @@ public class ImageService(AppDbContext dbContext, IStorageProvider storageProvid
         dbContext.ImageModels.Remove(imageModel);
 
         await dbContext.SaveChangesAsync();
+    }
+
+    public string GetPreviewImagePreSignedUrl(string imageName, TimeSpan validFor = default)
+    {
+        if(validFor == default)
+        {
+            validFor = TimeSpan.FromMinutes(30);
+        }
+
+        var imageModel = dbContext.ImageModels.Where(model => model.ImageName == imageName).First();
+
+        if (!memoryCache.TryGetValue(imageModel.DownscaledImageName, out string preSignedUrl))
+        {
+            preSignedUrl = storageProvider.GetPreSignedUrl(imageModel.DownscaledImageName, validFor);
+
+            //Set the timeout a little lower, so it wont be invalidated, the second the client receives it
+            memoryCache.Set(imageModel.DownscaledImageName, preSignedUrl, validFor * 0.95);
+        }
+
+        return preSignedUrl;
     }
 }

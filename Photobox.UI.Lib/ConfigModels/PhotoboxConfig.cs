@@ -21,6 +21,8 @@ public class PhotoboxConfig
 
     public bool StoreDeletedImages { get; set; }
 
+    public RefreshToken RefreshToken { get; set; }
+
     public void Save()
     {
         string fileName = "appsettings.json";

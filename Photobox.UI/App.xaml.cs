@@ -14,6 +14,7 @@ using Photobox.UI.Lib.Printer;
 using Photobox.UI.Windows;
 using Serilog;
 using System.Windows;
+using System.Net.Http;
 
 namespace Photobox.UI;
 /// <summary>
@@ -56,7 +57,6 @@ public partial class App
         builder.Services.AddSingleton<ICountDown, CountDownCircle>();
         builder.Services.AddSingleton<IImageHandler, ImageHandler>();
         builder.Services.AddSingleton<IImageClient, ImageClient>(_ => new ImageClient { BaseUrl = "https://localhost" });
-
         builder.Logging.ClearProviders();
 
         var logger = new LoggerConfiguration()
