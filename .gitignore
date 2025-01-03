@@ -404,3 +404,13 @@ EDSKLib/EDSDK.dll
 /Photobox.Web/Photobox.Web/wwwroot/uploads
 /Photobox.Web/Photobox.Web/wwwroot/images
 /Photobox.Web/Photobox.Web/wwwroot/is-cache
+
+# LaTeX
+/Documentation/out
+
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.synctex.gz
+*.pdf

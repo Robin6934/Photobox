@@ -32,15 +32,13 @@ public class ImageService(AppDbContext dbContext, IStorageProvider storageProvid
 
         using var downScaledImage = image.Clone(i => i.Resize(newWidth, 0));
 
-        var saveLocallyTask = downScaledImage.SaveAsJpegAsync(imagePath);
-
         var storeDownscaledTask = storageProvider.StoreImageAsync(downScaledImage, imageModel.DownscaledImageName);
 
         var fullSizeTask = storageProvider.StoreImageAsync(image, imageModel.UniqueImageName);
 
         var dbTask = dbContext.ImageModels.AddAsync(imageModel);
 
-        await Task.WhenAll(saveLocallyTask, storeDownscaledTask, fullSizeTask, dbTask.AsTask());
+        await Task.WhenAll(storeDownscaledTask, fullSizeTask, dbTask.AsTask());
 
         await dbContext.SaveChangesAsync();
     }
@@ -87,13 +85,9 @@ public class ImageService(AppDbContext dbContext, IStorageProvider storageProvid
             return;
         }
 
-        string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageName);
-
         await storageProvider.DeleteImageAsync(imageName);
 
         await storageProvider.DeleteImageAsync(imageName);
-
-        File.Delete(imagePath);
 
         dbContext.ImageModels.Remove(imageModel);
 
@@ -116,6 +110,8 @@ public class ImageService(AppDbContext dbContext, IStorageProvider storageProvid
             //Set the timeout a little lower, so it wont be invalidated, the second the client receives it
             memoryCache.Set(imageModel.DownscaledImageName, preSignedUrl, validFor * 0.95);
         }
+
+        ArgumentException.ThrowIfNullOrEmpty(preSignedUrl);
 
         return preSignedUrl;
     }

@@ -1,0 +1,46 @@
+\documentclass[12pt, a4paper]{article}
+\title{Diplomarbeit Fotobox}
+\author{Robin Ganahl\thanks{Ich danke DIEM Lukas, DI für die Unterstützung bei der Umsetzung dieses Projektes}}
+\date{\today}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[ngerman]{babel}
+\parindent0pt
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+
+\lstdefinestyle{csharp}{
+    language=[Sharp]C,
+    backgroundcolor=\color{gray!10},   
+    commentstyle=\color{codegreen },
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{gray},
+    stringstyle=\color{orange},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=csharp}
+
+\graphicspath{{images/}}
+\begin{document}
+\maketitle
+We have now added a title, author and date to our first \LaTeX{} document!
+
+\newpage
+\tableofcontents
+\newpage
+\section{Einleitung}
+
+\include{chapters/mechanics/mechanics}
+\end{document}
