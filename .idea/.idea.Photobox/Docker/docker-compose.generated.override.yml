@@ -1,0 +1,21 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  photobox.web:
+    build:
+      context: "C:\\Users\\Robin\\Documents\\GitHub\\Photobox"
+      dockerfile: "Photobox.Web/Photobox.Web/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/Photobox.Web.dll"
+    environment:
+      ASPNETCORE_STATICWEBASSETS: "/app/bin/Debug/net9.0/Photobox.Web.staticwebassets.runtime.CT.json"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "photoboxweb:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\Robin\\Documents\\GitHub\\Photobox\\Photobox.Web\\Photobox.Web:/app:rw"
+    - "C:\\Users\\Robin\\Documents\\GitHub\\Photobox:/src:rw"
+    - "C:\\Users\\Robin\\.nuget\\packages:/home/app/.nuget/packages"
+    working_dir: "/app"

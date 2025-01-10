@@ -11,10 +11,7 @@ public static class Folders
     }
 
     public static string PhotoboxBaseDir
-        => Path.Combine([
-            "C:"
-            , "Users"
-            , Environment.GetEnvironmentVariable("username") ?? ""
+        => Path.Combine([Environment.GetFolderPath(Environment.SpecialFolder.MyPictures)
             , "Pictures"
             , "Photobox"
             ]);
