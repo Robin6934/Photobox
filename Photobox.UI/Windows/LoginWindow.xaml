@@ -1,0 +1,43 @@
+﻿<Window x:Class="Photobox.UI.Windows.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:Photobox.UI.Windows"
+        mc:Ignorable="d"
+        Title="LoginWindow" Height="400" Width="500">
+    <Grid>
+        <Border CornerRadius="10" BorderBrush="Gray" BorderThickness="2" Padding="10">
+            <StackPanel>
+                <TextBlock Text="Login" FontSize="24" FontWeight="Bold" 
+                                       HorizontalAlignment="Center" Margin="0,10"/>
+                
+                <TextBlock Text="Enter the credentials to add the Photobox to your Account." TextAlignment="Center"></TextBlock>
+
+
+                <StackPanel Margin="0 40 0 0">
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0 20 0 0"
+                                HorizontalAlignment="Center">
+                        <Label Content="Username:"/>
+                        <TextBox Name="UsernameTextBox" Width="200" Height="30"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0 20 0 0"
+                                HorizontalAlignment="Center">
+                        <Label Content="Password:" Margin="0,10,0,0"/>
+                        <PasswordBox Name="PasswordTextBox" Width="200" Height="30"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,40">
+                    <Button Content="Login" Width="80" Height="30" Margin="10,0"
+                            Click="LoginButton_Click"/>
+                    <Button Content="Cancel" Width="80" Height="30" Margin="10,0"
+                            Click="CancelButton_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

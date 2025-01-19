@@ -11,11 +11,14 @@ public class PhotoBoxModel
     public Guid Id { get; set; } = Guid.CreateVersion7();
 
     [Required]
+    [MaxLength(50)]
     public required string Name { get; set; }
 
     [Required]
-    public required string SerialNumber { get; set; }
+    [MaxLength(52)]
+    public required string PhotoboxId { get; set; }
 
+    [MaxLength(50)]
     public string ApplicationUserId { get; set; }
 
     [ForeignKey(nameof(ApplicationUserId))]
