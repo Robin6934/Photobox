@@ -2,6 +2,7 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using MudBlazor.Services;
 using NSwag;
 using NSwag.Generation.Processors.Security;
@@ -22,18 +23,18 @@ builder.Services.AddControllers();
 
 builder.Services.AddOpenApiDocument(doc =>
 {
-    doc.AddSecurity("bearer", new OpenApiSecurityScheme
-    {
-        Type = OpenApiSecuritySchemeType.ApiKey,
-        Name = "Authorization",
-        In = OpenApiSecurityApiKeyLocation.Header,
-        Description = "Bearer token authorization header",
-    });
-
-    doc.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("bearer"));
+    // doc.AddSecurity("bearer", new OpenApiSecurityScheme
+    // {
+    //     Type = OpenApiSecuritySchemeType.ApiKey,
+    //     Name = "Authorization",
+    //     In = OpenApiSecurityApiKeyLocation.Header,
+    //     Description = "Bearer token authorization header",
+    // });
+    //
+    // doc.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("bearer"));
 });
 
-builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddImageSharp();
 
@@ -89,13 +90,13 @@ app.MapHealthChecks("/api/health", new HealthCheckOptions()
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
-app.MapGet("users/me", async (ClaimsPrincipal claims, AppDbContext context) =>
-{
-    string userId = claims.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-
-    return await context.Users.FindAsync(userId);
-})
-.RequireAuthorization();
+// app.MapGet("users/me", async (ClaimsPrincipal claims, AppDbContext context) =>
+// {
+//     string userId = claims.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+//
+//     return await context.Users.FindAsync(userId);
+// })
+// .RequireAuthorization();
 
 
 // Configure the HTTP request pipeline.
@@ -121,7 +122,14 @@ app.MapControllers();
 
 app.UseAntiforgery();
 
-app.MapStaticAssets();
+// needed because of nswag generator, when the manifestpath is set to null,
+// usually it takes the application name and appends .staticwebassets.endpoints.json
+// but here it just takes null, so we need to provide the path manually
+var manifestPath = Path.Combine(
+    AppContext.BaseDirectory, 
+    "Photobox.Web.staticwebassets.endpoints.json");
+
+app.MapStaticAssets(manifestPath);
 
 app.UseStaticFiles();
 

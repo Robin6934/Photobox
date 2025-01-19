@@ -25,75 +25,46 @@ namespace Photobox.Lib.RestApi
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IClient
     {
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task PostRegisterAsync(RegisterRequest registration);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task PostRegisterAsync(RegisterRequest registration, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<AccessTokenResponse> PostLoginAsync(bool? useCookies, bool? useSessionCookies, LoginRequest login);
+        System.Threading.Tasks.Task PostRegisterAsync(RegisterRequest registration, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<AccessTokenResponse> PostLoginAsync(bool? useCookies, bool? useSessionCookies, LoginRequest login, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<AccessTokenResponse> PostRefreshAsync(RefreshRequest refreshRequest);
+        System.Threading.Tasks.Task<AccessTokenResponse> PostLoginAsync(LoginRequest login, bool? useCookies = null, bool? useSessionCookies = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<AccessTokenResponse> PostRefreshAsync(RefreshRequest refreshRequest, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task GetConfirmEmailAsync(string userId, string code, string changedEmail);
+        System.Threading.Tasks.Task<AccessTokenResponse> PostRefreshAsync(RefreshRequest refreshRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task GetConfirmEmailAsync(string userId, string code, string changedEmail, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task PostResendConfirmationEmailAsync(ResendConfirmationEmailRequest resendRequest);
+        System.Threading.Tasks.Task GetConfirmEmailAsync(string userId, string code, string changedEmail = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task PostResendConfirmationEmailAsync(ResendConfirmationEmailRequest resendRequest, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task PostForgotPasswordAsync(ForgotPasswordRequest resetRequest);
+        System.Threading.Tasks.Task PostResendConfirmationEmailAsync(ResendConfirmationEmailRequest resendRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task PostForgotPasswordAsync(ForgotPasswordRequest resetRequest, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task PostResetPasswordAsync(ResetPasswordRequest resetRequest);
+        System.Threading.Tasks.Task PostForgotPasswordAsync(ForgotPasswordRequest resetRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task PostResetPasswordAsync(ResetPasswordRequest resetRequest, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<TwoFactorResponse> PostManage2faAsync(TwoFactorRequest tfaRequest);
+        System.Threading.Tasks.Task PostResetPasswordAsync(ResetPasswordRequest resetRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<TwoFactorResponse> PostManage2faAsync(TwoFactorRequest tfaRequest, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<InfoResponse> GetManageInfoAsync();
+        System.Threading.Tasks.Task<TwoFactorResponse> PostManage2faAsync(TwoFactorRequest tfaRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<InfoResponse> GetManageInfoAsync(System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<InfoResponse> PostManageInfoAsync(InfoRequest infoRequest);
+        System.Threading.Tasks.Task<InfoResponse> GetManageInfoAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<InfoResponse> PostManageInfoAsync(InfoRequest infoRequest, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<InfoResponse> PostManageInfoAsync(InfoRequest infoRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
@@ -108,10 +79,10 @@ namespace Photobox.Lib.RestApi
         private Newtonsoft.Json.JsonSerializerSettings _instanceSettings;
 
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public Client()
+        public Client(string baseUrl)
     #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
-            BaseUrl = "https://localhost";
+            BaseUrl = baseUrl;
             Initialize();
         }
 
@@ -143,15 +114,9 @@ namespace Photobox.Lib.RestApi
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task PostRegisterAsync(RegisterRequest registration)
-        {
-            return PostRegisterAsync(registration, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task PostRegisterAsync(RegisterRequest registration, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task PostRegisterAsync(RegisterRequest registration, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (registration == null)
                 throw new System.ArgumentNullException("registration");
@@ -230,15 +195,9 @@ namespace Photobox.Lib.RestApi
             }
         }
 
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<AccessTokenResponse> PostLoginAsync(bool? useCookies, bool? useSessionCookies, LoginRequest login)
-        {
-            return PostLoginAsync(useCookies, useSessionCookies, login, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<AccessTokenResponse> PostLoginAsync(bool? useCookies, bool? useSessionCookies, LoginRequest login, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<AccessTokenResponse> PostLoginAsync(LoginRequest login, bool? useCookies = null, bool? useSessionCookies = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (login == null)
                 throw new System.ArgumentNullException("login");
@@ -323,15 +282,9 @@ namespace Photobox.Lib.RestApi
             }
         }
 
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<AccessTokenResponse> PostRefreshAsync(RefreshRequest refreshRequest)
-        {
-            return PostRefreshAsync(refreshRequest, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<AccessTokenResponse> PostRefreshAsync(RefreshRequest refreshRequest, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<AccessTokenResponse> PostRefreshAsync(RefreshRequest refreshRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (refreshRequest == null)
                 throw new System.ArgumentNullException("refreshRequest");
@@ -406,15 +359,9 @@ namespace Photobox.Lib.RestApi
             }
         }
 
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task GetConfirmEmailAsync(string userId, string code, string changedEmail)
-        {
-            return GetConfirmEmailAsync(userId, code, changedEmail, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task GetConfirmEmailAsync(string userId, string code, string changedEmail, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task GetConfirmEmailAsync(string userId, string code, string changedEmail = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = new System.Net.Http.HttpClient();
             var disposeClient_ = true;
@@ -484,15 +431,9 @@ namespace Photobox.Lib.RestApi
             }
         }
 
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task PostResendConfirmationEmailAsync(ResendConfirmationEmailRequest resendRequest)
-        {
-            return PostResendConfirmationEmailAsync(resendRequest, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task PostResendConfirmationEmailAsync(ResendConfirmationEmailRequest resendRequest, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task PostResendConfirmationEmailAsync(ResendConfirmationEmailRequest resendRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (resendRequest == null)
                 throw new System.ArgumentNullException("resendRequest");
@@ -561,15 +502,9 @@ namespace Photobox.Lib.RestApi
             }
         }
 
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task PostForgotPasswordAsync(ForgotPasswordRequest resetRequest)
-        {
-            return PostForgotPasswordAsync(resetRequest, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task PostForgotPasswordAsync(ForgotPasswordRequest resetRequest, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task PostForgotPasswordAsync(ForgotPasswordRequest resetRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (resetRequest == null)
                 throw new System.ArgumentNullException("resetRequest");
@@ -648,15 +583,9 @@ namespace Photobox.Lib.RestApi
             }
         }
 
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task PostResetPasswordAsync(ResetPasswordRequest resetRequest)
-        {
-            return PostResetPasswordAsync(resetRequest, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task PostResetPasswordAsync(ResetPasswordRequest resetRequest, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task PostResetPasswordAsync(ResetPasswordRequest resetRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (resetRequest == null)
                 throw new System.ArgumentNullException("resetRequest");
@@ -735,15 +664,9 @@ namespace Photobox.Lib.RestApi
             }
         }
 
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<TwoFactorResponse> PostManage2faAsync(TwoFactorRequest tfaRequest)
-        {
-            return PostManage2faAsync(tfaRequest, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<TwoFactorResponse> PostManage2faAsync(TwoFactorRequest tfaRequest, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<TwoFactorResponse> PostManage2faAsync(TwoFactorRequest tfaRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (tfaRequest == null)
                 throw new System.ArgumentNullException("tfaRequest");
@@ -834,15 +757,9 @@ namespace Photobox.Lib.RestApi
             }
         }
 
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<InfoResponse> GetManageInfoAsync()
-        {
-            return GetManageInfoAsync(System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<InfoResponse> GetManageInfoAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<InfoResponse> GetManageInfoAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = new System.Net.Http.HttpClient();
             var disposeClient_ = true;
@@ -926,15 +843,9 @@ namespace Photobox.Lib.RestApi
             }
         }
 
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<InfoResponse> PostManageInfoAsync(InfoRequest infoRequest)
-        {
-            return PostManageInfoAsync(infoRequest, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<InfoResponse> PostManageInfoAsync(InfoRequest infoRequest, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<InfoResponse> PostManageInfoAsync(InfoRequest infoRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (infoRequest == null)
                 throw new System.ArgumentNullException("infoRequest");
@@ -1140,12 +1051,23 @@ namespace Photobox.Lib.RestApi
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IPhotoBoxClient
     {
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> CreateAsync(CreatePhotoBoxDto createPhotoBox);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> CreateAsync(CreatePhotoBoxDto createPhotoBox, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<FileResponse> RegisterAsync(CreatePhotoBoxDto createPhotoBox, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<FileResponse> LoginAsync(LoginPhotoboxDto loginDto, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Checks if a photobox with the specified ID exists in the database.
+        /// </summary>
+        /// <param name="photoBoxId">The ID of the photobox to check.</param>
+        /// <returns>Photobox exists in the database.</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<FileResponse> CheckIfPhotoboxExistsAsync(string photoBoxId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
@@ -1160,10 +1082,10 @@ namespace Photobox.Lib.RestApi
         private Newtonsoft.Json.JsonSerializerSettings _instanceSettings;
 
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public PhotoBoxClient()
+        public PhotoBoxClient(string baseUrl)
     #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
-            BaseUrl = "https://localhost";
+            BaseUrl = baseUrl;
             Initialize();
         }
 
@@ -1195,15 +1117,9 @@ namespace Photobox.Lib.RestApi
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FileResponse> CreateAsync(CreatePhotoBoxDto createPhotoBox)
-        {
-            return CreateAsync(createPhotoBox, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse> CreateAsync(CreatePhotoBoxDto createPhotoBox, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<FileResponse> RegisterAsync(CreatePhotoBoxDto createPhotoBox, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (createPhotoBox == null)
                 throw new System.ArgumentNullException("createPhotoBox");
@@ -1218,13 +1134,165 @@ namespace Photobox.Lib.RestApi
                     var content_ = new System.Net.Http.StringContent(json_);
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/octet-stream"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "api/PhotoBox/Register"
+                    urlBuilder_.Append("api/PhotoBox/Register");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200 || status_ == 206)
+                        {
+                            var responseStream_ = response_.Content == null ? System.IO.Stream.Null : await response_.Content.ReadAsStreamAsync().ConfigureAwait(false);
+                            var fileResponse_ = new FileResponse(status_, headers_, responseStream_, client_, response_);
+                            disposeClient_ = false; disposeResponse_ = false; // response and client are disposed by FileResponse
+                            return fileResponse_;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<FileResponse> LoginAsync(LoginPhotoboxDto loginDto, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (loginDto == null)
+                throw new System.ArgumentNullException("loginDto");
+
+            var client_ = new System.Net.Http.HttpClient();
+            var disposeClient_ = true;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(loginDto, JsonSerializerSettings);
+                    var content_ = new System.Net.Http.StringContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/octet-stream"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "api/PhotoBox/Login"
+                    urlBuilder_.Append("api/PhotoBox/Login");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200 || status_ == 206)
+                        {
+                            var responseStream_ = response_.Content == null ? System.IO.Stream.Null : await response_.Content.ReadAsStreamAsync().ConfigureAwait(false);
+                            var fileResponse_ = new FileResponse(status_, headers_, responseStream_, client_, response_);
+                            disposeClient_ = false; disposeResponse_ = false; // response and client are disposed by FileResponse
+                            return fileResponse_;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Checks if a photobox with the specified ID exists in the database.
+        /// </summary>
+        /// <param name="photoBoxId">The ID of the photobox to check.</param>
+        /// <returns>Photobox exists in the database.</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<FileResponse> CheckIfPhotoboxExistsAsync(string photoBoxId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (photoBoxId == null)
+                throw new System.ArgumentNullException("photoBoxId");
+
+            var client_ = new System.Net.Http.HttpClient();
+            var disposeClient_ = true;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
                     request_.Method = new System.Net.Http.HttpMethod("GET");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/octet-stream"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/PhotoBox/Create"
-                    urlBuilder_.Append("api/PhotoBox/Create");
+                    // Operation Path: "api/PhotoBox/CheckIfPhotoboxExists/{photoBoxId}"
+                    urlBuilder_.Append("api/PhotoBox/CheckIfPhotoboxExists/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(photoBoxId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -1391,12 +1459,6 @@ namespace Photobox.Lib.RestApi
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IImageClient
     {
-        /// <summary>
-        /// Uploads a picture to the server.
-        /// </summary>
-        /// <returns>Image has been uploaded successfully</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ImageUploadResult> UploadImageAsync(FileParameter formFile);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -1404,42 +1466,31 @@ namespace Photobox.Lib.RestApi
         /// </summary>
         /// <returns>Image has been uploaded successfully</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ImageUploadResult> UploadImageAsync(FileParameter formFile, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> GetImageAsync(string imageName);
+        System.Threading.Tasks.Task<ImageUploadResult> UploadImageAsync(FileParameter formFile = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> GetImageAsync(string imageName, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> GetPreviewImageAsync(string imageName);
+        System.Threading.Tasks.Task<FileResponse> GetImageAsync(string imageName, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> GetPreviewImageAsync(string imageName, System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<string>> ListImagesAsync();
+        System.Threading.Tasks.Task<FileResponse> GetPreviewImageAsync(string imageName, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<string>> ListImagesAsync(System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task DeleteImagesAsync();
+        System.Threading.Tasks.Task<string> GetPreviewImagePreSignedUrlAsync(string imageName, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task DeleteImagesAsync(System.Threading.CancellationToken cancellationToken);
-
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task DeleteImageAsync(string imageName);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<string>> ListImagesAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task DeleteImageAsync(string imageName, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task DeleteImagesAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task DeleteImageAsync(string imageName = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
@@ -1454,10 +1505,10 @@ namespace Photobox.Lib.RestApi
         private Newtonsoft.Json.JsonSerializerSettings _instanceSettings;
 
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public ImageClient()
+        public ImageClient(string baseUrl)
     #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
-            BaseUrl = "https://localhost";
+            BaseUrl = baseUrl;
             Initialize();
         }
 
@@ -1489,23 +1540,13 @@ namespace Photobox.Lib.RestApi
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
-        /// <summary>
-        /// Uploads a picture to the server.
-        /// </summary>
-        /// <returns>Image has been uploaded successfully</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ImageUploadResult> UploadImageAsync(FileParameter formFile)
-        {
-            return UploadImageAsync(formFile, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Uploads a picture to the server.
         /// </summary>
         /// <returns>Image has been uploaded successfully</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ImageUploadResult> UploadImageAsync(FileParameter formFile, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ImageUploadResult> UploadImageAsync(FileParameter formFile = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = new System.Net.Http.HttpClient();
             var disposeClient_ = true;
@@ -1586,15 +1627,9 @@ namespace Photobox.Lib.RestApi
             }
         }
 
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FileResponse> GetImageAsync(string imageName)
-        {
-            return GetImageAsync(imageName, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse> GetImageAsync(string imageName, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<FileResponse> GetImageAsync(string imageName, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (imageName == null)
                 throw new System.ArgumentNullException("imageName");
@@ -1664,15 +1699,9 @@ namespace Photobox.Lib.RestApi
             }
         }
 
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FileResponse> GetPreviewImageAsync(string imageName)
-        {
-            return GetPreviewImageAsync(imageName, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse> GetPreviewImageAsync(string imageName, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<FileResponse> GetPreviewImageAsync(string imageName, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (imageName == null)
                 throw new System.ArgumentNullException("imageName");
@@ -1742,15 +1771,83 @@ namespace Photobox.Lib.RestApi
             }
         }
 
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<string>> ListImagesAsync()
+        public virtual async System.Threading.Tasks.Task<string> GetPreviewImagePreSignedUrlAsync(string imageName, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            return ListImagesAsync(System.Threading.CancellationToken.None);
+            if (imageName == null)
+                throw new System.ArgumentNullException("imageName");
+
+            var client_ = new System.Net.Http.HttpClient();
+            var disposeClient_ = true;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "api/Image/GetPreviewImagePreSignedUrl/{imageName}"
+                    urlBuilder_.Append("api/Image/GetPreviewImagePreSignedUrl/");
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(imageName, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<string>> ListImagesAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<string>> ListImagesAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = new System.Net.Http.HttpClient();
             var disposeClient_ = true;
@@ -1818,15 +1915,9 @@ namespace Photobox.Lib.RestApi
             }
         }
 
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task DeleteImagesAsync()
-        {
-            return DeleteImagesAsync(System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task DeleteImagesAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task DeleteImagesAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = new System.Net.Http.HttpClient();
             var disposeClient_ = true;
@@ -1888,15 +1979,9 @@ namespace Photobox.Lib.RestApi
             }
         }
 
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task DeleteImageAsync(string imageName)
-        {
-            return DeleteImageAsync(imageName, System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task DeleteImageAsync(string imageName, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task DeleteImageAsync(string imageName = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = new System.Net.Http.HttpClient();
             var disposeClient_ = true;
@@ -2079,15 +2164,6 @@ namespace Photobox.Lib.RestApi
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial interface IHealthClient
     {
-        /// <summary>
-        /// Get Health
-        /// </summary>
-        /// <remarks>
-        /// Provides an indication about the health of the API
-        /// </remarks>
-        /// <returns>API is healthy</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<HealthReport> GetAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -2098,7 +2174,7 @@ namespace Photobox.Lib.RestApi
         /// </remarks>
         /// <returns>API is healthy</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<HealthReport> GetAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<HealthReport> GetAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
@@ -2113,10 +2189,10 @@ namespace Photobox.Lib.RestApi
         private Newtonsoft.Json.JsonSerializerSettings _instanceSettings;
 
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public HealthClient()
+        public HealthClient(string baseUrl)
     #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
-            BaseUrl = "https://localhost";
+            BaseUrl = baseUrl;
             Initialize();
         }
 
@@ -2148,19 +2224,6 @@ namespace Photobox.Lib.RestApi
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
 
-        /// <summary>
-        /// Get Health
-        /// </summary>
-        /// <remarks>
-        /// Provides an indication about the health of the API
-        /// </remarks>
-        /// <returns>API is healthy</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<HealthReport> GetAsync()
-        {
-            return GetAsync(System.Threading.CancellationToken.None);
-        }
-
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
         /// Get Health
@@ -2170,7 +2233,7 @@ namespace Photobox.Lib.RestApi
         /// </remarks>
         /// <returns>API is healthy</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<HealthReport> GetAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<HealthReport> GetAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = new System.Net.Http.HttpClient();
             var disposeClient_ = true;
@@ -2549,7 +2612,30 @@ namespace Photobox.Lib.RestApi
     public partial record CreatePhotoBoxDto
     {
         [Newtonsoft.Json.JsonProperty("photoBoxId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string PhotoBoxId { get; set; }
+        public System.Guid PhotoBoxId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string UserName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("password", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Password { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("photoBoxName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string PhotoBoxName { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial record LoginPhotoboxDto
+    {
+        [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string UserName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("password", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Password { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("photoBoxId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid PhotoBoxId { get; set; }
 
     }
 

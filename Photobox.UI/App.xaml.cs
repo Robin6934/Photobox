@@ -56,7 +56,7 @@ public partial class App
             builder.Configuration.GetSection(PhotoboxConfig.Photobox));
         builder.Services.AddSingleton<ICountDown, CountDownCircle>();
         builder.Services.AddSingleton<IImageHandler, ImageHandler>();
-        builder.Services.AddSingleton<IImageClient, ImageClient>(_ => new ImageClient { BaseUrl = "https://localhost" });
+        builder.Services.AddSingleton<IImageClient, ImageClient>(_ => new ImageClient("https://localhost"));
         builder.Logging.ClearProviders();
 
         var logger = new LoggerConfiguration()

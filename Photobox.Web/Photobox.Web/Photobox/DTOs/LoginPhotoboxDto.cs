@@ -1,6 +1,6 @@
 ﻿namespace Photobox.Web.Photobox.DTOs;
 
-public record PhotoboxLoginDto
+public record LoginPhotoboxDto
 {
     public required string UserName { get; set; }
 
