@@ -1,11 +1,16 @@
-﻿using System.Net.Http.Headers;
+﻿using Photobox.UI.Lib.AccessTokenManager;
+using System.Net.Http.Headers;
 
 namespace Photobox.Lib.RestApi;
 
-public partial class ClientBase()
+public partial class Client
 {
-    partial void PrepareRequest(HttpClient request, ref string url)
+    async partial void PrepareRequest(HttpClient client, HttpRequestMessage request, string url)
     {
-        request.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _requestContext.GetBearerTokenOrTriggerUnauthException());
+        string? accessToken = "";//await accessTokenManager.AccessToken;
+        if (!string.IsNullOrEmpty(accessToken))
+        {
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
     }
 }

@@ -1,13 +1,10 @@
 ﻿using AdysTech.CredentialManager;
-using Mediapipe.Net.Framework.Protobuf;
-using Microsoft.Extensions.Options;
 using Photobox.Lib.RestApi;
-using Photobox.UI.Lib.ConfigModels;
 using System.Net;
 
 namespace Photobox.UI.Lib.AccessTokenManager;
 
-public class AccessTokenManager(IOptionsMonitor<PhotoboxConfig> configMonitor, IClient photoBoxClient, IPhotoBoxClient client) : IAccessTokenManager
+public class AccessTokenManager(IClient photoBoxClient, IPhotoBoxClient client) : IAccessTokenManager
 {
     private string? _accessToken;
     
