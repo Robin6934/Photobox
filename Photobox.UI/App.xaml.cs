@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Photobox.Lib.RestApi;
 using Photobox.UI.CountDown;
 using Photobox.UI.ImageViewer;
+using Photobox.UI.Lib.AccessTokenManager;
 using Photobox.UI.Lib.Camera;
 using Photobox.UI.Lib.ConfigModels;
 using Photobox.UI.Lib.ImageHandler;
@@ -57,6 +58,9 @@ public partial class App
         builder.Services.AddSingleton<ICountDown, CountDownCircle>();
         builder.Services.AddSingleton<IImageHandler, ImageHandler>();
         builder.Services.AddSingleton<IImageClient, ImageClient>(_ => new ImageClient("https://localhost"));
+        builder.Services.AddSingleton<IClient, Client>(_ => new Client("https://localhost"));
+        builder.Services.AddSingleton<IPhotoBoxClient, PhotoBoxClient>(_ => new PhotoBoxClient("https://localhost"));
+        builder.Services.AddSingleton<IAccessTokenManager, AccessTokenManager>();
         builder.Logging.ClearProviders();
 
         var logger = new LoggerConfiguration()

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.BearerToken;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Photobox.Web.DbContext;
 using Photobox.Web.Models;
 using Photobox.Web.Photobox.DTOs;
+using System.Security.Claims;
 
 namespace Photobox.Web.Photobox;
 
@@ -16,10 +18,22 @@ public class PhotoBoxController(
     SignInManager<ApplicationUser> signInManager,
     AppDbContext dbContext) : Controller
 {
+    [Authorize(AuthenticationSchemes = "Identity.Bearer")]
     [HttpPost]
-    public IActionResult Register(CreatePhotoBoxDto createPhotoBox)
+    public async Task<IActionResult> Create(CreatePhotoBoxDto createPhotoBox)
     {
-        return NotFound();
+        string userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+        var user = await dbContext.Users.FindAsync(userId);
+        
+        var photobox = new PhotoBoxModel()
+        {
+            PhotoboxId = createPhotoBox.PhotoBoxId,
+            Name = createPhotoBox.PhotoBoxName,
+            ApplicationUser = user
+        };
+        
+        return Ok(user);
     }
     
     //https://github.com/dotnet/aspnetcore/blob/9388d498aae571b9575e8252ecc51b54b2b44e22/src/Identity/Core/src/IdentityApiEndpointRouteBuilderExtensions.cs#L90
@@ -47,6 +61,7 @@ public class PhotoBoxController(
     /// <response code="200">Photobox exists in the database.</response>
     /// <response code="404">Photobox not found in the database.</response>
     [HttpGet("{photoBoxId}")]
+    [Authorize(AuthenticationSchemes = "Identity.Bearer")]
     public async Task<IActionResult> CheckIfPhotoboxExists(string photoBoxId)
     {
         var photoBox = await dbContext.PhotoBoxModels.FirstOrDefaultAsync(p => p.PhotoboxId == photoBoxId);

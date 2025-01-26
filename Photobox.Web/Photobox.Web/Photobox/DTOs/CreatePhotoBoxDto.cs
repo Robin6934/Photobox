@@ -2,7 +2,7 @@
 
 public class CreatePhotoBoxDto
 {
-    public Guid PhotoBoxId { get; set; }
+    public required string PhotoBoxId { get; set; }
 
     public required string UserName { get; set; }
 

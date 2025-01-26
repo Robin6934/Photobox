@@ -1,4 +1,6 @@
 using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,15 +25,15 @@ builder.Services.AddControllers();
 
 builder.Services.AddOpenApiDocument(doc =>
 {
-    // doc.AddSecurity("bearer", new OpenApiSecurityScheme
-    // {
-    //     Type = OpenApiSecuritySchemeType.ApiKey,
-    //     Name = "Authorization",
-    //     In = OpenApiSecurityApiKeyLocation.Header,
-    //     Description = "Bearer token authorization header",
-    // });
-    //
-    // doc.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("bearer"));
+    doc.AddSecurity("bearer", new OpenApiSecurityScheme
+    {
+        Type = OpenApiSecuritySchemeType.ApiKey,
+        Name = "Authorization",
+        In = OpenApiSecurityApiKeyLocation.Header,
+        Description = "Bearer token authorization header",
+    });
+    
+    doc.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("bearer"));
 });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -39,7 +41,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddImageSharp();
 
 builder.Services.AddAuthorization();
-builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme)
+
+builder.Services.AddAuthentication(IdentityConstants.BearerScheme)
+    .AddCookie(IdentityConstants.ApplicationScheme)
     .AddBearerToken(IdentityConstants.BearerScheme);
 
 builder.Services.AddIdentityCore<ApplicationUser>()
@@ -90,14 +94,13 @@ app.MapHealthChecks("/api/health", new HealthCheckOptions()
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
-// app.MapGet("users/me", async (ClaimsPrincipal claims, AppDbContext context) =>
-// {
-//     string userId = claims.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-//
-//     return await context.Users.FindAsync(userId);
-// })
-// .RequireAuthorization();
+app.MapGet("users/me", async (ClaimsPrincipal claims, AppDbContext context) =>
+{
+    string userId = claims.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
+    return await context.Users.FindAsync(userId);
+})
+.RequireAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

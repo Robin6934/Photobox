@@ -5,9 +5,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:Photobox.UI.Windows"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="400" Width="500">
+        Title="LoginWindow" Height="400" Width="500"
+        ResizeMode="NoResize">
     <Grid>
-        <Border CornerRadius="10" BorderBrush="Gray" BorderThickness="2" Padding="10">
+        <Border BorderBrush="Gray" BorderThickness="2" Padding="10">
             <StackPanel>
                 <TextBlock Text="Login" FontSize="24" FontWeight="Bold" 
                                        HorizontalAlignment="Center" Margin="0,10"/>
@@ -19,15 +20,25 @@
                     <StackPanel Orientation="Horizontal"
                                 Margin="0 20 0 0"
                                 HorizontalAlignment="Center">
-                        <Label Content="Username:"/>
-                        <TextBox Name="UsernameTextBox" Width="200" Height="30"/>
+                        <Label Content="Email:"
+                               Width="70"
+                               HorizontalContentAlignment="Right"/>
+                        <TextBox Name="EmailTextBox"
+                                 Width="200"
+                                 Height="30"
+                                 VerticalContentAlignment="Center"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal"
                                 Margin="0 20 0 0"
                                 HorizontalAlignment="Center">
-                        <Label Content="Password:" Margin="0,10,0,0"/>
-                        <PasswordBox Name="PasswordTextBox" Width="200" Height="30"/>
+                        <Label Content="Password:"
+                               Width="70"
+                               HorizontalContentAlignment="Right"/>
+                        <PasswordBox Name="PasswordTextBox"
+                                     Width="200"
+                                     Height="30"
+                                     VerticalContentAlignment="Center"/>
                     </StackPanel>
                 </StackPanel>
 
