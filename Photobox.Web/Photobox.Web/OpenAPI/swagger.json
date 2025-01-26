@@ -6,6 +6,28 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/users/me": {
+      "get": {
+        "operationId": "GetUsersMe",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApplicationUser"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/register": {
       "post": {
         "operationId": "PostRegister",
@@ -282,7 +304,12 @@
           "404": {
             "description": ""
           }
-        }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
     "/manage/info": {
@@ -312,7 +339,12 @@
           "404": {
             "description": ""
           }
-        }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       },
       "post": {
         "operationId": "PostManageInfo",
@@ -352,15 +384,20 @@
           "404": {
             "description": ""
           }
-        }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
-    "/api/PhotoBox/Register": {
+    "/api/PhotoBox/Create": {
       "post": {
         "tags": [
           "PhotoBox"
         ],
-        "operationId": "PhotoBox_Register",
+        "operationId": "PhotoBox_Create",
         "requestBody": {
           "x-name": "createPhotoBox",
           "content": {
@@ -385,7 +422,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
     "/api/PhotoBox/Login": {
@@ -452,7 +494,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
     "/api/Image/UploadImage": {
@@ -681,6 +728,130 @@
   },
   "components": {
     "schemas": {
+      "ApplicationUser": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentityUser"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "photoBoxes": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PhotoBoxModel"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "PhotoBoxModel": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "photoboxId"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 1
+          },
+          "photoboxId": {
+            "type": "string",
+            "maxLength": 52,
+            "minLength": 1
+          },
+          "applicationUserId": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "applicationUser": {
+            "$ref": "#/components/schemas/ApplicationUser"
+          }
+        }
+      },
+      "IdentityUser": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentityUserOfString"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "IdentityUserOfString": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "normalizedUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "normalizedEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "emailConfirmed": {
+            "type": "boolean"
+          },
+          "passwordHash": {
+            "type": "string",
+            "nullable": true
+          },
+          "securityStamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumberConfirmed": {
+            "type": "boolean"
+          },
+          "twoFactorEnabled": {
+            "type": "boolean"
+          },
+          "lockoutEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lockoutEnabled": {
+            "type": "boolean"
+          },
+          "accessFailedCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "HttpValidationProblemDetails": {
         "allOf": [
           {
@@ -911,8 +1082,7 @@
         "additionalProperties": false,
         "properties": {
           "photoBoxId": {
-            "type": "string",
-            "format": "guid"
+            "type": "string"
           },
           "userName": {
             "type": "string"
@@ -2032,6 +2202,14 @@
           1,
           2
         ]
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "type": "apiKey",
+        "description": "Bearer token authorization header",
+        "name": "Authorization",
+        "in": "header"
       }
     }
   }

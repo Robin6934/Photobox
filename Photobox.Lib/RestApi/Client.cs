@@ -28,6 +28,10 @@ namespace Photobox.Lib.RestApi
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<ApplicationUser> GetUsersMeAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task PostRegisterAsync(RegisterRequest registration, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -113,6 +117,76 @@ namespace Photobox.Lib.RestApi
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, string url);
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<ApplicationUser> GetUsersMeAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var client_ = new System.Net.Http.HttpClient();
+            var disposeClient_ = true;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                    if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
+                    // Operation Path: "users/me"
+                    urlBuilder_.Append("users/me");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.IEnumerable<string>>();
+                        foreach (var item_ in response_.Headers)
+                            headers_[item_.Key] = item_.Value;
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApplicationUser>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1054,7 +1128,7 @@ namespace Photobox.Lib.RestApi
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> RegisterAsync(CreatePhotoBoxDto createPhotoBox, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<FileResponse> CreateAsync(CreatePhotoBoxDto createPhotoBox, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1119,7 +1193,7 @@ namespace Photobox.Lib.RestApi
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse> RegisterAsync(CreatePhotoBoxDto createPhotoBox, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<FileResponse> CreateAsync(CreatePhotoBoxDto createPhotoBox, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (createPhotoBox == null)
                 throw new System.ArgumentNullException("createPhotoBox");
@@ -1139,8 +1213,8 @@ namespace Photobox.Lib.RestApi
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/PhotoBox/Register"
-                    urlBuilder_.Append("api/PhotoBox/Register");
+                    // Operation Path: "api/PhotoBox/Create"
+                    urlBuilder_.Append("api/PhotoBox/Create");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -2424,30 +2498,215 @@ namespace Photobox.Lib.RestApi
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial record ApplicationUser : IdentityUser
+    {
+        [Newtonsoft.Json.JsonConstructor]
+
+        public ApplicationUser(int @accessFailedCount, string @concurrencyStamp, string @email, bool @emailConfirmed, string @id, bool @lockoutEnabled, System.DateTimeOffset? @lockoutEnd, string @normalizedEmail, string @normalizedUserName, string @passwordHash, string @phoneNumber, bool @phoneNumberConfirmed, System.Collections.Generic.ICollection<PhotoBoxModel> @photoBoxes, string @securityStamp, bool @twoFactorEnabled, string @userName)
+
+            : base(accessFailedCount, concurrencyStamp, email, emailConfirmed, id, lockoutEnabled, lockoutEnd, normalizedEmail, normalizedUserName, passwordHash, phoneNumber, phoneNumberConfirmed, securityStamp, twoFactorEnabled, userName)
+
+        {
+
+            this.PhotoBoxes = @photoBoxes;
+
+        }    [Newtonsoft.Json.JsonProperty("photoBoxes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<PhotoBoxModel> PhotoBoxes { get; init; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial record PhotoBoxModel
+    {
+        [Newtonsoft.Json.JsonConstructor]
+
+        public PhotoBoxModel(ApplicationUser @applicationUser, string @applicationUserId, System.Guid @id, string @name, string @photoboxId)
+
+        {
+
+            this.Id = @id;
+
+            this.Name = @name;
+
+            this.PhotoboxId = @photoboxId;
+
+            this.ApplicationUserId = @applicationUserId;
+
+            this.ApplicationUser = @applicationUser;
+
+        }    [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; init; }
+
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.StringLength(50, MinimumLength = 1)]
+        public string Name { get; init; }
+
+        [Newtonsoft.Json.JsonProperty("photoboxId", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.StringLength(52, MinimumLength = 1)]
+        public string PhotoboxId { get; init; }
+
+        [Newtonsoft.Json.JsonProperty("applicationUserId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.StringLength(50)]
+        public string ApplicationUserId { get; init; }
+
+        [Newtonsoft.Json.JsonProperty("applicationUser", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ApplicationUser ApplicationUser { get; init; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial record IdentityUser : IdentityUserOfString
+    {
+        [Newtonsoft.Json.JsonConstructor]
+
+        public IdentityUser(int @accessFailedCount, string @concurrencyStamp, string @email, bool @emailConfirmed, string @id, bool @lockoutEnabled, System.DateTimeOffset? @lockoutEnd, string @normalizedEmail, string @normalizedUserName, string @passwordHash, string @phoneNumber, bool @phoneNumberConfirmed, string @securityStamp, bool @twoFactorEnabled, string @userName)
+
+            : base(accessFailedCount, concurrencyStamp, email, emailConfirmed, id, lockoutEnabled, lockoutEnd, normalizedEmail, normalizedUserName, passwordHash, phoneNumber, phoneNumberConfirmed, securityStamp, twoFactorEnabled, userName)
+
+        {
+
+        }
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial record IdentityUserOfString
+    {
+        [Newtonsoft.Json.JsonConstructor]
+
+        public IdentityUserOfString(int @accessFailedCount, string @concurrencyStamp, string @email, bool @emailConfirmed, string @id, bool @lockoutEnabled, System.DateTimeOffset? @lockoutEnd, string @normalizedEmail, string @normalizedUserName, string @passwordHash, string @phoneNumber, bool @phoneNumberConfirmed, string @securityStamp, bool @twoFactorEnabled, string @userName)
+
+        {
+
+            this.Id = @id;
+
+            this.UserName = @userName;
+
+            this.NormalizedUserName = @normalizedUserName;
+
+            this.Email = @email;
+
+            this.NormalizedEmail = @normalizedEmail;
+
+            this.EmailConfirmed = @emailConfirmed;
+
+            this.PasswordHash = @passwordHash;
+
+            this.SecurityStamp = @securityStamp;
+
+            this.ConcurrencyStamp = @concurrencyStamp;
+
+            this.PhoneNumber = @phoneNumber;
+
+            this.PhoneNumberConfirmed = @phoneNumberConfirmed;
+
+            this.TwoFactorEnabled = @twoFactorEnabled;
+
+            this.LockoutEnd = @lockoutEnd;
+
+            this.LockoutEnabled = @lockoutEnabled;
+
+            this.AccessFailedCount = @accessFailedCount;
+
+        }    [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Id { get; init; }
+
+        [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string UserName { get; init; }
+
+        [Newtonsoft.Json.JsonProperty("normalizedUserName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string NormalizedUserName { get; init; }
+
+        [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Email { get; init; }
+
+        [Newtonsoft.Json.JsonProperty("normalizedEmail", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string NormalizedEmail { get; init; }
+
+        [Newtonsoft.Json.JsonProperty("emailConfirmed", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool EmailConfirmed { get; init; }
+
+        [Newtonsoft.Json.JsonProperty("passwordHash", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string PasswordHash { get; init; }
+
+        [Newtonsoft.Json.JsonProperty("securityStamp", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SecurityStamp { get; init; }
+
+        [Newtonsoft.Json.JsonProperty("concurrencyStamp", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ConcurrencyStamp { get; init; }
+
+        [Newtonsoft.Json.JsonProperty("phoneNumber", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string PhoneNumber { get; init; }
+
+        [Newtonsoft.Json.JsonProperty("phoneNumberConfirmed", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool PhoneNumberConfirmed { get; init; }
+
+        [Newtonsoft.Json.JsonProperty("twoFactorEnabled", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool TwoFactorEnabled { get; init; }
+
+        [Newtonsoft.Json.JsonProperty("lockoutEnd", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.DateTimeOffset? LockoutEnd { get; init; }
+
+        [Newtonsoft.Json.JsonProperty("lockoutEnabled", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool LockoutEnabled { get; init; }
+
+        [Newtonsoft.Json.JsonProperty("accessFailedCount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int AccessFailedCount { get; init; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record HttpValidationProblemDetails : ProblemDetails
     {
-        [Newtonsoft.Json.JsonProperty("errors", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.IDictionary<string, System.Collections.Generic.ICollection<string>> Errors { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public HttpValidationProblemDetails(string @detail, System.Collections.Generic.IDictionary<string, System.Collections.Generic.ICollection<string>> @errors, string @instance, int? @status, string @title, string @type)
+
+            : base(detail, instance, status, title, type)
+
+        {
+
+            this.Errors = @errors;
+
+        }    [Newtonsoft.Json.JsonProperty("errors", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.IDictionary<string, System.Collections.Generic.ICollection<string>> Errors { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record ProblemDetails
     {
-        [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Type { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public ProblemDetails(string @detail, string @instance, int? @status, string @title, string @type)
+
+        {
+
+            this.Type = @type;
+
+            this.Title = @title;
+
+            this.Status = @status;
+
+            this.Detail = @detail;
+
+            this.Instance = @instance;
+
+        }    [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Type { get; init; }
 
         [Newtonsoft.Json.JsonProperty("title", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Title { get; set; }
+        public string Title { get; init; }
 
         [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? Status { get; set; }
+        public int? Status { get; init; }
 
         [Newtonsoft.Json.JsonProperty("detail", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Detail { get; set; }
+        public string Detail { get; init; }
 
         [Newtonsoft.Json.JsonProperty("instance", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Instance { get; set; }
+        public string Instance { get; init; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 
@@ -2463,301 +2722,549 @@ namespace Photobox.Lib.RestApi
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record RegisterRequest
     {
-        [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Email { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public RegisterRequest(string @email, string @password)
+
+        {
+
+            this.Email = @email;
+
+            this.Password = @password;
+
+        }    [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Email { get; init; }
 
         [Newtonsoft.Json.JsonProperty("password", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Password { get; set; }
+        public string Password { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record AccessTokenResponse
     {
-        [Newtonsoft.Json.JsonProperty("tokenType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string TokenType { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public AccessTokenResponse(string @accessToken, long @expiresIn, string @refreshToken, string @tokenType)
+
+        {
+
+            this.TokenType = @tokenType;
+
+            this.AccessToken = @accessToken;
+
+            this.ExpiresIn = @expiresIn;
+
+            this.RefreshToken = @refreshToken;
+
+        }    [Newtonsoft.Json.JsonProperty("tokenType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string TokenType { get; init; }
 
         [Newtonsoft.Json.JsonProperty("accessToken", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string AccessToken { get; set; }
+        public string AccessToken { get; init; }
 
         [Newtonsoft.Json.JsonProperty("expiresIn", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public long ExpiresIn { get; set; }
+        public long ExpiresIn { get; init; }
 
         [Newtonsoft.Json.JsonProperty("refreshToken", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string RefreshToken { get; set; }
+        public string RefreshToken { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record LoginRequest
     {
-        [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Email { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public LoginRequest(string @email, string @password, string @twoFactorCode, string @twoFactorRecoveryCode)
+
+        {
+
+            this.Email = @email;
+
+            this.Password = @password;
+
+            this.TwoFactorCode = @twoFactorCode;
+
+            this.TwoFactorRecoveryCode = @twoFactorRecoveryCode;
+
+        }    [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Email { get; init; }
 
         [Newtonsoft.Json.JsonProperty("password", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Password { get; set; }
+        public string Password { get; init; }
 
         [Newtonsoft.Json.JsonProperty("twoFactorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string TwoFactorCode { get; set; }
+        public string TwoFactorCode { get; init; }
 
         [Newtonsoft.Json.JsonProperty("twoFactorRecoveryCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string TwoFactorRecoveryCode { get; set; }
+        public string TwoFactorRecoveryCode { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record RefreshRequest
     {
-        [Newtonsoft.Json.JsonProperty("refreshToken", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string RefreshToken { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public RefreshRequest(string @refreshToken)
+
+        {
+
+            this.RefreshToken = @refreshToken;
+
+        }    [Newtonsoft.Json.JsonProperty("refreshToken", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string RefreshToken { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record ResendConfirmationEmailRequest
     {
-        [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Email { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public ResendConfirmationEmailRequest(string @email)
+
+        {
+
+            this.Email = @email;
+
+        }    [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Email { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record ForgotPasswordRequest
     {
-        [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Email { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public ForgotPasswordRequest(string @email)
+
+        {
+
+            this.Email = @email;
+
+        }    [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Email { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record ResetPasswordRequest
     {
-        [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Email { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public ResetPasswordRequest(string @email, string @newPassword, string @resetCode)
+
+        {
+
+            this.Email = @email;
+
+            this.ResetCode = @resetCode;
+
+            this.NewPassword = @newPassword;
+
+        }    [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Email { get; init; }
 
         [Newtonsoft.Json.JsonProperty("resetCode", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ResetCode { get; set; }
+        public string ResetCode { get; init; }
 
         [Newtonsoft.Json.JsonProperty("newPassword", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string NewPassword { get; set; }
+        public string NewPassword { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record TwoFactorResponse
     {
-        [Newtonsoft.Json.JsonProperty("sharedKey", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string SharedKey { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public TwoFactorResponse(bool @isMachineRemembered, bool @isTwoFactorEnabled, System.Collections.Generic.ICollection<string> @recoveryCodes, int @recoveryCodesLeft, string @sharedKey)
+
+        {
+
+            this.SharedKey = @sharedKey;
+
+            this.RecoveryCodesLeft = @recoveryCodesLeft;
+
+            this.RecoveryCodes = @recoveryCodes;
+
+            this.IsTwoFactorEnabled = @isTwoFactorEnabled;
+
+            this.IsMachineRemembered = @isMachineRemembered;
+
+        }    [Newtonsoft.Json.JsonProperty("sharedKey", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SharedKey { get; init; }
 
         [Newtonsoft.Json.JsonProperty("recoveryCodesLeft", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int RecoveryCodesLeft { get; set; }
+        public int RecoveryCodesLeft { get; init; }
 
         [Newtonsoft.Json.JsonProperty("recoveryCodes", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> RecoveryCodes { get; set; }
+        public System.Collections.Generic.ICollection<string> RecoveryCodes { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isTwoFactorEnabled", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsTwoFactorEnabled { get; set; }
+        public bool IsTwoFactorEnabled { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isMachineRemembered", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsMachineRemembered { get; set; }
+        public bool IsMachineRemembered { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record TwoFactorRequest
     {
-        [Newtonsoft.Json.JsonProperty("enable", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool? Enable { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public TwoFactorRequest(bool? @enable, bool @forgetMachine, bool @resetRecoveryCodes, bool @resetSharedKey, string @twoFactorCode)
+
+        {
+
+            this.Enable = @enable;
+
+            this.TwoFactorCode = @twoFactorCode;
+
+            this.ResetSharedKey = @resetSharedKey;
+
+            this.ResetRecoveryCodes = @resetRecoveryCodes;
+
+            this.ForgetMachine = @forgetMachine;
+
+        }    [Newtonsoft.Json.JsonProperty("enable", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool? Enable { get; init; }
 
         [Newtonsoft.Json.JsonProperty("twoFactorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string TwoFactorCode { get; set; }
+        public string TwoFactorCode { get; init; }
 
         [Newtonsoft.Json.JsonProperty("resetSharedKey", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool ResetSharedKey { get; set; }
+        public bool ResetSharedKey { get; init; }
 
         [Newtonsoft.Json.JsonProperty("resetRecoveryCodes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool ResetRecoveryCodes { get; set; }
+        public bool ResetRecoveryCodes { get; init; }
 
         [Newtonsoft.Json.JsonProperty("forgetMachine", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool ForgetMachine { get; set; }
+        public bool ForgetMachine { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record InfoResponse
     {
-        [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Email { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public InfoResponse(string @email, bool @isEmailConfirmed)
+
+        {
+
+            this.Email = @email;
+
+            this.IsEmailConfirmed = @isEmailConfirmed;
+
+        }    [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Email { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isEmailConfirmed", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsEmailConfirmed { get; set; }
+        public bool IsEmailConfirmed { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record InfoRequest
     {
-        [Newtonsoft.Json.JsonProperty("newEmail", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string NewEmail { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public InfoRequest(string @newEmail, string @newPassword, string @oldPassword)
+
+        {
+
+            this.NewEmail = @newEmail;
+
+            this.NewPassword = @newPassword;
+
+            this.OldPassword = @oldPassword;
+
+        }    [Newtonsoft.Json.JsonProperty("newEmail", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string NewEmail { get; init; }
 
         [Newtonsoft.Json.JsonProperty("newPassword", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string NewPassword { get; set; }
+        public string NewPassword { get; init; }
 
         [Newtonsoft.Json.JsonProperty("oldPassword", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string OldPassword { get; set; }
+        public string OldPassword { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record CreatePhotoBoxDto
     {
-        [Newtonsoft.Json.JsonProperty("photoBoxId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid PhotoBoxId { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public CreatePhotoBoxDto(string @password, string @photoBoxId, string @photoBoxName, string @userName)
+
+        {
+
+            this.PhotoBoxId = @photoBoxId;
+
+            this.UserName = @userName;
+
+            this.Password = @password;
+
+            this.PhotoBoxName = @photoBoxName;
+
+        }    [Newtonsoft.Json.JsonProperty("photoBoxId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string PhotoBoxId { get; init; }
 
         [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string UserName { get; set; }
+        public string UserName { get; init; }
 
         [Newtonsoft.Json.JsonProperty("password", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Password { get; set; }
+        public string Password { get; init; }
 
         [Newtonsoft.Json.JsonProperty("photoBoxName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string PhotoBoxName { get; set; }
+        public string PhotoBoxName { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record LoginPhotoboxDto
     {
-        [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string UserName { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public LoginPhotoboxDto(string @password, System.Guid @photoBoxId, string @userName)
+
+        {
+
+            this.UserName = @userName;
+
+            this.Password = @password;
+
+            this.PhotoBoxId = @photoBoxId;
+
+        }    [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string UserName { get; init; }
 
         [Newtonsoft.Json.JsonProperty("password", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Password { get; set; }
+        public string Password { get; init; }
 
         [Newtonsoft.Json.JsonProperty("photoBoxId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid PhotoBoxId { get; set; }
+        public System.Guid PhotoBoxId { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record ImageUploadResult
     {
-        [Newtonsoft.Json.JsonProperty("fileName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string FileName { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public ImageUploadResult(string @fileName)
+
+        {
+
+            this.FileName = @fileName;
+
+        }    [Newtonsoft.Json.JsonProperty("fileName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string FileName { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record HealthReport
     {
-        [Newtonsoft.Json.JsonProperty("entries", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.IDictionary<string, HealthReportEntry> Entries { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public HealthReport(System.Collections.Generic.IDictionary<string, HealthReportEntry> @entries, HealthStatus @status, System.TimeSpan @totalDuration)
+
+        {
+
+            this.Entries = @entries;
+
+            this.Status = @status;
+
+            this.TotalDuration = @totalDuration;
+
+        }    [Newtonsoft.Json.JsonProperty("entries", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.IDictionary<string, HealthReportEntry> Entries { get; init; }
 
         [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public HealthStatus Status { get; set; }
+        public HealthStatus Status { get; init; }
 
         [Newtonsoft.Json.JsonProperty("totalDuration", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.TimeSpan TotalDuration { get; set; }
+        public System.TimeSpan TotalDuration { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record HealthReportEntry
     {
-        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.IDictionary<string, object> Data { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public HealthReportEntry(System.Collections.Generic.IDictionary<string, object> @data, string @description, System.TimeSpan @duration, Exception @exception, HealthStatus @status, System.Collections.Generic.ICollection<string> @tags)
+
+        {
+
+            this.Data = @data;
+
+            this.Description = @description;
+
+            this.Duration = @duration;
+
+            this.Exception = @exception;
+
+            this.Status = @status;
+
+            this.Tags = @tags;
+
+        }    [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.IDictionary<string, object> Data { get; init; }
 
         [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Description { get; set; }
+        public string Description { get; init; }
 
         [Newtonsoft.Json.JsonProperty("duration", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.TimeSpan Duration { get; set; }
+        public System.TimeSpan Duration { get; init; }
 
         [Newtonsoft.Json.JsonProperty("exception", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public Exception Exception { get; set; }
+        public Exception Exception { get; init; }
 
         [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public HealthStatus Status { get; set; }
+        public HealthStatus Status { get; init; }
 
         [Newtonsoft.Json.JsonProperty("tags", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> Tags { get; set; }
+        public System.Collections.Generic.ICollection<string> Tags { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public abstract partial record MethodBase : MemberInfo
     {
-        [Newtonsoft.Json.JsonProperty("attributes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MethodAttributes Attributes { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        protected MethodBase(MethodAttributes @attributes, CallingConventions @callingConvention, bool @containsGenericParameters, System.Collections.Generic.ICollection<CustomAttributeData> @customAttributes, string @declaringType, bool @isAbstract, bool @isAssembly, bool @isCollectible, bool @isConstructedGenericMethod, bool @isConstructor, bool @isFamily, bool @isFamilyAndAssembly, bool @isFamilyOrAssembly, bool @isFinal, bool @isGenericMethod, bool @isGenericMethodDefinition, bool @isHideBySig, bool @isPrivate, bool @isPublic, bool @isSecurityCritical, bool @isSecuritySafeCritical, bool @isSecurityTransparent, bool @isSpecialName, bool @isStatic, bool @isVirtual, MemberTypes @memberType, int @metadataToken, RuntimeMethodHandle @methodHandle, MethodImplAttributes @methodImplementationFlags, Module @module, string @name, string @reflectedType)
+
+            : base(customAttributes, declaringType, isCollectible, memberType, metadataToken, module, name, reflectedType)
+
+        {
+
+            this.Attributes = @attributes;
+
+            this.MethodImplementationFlags = @methodImplementationFlags;
+
+            this.CallingConvention = @callingConvention;
+
+            this.IsAbstract = @isAbstract;
+
+            this.IsConstructor = @isConstructor;
+
+            this.IsFinal = @isFinal;
+
+            this.IsHideBySig = @isHideBySig;
+
+            this.IsSpecialName = @isSpecialName;
+
+            this.IsStatic = @isStatic;
+
+            this.IsVirtual = @isVirtual;
+
+            this.IsAssembly = @isAssembly;
+
+            this.IsFamily = @isFamily;
+
+            this.IsFamilyAndAssembly = @isFamilyAndAssembly;
+
+            this.IsFamilyOrAssembly = @isFamilyOrAssembly;
+
+            this.IsPrivate = @isPrivate;
+
+            this.IsPublic = @isPublic;
+
+            this.IsConstructedGenericMethod = @isConstructedGenericMethod;
+
+            this.IsGenericMethod = @isGenericMethod;
+
+            this.IsGenericMethodDefinition = @isGenericMethodDefinition;
+
+            this.ContainsGenericParameters = @containsGenericParameters;
+
+            this.MethodHandle = @methodHandle;
+
+            this.IsSecurityCritical = @isSecurityCritical;
+
+            this.IsSecuritySafeCritical = @isSecuritySafeCritical;
+
+            this.IsSecurityTransparent = @isSecurityTransparent;
+
+        }    [Newtonsoft.Json.JsonProperty("attributes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public MethodAttributes Attributes { get; init; }
 
         [Newtonsoft.Json.JsonProperty("methodImplementationFlags", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MethodImplAttributes MethodImplementationFlags { get; set; }
+        public MethodImplAttributes MethodImplementationFlags { get; init; }
 
         [Newtonsoft.Json.JsonProperty("callingConvention", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public CallingConventions CallingConvention { get; set; }
+        public CallingConventions CallingConvention { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isAbstract", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsAbstract { get; set; }
+        public bool IsAbstract { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isConstructor", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsConstructor { get; set; }
+        public bool IsConstructor { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isFinal", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsFinal { get; set; }
+        public bool IsFinal { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isHideBySig", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsHideBySig { get; set; }
+        public bool IsHideBySig { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isSpecialName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsSpecialName { get; set; }
+        public bool IsSpecialName { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isStatic", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsStatic { get; set; }
+        public bool IsStatic { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isVirtual", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsVirtual { get; set; }
+        public bool IsVirtual { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isAssembly", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsAssembly { get; set; }
+        public bool IsAssembly { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isFamily", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsFamily { get; set; }
+        public bool IsFamily { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isFamilyAndAssembly", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsFamilyAndAssembly { get; set; }
+        public bool IsFamilyAndAssembly { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isFamilyOrAssembly", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsFamilyOrAssembly { get; set; }
+        public bool IsFamilyOrAssembly { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isPrivate", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsPrivate { get; set; }
+        public bool IsPrivate { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isPublic", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsPublic { get; set; }
+        public bool IsPublic { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isConstructedGenericMethod", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsConstructedGenericMethod { get; set; }
+        public bool IsConstructedGenericMethod { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isGenericMethod", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsGenericMethod { get; set; }
+        public bool IsGenericMethod { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isGenericMethodDefinition", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsGenericMethodDefinition { get; set; }
+        public bool IsGenericMethodDefinition { get; init; }
 
         [Newtonsoft.Json.JsonProperty("containsGenericParameters", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool ContainsGenericParameters { get; set; }
+        public bool ContainsGenericParameters { get; init; }
 
         [Newtonsoft.Json.JsonProperty("methodHandle", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public RuntimeMethodHandle MethodHandle { get; set; }
+        public RuntimeMethodHandle MethodHandle { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isSecurityCritical", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsSecurityCritical { get; set; }
+        public bool IsSecurityCritical { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isSecuritySafeCritical", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsSecuritySafeCritical { get; set; }
+        public bool IsSecuritySafeCritical { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isSecurityTransparent", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsSecurityTransparent { get; set; }
+        public bool IsSecurityTransparent { get; init; }
 
     }
 
@@ -2876,43 +3383,79 @@ namespace Photobox.Lib.RestApi
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record RuntimeMethodHandle
     {
-        [Newtonsoft.Json.JsonProperty("value", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public IntPtr Value { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public RuntimeMethodHandle(IntPtr @value)
+
+        {
+
+            this.Value = @value;
+
+        }    [Newtonsoft.Json.JsonProperty("value", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public IntPtr Value { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record IntPtr
     {
+        [Newtonsoft.Json.JsonConstructor]
 
+        public IntPtr()
+
+        {
+
+        }
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public abstract partial record MemberInfo
     {
-        [Newtonsoft.Json.JsonProperty("memberType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MemberTypes MemberType { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        protected MemberInfo(System.Collections.Generic.ICollection<CustomAttributeData> @customAttributes, string @declaringType, bool @isCollectible, MemberTypes @memberType, int @metadataToken, Module @module, string @name, string @reflectedType)
+
+        {
+
+            this.MemberType = @memberType;
+
+            this.Name = @name;
+
+            this.DeclaringType = @declaringType;
+
+            this.ReflectedType = @reflectedType;
+
+            this.Module = @module;
+
+            this.CustomAttributes = @customAttributes;
+
+            this.IsCollectible = @isCollectible;
+
+            this.MetadataToken = @metadataToken;
+
+        }    [Newtonsoft.Json.JsonProperty("memberType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public MemberTypes MemberType { get; init; }
 
         [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
+        public string Name { get; init; }
 
         [Newtonsoft.Json.JsonProperty("declaringType", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string DeclaringType { get; set; }
+        public string DeclaringType { get; init; }
 
         [Newtonsoft.Json.JsonProperty("reflectedType", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ReflectedType { get; set; }
+        public string ReflectedType { get; init; }
 
         [Newtonsoft.Json.JsonProperty("module", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public Module Module { get; set; }
+        public Module Module { get; init; }
 
         [Newtonsoft.Json.JsonProperty("customAttributes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<CustomAttributeData> CustomAttributes { get; set; }
+        public System.Collections.Generic.ICollection<CustomAttributeData> CustomAttributes { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isCollectible", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsCollectible { get; set; }
+        public bool IsCollectible { get; init; }
 
         [Newtonsoft.Json.JsonProperty("metadataToken", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int MetadataToken { get; set; }
+        public int MetadataToken { get; init; }
 
     }
 
@@ -2944,100 +3487,175 @@ namespace Photobox.Lib.RestApi
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public abstract partial record Module
     {
-        [Newtonsoft.Json.JsonProperty("assembly", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public Assembly Assembly { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        protected Module(Assembly @assembly, System.Collections.Generic.ICollection<CustomAttributeData> @customAttributes, string @fullyQualifiedName, int @mdStreamVersion, int @metadataToken, ModuleHandle @moduleHandle, System.Guid @moduleVersionId, string @name, string @scopeName)
+
+        {
+
+            this.Assembly = @assembly;
+
+            this.FullyQualifiedName = @fullyQualifiedName;
+
+            this.Name = @name;
+
+            this.MdStreamVersion = @mdStreamVersion;
+
+            this.ModuleVersionId = @moduleVersionId;
+
+            this.ScopeName = @scopeName;
+
+            this.ModuleHandle = @moduleHandle;
+
+            this.CustomAttributes = @customAttributes;
+
+            this.MetadataToken = @metadataToken;
+
+        }    [Newtonsoft.Json.JsonProperty("assembly", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public Assembly Assembly { get; init; }
 
         [Newtonsoft.Json.JsonProperty("fullyQualifiedName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string FullyQualifiedName { get; set; }
+        public string FullyQualifiedName { get; init; }
 
         [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
+        public string Name { get; init; }
 
         [Newtonsoft.Json.JsonProperty("mdStreamVersion", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int MdStreamVersion { get; set; }
+        public int MdStreamVersion { get; init; }
 
         [Newtonsoft.Json.JsonProperty("moduleVersionId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid ModuleVersionId { get; set; }
+        public System.Guid ModuleVersionId { get; init; }
 
         [Newtonsoft.Json.JsonProperty("scopeName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ScopeName { get; set; }
+        public string ScopeName { get; init; }
 
         [Newtonsoft.Json.JsonProperty("moduleHandle", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ModuleHandle ModuleHandle { get; set; }
+        public ModuleHandle ModuleHandle { get; init; }
 
         [Newtonsoft.Json.JsonProperty("customAttributes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<CustomAttributeData> CustomAttributes { get; set; }
+        public System.Collections.Generic.ICollection<CustomAttributeData> CustomAttributes { get; init; }
 
         [Newtonsoft.Json.JsonProperty("metadataToken", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int MetadataToken { get; set; }
+        public int MetadataToken { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public abstract partial record Assembly
     {
-        [Newtonsoft.Json.JsonProperty("definedTypes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<TypeInfo> DefinedTypes { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        protected Assembly(string @codeBase, System.Collections.Generic.ICollection<CustomAttributeData> @customAttributes, System.Collections.Generic.ICollection<TypeInfo> @definedTypes, MethodInfo @entryPoint, string @escapedCodeBase, System.Collections.Generic.ICollection<string> @exportedTypes, string @fullName, bool @globalAssemblyCache, long @hostContext, string @imageRuntimeVersion, bool @isCollectible, bool @isDynamic, bool @isFullyTrusted, string @location, Module @manifestModule, System.Collections.Generic.ICollection<Module> @modules, bool @reflectionOnly, SecurityRuleSet @securityRuleSet)
+
+        {
+
+            this.DefinedTypes = @definedTypes;
+
+            this.ExportedTypes = @exportedTypes;
+
+            this.CodeBase = @codeBase;
+
+            this.EntryPoint = @entryPoint;
+
+            this.FullName = @fullName;
+
+            this.ImageRuntimeVersion = @imageRuntimeVersion;
+
+            this.IsDynamic = @isDynamic;
+
+            this.Location = @location;
+
+            this.ReflectionOnly = @reflectionOnly;
+
+            this.IsCollectible = @isCollectible;
+
+            this.IsFullyTrusted = @isFullyTrusted;
+
+            this.CustomAttributes = @customAttributes;
+
+            this.EscapedCodeBase = @escapedCodeBase;
+
+            this.ManifestModule = @manifestModule;
+
+            this.Modules = @modules;
+
+            this.GlobalAssemblyCache = @globalAssemblyCache;
+
+            this.HostContext = @hostContext;
+
+            this.SecurityRuleSet = @securityRuleSet;
+
+        }    [Newtonsoft.Json.JsonProperty("definedTypes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<TypeInfo> DefinedTypes { get; init; }
 
         [Newtonsoft.Json.JsonProperty("exportedTypes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> ExportedTypes { get; set; }
+        public System.Collections.Generic.ICollection<string> ExportedTypes { get; init; }
 
         [Newtonsoft.Json.JsonProperty("codeBase", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [System.Obsolete("Assembly.CodeBase and Assembly.EscapedCodeBase are only included for .NET Framework compatibility. Use Assembly.Location.")]
-        public string CodeBase { get; set; }
+        public string CodeBase { get; init; }
 
         [Newtonsoft.Json.JsonProperty("entryPoint", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MethodInfo EntryPoint { get; set; }
+        public MethodInfo EntryPoint { get; init; }
 
         [Newtonsoft.Json.JsonProperty("fullName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string FullName { get; set; }
+        public string FullName { get; init; }
 
         [Newtonsoft.Json.JsonProperty("imageRuntimeVersion", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ImageRuntimeVersion { get; set; }
+        public string ImageRuntimeVersion { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isDynamic", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsDynamic { get; set; }
+        public bool IsDynamic { get; init; }
 
         [Newtonsoft.Json.JsonProperty("location", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Location { get; set; }
+        public string Location { get; init; }
 
         [Newtonsoft.Json.JsonProperty("reflectionOnly", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool ReflectionOnly { get; set; }
+        public bool ReflectionOnly { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isCollectible", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsCollectible { get; set; }
+        public bool IsCollectible { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isFullyTrusted", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsFullyTrusted { get; set; }
+        public bool IsFullyTrusted { get; init; }
 
         [Newtonsoft.Json.JsonProperty("customAttributes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<CustomAttributeData> CustomAttributes { get; set; }
+        public System.Collections.Generic.ICollection<CustomAttributeData> CustomAttributes { get; init; }
 
         [Newtonsoft.Json.JsonProperty("escapedCodeBase", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [System.Obsolete("Assembly.CodeBase and Assembly.EscapedCodeBase are only included for .NET Framework compatibility. Use Assembly.Location.")]
-        public string EscapedCodeBase { get; set; }
+        public string EscapedCodeBase { get; init; }
 
         [Newtonsoft.Json.JsonProperty("manifestModule", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public Module ManifestModule { get; set; }
+        public Module ManifestModule { get; init; }
 
         [Newtonsoft.Json.JsonProperty("modules", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<Module> Modules { get; set; }
+        public System.Collections.Generic.ICollection<Module> Modules { get; init; }
 
         [Newtonsoft.Json.JsonProperty("globalAssemblyCache", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [System.Obsolete("The Global Assembly Cache is not supported.")]
-        public bool GlobalAssemblyCache { get; set; }
+        public bool GlobalAssemblyCache { get; init; }
 
         [Newtonsoft.Json.JsonProperty("hostContext", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public long HostContext { get; set; }
+        public long HostContext { get; init; }
 
         [Newtonsoft.Json.JsonProperty("securityRuleSet", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public SecurityRuleSet SecurityRuleSet { get; set; }
+        public SecurityRuleSet SecurityRuleSet { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record TypeInfo : Anonymous
     {
+        [Newtonsoft.Json.JsonConstructor]
+
+        public TypeInfo(System.Collections.Generic.ICollection<ConstructorInfo> @declaredConstructors, System.Collections.Generic.ICollection<EventInfo> @declaredEvents, System.Collections.Generic.ICollection<FieldInfo> @declaredFields, System.Collections.Generic.ICollection<MemberInfo> @declaredMembers, System.Collections.Generic.ICollection<MethodInfo> @declaredMethods, System.Collections.Generic.ICollection<TypeInfo> @declaredNestedTypes, System.Collections.Generic.ICollection<PropertyInfo> @declaredProperties, System.Collections.Generic.ICollection<string> @genericTypeParameters, System.Collections.Generic.ICollection<string> @implementedInterfaces)
+
+            : base(declaredConstructors, declaredEvents, declaredFields, declaredMembers, declaredMethods, declaredNestedTypes, declaredProperties, genericTypeParameters, implementedInterfaces)
+
+        {
+
+        }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 
@@ -3053,37 +3671,71 @@ namespace Photobox.Lib.RestApi
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public abstract partial record ConstructorInfo : MethodBase
     {
-        [Newtonsoft.Json.JsonProperty("memberType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MemberTypes MemberType { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        protected ConstructorInfo(MethodAttributes @attributes, CallingConventions @callingConvention, bool @containsGenericParameters, System.Collections.Generic.ICollection<CustomAttributeData> @customAttributes, string @declaringType, bool @isAbstract, bool @isAssembly, bool @isCollectible, bool @isConstructedGenericMethod, bool @isConstructor, bool @isFamily, bool @isFamilyAndAssembly, bool @isFamilyOrAssembly, bool @isFinal, bool @isGenericMethod, bool @isGenericMethodDefinition, bool @isHideBySig, bool @isPrivate, bool @isPublic, bool @isSecurityCritical, bool @isSecuritySafeCritical, bool @isSecurityTransparent, bool @isSpecialName, bool @isStatic, bool @isVirtual, MemberTypes @memberType, MemberTypes @memberType, int @metadataToken, RuntimeMethodHandle @methodHandle, MethodImplAttributes @methodImplementationFlags, Module @module, string @name, string @reflectedType)
+
+            : base(attributes, callingConvention, containsGenericParameters, customAttributes, declaringType, isAbstract, isAssembly, isCollectible, isConstructedGenericMethod, isConstructor, isFamily, isFamilyAndAssembly, isFamilyOrAssembly, isFinal, isGenericMethod, isGenericMethodDefinition, isHideBySig, isPrivate, isPublic, isSecurityCritical, isSecuritySafeCritical, isSecurityTransparent, isSpecialName, isStatic, isVirtual, memberType, metadataToken, methodHandle, methodImplementationFlags, module, name, reflectedType)
+
+        {
+
+            this.MemberType = @memberType;
+
+        }    [Newtonsoft.Json.JsonProperty("memberType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public MemberTypes MemberType { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public abstract partial record EventInfo : MemberInfo
     {
-        [Newtonsoft.Json.JsonProperty("memberType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MemberTypes MemberType { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        protected EventInfo(MethodInfo @addMethod, EventAttributes @attributes, System.Collections.Generic.ICollection<CustomAttributeData> @customAttributes, string @declaringType, string @eventHandlerType, bool @isCollectible, bool @isMulticast, bool @isSpecialName, MemberTypes @memberType, MemberTypes @memberType, int @metadataToken, Module @module, string @name, MethodInfo @raiseMethod, string @reflectedType, MethodInfo @removeMethod)
+
+            : base(customAttributes, declaringType, isCollectible, memberType, metadataToken, module, name, reflectedType)
+
+        {
+
+            this.MemberType = @memberType;
+
+            this.Attributes = @attributes;
+
+            this.IsSpecialName = @isSpecialName;
+
+            this.AddMethod = @addMethod;
+
+            this.RemoveMethod = @removeMethod;
+
+            this.RaiseMethod = @raiseMethod;
+
+            this.IsMulticast = @isMulticast;
+
+            this.EventHandlerType = @eventHandlerType;
+
+        }    [Newtonsoft.Json.JsonProperty("memberType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public MemberTypes MemberType { get; init; }
 
         [Newtonsoft.Json.JsonProperty("attributes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public EventAttributes Attributes { get; set; }
+        public EventAttributes Attributes { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isSpecialName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsSpecialName { get; set; }
+        public bool IsSpecialName { get; init; }
 
         [Newtonsoft.Json.JsonProperty("addMethod", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MethodInfo AddMethod { get; set; }
+        public MethodInfo AddMethod { get; init; }
 
         [Newtonsoft.Json.JsonProperty("removeMethod", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MethodInfo RemoveMethod { get; set; }
+        public MethodInfo RemoveMethod { get; init; }
 
         [Newtonsoft.Json.JsonProperty("raiseMethod", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MethodInfo RaiseMethod { get; set; }
+        public MethodInfo RaiseMethod { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isMulticast", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsMulticast { get; set; }
+        public bool IsMulticast { get; init; }
 
         [Newtonsoft.Json.JsonProperty("eventHandlerType", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string EventHandlerType { get; set; }
+        public string EventHandlerType { get; init; }
 
     }
 
@@ -3105,70 +3757,124 @@ namespace Photobox.Lib.RestApi
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public abstract partial record MethodInfo : MethodBase
     {
-        [Newtonsoft.Json.JsonProperty("memberType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MemberTypes MemberType { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        protected MethodInfo(MethodAttributes @attributes, CallingConventions @callingConvention, bool @containsGenericParameters, System.Collections.Generic.ICollection<CustomAttributeData> @customAttributes, string @declaringType, int @genericParameterCount, bool @isAbstract, bool @isAssembly, bool @isCollectible, bool @isConstructedGenericMethod, bool @isConstructor, bool @isFamily, bool @isFamilyAndAssembly, bool @isFamilyOrAssembly, bool @isFinal, bool @isGenericMethod, bool @isGenericMethodDefinition, bool @isHideBySig, bool @isPrivate, bool @isPublic, bool @isSecurityCritical, bool @isSecuritySafeCritical, bool @isSecurityTransparent, bool @isSpecialName, bool @isStatic, bool @isVirtual, MemberTypes @memberType, MemberTypes @memberType, int @metadataToken, RuntimeMethodHandle @methodHandle, MethodImplAttributes @methodImplementationFlags, Module @module, string @name, string @reflectedType, ParameterInfo @returnParameter, string @returnType, ICustomAttributeProvider @returnTypeCustomAttributes)
+
+            : base(attributes, callingConvention, containsGenericParameters, customAttributes, declaringType, isAbstract, isAssembly, isCollectible, isConstructedGenericMethod, isConstructor, isFamily, isFamilyAndAssembly, isFamilyOrAssembly, isFinal, isGenericMethod, isGenericMethodDefinition, isHideBySig, isPrivate, isPublic, isSecurityCritical, isSecuritySafeCritical, isSecurityTransparent, isSpecialName, isStatic, isVirtual, memberType, metadataToken, methodHandle, methodImplementationFlags, module, name, reflectedType)
+
+        {
+
+            this.MemberType = @memberType;
+
+            this.ReturnParameter = @returnParameter;
+
+            this.ReturnType = @returnType;
+
+            this.ReturnTypeCustomAttributes = @returnTypeCustomAttributes;
+
+            this.GenericParameterCount = @genericParameterCount;
+
+        }    [Newtonsoft.Json.JsonProperty("memberType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public MemberTypes MemberType { get; init; }
 
         [Newtonsoft.Json.JsonProperty("returnParameter", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ParameterInfo ReturnParameter { get; set; }
+        public ParameterInfo ReturnParameter { get; init; }
 
         [Newtonsoft.Json.JsonProperty("returnType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ReturnType { get; set; }
+        public string ReturnType { get; init; }
 
         [Newtonsoft.Json.JsonProperty("returnTypeCustomAttributes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ICustomAttributeProvider ReturnTypeCustomAttributes { get; set; }
+        public ICustomAttributeProvider ReturnTypeCustomAttributes { get; init; }
 
         [Newtonsoft.Json.JsonProperty("genericParameterCount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int GenericParameterCount { get; set; }
+        public int GenericParameterCount { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record ParameterInfo
     {
-        [Newtonsoft.Json.JsonProperty("attributes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ParameterAttributes Attributes { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public ParameterInfo(ParameterAttributes @attributes, System.Collections.Generic.ICollection<CustomAttributeData> @customAttributes, object @defaultValue, bool @hasDefaultValue, bool @isIn, bool @isLcid, bool @isOptional, bool @isOut, bool @isRetval, MemberInfo @member, int @metadataToken, string @name, string @parameterType, int @position, object @rawDefaultValue)
+
+        {
+
+            this.Attributes = @attributes;
+
+            this.Member = @member;
+
+            this.Name = @name;
+
+            this.ParameterType = @parameterType;
+
+            this.Position = @position;
+
+            this.IsIn = @isIn;
+
+            this.IsLcid = @isLcid;
+
+            this.IsOptional = @isOptional;
+
+            this.IsOut = @isOut;
+
+            this.IsRetval = @isRetval;
+
+            this.DefaultValue = @defaultValue;
+
+            this.RawDefaultValue = @rawDefaultValue;
+
+            this.HasDefaultValue = @hasDefaultValue;
+
+            this.CustomAttributes = @customAttributes;
+
+            this.MetadataToken = @metadataToken;
+
+        }    [Newtonsoft.Json.JsonProperty("attributes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ParameterAttributes Attributes { get; init; }
 
         [Newtonsoft.Json.JsonProperty("member", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MemberInfo Member { get; set; }
+        public MemberInfo Member { get; init; }
 
         [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
+        public string Name { get; init; }
 
         [Newtonsoft.Json.JsonProperty("parameterType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ParameterType { get; set; }
+        public string ParameterType { get; init; }
 
         [Newtonsoft.Json.JsonProperty("position", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int Position { get; set; }
+        public int Position { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isIn", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsIn { get; set; }
+        public bool IsIn { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isLcid", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsLcid { get; set; }
+        public bool IsLcid { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isOptional", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsOptional { get; set; }
+        public bool IsOptional { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isOut", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsOut { get; set; }
+        public bool IsOut { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isRetval", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsRetval { get; set; }
+        public bool IsRetval { get; init; }
 
         [Newtonsoft.Json.JsonProperty("defaultValue", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public object DefaultValue { get; set; }
+        public object DefaultValue { get; init; }
 
         [Newtonsoft.Json.JsonProperty("rawDefaultValue", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public object RawDefaultValue { get; set; }
+        public object RawDefaultValue { get; init; }
 
         [Newtonsoft.Json.JsonProperty("hasDefaultValue", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool HasDefaultValue { get; set; }
+        public bool HasDefaultValue { get; init; }
 
         [Newtonsoft.Json.JsonProperty("customAttributes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<CustomAttributeData> CustomAttributes { get; set; }
+        public System.Collections.Generic.ICollection<CustomAttributeData> CustomAttributes { get; init; }
 
         [Newtonsoft.Json.JsonProperty("metadataToken", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int MetadataToken { get; set; }
+        public int MetadataToken { get; init; }
 
     }
 
@@ -3204,117 +3910,209 @@ namespace Photobox.Lib.RestApi
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record CustomAttributeData
     {
-        [Newtonsoft.Json.JsonProperty("attributeType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string AttributeType { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public CustomAttributeData(string @attributeType, ConstructorInfo @constructor, System.Collections.Generic.ICollection<CustomAttributeTypedArgument> @constructorArguments, System.Collections.Generic.ICollection<CustomAttributeNamedArgument> @namedArguments)
+
+        {
+
+            this.AttributeType = @attributeType;
+
+            this.Constructor = @constructor;
+
+            this.ConstructorArguments = @constructorArguments;
+
+            this.NamedArguments = @namedArguments;
+
+        }    [Newtonsoft.Json.JsonProperty("attributeType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string AttributeType { get; init; }
 
         [Newtonsoft.Json.JsonProperty("constructor", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ConstructorInfo Constructor { get; set; }
+        public ConstructorInfo Constructor { get; init; }
 
         [Newtonsoft.Json.JsonProperty("constructorArguments", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<CustomAttributeTypedArgument> ConstructorArguments { get; set; }
+        public System.Collections.Generic.ICollection<CustomAttributeTypedArgument> ConstructorArguments { get; init; }
 
         [Newtonsoft.Json.JsonProperty("namedArguments", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<CustomAttributeNamedArgument> NamedArguments { get; set; }
+        public System.Collections.Generic.ICollection<CustomAttributeNamedArgument> NamedArguments { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record CustomAttributeTypedArgument
     {
-        [Newtonsoft.Json.JsonProperty("argumentType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ArgumentType { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public CustomAttributeTypedArgument(string @argumentType, object @value)
+
+        {
+
+            this.ArgumentType = @argumentType;
+
+            this.Value = @value;
+
+        }    [Newtonsoft.Json.JsonProperty("argumentType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ArgumentType { get; init; }
 
         [Newtonsoft.Json.JsonProperty("value", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public object Value { get; set; }
+        public object Value { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record CustomAttributeNamedArgument
     {
-        [Newtonsoft.Json.JsonProperty("argumentType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ArgumentType { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public CustomAttributeNamedArgument(string @argumentType, bool @isField, MemberInfo @memberInfo, string @memberName, CustomAttributeTypedArgument @typedValue)
+
+        {
+
+            this.ArgumentType = @argumentType;
+
+            this.MemberInfo = @memberInfo;
+
+            this.TypedValue = @typedValue;
+
+            this.MemberName = @memberName;
+
+            this.IsField = @isField;
+
+        }    [Newtonsoft.Json.JsonProperty("argumentType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ArgumentType { get; init; }
 
         [Newtonsoft.Json.JsonProperty("memberInfo", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MemberInfo MemberInfo { get; set; }
+        public MemberInfo MemberInfo { get; init; }
 
         [Newtonsoft.Json.JsonProperty("typedValue", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public CustomAttributeTypedArgument TypedValue { get; set; }
+        public CustomAttributeTypedArgument TypedValue { get; init; }
 
         [Newtonsoft.Json.JsonProperty("memberName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string MemberName { get; set; }
+        public string MemberName { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isField", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsField { get; set; }
+        public bool IsField { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public abstract partial record ICustomAttributeProvider
     {
+        [Newtonsoft.Json.JsonConstructor]
 
+        protected ICustomAttributeProvider()
+
+        {
+
+        }
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public abstract partial record FieldInfo : MemberInfo
     {
-        [Newtonsoft.Json.JsonProperty("memberType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MemberTypes MemberType { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        protected FieldInfo(FieldAttributes @attributes, System.Collections.Generic.ICollection<CustomAttributeData> @customAttributes, string @declaringType, RuntimeFieldHandle @fieldHandle, string @fieldType, bool @isAssembly, bool @isCollectible, bool @isFamily, bool @isFamilyAndAssembly, bool @isFamilyOrAssembly, bool @isInitOnly, bool @isLiteral, bool @isNotSerialized, bool @isPinvokeImpl, bool @isPrivate, bool @isPublic, bool @isSecurityCritical, bool @isSecuritySafeCritical, bool @isSecurityTransparent, bool @isSpecialName, bool @isStatic, MemberTypes @memberType, MemberTypes @memberType, int @metadataToken, Module @module, string @name, string @reflectedType)
+
+            : base(customAttributes, declaringType, isCollectible, memberType, metadataToken, module, name, reflectedType)
+
+        {
+
+            this.MemberType = @memberType;
+
+            this.Attributes = @attributes;
+
+            this.FieldType = @fieldType;
+
+            this.IsInitOnly = @isInitOnly;
+
+            this.IsLiteral = @isLiteral;
+
+            this.IsNotSerialized = @isNotSerialized;
+
+            this.IsPinvokeImpl = @isPinvokeImpl;
+
+            this.IsSpecialName = @isSpecialName;
+
+            this.IsStatic = @isStatic;
+
+            this.IsAssembly = @isAssembly;
+
+            this.IsFamily = @isFamily;
+
+            this.IsFamilyAndAssembly = @isFamilyAndAssembly;
+
+            this.IsFamilyOrAssembly = @isFamilyOrAssembly;
+
+            this.IsPrivate = @isPrivate;
+
+            this.IsPublic = @isPublic;
+
+            this.IsSecurityCritical = @isSecurityCritical;
+
+            this.IsSecuritySafeCritical = @isSecuritySafeCritical;
+
+            this.IsSecurityTransparent = @isSecurityTransparent;
+
+            this.FieldHandle = @fieldHandle;
+
+        }    [Newtonsoft.Json.JsonProperty("memberType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public MemberTypes MemberType { get; init; }
 
         [Newtonsoft.Json.JsonProperty("attributes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public FieldAttributes Attributes { get; set; }
+        public FieldAttributes Attributes { get; init; }
 
         [Newtonsoft.Json.JsonProperty("fieldType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string FieldType { get; set; }
+        public string FieldType { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isInitOnly", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsInitOnly { get; set; }
+        public bool IsInitOnly { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isLiteral", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsLiteral { get; set; }
+        public bool IsLiteral { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isNotSerialized", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [System.Obsolete("Formatter-based serialization is obsolete and should not be used.")]
-        public bool IsNotSerialized { get; set; }
+        public bool IsNotSerialized { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isPinvokeImpl", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsPinvokeImpl { get; set; }
+        public bool IsPinvokeImpl { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isSpecialName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsSpecialName { get; set; }
+        public bool IsSpecialName { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isStatic", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsStatic { get; set; }
+        public bool IsStatic { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isAssembly", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsAssembly { get; set; }
+        public bool IsAssembly { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isFamily", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsFamily { get; set; }
+        public bool IsFamily { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isFamilyAndAssembly", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsFamilyAndAssembly { get; set; }
+        public bool IsFamilyAndAssembly { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isFamilyOrAssembly", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsFamilyOrAssembly { get; set; }
+        public bool IsFamilyOrAssembly { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isPrivate", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsPrivate { get; set; }
+        public bool IsPrivate { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isPublic", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsPublic { get; set; }
+        public bool IsPublic { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isSecurityCritical", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsSecurityCritical { get; set; }
+        public bool IsSecurityCritical { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isSecuritySafeCritical", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsSecuritySafeCritical { get; set; }
+        public bool IsSecuritySafeCritical { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isSecurityTransparent", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsSecurityTransparent { get; set; }
+        public bool IsSecurityTransparent { get; init; }
 
         [Newtonsoft.Json.JsonProperty("fieldHandle", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public RuntimeFieldHandle FieldHandle { get; set; }
+        public RuntimeFieldHandle FieldHandle { get; init; }
 
     }
 
@@ -3366,37 +4164,69 @@ namespace Photobox.Lib.RestApi
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record RuntimeFieldHandle
     {
-        [Newtonsoft.Json.JsonProperty("value", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public IntPtr Value { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public RuntimeFieldHandle(IntPtr @value)
+
+        {
+
+            this.Value = @value;
+
+        }    [Newtonsoft.Json.JsonProperty("value", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public IntPtr Value { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public abstract partial record PropertyInfo : MemberInfo
     {
-        [Newtonsoft.Json.JsonProperty("memberType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MemberTypes MemberType { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        protected PropertyInfo(PropertyAttributes @attributes, bool @canRead, bool @canWrite, System.Collections.Generic.ICollection<CustomAttributeData> @customAttributes, string @declaringType, MethodInfo @getMethod, bool @isCollectible, bool @isSpecialName, MemberTypes @memberType, MemberTypes @memberType, int @metadataToken, Module @module, string @name, string @propertyType, string @reflectedType, MethodInfo @setMethod)
+
+            : base(customAttributes, declaringType, isCollectible, memberType, metadataToken, module, name, reflectedType)
+
+        {
+
+            this.MemberType = @memberType;
+
+            this.PropertyType = @propertyType;
+
+            this.Attributes = @attributes;
+
+            this.IsSpecialName = @isSpecialName;
+
+            this.CanRead = @canRead;
+
+            this.CanWrite = @canWrite;
+
+            this.GetMethod = @getMethod;
+
+            this.SetMethod = @setMethod;
+
+        }    [Newtonsoft.Json.JsonProperty("memberType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public MemberTypes MemberType { get; init; }
 
         [Newtonsoft.Json.JsonProperty("propertyType", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string PropertyType { get; set; }
+        public string PropertyType { get; init; }
 
         [Newtonsoft.Json.JsonProperty("attributes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public PropertyAttributes Attributes { get; set; }
+        public PropertyAttributes Attributes { get; init; }
 
         [Newtonsoft.Json.JsonProperty("isSpecialName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsSpecialName { get; set; }
+        public bool IsSpecialName { get; init; }
 
         [Newtonsoft.Json.JsonProperty("canRead", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool CanRead { get; set; }
+        public bool CanRead { get; init; }
 
         [Newtonsoft.Json.JsonProperty("canWrite", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool CanWrite { get; set; }
+        public bool CanWrite { get; init; }
 
         [Newtonsoft.Json.JsonProperty("getMethod", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MethodInfo GetMethod { get; set; }
+        public MethodInfo GetMethod { get; init; }
 
         [Newtonsoft.Json.JsonProperty("setMethod", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MethodInfo SetMethod { get; set; }
+        public MethodInfo SetMethod { get; init; }
 
     }
 
@@ -3438,8 +4268,16 @@ namespace Photobox.Lib.RestApi
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record ModuleHandle
     {
-        [Newtonsoft.Json.JsonProperty("mdStreamVersion", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int MdStreamVersion { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public ModuleHandle(int @mdStreamVersion)
+
+        {
+
+            this.MdStreamVersion = @mdStreamVersion;
+
+        }    [Newtonsoft.Json.JsonProperty("mdStreamVersion", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int MdStreamVersion { get; init; }
 
     }
 
@@ -3459,61 +4297,107 @@ namespace Photobox.Lib.RestApi
     [Newtonsoft.Json.JsonObjectAttribute]
     public partial record Exception
     {
-        [Newtonsoft.Json.JsonProperty("targetSite", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public MethodBase TargetSite { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        public Exception(System.Collections.Generic.ICollection<object> @data, string @helpLink, int @hResult, Exception @innerException, string @message, string @source, string @stackTrace, MethodBase @targetSite)
+
+        {
+
+            this.TargetSite = @targetSite;
+
+            this.Message = @message;
+
+            this.Data = @data;
+
+            this.InnerException = @innerException;
+
+            this.HelpLink = @helpLink;
+
+            this.Source = @source;
+
+            this.HResult = @hResult;
+
+            this.StackTrace = @stackTrace;
+
+        }    [Newtonsoft.Json.JsonProperty("targetSite", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public MethodBase TargetSite { get; init; }
 
         [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Message { get; set; }
+        public string Message { get; init; }
 
         [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<object> Data { get; set; }
+        public System.Collections.Generic.ICollection<object> Data { get; init; }
 
         [Newtonsoft.Json.JsonProperty("innerException", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public Exception InnerException { get; set; }
+        public Exception InnerException { get; init; }
 
         [Newtonsoft.Json.JsonProperty("helpLink", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string HelpLink { get; set; }
+        public string HelpLink { get; init; }
 
         [Newtonsoft.Json.JsonProperty("source", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Source { get; set; }
+        public string Source { get; init; }
 
         [Newtonsoft.Json.JsonProperty("hResult", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int HResult { get; set; }
+        public int HResult { get; init; }
 
         [Newtonsoft.Json.JsonProperty("stackTrace", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string StackTrace { get; set; }
+        public string StackTrace { get; init; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public abstract partial record Anonymous
     {
-        [Newtonsoft.Json.JsonProperty("genericTypeParameters", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> GenericTypeParameters { get; set; }
+        [Newtonsoft.Json.JsonConstructor]
+
+        protected Anonymous(System.Collections.Generic.ICollection<ConstructorInfo> @declaredConstructors, System.Collections.Generic.ICollection<EventInfo> @declaredEvents, System.Collections.Generic.ICollection<FieldInfo> @declaredFields, System.Collections.Generic.ICollection<MemberInfo> @declaredMembers, System.Collections.Generic.ICollection<MethodInfo> @declaredMethods, System.Collections.Generic.ICollection<TypeInfo> @declaredNestedTypes, System.Collections.Generic.ICollection<PropertyInfo> @declaredProperties, System.Collections.Generic.ICollection<string> @genericTypeParameters, System.Collections.Generic.ICollection<string> @implementedInterfaces)
+
+        {
+
+            this.GenericTypeParameters = @genericTypeParameters;
+
+            this.DeclaredConstructors = @declaredConstructors;
+
+            this.DeclaredEvents = @declaredEvents;
+
+            this.DeclaredFields = @declaredFields;
+
+            this.DeclaredMembers = @declaredMembers;
+
+            this.DeclaredMethods = @declaredMethods;
+
+            this.DeclaredNestedTypes = @declaredNestedTypes;
+
+            this.DeclaredProperties = @declaredProperties;
+
+            this.ImplementedInterfaces = @implementedInterfaces;
+
+        }    [Newtonsoft.Json.JsonProperty("genericTypeParameters", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> GenericTypeParameters { get; init; }
 
         [Newtonsoft.Json.JsonProperty("declaredConstructors", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<ConstructorInfo> DeclaredConstructors { get; set; }
+        public System.Collections.Generic.ICollection<ConstructorInfo> DeclaredConstructors { get; init; }
 
         [Newtonsoft.Json.JsonProperty("declaredEvents", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<EventInfo> DeclaredEvents { get; set; }
+        public System.Collections.Generic.ICollection<EventInfo> DeclaredEvents { get; init; }
 
         [Newtonsoft.Json.JsonProperty("declaredFields", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<FieldInfo> DeclaredFields { get; set; }
+        public System.Collections.Generic.ICollection<FieldInfo> DeclaredFields { get; init; }
 
         [Newtonsoft.Json.JsonProperty("declaredMembers", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<MemberInfo> DeclaredMembers { get; set; }
+        public System.Collections.Generic.ICollection<MemberInfo> DeclaredMembers { get; init; }
 
         [Newtonsoft.Json.JsonProperty("declaredMethods", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<MethodInfo> DeclaredMethods { get; set; }
+        public System.Collections.Generic.ICollection<MethodInfo> DeclaredMethods { get; init; }
 
         [Newtonsoft.Json.JsonProperty("declaredNestedTypes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<TypeInfo> DeclaredNestedTypes { get; set; }
+        public System.Collections.Generic.ICollection<TypeInfo> DeclaredNestedTypes { get; init; }
 
         [Newtonsoft.Json.JsonProperty("declaredProperties", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<PropertyInfo> DeclaredProperties { get; set; }
+        public System.Collections.Generic.ICollection<PropertyInfo> DeclaredProperties { get; init; }
 
         [Newtonsoft.Json.JsonProperty("implementedInterfaces", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> ImplementedInterfaces { get; set; }
+        public System.Collections.Generic.ICollection<string> ImplementedInterfaces { get; init; }
 
     }
 
