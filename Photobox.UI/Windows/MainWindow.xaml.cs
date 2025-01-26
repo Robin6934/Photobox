@@ -2,10 +2,12 @@
 using Microsoft.Extensions.Logging;
 using Photobox.UI.CountDown;
 using Photobox.UI.ImageViewer;
+using Photobox.UI.Lib.AccessTokenManager;
 using Photobox.UI.Lib.Camera;
 using Photobox.UI.Lib.ImageHandler;
 using Photobox.UI.Lib.ImageManager;
 using Photobox.WpfHelpers;
+using Serilog;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System.IO;
@@ -27,6 +29,8 @@ public partial class MainWindow : Window, IHostedService
     private readonly IImageHandler imageHandler;
 
     private readonly IImageManager imageManager;
+    
+    private readonly IAccessTokenManager _accessTokenManager;
 
     public MainWindow(
         ICamera camera,
@@ -35,7 +39,8 @@ public partial class MainWindow : Window, IHostedService
         ICountDown countDown,
         IHostApplicationLifetime applicationLifetime,
         IImageHandler imageHandler,
-        IImageManager imageManager)
+        IImageManager imageManager,
+        IAccessTokenManager accessTokenManager)
     {
         InitializeComponent();
 
@@ -52,6 +57,8 @@ public partial class MainWindow : Window, IHostedService
         this.imageHandler = imageHandler;
 
         this.imageManager = imageManager;
+        
+        _accessTokenManager = accessTokenManager;
 
         countDown.Panel = GridLiveView;
 
@@ -86,7 +93,7 @@ public partial class MainWindow : Window, IHostedService
                     await imageManager.DeleteAsync(image);
                     break;
                 default:
-                    break;
+                    throw new ArgumentOutOfRangeException(nameof(result));
             }
         };
 
@@ -109,7 +116,18 @@ public partial class MainWindow : Window, IHostedService
         Show();
         applicationLifetime.ApplicationStopping.Register(Close);
         logger.LogInformation("The main window has started.");
+        if (!_accessTokenManager.RefreshTokenAvailable)
+        {
+            Login();
+        }
         return Task.CompletedTask;
+    }
+
+    private void Login()
+    {
+        var loginWindow = new LoginWindow(_accessTokenManager);
+        loginWindow.OnLoginCanceled += (s, e) => applicationLifetime.StopApplication();
+        loginWindow.ShowDialog();
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

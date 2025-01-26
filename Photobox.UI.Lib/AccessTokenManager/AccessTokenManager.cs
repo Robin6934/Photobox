@@ -7,7 +7,7 @@ using System.Net;
 
 namespace Photobox.UI.Lib.AccessTokenManager;
 
-public class AccessTokenManager(IOptionsMonitor<PhotoboxConfig> configMonitor, IClient photoBoxClient) : IAccessTokenManager
+public class AccessTokenManager(IOptionsMonitor<PhotoboxConfig> configMonitor, IClient photoBoxClient, IPhotoBoxClient client) : IAccessTokenManager
 {
     private string? _accessToken;
     
@@ -44,7 +44,7 @@ public class AccessTokenManager(IOptionsMonitor<PhotoboxConfig> configMonitor, I
         };
 
         var loginResponse = await photoBoxClient.PostLoginAsync(loginRequest, false, false);
-        
+
         _accessToken = loginResponse.AccessToken;
         
         RefreshToken = loginResponse.RefreshToken;
