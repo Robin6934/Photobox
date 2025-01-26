@@ -83,7 +83,7 @@
       "dictionaryInstanceType": "System.Collections.Generic.Dictionary",
       "arrayBaseType": "System.Collections.ObjectModel.Collection",
       "dictionaryBaseType": "System.Collections.Generic.Dictionary",
-      "classStyle": "Record",
+      "classStyle": "Poco",
       "jsonLibrary": "NewtonsoftJson",
       "generateDefaultValues": true,
       "generateDataAnnotations": true,
