@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Photobox.UI.CountDown;
 using Photobox.UI.ImageViewer;
-using Photobox.UI.Lib.AccessTokenManager;
+using Photobox.Lib.AccessTokenManager;
 using Photobox.UI.Lib.Camera;
 using Photobox.UI.Lib.ImageHandler;
 using Photobox.UI.Lib.ImageManager;

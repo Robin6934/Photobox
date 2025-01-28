@@ -2,7 +2,7 @@
 using Photobox.Lib.RestApi;
 using System.Net;
 
-namespace Photobox.UI.Lib.AccessTokenManager;
+namespace Photobox.Lib.AccessTokenManager;
 
 public class AccessTokenManager(IClient photoBoxClient, IPhotoBoxClient client) : IAccessTokenManager
 {
@@ -28,7 +28,7 @@ public class AccessTokenManager(IClient photoBoxClient, IPhotoBoxClient client) 
 
     public Task<string?> AccessToken => GetAccessToken();
     
-    public bool LoggedIn => !string.IsNullOrEmpty(_accessToken) && _accessTokenExpiry > DateTime.Now;
+    public bool LoggedIn => !string.IsNullOrEmpty(_accessToken) && _accessTokenExpiry > DateTime.Now.Add(TimeSpan.FromSeconds(5));
     
     public bool RefreshTokenAvailable => !string.IsNullOrEmpty(RefreshToken);
 
@@ -49,18 +49,15 @@ public class AccessTokenManager(IClient photoBoxClient, IPhotoBoxClient client) 
         _accessTokenExpiry = DateTime.Now.AddSeconds(loginResponse.ExpiresIn);
     }
     
-    public Task LogoutAsync()
+    public void Logout()
     {
         _accessToken = null;
         _accessTokenExpiry = DateTime.Now;
-        
-        return Task.CompletedTask;
     }
     
     private async Task<string?> GetAccessToken()
     {
-        if(_accessTokenExpiry > DateTime.Now.Subtract(TimeSpan.FromSeconds(5))
-           && !string.IsNullOrEmpty(_accessToken))
+        if(LoggedIn)
         {
             return _accessToken;
         }

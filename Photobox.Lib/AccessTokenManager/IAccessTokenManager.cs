@@ -1,4 +1,4 @@
-﻿namespace Photobox.UI.Lib.AccessTokenManager;
+﻿namespace Photobox.Lib.AccessTokenManager;
 
 public interface IAccessTokenManager
 {
@@ -31,5 +31,5 @@ public interface IAccessTokenManager
     /// Sets the access token to null and logs the user out.
     /// </summary>
     /// <returns></returns>
-    Task LogoutAsync();
+    void Logout();
 }
