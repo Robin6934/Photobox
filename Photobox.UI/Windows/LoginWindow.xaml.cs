@@ -1,4 +1,4 @@
-﻿using Photobox.UI.Lib.AccessTokenManager;
+﻿using Photobox.Lib.AccessTokenManager;
 using System.Windows;
 
 namespace Photobox.UI.Windows;
