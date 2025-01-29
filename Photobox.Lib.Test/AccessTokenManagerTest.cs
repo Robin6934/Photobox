@@ -85,7 +85,6 @@ public class AccessTokenManagerTests
     public void RefreshTokenAvailable_ShouldReturnFalse_IfNoRefreshTokenIsPresent()
     {
         // Arrange
-
         var credential = CredentialManager.GetICredential("PhotoboxRefreshToken");
         if (credential is not null)
         {
@@ -129,7 +128,6 @@ public class AccessTokenManagerTests
     public async Task AccessToken_ShouldBeUpdated_WhenAccessTokenIsExpired()
     {
         // Arrange
-
         var accessTokenResponse = new AccessTokenResponse
         {
             AccessToken = "access-token", RefreshToken = "refresh-token", ExpiresIn = 6
@@ -157,5 +155,50 @@ public class AccessTokenManagerTests
 
         // Assert
         accessToken.ShouldBe("new-access-token");
+    }
+    
+    [Fact]
+    public async Task AccessToken_ShouldBeNull_WhenNotLoggedIn()
+    {
+        // Arrange
+        var credential = CredentialManager.GetICredential("PhotoboxRefreshToken");
+        if (credential is not null)
+        {
+            CredentialManager.RemoveCredentials("PhotoboxRefreshToken");
+        }
+        
+        // Act
+        string? accessToken = await _accessTokenManager.AccessToken;
+
+        // Assert
+        accessToken.ShouldBeNull();
+    }
+    
+    [Fact]
+    public async Task AccessTokenManager_Logout_ShouldDeleteBothTokens()
+    {
+        // Arrange
+        var accessTokenResponse = new AccessTokenResponse
+        {
+            AccessToken = "access-token", RefreshToken = "refresh-token", ExpiresIn = 6
+        };
+
+        _photoBoxClient.PostLoginAsync(Arg.Any<LoginRequest>(), false, false)
+            .Returns(Task.FromResult(accessTokenResponse));
+
+        _accessTokenManager.LoginAsync("", "");
+        
+        (await _accessTokenManager.AccessToken).ShouldBe("access-token");
+
+        _accessTokenManager.Logout();
+        
+        // Act
+        string? accessToken = await _accessTokenManager.AccessToken;
+        
+        var credential = CredentialManager.GetICredential("PhotoboxRefreshToken");
+
+        // Assert
+        accessToken.ShouldBeNull();
+        credential.ShouldBeNull();
     }
 }

@@ -53,6 +53,12 @@ public class AccessTokenManager(IClient photoBoxClient, IPhotoBoxClient client) 
     {
         _accessToken = null;
         _accessTokenExpiry = DateTime.Now;
+        
+        var credential = CredentialManager.GetICredential("PhotoboxRefreshToken");
+        if (credential is not null)
+        {
+            CredentialManager.RemoveCredentials("PhotoboxRefreshToken");
+        }
     }
     
     private async Task<string?> GetAccessToken()
