@@ -28,7 +28,7 @@ public interface IAccessTokenManager
     Task LoginAsync(string email, string password);
     
     /// <summary>
-    /// Sets the access token to null and logs the user out.
+    /// Logs the user out, invalidating the current access and refresh tokens.
     /// </summary>
     /// <returns></returns>
     void Logout();
