@@ -1,0 +1,58 @@
+﻿@inherits ComponentBase
+
+@inject IJSRuntime JS
+
+@if (Object.Type == "Image")
+{
+    <img src="@Object.Content" 
+         style="position: absolute; left: @(Object.X)px; top: @(Object.Y)px; width: @(Object.Width)px; height: @(Object.Height)px; cursor: move;"
+         @onmousedown="StartDrag" />
+}
+else if (Object.Type == "Text")
+{
+    <span style="position: absolute; left: @(Object.X)px; top: @(Object.Y)px; font-size: @(Object.FontSize)px; color: black; cursor: move;"
+          @onmousedown="StartDrag">
+        @Object.Content
+    </span>
+}
+
+@code {
+    [Parameter] public ImageObject Object { get; set; } = default!;
+    [Parameter] public EventCallback<ImageObject> OnUpdated { get; set; }
+
+    private bool _isDragging;
+    private int _startX;
+    private int _startY;
+
+    private void StartDrag(MouseEventArgs e)
+    {
+        _isDragging = true;
+        _startX = (int)e.ClientX - Object.X;
+        _startY = (int)e.ClientY - Object.Y;
+    }
+
+    [JSInvokable]
+    public void StopDrag()
+    {
+        _isDragging = false;
+    }
+
+    [JSInvokable]
+    public void OnMouseMove(MouseEventArgs e)
+    {
+        if (_isDragging)
+        {
+            Object.X = (int)e.ClientX - _startX;
+            Object.Y = (int)e.ClientY - _startY;
+            OnUpdated.InvokeAsync(Object);
+        }
+    }
+
+    protected override async void OnInitialized()
+    {
+        await base.OnInitializedAsync();
+        // Attach event listeners for dragging
+        var dotNetRef = DotNetObjectReference.Create(this);
+        await JS.InvokeVoidAsync("attachMouseEvents", dotNetRef);
+    }
+}

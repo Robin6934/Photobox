@@ -1,4 +1,6 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using MudBlazor;
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">Photobox.Web</a>
     </div>
@@ -10,13 +12,13 @@
     <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Gallery
+                <MudIcon Icon="@Icons.Material.Filled.Image" aria-hidden="true"></MudIcon> Gallery
             </NavLink>
         </div>
 
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+            <NavLink class="nav-link" href="configureFrame">
+                <MudIcon Icon="@Icons.Material.Filled.ModeEdit" aria-hidden="true"></MudIcon> Configurator
             </NavLink>
         </div>
     </nav>

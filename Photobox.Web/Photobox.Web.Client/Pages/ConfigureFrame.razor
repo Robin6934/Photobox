@@ -1,0 +1,84 @@
+﻿@page "/configureFrame"
+@rendermode InteractiveWebAssembly
+
+@using MudBlazor;
+@using Photobox.Web.Client.Pages.Components
+
+<h3>Photo Frame Customizer</h3>
+
+@if (string.IsNullOrEmpty(_imagePreview))
+{
+    <InputFile OnChange="LoadFile" accept="image/*"/>
+}
+else
+{
+    <div style="position: relative; display: inline-block;" @onmousemove="OnMouseMove" @onmouseup="StopDrag">
+        <MudImage Fluid="true" src="@_imagePreview" style="max-width: 100%;" />
+
+        @foreach (var obj in _imageObjects)
+        {
+            <ImageObjectComponent Object="obj" OnUpdated="UpdateObject" />
+        }
+    </div>
+    
+    <button @onclick="AddTextObject">Add Text</button>
+    <button @onclick="AddImageObject">Add Image</button>
+}
+
+@code {
+    private string? _imagePreview;
+    private List<ImageObject> _imageObjects = new();
+
+    private async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        var buffer = new byte[file.Size];
+        await file.OpenReadStream().ReadAsync(buffer.AsMemory());
+        _imagePreview = $"data:{file.ContentType};base64,{Convert.ToBase64String(buffer)}";
+    }
+
+    private void AddTextObject()
+    {
+        _imageObjects.Add(new ImageObject
+        {
+            Type = "Text",
+            Content = "Sample Text",
+            X = 50,
+            Y = 50,
+            FontSize = 20
+        });
+    }
+
+    private void AddImageObject()
+    {
+        _imageObjects.Add(new ImageObject
+        {
+            Type = "Image",
+            Content = "https://via.placeholder.com/100", // Replace with uploaded image URL
+            X = 100,
+            Y = 100,
+            Width = 100,
+            Height = 100
+        });
+    }
+
+    private void UpdateObject(ImageObject obj)
+    {
+        var index = _imageObjects.FindIndex(x => x == obj);
+        if (index != -1)
+        {
+            _imageObjects[index] = obj;
+            StateHasChanged();
+        }
+    }
+
+    private void StopDrag()
+    {
+        // Stop dragging (handled inside ImageObjectComponent)
+    }
+
+    private void OnMouseMove(MouseEventArgs e)
+    {
+        // Handle mouse movement globally (optional)
+    }
+}
