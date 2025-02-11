@@ -1,0 +1,23 @@
+﻿@using Photobox.Web.Client.MouseService
+
+@inject IMouseService MouseService
+
+<g transform="translate(@x, @y)" @onmousedown="OnDown">
+    @ChildContent
+</g>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }  double x = 250;
+    double y = 150;  protected override void OnInitialized() {    MouseService.OnMove += OnMove;
+        MouseService.OnUp += OnUp;    base.OnInitialized();
+    }  void OnDown(MouseEventArgs e) {...}
+    void OnMove(object? _, MouseEventArgs e) {... x=... y=...}
+    
+    void OnUp(object? _, MouseEventArgs e) {...}
+    
+    
+    public void Dispose() {
+        MouseService.OnMove -= OnMove;
+        MouseService.OnUp -= OnUp;
+    }
+}
