@@ -17,7 +17,7 @@ namespace Photobox.Web.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("ProductVersion", "9.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -258,15 +258,18 @@ namespace Photobox.Web.Migrations
 
                     b.Property<string>("ApplicationUserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
-                    b.Property<string>("SerialNumber")
+                    b.Property<string>("PhotoboxId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(52)
+                        .HasColumnType("character varying(52)");
 
                     b.HasKey("Id");
 

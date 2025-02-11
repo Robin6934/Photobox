@@ -1,23 +1,105 @@
 ﻿@using Photobox.Web.Client.MouseService
+@inject IMouseService MouseSrv
 
-@inject IMouseService MouseService
-
-<g transform="translate(@x, @y)" @onmousedown="OnDown">
+<g transform="translate(@x, @y)" cursor=@_cursor @onmousedown=OnDown
+   @onmousedown:stopPropagation="true">
     @ChildContent
 </g>
 
 @code {
-    [Parameter] public RenderFragment? ChildContent { get; set; }  double x = 250;
-    double y = 150;  protected override void OnInitialized() {    MouseService.OnMove += OnMove;
-        MouseService.OnUp += OnUp;    base.OnInitialized();
-    }  void OnDown(MouseEventArgs e) {...}
-    void OnMove(object? _, MouseEventArgs e) {... x=... y=...}
-    
-    void OnUp(object? _, MouseEventArgs e) {...}
-    
-    
-    public void Dispose() {
-        MouseService.OnMove -= OnMove;
-        MouseService.OnUp -= OnUp;
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+
+    double? x;
+
+    [Parameter]
+    public double X
+    {
+        get => x ?? 0;
+        set
+        {
+            if (!x.HasValue || (!IsDown & XChanged.HasDelegate))
+            {
+                x = value;
+            }
+        }
     }
+
+    [Parameter] public EventCallback<double> XChanged { get; set; }
+
+    double? y;
+
+    [Parameter]
+    public double Y
+    {
+        get => y ?? 0;
+        set
+        {
+            if (!y.HasValue || (!IsDown & YChanged.HasDelegate))
+            {
+                y = value;
+            }
+        }
+    }
+
+    [Parameter] public EventCallback<double> YChanged { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        MouseSrv.OnMove += OnMove;
+        MouseSrv.OnUp += OnUpLeave;
+        MouseSrv.OnLeave += OnUpLeave;
+        base.OnInitialized();
+    }
+
+
+    string _cursor = "grab";
+    bool _isDown;
+
+    bool IsDown
+    {
+        get => _isDown;
+        set
+        {
+            _isDown = value;
+            _cursor = _isDown ? "grabbing" : "grab";
+        }
+    }
+
+    double _cursorX;
+    double _cursorY;
+
+    void OnDown(MouseEventArgs e)
+    {
+        IsDown = true;
+        _cursorX = e.ClientX;
+        _cursorY = e.ClientY;
+    }
+
+    void OnUpLeave(object? _, MouseEventArgs e)
+        => IsDown = false;
+
+    void OnMove(object? _, MouseEventArgs e)
+    {
+        if (!IsDown)
+            return;
+
+        x = x - (_cursorX - e.ClientX);
+        y = y - (_cursorY - e.ClientY);
+
+        _cursorX = e.ClientX;
+        _cursorY = e.ClientY;
+
+        XChanged.InvokeAsync(x.Value);
+        YChanged.InvokeAsync(y.Value);
+    }
+
+    public void Dispose()
+    {
+        MouseSrv.OnMove -= OnMove;
+        MouseSrv.OnUp -= OnUpLeave;
+        MouseSrv.OnLeave -= OnUpLeave;
+    }
+
 }
