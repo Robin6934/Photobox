@@ -11,7 +11,8 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <!-- Defines the build process to execute post build events defined below. -->
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent> 
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
 
   <!-- Defines the Target for post build event and condition to be met inord
