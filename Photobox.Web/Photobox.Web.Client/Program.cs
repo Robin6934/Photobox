@@ -1,15 +1,17 @@
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
 using Photobox.Web.Client.MouseService;
-using Serilog;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
-
+builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddMudServices();
+builder.Services.AddScoped(sp => 
+    new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-builder.Services.AddSingleton<MouseService>();
+builder.Services.AddSingleton<MouseService>()
+    .AddSingleton<IMouseService>(ff => ff.GetRequiredService<MouseService>());
 
-builder.Services.AddSingleton<IMouseService>(s => s.GetRequiredService<MouseService>());
 
 // Log.Logger = new LoggerConfiguration()
 //                 .MinimumLevel.Debug()

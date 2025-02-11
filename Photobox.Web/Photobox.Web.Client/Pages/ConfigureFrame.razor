@@ -1,5 +1,5 @@
 ﻿@page "/configureFrame"
-@rendermode InteractiveWebAssembly
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
 
 @using MudBlazor;
 @using MudBlazor.Interop
@@ -37,20 +37,22 @@
 }
 else
 {
-    <MudPaper Class="border-dashed border-2 mud-border-primary" Style="justify-content: center; align-items: center; display: inline-flex;">
+    <MudPaper Class="border-dashed border-2 mud-border-primary" Style="position: relative; justify-content: center; align-items: center; display: inline-flex;"
+              @onmousemove=@(e => mouseService.FireMove(this, e))
+              @onmouseup=@(e => mouseService.FireUp(this, e))
+              @onmouseleave=@(e => mouseService.FireLeave(this, e))>
         <MudImage id="myImage"
                   Fluid="true"
                   src="@_imagePreview"
-                  @onmousemove="@(e => mouseService.FireMove(this, e))" 
-                  @onmousedown="@(e => mouseService.FireUp(this, e))"/>
-
-        @foreach (var imageObject in _imageObjects)
-        {
-            <Draggable>
-                <img style="position: absolute; left: @(imageObject.X)px; top: @(imageObject.Y)px; scale: @(imageObject.Scale); cursor: move;"
-                     draggable="true" src="@imageObject.Content" alt="" @onclick="OnMouseDown" />
-            </Draggable> 
-        }
+                  Style="position: relative; z-index: 1; pointer-events: none"/>
+        
+            @foreach (var imageObject in _imageObjects)
+            {
+                <Draggable @bind-X=imageObject.X @bind-Y=imageObject.Y>
+                    <img style="position: absolute; scale: @(imageObject.Scale); z-index: 2;"
+                         draggable="true" src="@imageObject.Content" alt=""/>
+                </Draggable>
+            }
     </MudPaper>
     <MudButton @onclick="AddTextObject" StartIcon="@Icons.Material.Filled.NoteAdd">Add Text</MudButton>
     <MudButton @onclick="AddImageObject" StartIcon="@Icons.Material.Filled.AddPhotoAlternate">Add Image</MudButton>
@@ -61,67 +63,17 @@ else
 @code {
     private string? _imagePreview;
     private readonly List<ImageObject> _imageObjects = [];
-
-    private bool _isDragging;
-
-    private double _startX, _startY;
     
-    private ImageObjectComponent? _selectedComponent;
-
-    private MudElement _reference;
-
-    private async Task OnMouseMove(MouseEventArgs args)
-    {
-        if (_reference.Ref.HasValue)
-        {
-            await _reference.Ref.Value.MudGetBoundingClientRectAsync();
-        }
-        
-        if (_isDragging && _selectedComponent is not null)
-        {
-            var result = await JsRuntime.InvokeAsync<BoundingClientRect>("MyDOMGetBoundingClientRect", "myImage");
-            Console.WriteLine("Mouse Move on position X: " + args.ClientX + " Y: " + args.ClientY);
-
-            _selectedComponent.Object.X = (int)(args.ClientX - _startX - result.Left);
-            _selectedComponent.Object.Y = (int)(args.ClientY - _startY - result.Top);
-            
-            
-            StateHasChanged(); // Refresh UI after position update
-        }
-    }
-
-
-    private async Task OnMouseDown(MouseEventArgs args)
-    {
-        Console.WriteLine("Mouse Down on position X: " + args.ClientX + " Y: " + args.ClientY);
-        if (_selectedComponent is not null)
-        {
-            var result = await JsRuntime.InvokeAsync<BoundingClientRect>("MyDOMGetBoundingClientRect", "myImage");
-
-            _isDragging = true;
-            _startX = args.ClientX - (result.Left + _selectedComponent.Object.X);
-            _startY = args.ClientY - (result.Top + _selectedComponent.Object.Y);
-        }
-    }
-
-
-    private void OnMouseUp(MouseEventArgs args)
-    {
-        _isDragging = false;
-    }
-
-    private void SelectElement(ImageObjectComponent obj)
-    {
-        Console.WriteLine(obj.Object.X);
-        _selectedComponent = obj;
-    }
+    // 10.5 megaByte
+    long _maxFileSize = 10L * 1024L * 1024L;
 
     private async Task UploadFiles(IBrowserFile? file)
     {
         if (file is not null)
         {
+            // TODO (11.02.2025) check for too large files and show error message 
             var buffer = new byte[file.Size];
-            await file.OpenReadStream().ReadAsync(buffer.AsMemory());
+            await file.OpenReadStream(_maxFileSize).ReadAsync(buffer.AsMemory());
             _imagePreview = $"data:{file.ContentType};base64,{Convert.ToBase64String(buffer)}";
         }
     }
@@ -145,8 +97,8 @@ else
         _imageObjects.Add(new ImageObject
         {
             Content = content,
-            X = (int)(result.X + result.Width / 2),
-            Y = (int)(result.Y + result.Height / 2),
+            X = result.Width / 2,
+            Y = result.Height / 2,
             Scale = scale,
         });
     }

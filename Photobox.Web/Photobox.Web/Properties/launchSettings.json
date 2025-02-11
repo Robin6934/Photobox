@@ -18,7 +18,7 @@
       },
       "dotnetRunMessages": true,
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
-      "applicationUrl": "https://localhost:7131;http://localhost:5253"
+      "applicationUrl": "https://localhost;http://localhost:5253"
     },
     "Container (Dockerfile)": {
       "commandName": "Docker",
