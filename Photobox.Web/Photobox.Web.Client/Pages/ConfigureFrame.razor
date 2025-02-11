@@ -2,63 +2,152 @@
 @rendermode InteractiveWebAssembly
 
 @using MudBlazor;
+@using MudBlazor.Interop
+@using Photobox.Web.Client.MouseService
 @using Photobox.Web.Client.Pages.Components
+
+@inject IJSRuntime JsRuntime
+@inject MouseService mouseService;
+
+<MudPopoverProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
 
 <h3>Photo Frame Customizer</h3>
 
 @if (string.IsNullOrEmpty(_imagePreview))
 {
-    <InputFile OnChange="LoadFile" accept="image/*"/>
+    <MudPaper Class="border-dashed border-2 mud-border-primary pa-4"
+              Style="aspect-ratio: 3 / 2; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 16px; padding: 20px;">
+    
+        <MudText Typo="Typo.h6" Class="text-secondary">
+            No Image Selected <br />
+            Please choose a photo taken with your Photobox camera. Selecting the correct aspect ratio ensures the best display.
+        </MudText>
+
+        <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles" Accept="image/*">
+            <ActivatorContent>
+                <MudFab Color="Color.Secondary"
+                        StartIcon="@Icons.Material.Filled.Image"
+                        Label="Load Picture" />
+            </ActivatorContent>
+        </MudFileUpload>
+    </MudPaper>
+
 }
 else
 {
-    <div style="position: relative; display: inline-block;" @onmousemove="OnMouseMove" @onmouseup="StopDrag">
-        <MudImage Fluid="true" src="@_imagePreview" style="max-width: 100%;" />
+    <MudPaper Class="border-dashed border-2 mud-border-primary" Style="justify-content: center; align-items: center; display: inline-flex;">
+        <MudImage id="myImage"
+                  Fluid="true"
+                  src="@_imagePreview"
+                  @onmousemove="@(e => mouseService.FireMove(this, e))" 
+                  @onmousedown="@(e => mouseService.FireUp(this, e))"/>
 
-        @foreach (var obj in _imageObjects)
+        @foreach (var imageObject in _imageObjects)
         {
-            <ImageObjectComponent Object="obj" OnUpdated="UpdateObject" />
+            <Draggable>
+                <img style="position: absolute; left: @(imageObject.X)px; top: @(imageObject.Y)px; scale: @(imageObject.Scale); cursor: move;"
+                     draggable="true" src="@imageObject.Content" alt="" @onclick="OnMouseDown" />
+            </Draggable> 
         }
-    </div>
+    </MudPaper>
+    <MudButton @onclick="AddTextObject" StartIcon="@Icons.Material.Filled.NoteAdd">Add Text</MudButton>
+    <MudButton @onclick="AddImageObject" StartIcon="@Icons.Material.Filled.AddPhotoAlternate">Add Image</MudButton>
     
-    <button @onclick="AddTextObject">Add Text</button>
-    <button @onclick="AddImageObject">Add Image</button>
+    
 }
 
 @code {
     private string? _imagePreview;
-    private List<ImageObject> _imageObjects = new();
+    private readonly List<ImageObject> _imageObjects = [];
 
-    private async Task LoadFile(InputFileChangeEventArgs e)
+    private bool _isDragging;
+
+    private double _startX, _startY;
+    
+    private ImageObjectComponent? _selectedComponent;
+
+    private MudElement _reference;
+
+    private async Task OnMouseMove(MouseEventArgs args)
     {
-        var file = e.File;
-        var buffer = new byte[file.Size];
-        await file.OpenReadStream().ReadAsync(buffer.AsMemory());
-        _imagePreview = $"data:{file.ContentType};base64,{Convert.ToBase64String(buffer)}";
+        if (_reference.Ref.HasValue)
+        {
+            await _reference.Ref.Value.MudGetBoundingClientRectAsync();
+        }
+        
+        if (_isDragging && _selectedComponent is not null)
+        {
+            var result = await JsRuntime.InvokeAsync<BoundingClientRect>("MyDOMGetBoundingClientRect", "myImage");
+            Console.WriteLine("Mouse Move on position X: " + args.ClientX + " Y: " + args.ClientY);
+
+            _selectedComponent.Object.X = (int)(args.ClientX - _startX - result.Left);
+            _selectedComponent.Object.Y = (int)(args.ClientY - _startY - result.Top);
+            
+            
+            StateHasChanged(); // Refresh UI after position update
+        }
     }
 
-    private void AddTextObject()
+
+    private async Task OnMouseDown(MouseEventArgs args)
     {
-        _imageObjects.Add(new ImageObject
+        Console.WriteLine("Mouse Down on position X: " + args.ClientX + " Y: " + args.ClientY);
+        if (_selectedComponent is not null)
         {
-            Type = "Text",
-            Content = "Sample Text",
-            X = 50,
-            Y = 50,
-            FontSize = 20
-        });
+            var result = await JsRuntime.InvokeAsync<BoundingClientRect>("MyDOMGetBoundingClientRect", "myImage");
+
+            _isDragging = true;
+            _startX = args.ClientX - (result.Left + _selectedComponent.Object.X);
+            _startY = args.ClientY - (result.Top + _selectedComponent.Object.Y);
+        }
     }
 
-    private void AddImageObject()
+
+    private void OnMouseUp(MouseEventArgs args)
     {
+        _isDragging = false;
+    }
+
+    private void SelectElement(ImageObjectComponent obj)
+    {
+        Console.WriteLine(obj.Object.X);
+        _selectedComponent = obj;
+    }
+
+    private async Task UploadFiles(IBrowserFile? file)
+    {
+        if (file is not null)
+        {
+            var buffer = new byte[file.Size];
+            await file.OpenReadStream().ReadAsync(buffer.AsMemory());
+            _imagePreview = $"data:{file.ContentType};base64,{Convert.ToBase64String(buffer)}";
+        }
+    }
+
+    private async Task AddTextObject()
+    {
+        string content = await JsRuntime.InvokeAsync<string>("renderTextAsPng", "Sample Text", 16, "Black");
+
+        await AddObject(content);
+    }
+
+    private async Task AddImageObject()
+    {
+        await AddObject("https://cdn.pixabay.com/photo/2016/09/24/20/11/dab-1692452_1280.png", 0.1d);
+    }
+
+    private async Task AddObject(string content, double scale = 1.0d)
+    {
+        var result = await JsRuntime.InvokeAsync<BoundingClientRect>("MyDOMGetBoundingClientRect", "myImage");
+
         _imageObjects.Add(new ImageObject
         {
-            Type = "Image",
-            Content = "https://via.placeholder.com/100", // Replace with uploaded image URL
-            X = 100,
-            Y = 100,
-            Width = 100,
-            Height = 100
+            Content = content,
+            X = (int)(result.X + result.Width / 2),
+            Y = (int)(result.Y + result.Height / 2),
+            Scale = scale,
         });
     }
 
@@ -71,14 +160,11 @@ else
             StateHasChanged();
         }
     }
-
-    private void StopDrag()
-    {
-        // Stop dragging (handled inside ImageObjectComponent)
-    }
-
-    private void OnMouseMove(MouseEventArgs e)
-    {
-        // Handle mouse movement globally (optional)
-    }
 }
+
+<script>
+    window.MyDOMGetBoundingClientRect = (elementId) => {
+        const element = document.getElementById(elementId);
+        return element.getBoundingClientRect(); 
+    };
+</script>

@@ -78,4 +78,9 @@
     </Content>
   </ItemGroup>
 
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\fonts\ShortBaby.ttf" />
+  </ItemGroup>
+
 </Project>
