@@ -14,6 +14,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Photobox.Web/Photobox.Web/Photobox.Web.csproj", "Photobox.Web/Photobox.Web/"]
 COPY ["Photobox.Web/Photobox.Web.Client/Photobox.Web.Client.csproj", "Photobox.Web/Photobox.Web.Client/"]
+COPY ["Directory.Packages.props", "/"]
 RUN dotnet restore "./Photobox.Web/Photobox.Web/Photobox.Web.csproj"
 COPY . .
 WORKDIR "/src/Photobox.Web/Photobox.Web"
