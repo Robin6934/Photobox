@@ -37,32 +37,61 @@
 }
 else
 {
-    <MudPaper Class="border-dashed border-2 mud-border-primary" Style="position: relative; justify-content: center; align-items: center; display: inline-flex;"
-              @onmousemove=@(e => mouseService.FireMove(this, e))
-              @onmouseup=@(e => mouseService.FireUp(this, e))
-              @onmouseleave=@(e => mouseService.FireLeave(this, e))>
-        <MudImage id="myImage"
-                  Fluid="true"
-                  src="@_imagePreview"
-                  Style="position: relative; z-index: 1; pointer-events: none"/>
+    <MudPaper Class="border-dashed border-2 mud-border-primary" 
+              Style="position: relative; justify-content: center; align-items: center; display: inline-flex; flex-direction: row">
+    
+        <svg id="svgCanvas" width="@scaledWidth" height="@scaledHeight"
+             @onmousemove=@(e => mouseService.FireMove(this, e)) 
+                                   @onmouseup=@(e => mouseService.FireUp(this, e))
+                                   @onmouseleave=@(e => mouseService.FireLeave(this, e))>
         
+            <!-- Background Image (Auto-scaled to fit window) -->
+            <image id="myImage" href="@_imagePreview" x="0" y="0" 
+                   width="@scaledWidth" height="@scaledHeight"
+                   style="pointer-events: none;"/>
+        
+            <!-- Draggable Objects -->
             @foreach (var imageObject in _imageObjects)
             {
                 <Draggable @bind-X=imageObject.X @bind-Y=imageObject.Y>
-                    <img style="position: absolute; scale: @(imageObject.Scale); z-index: 2;"
-                         draggable="true" src="@imageObject.Content" alt=""/>
+                    <image href="@imageObject.Content" x="@imageObject.X" y="@imageObject.Y"
+                           width="100" height="100" alt=""/>
                 </Draggable>
             }
+        </svg>
+
+        <MudPaper Class="border-2 mud-border-primary"
+                  Style="width: 200px; overflow-y: auto; margin-right: 10px; padding: 10px;">
+            <MudText Typo="Typo.h6" Class="text-secondary">Layers</MudText>
+
+            <MudDropContainer T="ImageObject" Items="_imageObjects"
+                               Class="mud-elevation-2">
+ 
+                <ItemRenderer>
+                    <MudPaper>
+                        <MudAvatar Image="@context.Content" Size="Size.Large"/>
+                        <MudText>Placeholder</MudText>
+                    </MudPaper>
+                </ItemRenderer>
+            </MudDropContainer>
+        </MudPaper>
+
     </MudPaper>
+
+
     <MudButton @onclick="AddTextObject" StartIcon="@Icons.Material.Filled.NoteAdd">Add Text</MudButton>
     <MudButton @onclick="AddImageObject" StartIcon="@Icons.Material.Filled.AddPhotoAlternate">Add Image</MudButton>
-    
     
 }
 
 @code {
     private string? _imagePreview;
     private readonly List<ImageObject> _imageObjects = [];
+    
+    private double imageWidth = 800; // Original image width
+    private double imageHeight = 600; // Original image height
+    private double scaledWidth; // Auto-adjusted width
+    private double scaledHeight; // Auto-adjusted height
     
     // 10.5 megaByte
     long _maxFileSize = 10L * 1024L * 1024L;
@@ -75,7 +104,47 @@ else
             var buffer = new byte[file.Size];
             await file.OpenReadStream(_maxFileSize).ReadAsync(buffer.AsMemory());
             _imagePreview = $"data:{file.ContentType};base64,{Convert.ToBase64String(buffer)}";
+            
+            // Get real image size from the browser
+            var dimensions = await JsRuntime.InvokeAsync<BoundingClientRect>("getImageSize", "myImage");
+            imageWidth = dimensions.Width;
+            imageHeight = dimensions.Height;
+
+            // Scale image to fit window
+            await ScaleImageToWindow();
         }
+    }
+    
+    
+    private async Task ScaleImageToWindow()
+    {
+        var windowSize = await JsRuntime.InvokeAsync<BoundingClientRect>("getWindowSize");
+
+        double maxWidth = windowSize.Width * 0.9; // 90% of window width
+        double maxHeight = windowSize.Height * 0.9; // 90% of window height
+
+        double aspectRatio = imageWidth / imageHeight;
+
+        if (imageWidth > maxWidth || imageHeight > maxHeight)
+        {
+            if (maxWidth / aspectRatio <= maxHeight)
+            {
+                scaledWidth = maxWidth;
+                scaledHeight = maxWidth / aspectRatio;
+            }
+            else
+            {
+                scaledHeight = maxHeight;
+                scaledWidth = maxHeight * aspectRatio;
+            }
+        }
+        else
+        {
+            scaledWidth = imageWidth;
+            scaledHeight = imageHeight;
+        }
+
+        StateHasChanged();
     }
 
     private async Task AddTextObject()
@@ -97,8 +166,8 @@ else
         _imageObjects.Add(new ImageObject
         {
             Content = content,
-            X = result.Width / 2,
-            Y = result.Height / 2,
+            X = 150, // Centered horizontally
+            Y = 250, // Centered vertically
             Scale = scale,
         });
     }
@@ -118,5 +187,19 @@ else
     window.MyDOMGetBoundingClientRect = (elementId) => {
         const element = document.getElementById(elementId);
         return element.getBoundingClientRect(); 
+    };
+
+    window.getImageSize = (id) => {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.src = document.getElementById(id).href.baseVal;
+            img.onload = () => {
+                resolve({ Width: img.width, Height: img.height });
+            };
+        });
+    };
+
+    window.getWindowSize = () => {
+        return { Width: window.outerWidth, Height: window.innerHeight };
     };
 </script>

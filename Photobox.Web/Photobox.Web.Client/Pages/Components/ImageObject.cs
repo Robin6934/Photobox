@@ -7,4 +7,6 @@ public class ImageObject
     public double Y { get; set; } = 0;
     
     public double Scale { get; set; } = 1.0d;
+    
+    public int ZIndex { get; set; } = 0;
 }
