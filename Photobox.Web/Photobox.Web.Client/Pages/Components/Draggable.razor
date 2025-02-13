@@ -85,8 +85,8 @@
         if (!IsDown)
             return;
 
-        x = x - (_cursorX - e.ClientX);
-        y = y - (_cursorY - e.ClientY);
+        x -= (_cursorX - e.ClientX);
+        y -= (_cursorY - e.ClientY);
 
         _cursorX = e.ClientX;
         _cursorY = e.ClientY;
