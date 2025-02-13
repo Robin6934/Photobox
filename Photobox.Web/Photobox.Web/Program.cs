@@ -15,6 +15,7 @@ using Photobox.Web.HealthCheck;
 using Photobox.Web.Image;
 using Photobox.Web.Models;
 using Photobox.Web.StorageProvider;
+using Scalar.AspNetCore;
 using Serilog;
 using SixLabors.ImageSharp.Web.DependencyInjection;
 using System.Security.Claims;
@@ -106,8 +107,11 @@ app.MapGet("users/me", async (ClaimsPrincipal claims, AppDbContext context) =>
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
-    app.UseOpenApi();
-    app.UseSwaggerUI();
+    app.UseOpenApi(options =>
+    {
+        options.Path = "/openapi/{documentName}.json";
+    });
+    app.MapScalarApiReference();
     app.UseDeveloperExceptionPage();
 }
 else
