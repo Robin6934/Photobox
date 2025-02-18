@@ -2,8 +2,10 @@
 using EOSDigital.SDK;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Photobox.Lib;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using Rational = EOSDigital.SDK.Rational;
 
 namespace Photobox.UI.Lib.Camera;
 internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime applicationLifetime) : CameraBase(logger)
@@ -24,7 +26,7 @@ internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime
 
     private readonly IHostApplicationLifetime applicationLifetime = applicationLifetime;
 
-    public override SixLabors.ImageSharp.Rectangle PictureSize => new(0, 0, 960, 540);
+    public override AspectRatio ImageAspectRatio => new(960, 540);
 
     private void KeepAliveTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
     {
@@ -62,20 +64,17 @@ internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime
             throw new CameraNotFoundException("No Canon camera has been found.");
         }
 
-        if (camera is not null)
-        {
-            keepAliveTimer.Elapsed += KeepAliveTimer_Elapsed;
+        keepAliveTimer.Elapsed += KeepAliveTimer_Elapsed;
 
-            keepAliveTimer.Start();
+        keepAliveTimer.Start();
 
-            camera.OpenSession();
+        camera.OpenSession();
+        
+        camera.SetSetting(PropertyID.SaveTo, (int)SaveTo.Both);
 
-            camera.SetSetting(PropertyID.SaveTo, (int)SaveTo.Both);
+        camera.SetCapacity(4096, int.MaxValue);
 
-            camera.SetCapacity(4096, int.MaxValue);
-
-            logger.LogInformation("[Canon] has been connected.");
-        }
+        logger.LogInformation("[Canon] has been connected.");
     }
 
     public override void Focus()

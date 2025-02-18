@@ -1,4 +1,6 @@
-﻿using Photobox.UI.ImageViewer;
+﻿using Photobox.Lib;
+using Photobox.Lib.Helper;
+using Photobox.UI.ImageViewer;
 using Photobox.WpfHelpers;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -18,6 +20,8 @@ public partial class ImageViewWindow : Window, IDisposable
     private readonly Image<Rgb24> image = default!;
 
     public new event ResultHander Closed = default!;
+    
+    private readonly AspectRatio _imageAspectRatio;
 
 
     /// <summary>
@@ -29,6 +33,8 @@ public partial class ImageViewWindow : Window, IDisposable
         InitializeComponent();
 
         ImageViewer.Source = showImage.ToBitmapSource();
+
+        _imageAspectRatio = image.GetAspectRatio();
 
         if (!printingEnabled)
         {
@@ -80,7 +86,7 @@ public partial class ImageViewWindow : Window, IDisposable
         // Calculate the desired canvas size based on the window's height
         double windowHeight = this.ActualHeight;
         double canvasHeight = windowHeight;
-        double canvasWidth = (canvasHeight / 2) * 3; // 3:2 aspect ratio
+        double canvasWidth = canvasHeight * _imageAspectRatio.Ratio;
 
         // Set the canvas size
         ImageViewer.Width = canvasWidth;
