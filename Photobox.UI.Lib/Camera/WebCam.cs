@@ -3,6 +3,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Photobox.Lib;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -16,7 +17,7 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
 
     private readonly IHostApplicationLifetime applicationLifetime = applicationLifetime;
 
-    public override Rectangle PictureSize => new Rectangle(0, 0, (int)capture.Get(CapProp.FrameWidth), (int)capture.Get(CapProp.FrameHeight));
+    public override AspectRatio ImageAspectRatio => new ((int)capture.Get(CapProp.FrameWidth), (int)capture.Get(CapProp.FrameHeight));
 
     public override void Connect()
     {

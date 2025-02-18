@@ -25,7 +25,7 @@ public static partial class BitmapToBitmapSource
         return bitmapSource;
     }
 
-    public static BitmapSource ToBitmapSource(this Image<Rgb24> image)
+    public static BitmapSource ToBitmapSource<TPixel>(this Image<TPixel> image) where TPixel: unmanaged, IPixel<TPixel>
     {
         using var memoryStream = new MemoryStream();
 

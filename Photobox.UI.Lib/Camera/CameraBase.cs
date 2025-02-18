@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Photobox.Lib;
 using Polly;
 using Polly.Retry;
 using Polly.Timeout;
@@ -17,7 +18,7 @@ public abstract class CameraBase(ILogger logger) : ICamera
 
     public virtual bool LiveViewActive { get; set; } = false;
 
-    public virtual Rectangle PictureSize { get; }
+    public virtual AspectRatio ImageAspectRatio { get; }
 
     private readonly ResiliencePipeline pipeline = new ResiliencePipelineBuilder()
         .AddTimeout(new TimeoutStrategyOptions
