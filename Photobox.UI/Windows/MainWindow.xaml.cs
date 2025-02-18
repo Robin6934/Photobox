@@ -176,9 +176,7 @@ public partial class MainWindow : Window, IHostedService
     /// </summary>
     private void SetCanvasSize()
     {
-        // Actual image dimensions from the camera
-        Rectangle rectangle = camera.PictureSize;
-        double imageAspectRatio = (double)rectangle.Width / rectangle.Height;
+        double imageAspectRatio = camera.ImageAspectRatio.Ratio;
 
         // Available window dimensions
         double availableHeight = ActualHeight;

@@ -1,4 +1,5 @@
-﻿using SixLabors.ImageSharp;
+﻿using Photobox.Lib;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.UI.Lib.Camera;
@@ -9,7 +10,7 @@ public interface ICamera : IDisposable
 
     public bool LiveViewActive { get; }
 
-    public Rectangle PictureSize { get; }
+    public AspectRatio ImageAspectRatio { get; }
 
     void ResilientConnect();
 
