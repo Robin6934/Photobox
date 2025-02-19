@@ -12,13 +12,6 @@ public class ImageService(AppDbContext dbContext, IStorageProvider storageProvid
 
     public async Task StoreImageAsync(Image<Rgb24> image, string imageName)
     {
-        string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageName);
-
-        if (!Directory.Exists(Path.GetDirectoryName(imagePath)))
-        {
-            Directory.CreateDirectory(Path.GetDirectoryName(imagePath)!);
-        }
-
         ImageModel imageModel = new()
         {
             UniqueImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}",
