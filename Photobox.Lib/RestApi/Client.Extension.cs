@@ -3,11 +3,15 @@ using System.Net.Http.Headers;
 
 namespace Photobox.Lib.RestApi;
 
-public partial class Client
+public partial class ImageClient
 {
-    async partial void PrepareRequest(HttpClient client, HttpRequestMessage request, string url)
+    //TODO implement proper injection of the IAccessTokenManager
+    
+    public static IAccessTokenManager AccessTokenManager;
+    partial void PrepareRequest(HttpClient client, HttpRequestMessage request, string url)
     {
-        string? accessToken = "";//await accessTokenManager.AccessToken;
+        string? accessToken = AccessTokenManager.AccessToken.Result;
+        
         if (!string.IsNullOrEmpty(accessToken))
         {
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);

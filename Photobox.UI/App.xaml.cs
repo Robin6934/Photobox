@@ -28,6 +28,8 @@ public partial class App
     protected override async void OnStartup(StartupEventArgs e)
     {
         _host = CreateHostBuilder(e.Args).Build();
+        
+        ImageClient.AccessTokenManager = _host.Services.GetService<IAccessTokenManager>();
 
         await _host.StartAsync();
     }
@@ -58,7 +60,7 @@ public partial class App
         builder.Services.AddSingleton<ICountDown, CountDownCircle>();
         builder.Services.AddSingleton<IImageHandler, ImageHandler>();
         builder.Services.AddSingleton<IImageClient, ImageClient>(_ => new ImageClient("https://localhost"));
-        builder.Services.AddSingleton<IClient, Client>(_ => new Client("https://localhost"));
+        builder.Services.AddSingleton<IClient, Client>(s => new Client("https://localhost"));
         builder.Services.AddSingleton<IPhotoBoxClient, PhotoBoxClient>(_ => new PhotoBoxClient("https://localhost"));
         builder.Services.AddSingleton<IAccessTokenManager, AccessTokenManager>();
         builder.Logging.ClearProviders();
