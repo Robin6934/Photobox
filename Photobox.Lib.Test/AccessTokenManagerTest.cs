@@ -1,23 +1,22 @@
-﻿using System.Net;
-using AdysTech.CredentialManager;
+﻿using AdysTech.CredentialManager;
 using NSubstitute;
-using Photobox.Lib.RestApi;
 using Photobox.Lib.AccessTokenManager;
+using Photobox.Lib.RestApi;
 using Shouldly;
+using System.Net;
 
-namespace Photobox.Tests.AccessTokenManager;
+namespace Photobox.Lib.Test;
 
 public class AccessTokenManagerTests
 {
     private readonly IClient _photoBoxClient;
-    private readonly IPhotoBoxClient _photoBoxApiClient;
     private IAccessTokenManager _accessTokenManager;
 
     public AccessTokenManagerTests()
     {
         _photoBoxClient = Substitute.For<IClient>();
-        _photoBoxApiClient = Substitute.For<IPhotoBoxClient>();
-        _accessTokenManager = new Lib.AccessTokenManager.AccessTokenManager(_photoBoxClient, _photoBoxApiClient);
+        IPhotoBoxClient photoBoxApiClient = Substitute.For<IPhotoBoxClient>();
+        _accessTokenManager = new Lib.AccessTokenManager.AccessTokenManager(_photoBoxClient, photoBoxApiClient);
     }
 
     [Fact]
@@ -32,8 +31,7 @@ public class AccessTokenManagerTests
             AccessToken = "access-token", RefreshToken = "refresh-token", ExpiresIn = 3600
         };
 
-        _photoBoxClient.PostLoginAsync(Arg.Any<LoginRequest>(), false, false)
-            .Returns(Task.FromResult(loginResponse));
+        _photoBoxClient.PostLoginAsync(Arg.Any<LoginRequest>(), false, false, TestContext.Current.CancellationToken).Returns(Task.FromResult(loginResponse));
 
         // Act
         await _accessTokenManager.LoginAsync(email, password);
@@ -53,11 +51,7 @@ public class AccessTokenManagerTests
             AccessToken = "new-access-token", RefreshToken = "new-refresh-token", ExpiresIn = 3600
         };
 
-        _photoBoxClient.PostRefreshAsync(Arg.Any<RefreshRequest>())
-            .Returns(Task.FromResult(refreshTokenResponse));
-
-        string expiredToken = "expired-access-token";
-        string refreshToken = "valid-refresh-token";
+        _photoBoxClient.PostRefreshAsync(Arg.Any<RefreshRequest>(), TestContext.Current.CancellationToken).Returns(Task.FromResult(refreshTokenResponse));
 
         // Act
         string? accessToken = await _accessTokenManager.AccessToken;
@@ -108,8 +102,7 @@ public class AccessTokenManagerTests
             AccessToken = "access-token", RefreshToken = "refresh-token", ExpiresIn = 6
         };
 
-        _photoBoxClient.PostLoginAsync(Arg.Any<LoginRequest>(), false, false)
-            .Returns(Task.FromResult(accessTokenResponse));
+        _photoBoxClient.PostLoginAsync(Arg.Any<LoginRequest>(), false, false, TestContext.Current.CancellationToken).Returns(Task.FromResult(accessTokenResponse));
         
         await _accessTokenManager.LoginAsync("email", "password");
         
@@ -133,8 +126,7 @@ public class AccessTokenManagerTests
             AccessToken = "access-token", RefreshToken = "refresh-token", ExpiresIn = 6
         };
 
-        _photoBoxClient.PostLoginAsync(Arg.Any<LoginRequest>(), false, false)
-            .Returns(Task.FromResult(accessTokenResponse));
+        _photoBoxClient.PostLoginAsync(Arg.Any<LoginRequest>(), false, false, TestContext.Current.CancellationToken).Returns(Task.FromResult(accessTokenResponse));
         
         await _accessTokenManager.LoginAsync("email", "password");
         
@@ -145,8 +137,7 @@ public class AccessTokenManagerTests
             AccessToken = "new-access-token", RefreshToken = "new-refresh-token", ExpiresIn = 6
         };
         
-        _photoBoxClient.PostRefreshAsync(Arg.Any<RefreshRequest>())
-            .Returns(Task.FromResult(refreshTokenResponse));
+        _photoBoxClient.PostRefreshAsync(Arg.Any<RefreshRequest>(), TestContext.Current.CancellationToken).Returns(Task.FromResult(refreshTokenResponse));
 
         await Task.Delay(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
 
@@ -183,10 +174,9 @@ public class AccessTokenManagerTests
             AccessToken = "access-token", RefreshToken = "refresh-token", ExpiresIn = 6
         };
 
-        _photoBoxClient.PostLoginAsync(Arg.Any<LoginRequest>(), false, false)
-            .Returns(Task.FromResult(accessTokenResponse));
+        _photoBoxClient.PostLoginAsync(Arg.Any<LoginRequest>(), false, false, TestContext.Current.CancellationToken).Returns(Task.FromResult(accessTokenResponse));
 
-        _accessTokenManager.LoginAsync("", "");
+        await _accessTokenManager.LoginAsync("", "");
         
         (await _accessTokenManager.AccessToken).ShouldBe("access-token");
 

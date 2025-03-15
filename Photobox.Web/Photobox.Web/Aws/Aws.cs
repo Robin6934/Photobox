@@ -20,7 +20,8 @@ public static class Aws
             ServiceURL = serviceUrl,
             ForcePathStyle = true, // Ensure compatibility with Cloudflare R2
             AuthenticationRegion = "auto",
-            
+            RequestChecksumCalculation = RequestChecksumCalculation.WHEN_REQUIRED,
+            ResponseChecksumValidation = ResponseChecksumValidation.WHEN_REQUIRED
         };
 
         // Directly register IAmazonS3 with specified config
