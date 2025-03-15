@@ -15,7 +15,7 @@ public class AwsStorageProvider(IAmazonS3 amazonS3) : IStorageProvider
 
     public Task StoreImageAsync(Image<Rgb24> image, string name)
     {
-        imageBuffer.TryAdd(name, image);
+        imageBuffer.TryAdd(name, image.Clone());
 
         return UploadImagesAsync();
     }
@@ -35,17 +35,10 @@ public class AwsStorageProvider(IAmazonS3 amazonS3) : IStorageProvider
                 Key = imageName,
                 InputStream = imageStream
             };
+            
+            await amazonS3.PutObjectAsync(request);
 
-            try
-            {
-                await amazonS3.PutObjectAsync(request);
-
-                imageBuffer.Remove(imageName, out _);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            imageBuffer.Remove(imageName, out _);
         }
     }
 
