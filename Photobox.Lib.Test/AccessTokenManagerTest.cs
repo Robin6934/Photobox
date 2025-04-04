@@ -15,8 +15,7 @@ public class AccessTokenManagerTests
     public AccessTokenManagerTests()
     {
         _photoBoxClient = Substitute.For<IClient>();
-        IPhotoBoxClient photoBoxApiClient = Substitute.For<IPhotoBoxClient>();
-        _accessTokenManager = new Lib.AccessTokenManager.AccessTokenManager(_photoBoxClient, photoBoxApiClient);
+        _accessTokenManager = new Lib.AccessTokenManager.AccessTokenManager(_photoBoxClient);
     }
 
     [Fact]

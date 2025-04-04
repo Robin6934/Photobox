@@ -17,6 +17,7 @@ public class ImageController(ImageService imageService) : Controller
     /// <response code="200">Image has been uploaded successfully</response>
     [HttpPost]
     [ProducesResponseType<ImageUploadResult>((int)HttpStatusCode.OK)]
+    [Authorize]
     public async Task<IActionResult> UploadImage(IFormFile formFile)
     {
         if (formFile == null || formFile.Length == 0)

@@ -536,7 +536,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
     "/api/Image/GetImage/{imageName}": {

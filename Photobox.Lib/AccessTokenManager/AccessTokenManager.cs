@@ -1,10 +1,12 @@
 ﻿using AdysTech.CredentialManager;
 using Photobox.Lib.RestApi;
 using System.Net;
+using System.Runtime.Versioning;
 
 namespace Photobox.Lib.AccessTokenManager;
 
-public class AccessTokenManager(IClient photoBoxClient, IPhotoBoxClient client) : IAccessTokenManager
+[SupportedOSPlatform("Windows")]
+public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
 {
     private string? _accessToken;
     
@@ -16,11 +18,16 @@ public class AccessTokenManager(IClient photoBoxClient, IPhotoBoxClient client) 
     {
         get
         {
-            var credential = CredentialManager.GetCredentials(RefreshTokenTarget);
-            return credential?.Password;
+            if(string.IsNullOrEmpty(field))
+            {
+                var credential = CredentialManager.GetCredentials(RefreshTokenTarget);
+                field = credential?.Password!;
+            }
+            return field;
         }
         set
         {
+            field = value;
             var credential = new NetworkCredential("Photobox", value);
             CredentialManager.SaveCredentials(RefreshTokenTarget, credential);
         }
@@ -78,7 +85,7 @@ public class AccessTokenManager(IClient photoBoxClient, IPhotoBoxClient client) 
             RefreshToken = RefreshToken
         };
         
-        var refreshTokenResponse = await photoBoxClient.PostRefreshAsync(refreshTokenRequest);
+        var refreshTokenResponse = await photoBoxClient.PostRefreshAsync(refreshTokenRequest).ConfigureAwait(false);
         
         _accessToken = refreshTokenResponse.AccessToken;
         RefreshToken = refreshTokenResponse.RefreshToken;
