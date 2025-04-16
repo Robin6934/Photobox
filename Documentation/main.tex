@@ -14,10 +14,11 @@
 \usepackage{array}
 \usepackage{booktabs}
 \usepackage[parfill]{parskip}
-\geometry{top=1.5cm, bottom=4.5cm, left=2.5cm, right=2.5cm}
+\usepackage[hidelinks]{hyperref} % Hyperlinks without color boxes
 
-% Header height adjustment
-\setlength{\headheight}{65pt}
+\geometry{top=2cm, bottom=3cm, left=2.5cm, right=2.5cm}
+
+\author{Robin Ganahl}
 
 \pagestyle{empty}  % No footer or header on the first page
 
@@ -45,7 +46,7 @@
   \end{center}
   \vspace{1.5cm} % spacing below the logos before title
   \begin{center}
-    \textbf{\LARGE DIPLOMARBEIT} \\[0.5em]
+    \textbf{\LARGE DIPLOMARBEIT} \\ [0.5em]
     \Large Fotobox
   \end{center}
 }
@@ -96,14 +97,14 @@
 \maketitle
 
 \vspace{-3cm}
+
+% TODO: ersetzen durch die fertig zusamengabeuta fotobox
 \begin{figure}[H]
   \centering
-  \includegraphics[width=1\textwidth]{images/mechanics/fotobox_frontplatte_v2.png}
+  \includegraphics[width=0.6\textwidth]{images/mechanics/fotobox_frontplatte_v2.png}
 \end{figure}
 
 \thispagestyle{empty}  % No footer on the first page needs to come after \maketitle
-
-%\vspace{2cm} % Adds space between title and table
 
 \begin{table}[h!]
     \centering
