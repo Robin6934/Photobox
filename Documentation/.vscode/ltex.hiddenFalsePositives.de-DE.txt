@@ -1,1 +1,4 @@
 {"rule":"WHITESPACE_RULE","sentence":"^\\QRankweil, am\\E$"}
+{"rule":"DE_CASE","sentence":"^\\QHTBLuVA Rankweil Höhere Lehranstalt für Elektronik und Technische Informatik DIPLOMARBEIT Fotobox\\E$"}
+{"rule":"GERMAN_SPELLER_RULE","sentence":"^\\Q0pt\\E$"}
+{"rule":"GERMAN_SPELLER_RULE","sentence":"^\\Qcsharp language=[Sharp]C, backgroundcolor=, commentstyle=, keywordstyle=, numberstyle=, stringstyle=, basicstyle=, breakatwhitespace=false, breaklines=true, captionpos=b, keepspaces=true, numbers=left, numbersep=5pt, showspaces=false, showstringspaces=false, showtabs=false, tabsize=2 style=csharp\\E$"}
