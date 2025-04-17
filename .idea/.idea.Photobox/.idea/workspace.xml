@@ -16,8 +16,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5e8b0e95-3a53-45a9-9f99-610719a87e94" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Documentation/chapters/program/program.tex" beforeDir="false" afterPath="$PROJECT_DIR$/Documentation/chapters/program/program.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Documentation/main.tex" beforeDir="false" afterPath="$PROJECT_DIR$/Documentation/main.tex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Photobox/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Photobox/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/AccessTokenManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/AccessTokenManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/IAccessTokenManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/IAccessTokenManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Photobox.UI/Windows/MainWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/Windows/MainWindow.xaml.cs" afterDir="false" />
@@ -74,29 +73,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.Photobox.UI.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Launch Settings Profile.Photobox.Web: https.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Project.ConsoleApp1.executor&quot;: &quot;Run&quot;,
-    &quot;ATTACH_DIALOG_SELECTED_CONTAINER&quot;: &quot;photobox-photobox.web-1&quot;,
-    &quot;Docker.Photobox.Web/Dockerfile.executor&quot;: &quot;Debug&quot;,
-    &quot;Docker.docker-compose.yml.photobox.web: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.42680776&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.Photobox.UI.executor": "Debug",
+    ".NET Launch Settings Profile.Photobox.Web: https.executor": "Run",
+    ".NET Project.ConsoleApp1.executor": "Run",
+    "ATTACH_DIALOG_SELECTED_CONTAINER": "photobox-photobox.web-1",
+    "Docker.Photobox.Web/Dockerfile.executor": "Debug",
+    "Docker.docker-compose.yml.photobox.web: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml: Compose Deployment.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "XThreadsFramesViewSplitterKey": "0.42680776",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="QodanaReportsService">
     <option name="descriptions">
       <ReportDescription localRun="true" path="C:\Users\Robin\AppData\Local\Temp\qodana_output\qodana.sarif.json" reportGuid="0f694b94-cc76-4de0-a405-f0e883426139" reportId="Photobox/qodana/2025-03-15" />
@@ -313,6 +312,7 @@
       <workItem from="1743837727356" duration="3684000" />
       <workItem from="1743858430501" duration="1897000" />
       <workItem from="1744365725045" duration="2226000" />
+      <workItem from="1744891348126" duration="976000" />
     </task>
     <servers />
   </component>

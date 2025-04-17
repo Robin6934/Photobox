@@ -110,17 +110,20 @@ public partial class MainWindow : Window, IHostedService
         Closing += (o, i) => camera.Dispose();
     }
 
-    public Task StartAsync(CancellationToken cancellationToken)
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
         Start();
         Show();
         applicationLifetime.ApplicationStopping.Register(Close);
         logger.LogInformation("The main window has started.");
-        if (!_accessTokenManager.RefreshTokenAvailable)
+        try
+        {
+            await _accessTokenManager.LoginWithRefreshTokenAsync().ConfigureAwait(false);
+        }
+        catch (InvalidOperationException e)
         {
             Login();
         }
-        return Task.CompletedTask;
     }
 
     private void Login()
