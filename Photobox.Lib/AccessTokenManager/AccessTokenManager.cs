@@ -39,9 +39,39 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
     
     public bool RefreshTokenAvailable => !string.IsNullOrEmpty(RefreshToken);
 
+    public async Task LoginWithRefreshTokenAsync()
+    {
+        if (!RefreshTokenAvailable)
+        {
+            throw new InvalidOperationException("No refresh token available.");
+        }
+        
+        var refreshRequest = new RefreshRequest
+        {
+            RefreshToken = RefreshToken,
+        };
+
+        AccessTokenResponse accessTokenResponse;
+        
+        try
+        {
+            accessTokenResponse = await photoBoxClient.PostRefreshAsync(refreshRequest);
+        }
+        catch (ApiException e)
+        {
+            throw new InvalidOperationException("Unable to retrieve the refresh token.", e);
+        }
+        
+        _accessToken = accessTokenResponse.AccessToken;
+        
+        RefreshToken = accessTokenResponse.RefreshToken;
+        
+        _accessTokenExpiry = DateTime.Now.AddSeconds(accessTokenResponse.ExpiresIn);
+    }
+    
     public async Task LoginAsync(string email, string password)
     {
-        var loginRequest = new LoginRequest()
+        var loginRequest = new LoginRequest
         {
             Email = email, 
             Password = password
@@ -80,7 +110,7 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
             return null;
         }
         
-        var refreshTokenRequest = new RefreshRequest()
+        var refreshTokenRequest = new RefreshRequest
         {
             RefreshToken = RefreshToken
         };
