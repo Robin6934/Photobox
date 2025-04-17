@@ -18,6 +18,7 @@ using Photobox.Web.StorageProvider;
 using Scalar.AspNetCore;
 using Serilog;
 using SixLabors.ImageSharp.Web.DependencyInjection;
+using System.Reflection;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +43,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddImageSharp();
 
 builder.Services.AddAuthorization();
+
+if (builder.Environment.IsDevelopment() && builder.Environment.ApplicationName is { Length: > 0 })
+{
+    var assembly = Assembly.Load(builder.Environment.ApplicationName);
+    
+    builder.Configuration.AddUserSecrets(assembly, optional: true,  reloadOnChange: true);
+}
 
 builder.Services.AddAuthentication(IdentityConstants.BearerScheme)
     .AddCookie(IdentityConstants.ApplicationScheme)
