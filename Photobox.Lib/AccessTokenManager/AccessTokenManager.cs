@@ -2,6 +2,7 @@
 using Photobox.Lib.RestApi;
 using System.Net;
 using System.Runtime.Versioning;
+using Exception = System.Exception;
 
 namespace Photobox.Lib.AccessTokenManager;
 
@@ -39,7 +40,7 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
     
     public bool RefreshTokenAvailable => !string.IsNullOrEmpty(RefreshToken);
 
-    public async Task LoginWithRefreshTokenAsync()
+    public async Task CheckIfRefreshTokenValid()
     {
         if (!RefreshTokenAvailable)
         {
@@ -52,14 +53,18 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
         };
 
         AccessTokenResponse accessTokenResponse;
-        
+
         try
         {
             accessTokenResponse = await photoBoxClient.PostRefreshAsync(refreshRequest);
         }
-        catch (ApiException e)
+        catch (ApiException e) when (e.StatusCode == (int)HttpStatusCode.Unauthorized)
         {
-            throw new InvalidOperationException("Unable to retrieve the refresh token.", e);
+            throw new InvalidOperationException("The Refresh Token is not valid.", e);
+        }
+        catch (Exception e)
+        {
+           throw new InvalidOperationException("An error occurred while trying to access the refresh token.", e);
         }
         
         _accessToken = accessTokenResponse.AccessToken;
