@@ -17,9 +17,10 @@
   <component name="ChangeListManager">
     <list default="true" id="5e8b0e95-3a53-45a9-9f99-610719a87e94" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Photobox/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Photobox/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/appsettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.dcproj" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.dcproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Directory.Packages.props" beforeDir="false" afterPath="$PROJECT_DIR$/Directory.Packages.props" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/AccessTokenManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/AccessTokenManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/IAccessTokenManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/IAccessTokenManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI/Windows/MainWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/Windows/MainWindow.xaml.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,17 +41,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/bb06f64c178142b0b2d10172f56d4911e8e928/9d/cf5fea9f/SafeFileHandle.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/1edcaad3abcc3869377e35792a4ca39a2868d7c4ab79bdaa34bee6e3d6/ITestFrameworkDiscoveryOptions.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3bbe6dd576393d7879ab7ff7794f37c7fbbdc93198a9d655380d4353d726/MudImage.razor.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/4fbc363ed19415f9101885ac5a71ffcb1e26a6fd2d97c2af017f8a18dda011/MudPaper.razor.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/58513116ee1e7cdaa1c8ea4cd6801eedae012134145c97da3b2ff13c0504b/ElementReferenceExtensions.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8825182cf4722a1d6089a897de2aeea2f2b25df3293a63ac27cdb216589f62d2/ImageExtensions.Save.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/ae2697138ab13657efae157650194acaf2b0fb02aa9bca9cc366ea6654ef4df/MultipartItem.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/bd4e6e59c59fbbfa45b12cf1dc2c47ace07dc8bfcf558dff2358ccefc736c2/BoundingClientRect.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c43294635080d4819e5763d3ad72918d2a95933de976ee696ba934ba1f717/OpenApiSecurityScheme.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c7ea880f2ea3098e66cdd86db19af5626f7182eb8fa97ea045821ec14fe5c3/MudComponentBase.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/e2fd312a6c19d230a2698da118f94df65542af7485550da6949ee10b855cff/ObjectExtensions.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/69b8ee739126db8ad6a2c3d5a87138316eedf3c7e61798cc50a7ef87c32b2d/HttpClientHandler.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c439425da351c75ac7d966a1cc8324b51a9c471865af79d2f2f3fcb65e392/HttpClient.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c8ff5426bce7f781e6035a111b49b195bab86ffe24e39c7112cc02a4361/InputManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Photobox.Web/Photobox.Web/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Photobox.Web/Photobox.Web/nswag.json" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -73,35 +66,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.Photobox.UI.executor&quot;: &quot;Debug&quot;,
-    &quot;.NET Launch Settings Profile.Photobox.Web: https.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Project.ConsoleApp1.executor&quot;: &quot;Run&quot;,
-    &quot;ATTACH_DIALOG_SELECTED_CONTAINER&quot;: &quot;photobox-photobox.web-1&quot;,
-    &quot;Docker.Photobox.Web/Dockerfile.executor&quot;: &quot;Debug&quot;,
-    &quot;Docker.docker-compose.yml.photobox.web: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.42680776&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.Photobox.UI.executor": "Run",
+    ".NET Launch Settings Profile.Photobox.Web: https.executor": "Run",
+    ".NET Project.ConsoleApp1.executor": "Run",
+    "ATTACH_DIALOG_SELECTED_CONTAINER": "photobox-photobox.web-1",
+    "Docker.Photobox.Web/Dockerfile.executor": "Debug",
+    "Docker.docker-compose.yml.photobox.web: Compose Deployment.executor": "Run",
+    "Docker.docker-compose.yml: Compose Deployment.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "XThreadsFramesViewSplitterKey": "0.42680776",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="QodanaReportsService">
     <option name="descriptions">
       <ReportDescription localRun="true" path="C:\Users\Robin\AppData\Local\Temp\qodana_output\qodana.sarif.json" reportGuid="0f694b94-cc76-4de0-a405-f0e883426139" reportId="Photobox/qodana/2025-03-15" />
     </option>
   </component>
-  <component name="RunManager" selected="Docker.docker-compose.yml.photobox.web: Compose Deployment">
+  <component name="RunManager" selected=".NET Launch Settings Profile.Photobox.UI">
     <configuration name="Photobox.Web: PhotoboxWeb20241114205552 - Zip Deploy" type="DotNetMsBuildPublish" factoryName="Publish to IIS">
       <riderPublish configuration="Release" platform="Any CPU" publish_profile="PhotoboxWeb20241114205552 - Zip Deploy.pubxml" pubxml_path="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Properties/PublishProfiles/PhotoboxWeb20241114205552 - Zip Deploy.pubxml" uuid_high="-5026023008747305911" uuid_low="-6253107357570931512" />
       <method v="2" />
@@ -328,6 +321,7 @@
       <workItem from="1743858430501" duration="1897000" />
       <workItem from="1744365725045" duration="2226000" />
       <workItem from="1744891348126" duration="976000" />
+      <workItem from="1744990548421" duration="1053000" />
     </task>
     <servers />
   </component>
@@ -458,6 +452,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Photobox.UI/Windows/MainWindow.xaml.cs</url>
+          <line>114</line>
+          <properties documentPath="C:\Users\Robin\Documents\GitHub\Photobox\Photobox.UI\Windows\MainWindow.xaml.cs" containingFunctionPresentation="Method 'StartAsync'">
+            <startOffsets>
+              <option value="3108" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3116" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

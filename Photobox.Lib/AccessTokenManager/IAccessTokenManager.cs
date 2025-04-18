@@ -20,11 +20,11 @@ public interface IAccessTokenManager
     bool RefreshTokenAvailable { get; }
 
     /// <summary>
-    /// Logs in the user with the Refreshtoken if available else throws 
+    /// Checks if the Refreshtoken is valid and retrieves a new access token with it.
     /// </summary>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException">Refresh token not valid or not available.</exception>
-    Task LoginWithRefreshTokenAsync();
+    Task CheckIfRefreshTokenValid();
     
     /// <summary>
     /// Logs in the user with the given email and password.

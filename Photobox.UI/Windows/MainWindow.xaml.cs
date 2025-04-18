@@ -116,13 +116,19 @@ public partial class MainWindow : Window, IHostedService
         Show();
         applicationLifetime.ApplicationStopping.Register(Close);
         logger.LogInformation("The main window has started.");
+
+        if (!_accessTokenManager.RefreshTokenAvailable)
+        {
+            Login();
+        }
+        
         try
         {
-            await _accessTokenManager.LoginWithRefreshTokenAsync().ConfigureAwait(false);
+            await _accessTokenManager.CheckIfRefreshTokenValid().ConfigureAwait(false);
         }
         catch (InvalidOperationException e)
         {
-            Login();
+            Dispatcher.Invoke(Login);
         }
     }
 
