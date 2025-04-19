@@ -121,14 +121,22 @@ public partial class MainWindow : Window, IHostedService
         {
             Login();
         }
-        
+
         try
         {
             await _accessTokenManager.CheckIfRefreshTokenValid().ConfigureAwait(false);
         }
-        catch (InvalidOperationException e)
+        catch (CredentialValidationException e)
         {
             Dispatcher.Invoke(Login);
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show("An error occurred while logging in. Please check your internet connection and try again.",
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+            Application.Current.Shutdown();
         }
     }
 

@@ -44,7 +44,7 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
     {
         if (!RefreshTokenAvailable)
         {
-            throw new InvalidOperationException("No refresh token available.");
+            throw new CredentialValidationException("No refresh token available.");
         }
         
         var refreshRequest = new RefreshRequest
@@ -60,7 +60,7 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
         }
         catch (ApiException e) when (e.StatusCode == (int)HttpStatusCode.Unauthorized)
         {
-            throw new InvalidOperationException("The Refresh Token is not valid.", e);
+            throw new CredentialValidationException("The Refresh Token is not valid.", e);
         }
         catch (Exception e)
         {
@@ -81,9 +81,21 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
             Email = email, 
             Password = password
         };
-
-        var loginResponse = await photoBoxClient.PostLoginAsync(loginRequest, false, false);
-
+        
+        AccessTokenResponse loginResponse;
+        try
+        {
+            loginResponse = await photoBoxClient.PostLoginAsync(loginRequest, false, false);
+        }
+        catch (ApiException e) when (e.StatusCode == (int)HttpStatusCode.Unauthorized)
+        {
+            throw new CredentialValidationException("The username or password are wrong.", e);
+        }
+        catch (Exception e)
+        {
+            throw new InvalidOperationException("An error occurred while trying to access the refresh token.", e);
+        }
+        
         _accessToken = loginResponse.AccessToken;
         
         RefreshToken = loginResponse.RefreshToken;
