@@ -37,14 +37,35 @@ public partial class LoginWindow : Window
             MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
-
-        // Call login method if inputs are valid
-        await _accessTokenManager.LoginAsync(email, password);
-
-        if (!_accessTokenManager.LoggedIn)
+        
+        try
         {
-            MessageBox.Show("The login was not successful. Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);    
+            await _accessTokenManager.LoginAsync(email, password);
         }
+        catch (CredentialValidationException)
+        {
+            var result = MessageBox.Show(
+                "Either the username or password is incorrect. Would you like to try again?",
+                "Login Failed",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.No)
+            {
+                Application.Current.Shutdown();
+            }
+            return;
+        }
+        catch (Exception)
+        {
+            MessageBox.Show("An error occurred while logging in. Please check your internet connection and try again.",
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+            Application.Current.Shutdown();
+            return;
+        }
+
         
         Close();
     }
