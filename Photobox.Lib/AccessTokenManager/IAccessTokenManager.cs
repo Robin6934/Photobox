@@ -22,8 +22,8 @@ public interface IAccessTokenManager
     /// <summary>
     /// Checks if the Refreshtoken is valid and retrieves a new access token with it.
     /// </summary>
-    /// <returns></returns>
-    /// <exception cref="InvalidOperationException">Refresh token not valid or not available.</exception>
+    /// <exception cref="CredentialValidationException">Refresh token not valid or not available.</exception>
+    /// <exception cref="InvalidOperationException">Another error happened.</exception>
     Task CheckIfRefreshTokenValid();
     
     /// <summary>
@@ -31,12 +31,12 @@ public interface IAccessTokenManager
     /// </summary>
     /// <param name="email">The users email address.</param>
     /// <param name="password">The password for the given email address.</param>
-    /// <returns></returns>
+    /// <exception cref="CredentialValidationException">Username or password are wrong.</exception>
+    /// <exception cref="InvalidOperationException">Another error happened.</exception>
     Task LoginAsync(string email, string password);
     
     /// <summary>
     /// Logs the user out, invalidating the current access and refresh tokens.
     /// </summary>
-    /// <returns></returns>
     void Logout();
 }

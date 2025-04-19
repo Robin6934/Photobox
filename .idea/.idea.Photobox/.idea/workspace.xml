@@ -16,10 +16,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5e8b0e95-3a53-45a9-9f99-610719a87e94" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/CredentialValidationException.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Photobox/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Photobox/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Directory.Packages.props" beforeDir="false" afterPath="$PROJECT_DIR$/Directory.Packages.props" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/AccessTokenManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/AccessTokenManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/IAccessTokenManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/IAccessTokenManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI/Windows/LoginWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/Windows/LoginWindow.xaml.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Photobox.UI/Windows/MainWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/Windows/MainWindow.xaml.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -41,6 +42,10 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/57cb3d39cf80483da78de29bf08ab76a5800/9c/80870e33/CredentialAPIException.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/76803a04e31b4fee99d90bcbfc5a6bdde8e930/d5/09c49b64/ExceptionDispatchInfo.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/76803a04e31b4fee99d90bcbfc5a6bdde8e930/f6/7f2e779e/StackFrameIterator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/abffd0563eba4c969adf2f1bbd1f8bc2222918/c9/48bfb832/Dispatcher.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/69b8ee739126db8ad6a2c3d5a87138316eedf3c7e61798cc50a7ef87c32b2d/HttpClientHandler.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c439425da351c75ac7d966a1cc8324b51a9c471865af79d2f2f3fcb65e392/HttpClient.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c8ff5426bce7f781e6035a111b49b195bab86ffe24e39c7112cc02a4361/InputManager.cs" root0="FORCE_HIGHLIGHTING" />
@@ -322,6 +327,7 @@
       <workItem from="1744365725045" duration="2226000" />
       <workItem from="1744891348126" duration="976000" />
       <workItem from="1744990548421" duration="1053000" />
+      <workItem from="1745089122333" duration="4252000" />
     </task>
     <servers />
   </component>
@@ -452,19 +458,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Photobox.UI/Windows/MainWindow.xaml.cs</url>
-          <line>114</line>
-          <properties documentPath="C:\Users\Robin\Documents\GitHub\Photobox\Photobox.UI\Windows\MainWindow.xaml.cs" containingFunctionPresentation="Method 'StartAsync'">
-            <startOffsets>
-              <option value="3108" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3116" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
