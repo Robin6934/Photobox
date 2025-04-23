@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Net;
 
 namespace Photobox.Web.HealthCheck;
 
@@ -23,6 +23,8 @@ public class HealthController(HealthCheckService healthCheckService) : Controlle
     {
         var report = await healthCheckService.CheckHealthAsync();
 
-        return report.Status == HealthStatus.Healthy ? Ok(report) : StatusCode((int)HttpStatusCode.ServiceUnavailable, report);
+        return report.Status == HealthStatus.Healthy
+            ? Ok(report)
+            : StatusCode((int)HttpStatusCode.ServiceUnavailable, report);
     }
 }

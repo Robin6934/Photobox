@@ -13,6 +13,7 @@ namespace EOSDigital.API
         /// Pointer to the downloadable object
         /// </summary>
         protected IntPtr inRef;
+
         /// <summary>
         /// Directory item info of the downloadable object
         /// </summary>
@@ -21,7 +22,11 @@ namespace EOSDigital.API
         /// <summary>
         /// Pointer to the downloadable object
         /// </summary>
-        public IntPtr Reference { get { return inRef; } }
+        public IntPtr Reference
+        {
+            get { return inRef; }
+        }
+
         /// <summary>
         /// The name of the file. You can change it before you pass it to the
         /// <see cref="Camera.DownloadFile(DownloadInfo)"/> or
@@ -32,14 +37,23 @@ namespace EOSDigital.API
             get { return dirInfo.FileName; }
             set { dirInfo.FileName = value; }
         }
+
         /// <summary>
         /// The files size in bytes
         /// </summary>
-        public int Size { get { return dirInfo.Size; } }
+        public int Size
+        {
+            get { return dirInfo.Size; }
+        }
+
         /// <summary>
         /// The files size in bytes (as ulong)
         /// </summary>
-        public long Size64 { get { return dirInfo.Size64; } }
+        public long Size64
+        {
+            get { return dirInfo.Size64; }
+        }
+
         /// <summary>
         /// States if the file is a RAW file or not
         /// </summary>
@@ -51,18 +65,19 @@ namespace EOSDigital.API
         /// <param name="inRef">Pointer to the downloadable object</param>
         internal protected DownloadInfo(IntPtr inRef)
         {
-            if (inRef == IntPtr.Zero) throw new ArgumentNullException(nameof(inRef));
+            if (inRef == IntPtr.Zero)
+                throw new ArgumentNullException(nameof(inRef));
 
             this.inRef = inRef;
             ErrorHandler.CheckError(this, CanonSDK.GetDirectoryItemInfo(inRef, out dirInfo));
             string ext = Path.GetExtension(FileName).ToLower();
-            if (ext == ".crw" || ext == ".cr2") IsRAW = true;
-            else IsRAW = false;
+            if (ext == ".crw" || ext == ".cr2")
+                IsRAW = true;
+            else
+                IsRAW = false;
         }
 
-        public DownloadInfo()
-        {
-        }
+        public DownloadInfo() { }
     }
 
     /// <summary>
@@ -73,28 +88,36 @@ namespace EOSDigital.API
         /// <summary>
         /// Pointer to the file entry
         /// </summary>
-        public IntPtr Reference { get { return Ref; } }
+        public IntPtr Reference
+        {
+            get { return Ref; }
+        }
+
         /// <summary>
         /// The name of the entry. (volume name, folder name or file name)
         /// </summary>
         public string Name { get; protected set; } = default!;
+
         /// <summary>
         /// States if the entry is a folder or not
         /// </summary>
         public bool IsFolder { get; protected set; } = default!;
+
         /// <summary>
         /// States if the entry is a volume or not
         /// </summary>
         public bool IsVolume { get; protected set; } = default!;
+
         /// <summary>
         /// If the entry is a volume or folder, these are the subentries it contains. It's null if no subentries are present.
         /// </summary>
-        public CameraFileEntry[] Entries { get; internal protected set; } = default!;
+        public CameraFileEntry[] Entries { get; protected internal set; } = default!;
 
         /// <summary>
         /// Pointer to the file entry
         /// </summary>
         protected IntPtr Ref;
+
         /// <summary>
         /// States if the entry is disposed or not
         /// </summary>
@@ -138,7 +161,9 @@ namespace EOSDigital.API
         public void DisposeAll()
         {
             Dispose();
-            if (Entries != null) for (int i = 0; i < Entries.Length; i++) Entries[i].DisposeAll();
+            if (Entries != null)
+                for (int i = 0; i < Entries.Length; i++)
+                    Entries[i].DisposeAll();
         }
 
         /// <summary>
@@ -185,7 +210,6 @@ namespace EOSDigital.API
         /// <param name="stream">The image stream</param>
         partial void SetThumbSub(IntPtr stream);
 
-
         /// <summary>
         /// Determines whether the specified <see cref="CameraFileEntry"/>s are equal to each other.
         /// </summary>
@@ -208,6 +232,7 @@ namespace EOSDigital.API
 
             return x.Reference == y.Reference;
         }
+
         /// <summary>
         /// Determines whether the specified <see cref="CameraFileEntry"/>s are unequal to each other.
         /// </summary>
@@ -218,6 +243,7 @@ namespace EOSDigital.API
         {
             return !(x == y);
         }
+
         /// <summary>
         /// Determines whether the specified <see cref="object"/> is equal to the current <see cref="CameraFileEntry"/>.
         /// </summary>
@@ -231,12 +257,15 @@ namespace EOSDigital.API
             }
 
             // If both are null, or both are same instance, return true.
-            if (ReferenceEquals(this, obj)) return true;
+            if (ReferenceEquals(this, obj))
+                return true;
 
-            if (obj is not CameraFileEntry cv) return false;
+            if (obj is not CameraFileEntry cv)
+                return false;
 
             return Reference == cv.Reference;
         }
+
         /// <summary>
         /// Serves as a hash function for a <see cref="CameraFileEntry"/>.
         /// </summary>
@@ -260,6 +289,7 @@ namespace EOSDigital.API
         {
             get { return true; }
         }
+
         /// <summary>
         /// Gets a value indicating whether the current stream supports seeking.
         /// </summary>
@@ -267,6 +297,7 @@ namespace EOSDigital.API
         {
             get { return true; }
         }
+
         /// <summary>
         /// Gets a value indicating whether the current stream supports writing.
         /// </summary>
@@ -274,6 +305,7 @@ namespace EOSDigital.API
         {
             get { return true; }
         }
+
         /// <summary>
         /// Gets the length in bytes of the stream.
         /// </summary>
@@ -293,6 +325,7 @@ namespace EOSDigital.API
                 }
             }
         }
+
         /// <summary>
         /// Gets or sets the position within the current stream.
         /// </summary>
@@ -313,6 +346,7 @@ namespace EOSDigital.API
             }
             set { Seek(value, SeekOrigin.Begin); }
         }
+
         /// <summary>
         /// Pointer to the underlying SDK stream
         /// </summary>
@@ -323,14 +357,14 @@ namespace EOSDigital.API
         }
         private IntPtr _Reference;
 
-
         /// <summary>
         /// Creates a new instance of the <see cref="SDKStream"/> class from an existing SDK stream
         /// </summary>
         /// <param name="sdkStream">Pointer to the SDK stream</param>
         public SDKStream(IntPtr sdkStream)
         {
-            if (sdkStream == IntPtr.Zero) throw new ArgumentNullException(nameof(sdkStream));
+            if (sdkStream == IntPtr.Zero)
+                throw new ArgumentNullException(nameof(sdkStream));
             Reference = sdkStream;
         }
 
@@ -340,10 +374,16 @@ namespace EOSDigital.API
         /// <param name="filePath">Path to the file</param>
         /// <param name="createDisposition">State how to create the stream</param>
         /// <param name="access">File access type</param>
-        public SDKStream(string filePath, FileCreateDisposition createDisposition, FileAccess access)
+        public SDKStream(
+            string filePath,
+            FileCreateDisposition createDisposition,
+            FileAccess access
+        )
         {
             ArgumentNullException.ThrowIfNull(filePath);
-            ErrorHandler.CheckError(CanonSDK.EdsCreateFileStreamEx(filePath, createDisposition, access, out _Reference));
+            ErrorHandler.CheckError(
+                CanonSDK.EdsCreateFileStreamEx(filePath, createDisposition, access, out _Reference)
+            );
         }
 
         /// <summary>
@@ -354,8 +394,10 @@ namespace EOSDigital.API
         public SDKStream(long length)
         {
             ErrorCode err;
-            if (CanonSDK.IsVerGE34) err = CanonSDK.EdsCreateMemoryStream(length, out _Reference);
-            else err = CanonSDK.EdsCreateMemoryStream((int)length, out _Reference);
+            if (CanonSDK.IsVerGE34)
+                err = CanonSDK.EdsCreateMemoryStream(length, out _Reference);
+            else
+                err = CanonSDK.EdsCreateMemoryStream((int)length, out _Reference);
             ErrorHandler.CheckError(err);
         }
 
@@ -369,8 +411,18 @@ namespace EOSDigital.API
             ArgumentNullException.ThrowIfNull(buffer);
 
             ErrorCode err;
-            if (CanonSDK.IsVerGE34) err = CanonSDK.EdsCreateMemoryStreamFromPointer(buffer, buffer.LongLength, out _Reference);
-            else err = CanonSDK.EdsCreateMemoryStreamFromPointer(buffer, (int)buffer.LongLength, out _Reference);
+            if (CanonSDK.IsVerGE34)
+                err = CanonSDK.EdsCreateMemoryStreamFromPointer(
+                    buffer,
+                    buffer.LongLength,
+                    out _Reference
+                );
+            else
+                err = CanonSDK.EdsCreateMemoryStreamFromPointer(
+                    buffer,
+                    (int)buffer.LongLength,
+                    out _Reference
+                );
             ErrorHandler.CheckError(err);
         }
 
@@ -382,11 +434,18 @@ namespace EOSDigital.API
         /// <param name="length">The size of the memory buffer in bytes</param>
         public SDKStream(IntPtr buffer, long length)
         {
-            if (buffer == IntPtr.Zero) throw new ArgumentNullException(nameof(buffer));
+            if (buffer == IntPtr.Zero)
+                throw new ArgumentNullException(nameof(buffer));
 
             ErrorCode err;
-            if (CanonSDK.IsVerGE34) err = CanonSDK.EdsCreateMemoryStreamFromPointer(buffer, length, out _Reference);
-            else err = CanonSDK.EdsCreateMemoryStreamFromPointer(buffer, (int)length, out _Reference);
+            if (CanonSDK.IsVerGE34)
+                err = CanonSDK.EdsCreateMemoryStreamFromPointer(buffer, length, out _Reference);
+            else
+                err = CanonSDK.EdsCreateMemoryStreamFromPointer(
+                    buffer,
+                    (int)length,
+                    out _Reference
+                );
             ErrorHandler.CheckError(err);
         }
 
@@ -399,9 +458,7 @@ namespace EOSDigital.API
         /// <param name="length">The size of the underlying SDK buffer in bytes. Ignored parameter</param>
         [Obsolete("Not necessary anymore. Buffer and length is not used.")]
         public SDKStream(IntPtr buffer, IntPtr sdkStream, long length)
-            : this(sdkStream)
-        { }
-
+            : this(sdkStream) { }
 
         /// <summary>
         /// Clears all buffers for this stream and causes any buffered data to be
@@ -454,12 +511,21 @@ namespace EOSDigital.API
 
                 if (CanonSDK.IsVerGE34)
                 {
-                    ErrorHandler.CheckError(CanonSDK.EdsRead(_Reference, count, (IntPtr)offsetBufferPtr, out long read));
+                    ErrorHandler.CheckError(
+                        CanonSDK.EdsRead(_Reference, count, (IntPtr)offsetBufferPtr, out long read)
+                    );
                     return read;
                 }
                 else
                 {
-                    ErrorHandler.CheckError(CanonSDK.EdsRead(_Reference, (int)count, (IntPtr)offsetBufferPtr, out int read));
+                    ErrorHandler.CheckError(
+                        CanonSDK.EdsRead(
+                            _Reference,
+                            (int)count,
+                            (IntPtr)offsetBufferPtr,
+                            out int read
+                        )
+                    );
                     return read;
                 }
             }
@@ -481,8 +547,10 @@ namespace EOSDigital.API
                 SeekOrigin.End => SDK.SeekOrigin.End,
                 _ => throw new ArgumentException("Not a valid enum value", nameof(origin)),
             };
-            if (CanonSDK.IsVerGE34) ErrorHandler.CheckError(CanonSDK.EdsSeek(_Reference, offset, sdkOrigin));
-            else ErrorHandler.CheckError(CanonSDK.EdsSeek(_Reference, (int)offset, sdkOrigin));
+            if (CanonSDK.IsVerGE34)
+                ErrorHandler.CheckError(CanonSDK.EdsSeek(_Reference, offset, sdkOrigin));
+            else
+                ErrorHandler.CheckError(CanonSDK.EdsSeek(_Reference, (int)offset, sdkOrigin));
 
             return Position;
         }
@@ -525,11 +593,25 @@ namespace EOSDigital.API
 
                 if (CanonSDK.IsVerGE34)
                 {
-                    ErrorHandler.CheckError(CanonSDK.EdsWrite(_Reference, count, (IntPtr)offsetBufferPtr, out long written));
+                    ErrorHandler.CheckError(
+                        CanonSDK.EdsWrite(
+                            _Reference,
+                            count,
+                            (IntPtr)offsetBufferPtr,
+                            out long written
+                        )
+                    );
                 }
                 else
                 {
-                    ErrorHandler.CheckError(CanonSDK.EdsWrite(_Reference, (int)count, (IntPtr)offsetBufferPtr, out int written));
+                    ErrorHandler.CheckError(
+                        CanonSDK.EdsWrite(
+                            _Reference,
+                            (int)count,
+                            (IntPtr)offsetBufferPtr,
+                            out int written
+                        )
+                    );
                 }
             }
         }
@@ -548,7 +630,8 @@ namespace EOSDigital.API
             {
                 int err = CanonSDK.EdsRelease(_Reference);
                 Reference = IntPtr.Zero;
-                if (disposing) ErrorHandler.CheckError(err);
+                if (disposing)
+                    ErrorHandler.CheckError(err);
             }
         }
     }

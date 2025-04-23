@@ -1,12 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Drawing;
+using System.Drawing.Printing;
+using System.Management;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Photobox.UI.Lib.ConfigModels;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Drawing;
-using System.Drawing.Printing;
-using System.Management;
 
 namespace Photobox.UI.Lib.Printer;
+
 public class Printer(ILogger<Printer> logger, IOptionsMonitor<PhotoboxConfig> options) : IPrinter
 {
     private readonly ILogger<Printer> logger = logger;
@@ -62,13 +63,10 @@ public class Printer(ILogger<Printer> logger, IOptionsMonitor<PhotoboxConfig> op
 
         PrinterSettings printerSettings = new()
         {
-            PrinterName = photoboxOptionsMonitor.CurrentValue.PrinterName
+            PrinterName = photoboxOptionsMonitor.CurrentValue.PrinterName,
         };
 
-        using PrintDocument pd = new()
-        {
-            PrinterSettings = printerSettings
-        };
+        using PrintDocument pd = new() { PrinterSettings = printerSettings };
 
         pd.PrintPage += (sender, e) =>
         {
@@ -95,9 +93,10 @@ public class Printer(ILogger<Printer> logger, IOptionsMonitor<PhotoboxConfig> op
         {
             PrinterEnabledOptions.True => true,
             PrinterEnabledOptions.False => false,
-            PrinterEnabledOptions.Automatic =>
-            CheckIfPrinterIsConnected(photoboxOptionsMonitor.CurrentValue.PrinterName), // Example method to check printer status
-            _ => false // Default case, if necessary
+            PrinterEnabledOptions.Automatic => CheckIfPrinterIsConnected(
+                photoboxOptionsMonitor.CurrentValue.PrinterName
+            ), // Example method to check printer status
+            _ => false, // Default case, if necessary
         };
     }
 
@@ -111,7 +110,9 @@ public class Printer(ILogger<Printer> logger, IOptionsMonitor<PhotoboxConfig> op
         string sanitizedPrinterName = printerToCheck.Replace("'", "''");
 
         // Search for the printer by name
-        using var searcher = new ManagementObjectSearcher($"SELECT Name, PrinterStatus, DetectedErrorState, WorkOffline FROM Win32_Printer WHERE Name LIKE '%{sanitizedPrinterName}%'");
+        using var searcher = new ManagementObjectSearcher(
+            $"SELECT Name, PrinterStatus, DetectedErrorState, WorkOffline FROM Win32_Printer WHERE Name LIKE '%{sanitizedPrinterName}%'"
+        );
 
         foreach (var printer in searcher.Get())
         {
@@ -127,7 +128,10 @@ public class Printer(ILogger<Printer> logger, IOptionsMonitor<PhotoboxConfig> op
                 // PrinterStatus 3 means it's idle (ready to print)
                 // DetectedErrorState 0 means no error
                 // WorkOffline should be false
-                if (printerStatus == 3 || printerStatus == 2 && detectedState == 0 && isPrinterOnline)
+                if (
+                    printerStatus == 3
+                    || printerStatus == 2 && detectedState == 0 && isPrinterOnline
+                )
                 {
                     return true; // Printer is available and ready to print
                 }

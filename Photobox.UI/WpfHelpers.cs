@@ -1,11 +1,11 @@
-﻿using Microsoft.IO;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp.PixelFormats;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Microsoft.IO;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.WpfHelpers;
 
@@ -14,19 +14,30 @@ public static partial class BitmapToBitmapSource
     public static BitmapSource ToBitmapSource(this Bitmap source)
     {
         var bitmapData = source.LockBits(
-        new System.Drawing.Rectangle(0, 0, source.Width, source.Height),
-        System.Drawing.Imaging.ImageLockMode.ReadOnly, source.PixelFormat);
+            new System.Drawing.Rectangle(0, 0, source.Width, source.Height),
+            System.Drawing.Imaging.ImageLockMode.ReadOnly,
+            source.PixelFormat
+        );
 
         var bitmapSource = BitmapSource.Create(
-           bitmapData.Width, bitmapData.Height, 96.0, 96.0, PixelFormats.Bgr24, null,
-           bitmapData.Scan0, bitmapData.Stride * bitmapData.Height, bitmapData.Stride);
+            bitmapData.Width,
+            bitmapData.Height,
+            96.0,
+            96.0,
+            PixelFormats.Bgr24,
+            null,
+            bitmapData.Scan0,
+            bitmapData.Stride * bitmapData.Height,
+            bitmapData.Stride
+        );
 
         source.UnlockBits(bitmapData);
 
         return bitmapSource;
     }
 
-    public static BitmapSource ToBitmapSource<TPixel>(this Image<TPixel> image) where TPixel: unmanaged, IPixel<TPixel>
+    public static BitmapSource ToBitmapSource<TPixel>(this Image<TPixel> image)
+        where TPixel : unmanaged, IPixel<TPixel>
     {
         using var stream = new MemoryStream();
 

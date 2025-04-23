@@ -16,24 +16,95 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5e8b0e95-3a53-45a9-9f99-610719a87e94" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Components/Pages/Register.cshtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Components/Pages/Register.cshtml.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Photobox/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Photobox/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Directory.Packages.props" beforeDir="false" afterPath="$PROJECT_DIR$/Directory.Packages.props" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Documentation/chapters/program/program.tex" beforeDir="false" afterPath="$PROJECT_DIR$/Documentation/chapters/program/program.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Documentation/main.tex" beforeDir="false" afterPath="$PROJECT_DIR$/Documentation/main.tex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EDSKLib/API/Base/Camera.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/API/Base/Camera.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EDSKLib/API/Base/CanonAPI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/API/Base/CanonAPI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EDSKLib/API/Helper/CameraValue.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/API/Helper/CameraValue.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EDSKLib/API/Helper/Delegates.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/API/Helper/Delegates.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EDSKLib/API/Helper/ExceptionHandling.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/API/Helper/ExceptionHandling.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EDSKLib/API/Helper/IO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/API/Helper/IO.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EDSKLib/API/Helper/STAThread.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/API/Helper/STAThread.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EDSKLib/API/Helper/ValueCollections.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/API/Helper/ValueCollections.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/EDSKLib/EDSKLib.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/EDSKLib.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EDSKLib/SDK/SDKDelegates.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/SDK/SDKDelegates.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EDSKLib/SDK/SDKEnums.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/SDK/SDKEnums.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EDSKLib/SDK/SDKMethods.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/SDK/SDKMethods.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EDSKLib/SDK/SDKStructs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/SDK/SDKStructs.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Lib.Test/AccessTokenManagerTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib.Test/AccessTokenManagerTest.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Photobox.Lib.Test/Photobox.Lib.Test.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib.Test/Photobox.Lib.Test.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/AccessTokenManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/AccessTokenManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/CredentialValidationException.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/CredentialValidationException.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/IAccessTokenManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/IAccessTokenManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Lib/AspectRatio.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/AspectRatio.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Lib/Extensions/ImageExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/Extensions/ImageExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Lib/Helper/ImageHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/Helper/ImageHelper.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Photobox.Lib/Photobox.Lib.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/Photobox.Lib.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Lib/RestApi/Client.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/RestApi/Client.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Lib/RestApi/Client.Extension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/RestApi/Client.Extension.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib.Test/ImageManagerTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib.Test/ImageManagerTest.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib.Test/Photobox.UI.Lib.Test.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib.Test/Photobox.UI.Lib.Test.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraException.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraException.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraFactory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraNotFoundException.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraNotFoundException.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraType.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CanonCamera.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CanonCamera.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/WebCam.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/WebCam.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/WrappingStream.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/WrappingStream.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/ConfigModels/CountDownConfig.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/ConfigModels/CountDownConfig.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/ConfigModels/PhotoboxConfig.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/ConfigModels/PhotoboxConfig.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Folders.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Folders.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/GlobalSuppressions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/GlobalSuppressions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Helper/PhotoboxHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Helper/PhotoboxHelper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/ImageHandler/ImageHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/ImageHandler/ImageHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/ImageManager/IImageManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/ImageManager/IImageManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/ImageManager/ImageManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/ImageManager/ImageManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/ImageUploadService/IImageUploadService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/ImageUploadService/IImageUploadService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/ImageUploadService/ImageUploadService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/ImageUploadService/ImageUploadService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Photobox.UI.Lib.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Photobox.UI.Lib.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Printer/IPrinter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Printer/IPrinter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Printer/Printer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Printer/Printer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Printer/PrinterEnabledOptions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Printer/PrinterEnabledOptions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI/App.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/App.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI/AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI/CountDown/CountDownCircle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/CountDown/CountDownCircle.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI/CountDown/ICountDown.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/CountDown/ICountDown.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI/ImageViewer/IImageViewer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/ImageViewer/IImageViewer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI/ImageViewer/ImageViewResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/ImageViewer/ImageViewResult.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI/ImageViewer/ImageViewerLocal.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/ImageViewer/ImageViewerLocal.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Photobox.UI/Photobox.UI.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/Photobox.UI.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI/Windows/ImageViewWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/Windows/ImageViewWindow.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI/Windows/LogWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/Windows/LogWindow.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI/Windows/LoginWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/Windows/LoginWindow.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI/Windows/MainWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/Windows/MainWindow.xaml.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Photobox.UI/WpfHelpers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/WpfHelpers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/MouseService/IMouseService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/MouseService/IMouseService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/MouseService/MouseService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/MouseService/MouseService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/Pages/Components/ImageObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/Pages/Components/ImageObject.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/Photobox.Web.Client.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/Photobox.Web.Client.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/OpenAPI/swagger.json" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/OpenAPI/swagger.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Aws/Aws.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Aws/Aws.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Components/Pages/Register.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Components/Pages/Register.cshtml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/DbContext/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/DbContext/AppDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/GlobalSuppressions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/GlobalSuppressions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/HealthCheck/HealthCheck.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/HealthCheck/HealthCheck.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/HealthCheck/HealthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/HealthCheck/HealthController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/HealthCheck/MemoryHealthCheck.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/HealthCheck/MemoryHealthCheck.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Image/ImageController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Image/ImageController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Image/ImageModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Image/ImageModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Image/ImageService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Image/ImageService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20241201190630_InitialCreate.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20241201190630_InitialCreate.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20241206105802_UpdatedAppdcoontextToInheritIdentityDbCOntext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20241206105802_UpdatedAppdcoontextToInheritIdentityDbCOntext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20241206164258_AddedPhotoBoxModelWithRelationToUser.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20241206164258_AddedPhotoBoxModelWithRelationToUser.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20241207103250_UpdatedPhotoBoxModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20241207103250_UpdatedPhotoBoxModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20250211183747_update.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20250211183747_update.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox.Web.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox.Web.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox/DTOs/CreatePhotoBoxDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox/DTOs/CreatePhotoBoxDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox/PhotoBoxController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox/PhotoBoxController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox/PhotoBoxModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox/PhotoBoxModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox/PhotoBoxService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox/PhotoBoxService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/StorageProvider/AwsStorageProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/StorageProvider/AwsStorageProvider.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -352,7 +423,7 @@
       <workItem from="1744990548421" duration="1053000" />
       <workItem from="1745089122333" duration="4853000" />
       <workItem from="1745142159633" duration="9024000" />
-      <workItem from="1745415896006" duration="4991000" />
+      <workItem from="1745415896006" duration="5589000" />
     </task>
     <servers />
   </component>
@@ -467,24 +538,5 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox/PhotoBoxController.cs</url>
-          <line>24</line>
-          <properties documentPath="C:\Users\Robin\Documents\GitHub\Photobox\Photobox.Web\Photobox.Web\Photobox\PhotoBoxController.cs" containingFunctionPresentation="Method 'Create'">
-            <startOffsets>
-              <option value="789" />
-            </startOffsets>
-            <endOffsets>
-              <option value="871" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

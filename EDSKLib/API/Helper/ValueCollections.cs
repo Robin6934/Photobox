@@ -21,10 +21,15 @@ namespace EOSDigital.API
             if (arr.Length == 0)
             {
                 var invalid = Values.FirstOrDefault(t => t.IntValue == unchecked((int)0xFFFFFFFF));
-                if (invalid is not null) return invalid;
-                else throw new KeyNotFoundException("There is no CameraValue for this ID");
+                if (invalid is not null)
+                    return invalid;
+                else
+                    throw new KeyNotFoundException("There is no CameraValue for this ID");
             }
-            else { return arr[0]; }
+            else
+            {
+                return arr[0];
+            }
         }
 
         /// <summary>
@@ -41,10 +46,15 @@ namespace EOSDigital.API
             if (arr.Length == 0)
             {
                 var invalid = Values.FirstOrDefault(t => t.IntValue == unchecked((int)0xFFFFFFFF));
-                if (invalid is not null) return invalid;
-                else throw new KeyNotFoundException("There is no CameraValue for this ID");
+                if (invalid is not null)
+                    return invalid;
+                else
+                    throw new KeyNotFoundException("There is no CameraValue for this ID");
             }
-            else { return arr[0]; }
+            else
+            {
+                return arr[0];
+            }
         }
 
         /// <summary>
@@ -56,25 +66,37 @@ namespace EOSDigital.API
         /// <returns>The CameraValue with given double representation</returns>
         public static CameraValue GetValue(double value, List<CameraValue> Values)
         {
-            CameraValue[] sorted = [.. Values.Distinct(new CameraValueComparer())
-                                    .Where(t => t.IntValue != unchecked((int)0xFFFFFFFF) && t != TvValues.Bulb && t != ISOValues.Auto)
-                                    .OrderBy(t => t.DoubleValue)];
+            CameraValue[] sorted =
+            [
+                .. Values
+                    .Distinct(new CameraValueComparer())
+                    .Where(t =>
+                        t.IntValue != unchecked((int)0xFFFFFFFF)
+                        && t != TvValues.Bulb
+                        && t != ISOValues.Auto
+                    )
+                    .OrderBy(t => t.DoubleValue),
+            ];
 
             for (int i = 0; i < sorted.Length; i++)
             {
                 //Exact match:
-                if (Math.Abs(sorted[i].DoubleValue - value) <= 0.00000000001) return sorted[i];
+                if (Math.Abs(sorted[i].DoubleValue - value) <= 0.00000000001)
+                    return sorted[i];
                 else if (sorted[i].DoubleValue > value)
                 {
                     //Value is smaller than the range of given list. Return first:
-                    if (i == 0) return sorted[i];
+                    if (i == 0)
+                        return sorted[i];
                     else
                     {
                         //Select CameraValue closest to given value
                         double delta1 = value - sorted[i - 1].DoubleValue;
                         double delta = sorted[i].DoubleValue - value;
-                        if (delta > delta1) return sorted[i - 1];
-                        else return sorted[i];
+                        if (delta > delta1)
+                            return sorted[i - 1];
+                        else
+                            return sorted[i];
                     }
                 }
             }
@@ -130,7 +152,6 @@ namespace EOSDigital.API
     /// </summary>
     public sealed class AvValues : ValueBase
     {
-
         /// <summary>
         /// All values for this property
         /// </summary>
@@ -144,10 +165,16 @@ namespace EOSDigital.API
         /// The Av <see cref="CameraValue"/> of the "Auto" or "None" setting
         /// </summary>
         public static readonly CameraValue Auto = cameraValue;
+
         /// <summary>
         /// The Av <see cref="CameraValue"/> of an invalid setting
         /// </summary>
-        public static readonly CameraValue Invalid = new("N/A", unchecked((int)0xFFFFFFFF), 0, PropertyID.Av);
+        public static readonly CameraValue Invalid = new(
+            "N/A",
+            unchecked((int)0xFFFFFFFF),
+            0,
+            PropertyID.Av
+        );
 
         static AvValues()
         {
@@ -207,7 +234,7 @@ namespace EOSDigital.API
                 new("76", 0x6C, 76, PropertyID.Av),
                 new("80", 0x6D, 80, PropertyID.Av),
                 new("91", 0x70, 91, PropertyID.Av),
-                Invalid
+                Invalid,
             ];
         }
 
@@ -262,14 +289,21 @@ namespace EOSDigital.API
         /// The Tv <see cref="CameraValue"/> of the "Auto" setting
         /// </summary>
         public static readonly CameraValue Auto = new("Auto", 0x00000000, 0, PropertyID.Tv);
+
         /// <summary>
         /// The Tv <see cref="CameraValue"/> of the "Bulb" setting
         /// </summary>
         public static readonly CameraValue Bulb = new("Bulb", 0x0C, 0, PropertyID.Tv);
+
         /// <summary>
         /// The Tv <see cref="CameraValue"/> of an invalid setting
         /// </summary>
-        public static readonly CameraValue Invalid = new("N/A", unchecked((int)0xFFFFFFFF), 0, PropertyID.Tv);
+        public static readonly CameraValue Invalid = new(
+            "N/A",
+            unchecked((int)0xFFFFFFFF),
+            0,
+            PropertyID.Tv
+        );
 
         static TvValues()
         {
@@ -350,7 +384,7 @@ namespace EOSDigital.API
                 new("1/6000", 0x9C, 1 / 6000d, PropertyID.Tv),
                 new("1/6400", 0x9D, 1 / 6400d, PropertyID.Tv),
                 new("1/8000", 0xA0, 1 / 8000d, PropertyID.Tv),
-                Invalid
+                Invalid,
             ];
         }
 
@@ -405,10 +439,16 @@ namespace EOSDigital.API
         /// The ISO <see cref="CameraValue"/> of the "Auto" setting
         /// </summary>
         public static readonly CameraValue Auto = new("ISO Auto", 0x00000000, 0, PropertyID.ISO);
+
         /// <summary>
         /// The ISO <see cref="CameraValue"/> of an invalid setting
         /// </summary>
-        public static readonly CameraValue Invalid = new("N/A", unchecked((int)0xFFFFFFFF), 0, PropertyID.ISO);
+        public static readonly CameraValue Invalid = new(
+            "N/A",
+            unchecked((int)0xFFFFFFFF),
+            0,
+            PropertyID.ISO
+        );
 
         static ISOValues()
         {
@@ -443,7 +483,7 @@ namespace EOSDigital.API
                 new("ISO 25600", 0x00000088, 25600, PropertyID.ISO),
                 new("ISO 51200", 0x00000090, 51200, PropertyID.ISO),
                 new("ISO 102400", 0x00000098, 102400, PropertyID.ISO),
-                Invalid
+                Invalid,
             ];
         }
 
@@ -497,11 +537,22 @@ namespace EOSDigital.API
         /// <summary>
         /// The ExposureCompensation <see cref="CameraValue"/> of Zero
         /// </summary>
-        public static readonly CameraValue Zero = new("0", 0x00, 0, PropertyID.ExposureCompensation);
+        public static readonly CameraValue Zero = new(
+            "0",
+            0x00,
+            0,
+            PropertyID.ExposureCompensation
+        );
+
         /// <summary>
         /// The ExposureCompensation <see cref="CameraValue"/> of an invalid setting
         /// </summary>
-        public static readonly CameraValue Invalid = new("N/A", unchecked((int)0xFFFFFFFF), 0, PropertyID.ExposureCompensation);
+        public static readonly CameraValue Invalid = new(
+            "N/A",
+            unchecked((int)0xFFFFFFFF),
+            0,
+            PropertyID.ExposureCompensation
+        );
 
         static ExpCompValues()
         {
@@ -548,7 +599,7 @@ namespace EOSDigital.API
                 new("-4 1/2", 0xDC, -4 - (1 / 2d), PropertyID.ExposureCompensation),
                 new("-4 2/3", 0xDB, -4 - (2 / 3d), PropertyID.ExposureCompensation),
                 new("-5", 0xD8, -5, PropertyID.ExposureCompensation),
-                Invalid
+                Invalid,
             ];
         }
 
@@ -609,7 +660,12 @@ namespace EOSDigital.API
         public static readonly CameraValue Custom = new("Custom", 7, 0, PropertyID.AEMode);
         public static readonly CameraValue Lock = new("Lock", 8, 0, PropertyID.AEMode);
         public static readonly CameraValue Green = new("Green", 9, 0, PropertyID.AEMode);
-        public static readonly CameraValue NightPortrait = new("NightPortrait", 10, 0, PropertyID.AEMode);
+        public static readonly CameraValue NightPortrait = new(
+            "NightPortrait",
+            10,
+            0,
+            PropertyID.AEMode
+        );
         public static readonly CameraValue Sports = new("Sports", 11, 0, PropertyID.AEMode);
         public static readonly CameraValue Portrait = new("Portrait", 12, 0, PropertyID.AEMode);
         public static readonly CameraValue Landscape = new("Landscape", 13, 0, PropertyID.AEMode);
@@ -617,33 +673,103 @@ namespace EOSDigital.API
         public static readonly CameraValue FlashOff = new("FlashOff", 15, 0, PropertyID.AEMode);
         public static readonly CameraValue Custom2 = new("Custom2", 16, 0, PropertyID.AEMode);
         public static readonly CameraValue Custom3 = new("Custom3", 17, 0, PropertyID.AEMode);
-        public static readonly CameraValue CreativeAuto = new("CreativeAuto", 19, 0, PropertyID.AEMode);
+        public static readonly CameraValue CreativeAuto = new(
+            "CreativeAuto",
+            19,
+            0,
+            PropertyID.AEMode
+        );
         public static readonly CameraValue Movie = new("Movie", 20, 0, PropertyID.AEMode);
-        public static readonly CameraValue PhotoInMovie = new("PhotoInMovie", 21, 0, PropertyID.AEMode);
-        public static readonly CameraValue SceneIntelligentAuto = new("SceneIntelligentAuto", 22, 0, PropertyID.AEMode);
+        public static readonly CameraValue PhotoInMovie = new(
+            "PhotoInMovie",
+            21,
+            0,
+            PropertyID.AEMode
+        );
+        public static readonly CameraValue SceneIntelligentAuto = new(
+            "SceneIntelligentAuto",
+            22,
+            0,
+            PropertyID.AEMode
+        );
         public static readonly CameraValue Scene = new("Scene", 25, 0, PropertyID.AEMode);
-        public static readonly CameraValue NightScenes = new("NightScenes", 23, 0, PropertyID.AEMode);
-        public static readonly CameraValue BacklitScenes = new("BacklitScenes", 24, 0, PropertyID.AEMode);
+        public static readonly CameraValue NightScenes = new(
+            "NightScenes",
+            23,
+            0,
+            PropertyID.AEMode
+        );
+        public static readonly CameraValue BacklitScenes = new(
+            "BacklitScenes",
+            24,
+            0,
+            PropertyID.AEMode
+        );
         public static readonly CameraValue Children = new("Children", 26, 0, PropertyID.AEMode);
         public static readonly CameraValue Food = new("Food", 27, 0, PropertyID.AEMode);
-        public static readonly CameraValue CandlelightPortraits = new("CandlelightPortraits", 28, 0, PropertyID.AEMode);
-        public static readonly CameraValue CreativeFilter = new("CreativeFilter", 29, 0, PropertyID.AEMode);
-        public static readonly CameraValue RoughMonoChrome = new("RoughMonoChrome", 30, 0, PropertyID.AEMode);
+        public static readonly CameraValue CandlelightPortraits = new(
+            "CandlelightPortraits",
+            28,
+            0,
+            PropertyID.AEMode
+        );
+        public static readonly CameraValue CreativeFilter = new(
+            "CreativeFilter",
+            29,
+            0,
+            PropertyID.AEMode
+        );
+        public static readonly CameraValue RoughMonoChrome = new(
+            "RoughMonoChrome",
+            30,
+            0,
+            PropertyID.AEMode
+        );
         public static readonly CameraValue SoftFocus = new("SoftFocus", 31, 0, PropertyID.AEMode);
         public static readonly CameraValue ToyCamera = new("ToyCamera", 32, 0, PropertyID.AEMode);
         public static readonly CameraValue Fisheye = new("Fisheye", 33, 0, PropertyID.AEMode);
         public static readonly CameraValue WaterColor = new("WaterColor", 34, 0, PropertyID.AEMode);
         public static readonly CameraValue Miniature = new("Miniature", 35, 0, PropertyID.AEMode);
-        public static readonly CameraValue Hdr_Standard = new("Hdr_Standard", 36, 0, PropertyID.AEMode);
+        public static readonly CameraValue Hdr_Standard = new(
+            "Hdr_Standard",
+            36,
+            0,
+            PropertyID.AEMode
+        );
         public static readonly CameraValue Hdr_Vivid = new("Hdr_Vivid", 37, 0, PropertyID.AEMode);
         public static readonly CameraValue Hdr_Bold = new("Hdr_Bold", 38, 0, PropertyID.AEMode);
-        public static readonly CameraValue Hdr_Embossed = new("Hdr_Embossed", 39, 0, PropertyID.AEMode);
-        public static readonly CameraValue Movie_Fantasy = new("Movie_Fantasy", 40, 0, PropertyID.AEMode);
+        public static readonly CameraValue Hdr_Embossed = new(
+            "Hdr_Embossed",
+            39,
+            0,
+            PropertyID.AEMode
+        );
+        public static readonly CameraValue Movie_Fantasy = new(
+            "Movie_Fantasy",
+            40,
+            0,
+            PropertyID.AEMode
+        );
         public static readonly CameraValue Movie_Old = new("Movie_Old", 41, 0, PropertyID.AEMode);
-        public static readonly CameraValue Movie_Memory = new("Movie_Memory", 42, 0, PropertyID.AEMode);
-        public static readonly CameraValue Movie_DirectMono = new("Movie_DirectMono", 43, 0, PropertyID.AEMode);
+        public static readonly CameraValue Movie_Memory = new(
+            "Movie_Memory",
+            42,
+            0,
+            PropertyID.AEMode
+        );
+        public static readonly CameraValue Movie_DirectMono = new(
+            "Movie_DirectMono",
+            43,
+            0,
+            PropertyID.AEMode
+        );
         public static readonly CameraValue Movie_Mini = new("Movie_Mini", 44, 0, PropertyID.AEMode);
-        public static readonly CameraValue Unknown = new("Unknown", unchecked((int)0xFFFFFFFF), 0, PropertyID.AEMode);
+        public static readonly CameraValue Unknown = new(
+            "Unknown",
+            unchecked((int)0xFFFFFFFF),
+            0,
+            PropertyID.AEMode
+        );
 
         static AEModeValues()
         {
@@ -745,20 +871,29 @@ namespace EOSDigital.API
         private static readonly List<CameraValue> values;
 
         public static readonly CameraValue Spot = new("Spot", 1, 0, PropertyID.MeteringMode);
-        public static readonly CameraValue Evaluative = new("Evaluative", 3, 0, PropertyID.MeteringMode);
+        public static readonly CameraValue Evaluative = new(
+            "Evaluative",
+            3,
+            0,
+            PropertyID.MeteringMode
+        );
         public static readonly CameraValue Partial = new("Partial", 4, 0, PropertyID.MeteringMode);
-        public static readonly CameraValue CenterWeightedAveraging = new("Center-weighted averaging", 5, 0, PropertyID.MeteringMode);
-        public static readonly CameraValue NotValid = new("Not valid", unchecked((int)0xFFFFFFFF), 0, PropertyID.MeteringMode);
+        public static readonly CameraValue CenterWeightedAveraging = new(
+            "Center-weighted averaging",
+            5,
+            0,
+            PropertyID.MeteringMode
+        );
+        public static readonly CameraValue NotValid = new(
+            "Not valid",
+            unchecked((int)0xFFFFFFFF),
+            0,
+            PropertyID.MeteringMode
+        );
 
         static MeteringModeValues()
         {
-            values = [
-                Spot,
-                Evaluative,
-                Partial,
-                CenterWeightedAveraging,
-                NotValid
-            ];
+            values = [Spot, Evaluative, Partial, CenterWeightedAveraging, NotValid];
         }
 
         /// <summary>

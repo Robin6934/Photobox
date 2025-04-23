@@ -89,16 +89,14 @@ namespace EOSDigital.API
         /// <summary>
         /// Initializes a new instance of the <see cref="CameraSessionException"/> class
         /// </summary>
-        public CameraSessionException()
-        { }
+        public CameraSessionException() { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CameraSessionException"/> class with a specified error message
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         public CameraSessionException(string message)
-            : base(message)
-        { }
+            : base(message) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CameraSessionException"/> class with a specified
@@ -109,8 +107,7 @@ namespace EOSDigital.API
         /// <param name="innerException">The exception that is the cause of the current exception, or a null reference
         /// (Nothing in Visual Basic) if no inner exception is specified</param>
         public CameraSessionException(string message, Exception innerException)
-            : base(message, innerException)
-        { }
+            : base(message, innerException) { }
     }
 
     /// <summary>
@@ -121,16 +118,14 @@ namespace EOSDigital.API
         /// <summary>
         /// Initializes a new instance of the <see cref="SDKStateException"/> class
         /// </summary>
-        public SDKStateException()
-        { }
+        public SDKStateException() { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SDKStateException"/> class with a specified error message
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         public SDKStateException(string message)
-            : base(message)
-        { }
+            : base(message) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SDKStateException"/> class with a specified
@@ -141,8 +136,7 @@ namespace EOSDigital.API
         /// <param name="innerException">The exception that is the cause of the current exception, or a null reference
         /// (Nothing in Visual Basic) if no inner exception is specified</param>
         public SDKStateException(string message, Exception innerException)
-            : base(message, innerException)
-        { }
+            : base(message, innerException) { }
     }
 
     /// <summary>
@@ -155,8 +149,7 @@ namespace EOSDigital.API
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         public ExecutionException(string message)
-            : base(message)
-        { }
+            : base(message) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExecutionException"/> class with a reference to
@@ -166,8 +159,7 @@ namespace EOSDigital.API
         /// <param name="innerException">The exception that is the cause of the current exception, or a null reference
         /// (Nothing in Visual Basic) if no inner exception is specified</param>
         public ExecutionException(string message, Exception innerException)
-            : base(message, innerException)
-        { }
+            : base(message, innerException) { }
     }
 
     /// <summary>
@@ -179,14 +171,17 @@ namespace EOSDigital.API
         /// If an error happened, that does not break the program, this event is fired (e.g. a focus error)
         /// </summary>
         public static event SDKExceptionHandler NonSevereErrorHappened = default!;
+
         /// <summary>
         /// If an error happened on a thread that does not fall into the non-severe category, this event is fired
         /// </summary>
         public static event GeneralExceptionHandler SevereErrorHappened = default!;
+
         /// <summary>
         /// List of all non-severe errors. Items can be added or removed.
         /// </summary>
-        public static List<ErrorCode> NonSevereErrors { get; private set; } = [
+        public static List<ErrorCode> NonSevereErrors { get; private set; } =
+            [
                 ErrorCode.TAKE_PICTURE_AF_NG,
                 ErrorCode.TAKE_PICTURE_CARD_NG,
                 ErrorCode.TAKE_PICTURE_CARD_PROTECT_NG,
@@ -200,7 +195,7 @@ namespace EOSDigital.API
                 ErrorCode.TAKE_PICTURE_SPECIAL_MOVIE_MODE_NG,
                 ErrorCode.TAKE_PICTURE_STROBO_CHARGE_NG,
                 ErrorCode.LENS_COVER_CLOSE,
-                ErrorCode.DEVICE_BUSY
+                ErrorCode.DEVICE_BUSY,
             ];
 
         /// <summary>
@@ -210,25 +205,27 @@ namespace EOSDigital.API
         /// <param name="errorCode">The return code of the SDK call</param>
         /// <exception cref="SDKException">If a severe error is recognized or the <see cref="NonSevereErrorHappened"/>
         /// event is null with a non-severe error, it will be thrown as an exception</exception>
-
         public static void CheckError(object sender, ErrorCode errorCode)
         {
-            if (errorCode == ErrorCode.OK) return;
+            if (errorCode == ErrorCode.OK)
+                return;
             else
             {
                 bool Severe = !NonSevereErrors.Any(t => t == errorCode);
 
                 var NonSevereErrorHappenedEvent = NonSevereErrorHappened;
-                if (!Severe) Severe = NonSevereErrorHappenedEvent == null;
+                if (!Severe)
+                    Severe = NonSevereErrorHappenedEvent == null;
 
-                if (Severe) throw new SDKException(errorCode);
+                if (Severe)
+                    throw new SDKException(errorCode);
                 else
                 {
                     // Create and initialize an AsyncLocal
                     AsyncLocal<SDKExceptionHandler> asyncLocalHandler = new()
                     {
                         // Capture the current delegate and set it in the AsyncLocal
-                        Value = NonSevereErrorHappenedEvent!
+                        Value = NonSevereErrorHappenedEvent!,
                     };
 
                     asyncLocalHandler.Value(sender, errorCode); // Invoke the delegate stored in AsyncLocal
@@ -243,7 +240,8 @@ namespace EOSDigital.API
         /// <exception cref="SDKException">If <paramref name="errorCode"/> is something other than <see cref="ErrorCode.OK"/></exception>
         public static void CheckError(ErrorCode errorCode)
         {
-            if (errorCode != ErrorCode.OK) throw new SDKException(errorCode);
+            if (errorCode != ErrorCode.OK)
+                throw new SDKException(errorCode);
         }
 
         /// <summary>
@@ -254,8 +252,10 @@ namespace EOSDigital.API
         /// <returns>The number of references for the pointer that was used for the SDK call</returns>
         public static int CheckError(int countOrError)
         {
-            if (countOrError == unchecked((int)0xFFFFFFFF)) throw new SDKException(ErrorCode.INVALID_HANDLE);
-            else return countOrError;
+            if (countOrError == unchecked((int)0xFFFFFFFF))
+                throw new SDKException(ErrorCode.INVALID_HANDLE);
+            else
+                return countOrError;
         }
 
         /// <summary>
@@ -267,14 +267,15 @@ namespace EOSDigital.API
         public static bool ReportError(object sender, Exception ex)
         {
             var SevereErrorHappenedEvent = SevereErrorHappened;
-            if (SevereErrorHappenedEvent == null) return false;
+            if (SevereErrorHappenedEvent == null)
+                return false;
             else
             {
                 // Create and initialize an AsyncLocal
                 AsyncLocal<GeneralExceptionHandler> asyncLocalHandler = new()
                 {
                     // Capture the current delegate and set it in the AsyncLocal
-                    Value = SevereErrorHappenedEvent
+                    Value = SevereErrorHappenedEvent,
                 };
 
                 asyncLocalHandler.Value(sender, ex); // Invoke the delegate stored in AsyncLocal

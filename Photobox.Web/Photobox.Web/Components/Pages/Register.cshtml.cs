@@ -4,8 +4,5 @@ namespace Photobox.Web.Components.Pages;
 
 public class Register : PageModel
 {
-    public void OnGet()
-    {
-        
-    }
+    public void OnGet() { }
 }

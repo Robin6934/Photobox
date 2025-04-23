@@ -21,17 +21,19 @@ public static class Aws
             ForcePathStyle = true, // Ensure compatibility with Cloudflare R2
             AuthenticationRegion = "auto",
             RequestChecksumCalculation = RequestChecksumCalculation.WHEN_REQUIRED,
-            ResponseChecksumValidation = ResponseChecksumValidation.WHEN_REQUIRED
+            ResponseChecksumValidation = ResponseChecksumValidation.WHEN_REQUIRED,
         };
 
         // Directly register IAmazonS3 with specified config
         services.AddSingleton<IAmazonS3>(new AmazonS3Client(credentials, s3Config));
 
-        services.AddHealthChecks().AddS3(options =>
-        {
-            options.BucketName = BucketName;
-            options.Credentials = credentials;
-            options.S3Config = s3Config;
-        });
+        services
+            .AddHealthChecks()
+            .AddS3(options =>
+            {
+                options.BucketName = BucketName;
+                options.Credentials = credentials;
+                options.S3Config = s3Config;
+            });
     }
 }

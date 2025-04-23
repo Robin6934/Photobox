@@ -1,7 +1,7 @@
-﻿using Photobox.UI.Lib.Camera;
-using Photobox.UI.Lib.Printer;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Nodes;
+using Photobox.UI.Lib.Camera;
+using Photobox.UI.Lib.Printer;
 
 namespace Photobox.UI.Lib.ConfigModels;
 

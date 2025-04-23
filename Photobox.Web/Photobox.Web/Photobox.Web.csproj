@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -14,7 +13,6 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
-
   <!-- Defines the Target for post build event and condition to be met inord
   er to be executed. -->
   <Target Name="NSwag" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' == 'Debug' ">
@@ -25,9 +23,12 @@
     WorkingDirectory = holds the directory path from which the command has to be executed
     Command = holds the command to be executed when this exec block is executed during post build process
     . -->
-    <Exec WorkingDirectory="$(ProjectDir)" EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development" Command="$(NSwagExe_Net90) run nswag.json /variables:Configuration=$(Configuration)" />
+    <Exec
+      WorkingDirectory="$(ProjectDir)"
+      EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development"
+      Command="$(NSwagExe_Net90) run nswag.json /variables:Configuration=$(Configuration)"
+    />
   </Target>
-
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.Aws.S3" />
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" />
@@ -75,17 +76,12 @@
     <PackageReference Include="SixLabors.ImageSharp.Drawing" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
   </ItemGroup>
-
-
   <ItemGroup>
     <Content Update="wwwroot\favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-
-
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\fonts\ShortBaby.ttf" />
   </ItemGroup>
-
 </Project>

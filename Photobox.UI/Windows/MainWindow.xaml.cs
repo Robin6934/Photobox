@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using System.IO;
+using System.Windows;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Photobox.Lib.AccessTokenManager;
 using Photobox.UI.CountDown;
 using Photobox.UI.ImageViewer;
-using Photobox.Lib.AccessTokenManager;
 using Photobox.UI.Lib.Camera;
 using Photobox.UI.Lib.ImageHandler;
 using Photobox.UI.Lib.ImageManager;
@@ -10,10 +12,9 @@ using Photobox.WpfHelpers;
 using Serilog;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System.IO;
-using System.Windows;
 
 namespace Photobox.UI.Windows;
+
 public partial class MainWindow : Window, IHostedService
 {
     private readonly ICamera camera;
@@ -29,7 +30,7 @@ public partial class MainWindow : Window, IHostedService
     private readonly IImageHandler imageHandler;
 
     private readonly IImageManager imageManager;
-    
+
     private readonly IAccessTokenManager _accessTokenManager;
 
     public MainWindow(
@@ -40,7 +41,8 @@ public partial class MainWindow : Window, IHostedService
         IHostApplicationLifetime applicationLifetime,
         IImageHandler imageHandler,
         IImageManager imageManager,
-        IAccessTokenManager accessTokenManager)
+        IAccessTokenManager accessTokenManager
+    )
     {
         InitializeComponent();
 
@@ -57,13 +59,12 @@ public partial class MainWindow : Window, IHostedService
         this.imageHandler = imageHandler;
 
         this.imageManager = imageManager;
-        
+
         _accessTokenManager = accessTokenManager;
 
         countDown.Panel = GridLiveView;
 
-        countDown.CountDownEarly += (s) =>
-        {
+        countDown.CountDownEarly += (s) => {
             //camera.Focus();
         };
 
@@ -132,10 +133,12 @@ public partial class MainWindow : Window, IHostedService
         }
         catch (Exception e)
         {
-            MessageBox.Show("An error occurred while logging in. Please check your internet connection and try again.",
+            MessageBox.Show(
+                "An error occurred while logging in. Please check your internet connection and try again.",
                 "Error",
                 MessageBoxButton.OK,
-                MessageBoxImage.Error);
+                MessageBoxImage.Error
+            );
             Application.Current.Shutdown();
         }
     }

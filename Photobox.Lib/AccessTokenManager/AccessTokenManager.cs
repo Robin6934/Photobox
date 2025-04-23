@@ -1,7 +1,7 @@
-﻿using AdysTech.CredentialManager;
-using Photobox.Lib.RestApi;
-using System.Net;
+﻿using System.Net;
 using System.Runtime.Versioning;
+using AdysTech.CredentialManager;
+using Photobox.Lib.RestApi;
 using Exception = System.Exception;
 
 namespace Photobox.Lib.AccessTokenManager;
@@ -10,16 +10,16 @@ namespace Photobox.Lib.AccessTokenManager;
 public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
 {
     private string? _accessToken;
-    
+
     private DateTime _accessTokenExpiry = DateTime.Now;
-    
+
     private const string RefreshTokenTarget = "PhotoboxRefreshToken";
 
     private string? RefreshToken
     {
         get
         {
-            if(string.IsNullOrEmpty(field))
+            if (string.IsNullOrEmpty(field))
             {
                 var credential = CredentialManager.GetCredentials(RefreshTokenTarget);
                 field = credential?.Password!;
@@ -35,9 +35,11 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
     }
 
     public Task<string?> AccessToken => GetAccessToken();
-    
-    public bool LoggedIn => !string.IsNullOrEmpty(_accessToken) && _accessTokenExpiry > DateTime.Now.Add(TimeSpan.FromSeconds(5));
-    
+
+    public bool LoggedIn =>
+        !string.IsNullOrEmpty(_accessToken)
+        && _accessTokenExpiry > DateTime.Now.Add(TimeSpan.FromSeconds(5));
+
     public bool RefreshTokenAvailable => !string.IsNullOrEmpty(RefreshToken);
 
     public async Task CheckIfRefreshTokenValid()
@@ -46,11 +48,8 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
         {
             throw new CredentialValidationException("No refresh token available.");
         }
-        
-        var refreshRequest = new RefreshRequest
-        {
-            RefreshToken = RefreshToken,
-        };
+
+        var refreshRequest = new RefreshRequest { RefreshToken = RefreshToken };
 
         AccessTokenResponse accessTokenResponse;
 
@@ -64,24 +63,23 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
         }
         catch (Exception e)
         {
-           throw new InvalidOperationException("An error occurred while trying to access the refresh token.", e);
+            throw new InvalidOperationException(
+                "An error occurred while trying to access the refresh token.",
+                e
+            );
         }
-        
+
         _accessToken = accessTokenResponse.AccessToken;
-        
+
         RefreshToken = accessTokenResponse.RefreshToken;
-        
+
         _accessTokenExpiry = DateTime.Now.AddSeconds(accessTokenResponse.ExpiresIn);
     }
-    
+
     public async Task LoginAsync(string email, string password)
     {
-        var loginRequest = new LoginRequest
-        {
-            Email = email, 
-            Password = password
-        };
-        
+        var loginRequest = new LoginRequest { Email = email, Password = password };
+
         AccessTokenResponse loginResponse;
         try
         {
@@ -93,31 +91,34 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
         }
         catch (Exception e)
         {
-            throw new InvalidOperationException("An error occurred while trying to access the refresh token.", e);
+            throw new InvalidOperationException(
+                "An error occurred while trying to access the refresh token.",
+                e
+            );
         }
-        
+
         _accessToken = loginResponse.AccessToken;
-        
+
         RefreshToken = loginResponse.RefreshToken;
-        
+
         _accessTokenExpiry = DateTime.Now.AddSeconds(loginResponse.ExpiresIn);
     }
-    
+
     public void Logout()
     {
         _accessToken = null;
         _accessTokenExpiry = DateTime.Now;
-        
+
         var credential = CredentialManager.GetICredential("PhotoboxRefreshToken");
         if (credential is not null)
         {
             CredentialManager.RemoveCredentials("PhotoboxRefreshToken");
         }
     }
-    
+
     private async Task<string?> GetAccessToken()
     {
-        if(LoggedIn)
+        if (LoggedIn)
         {
             return _accessToken;
         }
@@ -126,17 +127,16 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
         {
             return null;
         }
-        
-        var refreshTokenRequest = new RefreshRequest
-        {
-            RefreshToken = RefreshToken
-        };
-        
-        var refreshTokenResponse = await photoBoxClient.PostRefreshAsync(refreshTokenRequest).ConfigureAwait(false);
-        
+
+        var refreshTokenRequest = new RefreshRequest { RefreshToken = RefreshToken };
+
+        var refreshTokenResponse = await photoBoxClient
+            .PostRefreshAsync(refreshTokenRequest)
+            .ConfigureAwait(false);
+
         _accessToken = refreshTokenResponse.AccessToken;
         RefreshToken = refreshTokenResponse.RefreshToken;
-        
+
         _accessTokenExpiry = DateTime.Now.AddSeconds(refreshTokenResponse.ExpiresIn);
 
         return _accessToken;

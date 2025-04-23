@@ -2,15 +2,19 @@
 using Microsoft.Extensions.Logging;
 
 namespace Photobox.UI.Lib.Camera;
-public class CameraFactory(ILogger<CameraFactory> logger,
+
+public class CameraFactory(
+    ILogger<CameraFactory> logger,
     ILoggerFactory loggerFactory,
-    IHostApplicationLifetime applicationLifetime)
+    IHostApplicationLifetime applicationLifetime
+)
 {
     private readonly ILoggerFactory factory = loggerFactory;
 
     private readonly IHostApplicationLifetime applicationLifetime = applicationLifetime;
 
     private readonly ILogger<CameraFactory> logger = logger;
+
     public ICamera Create()
     {
         if (CanonCamera.Connected())

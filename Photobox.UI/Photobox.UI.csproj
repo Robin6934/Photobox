@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net9.0-windows</TargetFramework>
@@ -10,7 +9,6 @@
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="CSharpier.MsBuild">
       <PrivateAssets>all</PrivateAssets>
@@ -59,22 +57,21 @@
     </PackageReference>
     <PackageReference Include="WPF-UI" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Photobox.UI.Lib\Photobox.UI.Lib.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Properties\" />
     <Folder Include="Resources\" />
   </ItemGroup>
-
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="schema.json" /></VisualStudio></ProjectExtensions>
-
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties appsettings_1json__JsonSchema="schema.json" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

@@ -1,6 +1,6 @@
-﻿using EOSDigital.SDK;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Imaging;
+using EOSDigital.SDK;
 using Size = EOSDigital.SDK.Size;
 
 namespace EOSDigital.API
@@ -16,6 +16,7 @@ namespace EOSDigital.API
         /// Fires if a new camera is added
         /// </summary>
         public event CameraAddedHandler CameraAdded;
+
         /// <summary>
         /// The SDK camera added delegate
         /// </summary>
@@ -38,6 +39,7 @@ namespace EOSDigital.API
         {
             get { return _IsSDKInitialized; }
         }
+
         /// <summary>
         /// The main SDK thread where the event loop runs
         /// </summary>
@@ -47,22 +49,27 @@ namespace EOSDigital.API
         /// Field for the public <see cref="IsSDKInitialized"/> property
         /// </summary>
         private static bool _IsSDKInitialized;
+
         /// <summary>
         /// States if the instance is disposed or not
         /// </summary>
         private bool IsDisposed;
+
         /// <summary>
         /// Number of instances of this class
         /// </summary>
         private static int RefCount = 0;
+
         /// <summary>
         /// Object to lock on to safely de- and increment the <see cref="RefCount"/> value
         /// </summary>
         private static readonly Lock InitLock = new();
+
         /// <summary>
         /// List of currently connected cameras (since the last time GetCameraList got called)
         /// </summary>
         private readonly static List<Camera> CurrentCameras = [];
+
         /// <summary>
         /// Object to lock on to safely add/remove cameras from the <see cref="CurrentCameras"/> list
         /// </summary>
@@ -76,8 +83,7 @@ namespace EOSDigital.API
         /// Initializes the SDK
         /// </summary>
         public CanonAPI()
-            : this(false)
-        { }
+            : this(false) { }
 
         /// <summary>
         /// Initializes the SDK
@@ -113,13 +119,18 @@ namespace EOSDigital.API
                             MainThread = new ApiThread();
                             MainThread.Start();
                             //Initialize the SDK on the main thread
-                            MainThread.Invoke(() => ErrorHandler.CheckError(this, CanonSDK.EdsInitializeSDK()));
+                            MainThread.Invoke(() =>
+                                ErrorHandler.CheckError(this, CanonSDK.EdsInitializeSDK())
+                            );
                         }
 
                         CanonSDK.InitializeVersion();
                         //Subscribe to the CameraAdded event
                         CameraAddedEvent = new SDKCameraAddedHandler(CanonAPI_CameraAddedEvent);
-                        ErrorHandler.CheckError(this, CanonSDK.EdsSetCameraAddedHandler(CameraAddedEvent, IntPtr.Zero));
+                        ErrorHandler.CheckError(
+                            this,
+                            CanonSDK.EdsSetCameraAddedHandler(CameraAddedEvent, IntPtr.Zero)
+                        );
                         _IsSDKInitialized = true;
                     }
                     RefCount++;
@@ -128,7 +139,8 @@ namespace EOSDigital.API
             catch
             {
                 IsDisposed = true;
-                if (MainThread?.IsRunning == true) MainThread.Shutdown();
+                if (MainThread?.IsRunning == true)
+                    MainThread.Shutdown();
                 throw;
             }
         }
@@ -164,7 +176,7 @@ namespace EOSDigital.API
                     //If it's the last instance, release everything
                     if (RefCount == 1)
                     {
-                        _IsSDKInitialized = false;//Set beforehand because if an error happens, the SDK will be in an unstable state anyway
+                        _IsSDKInitialized = false; //Set beforehand because if an error happens, the SDK will be in an unstable state anyway
 
                         //Remove event handler for the CameraAdded event
                         ErrorCode err = CanonSDK.EdsSetCameraAddedHandler(null!, IntPtr.Zero);
@@ -175,10 +187,16 @@ namespace EOSDigital.API
                             CurrentCameras.ForEach(t => t.Dispose());
                         }
                         //Terminate the SDK
-                        if (MainThread?.IsRunning == true) err = MainThread.Invoke(() => { return CanonSDK.EdsTerminateSDK(); });
+                        if (MainThread?.IsRunning == true)
+                            err = MainThread.Invoke(() =>
+                            {
+                                return CanonSDK.EdsTerminateSDK();
+                            });
                         //Close the main thread
-                        if (MainThread?.IsRunning == true) MainThread.Shutdown();
-                        if (managed) ErrorHandler.CheckError(this, err);
+                        if (MainThread?.IsRunning == true)
+                            MainThread.Shutdown();
+                        if (managed)
+                            ErrorHandler.CheckError(this, err);
                     }
                     RefCount--;
                     IsDisposed = true;
@@ -212,13 +230,19 @@ namespace EOSDigital.API
                 foreach (var ptr in ptrList)
                 {
                     var oldCam = CurrentCameras.FirstOrDefault(t => t.Reference == ptr);
-                    if (oldCam != null && !oldCam.IsDisposed) camList.Add(oldCam);  //Pointer exists already so we reuse it
-                    else camList.Add(new Camera(ptr));                              //Pointer does not exists yet, so we add it
+                    if (oldCam != null && !oldCam.IsDisposed)
+                        camList.Add(oldCam); //Pointer exists already so we reuse it
+                    else
+                        camList.Add(new Camera(ptr)); //Pointer does not exists yet, so we add it
                 }
 
                 //Ensure that cameras not connected anymore are disposed properly
                 var oldCameras = CurrentCameras.Where(t => !ptrList.Any(u => u == t.Reference));
-                foreach (var cam in oldCameras) { if (!cam.IsDisposed) cam.Dispose(); }
+                foreach (var cam in oldCameras)
+                {
+                    if (!cam.IsDisposed)
+                        cam.Dispose();
+                }
 
                 CurrentCameras.Clear();
                 CurrentCameras.AddRange(camList);
@@ -245,7 +269,10 @@ namespace EOSDigital.API
             for (int i = 0; i < camCount; i++)
             {
                 //Get camera pointer
-                ErrorHandler.CheckError(this, CanonSDK.EdsGetChildAtIndex(camList, i, out nint cptr));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.EdsGetChildAtIndex(camList, i, out nint cptr)
+                );
                 ptrList.Add(cptr);
             }
             //Release the list
@@ -261,7 +288,11 @@ namespace EOSDigital.API
         public Bitmap GetFileThumb(string filePath)
         {
             //create a file stream to given file
-            using var stream = new SDKStream(filePath, FileCreateDisposition.OpenExisting, EOSDigital.SDK.FileAccess.Read);
+            using var stream = new SDKStream(
+                filePath,
+                FileCreateDisposition.OpenExisting,
+                EOSDigital.SDK.FileAccess.Read
+            );
             //Create a thumbnail Bitmap from the stream
             return GetImage(stream.Reference, ImageSource.Thumbnail);
         }
@@ -281,12 +312,15 @@ namespace EOSDigital.API
             {
                 //create reference and get image info
                 ErrorHandler.CheckError(this, CanonSDK.EdsCreateImageRef(imgStream, out imgRef));
-                ErrorHandler.CheckError(this, CanonSDK.EdsGetImageInfo(imgRef, imageSource, out ImageInfo imageInfo));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.EdsGetImageInfo(imgRef, imageSource, out ImageInfo imageInfo)
+                );
 
                 Size outputSize = new()
                 {
                     Width = imageInfo.EffectiveRect.Width,
-                    Height = imageInfo.EffectiveRect.Height
+                    Height = imageInfo.EffectiveRect.Height,
                 };
                 //calculate amount of data
                 int dataLength = outputSize.Height * outputSize.Width * 3;
@@ -295,12 +329,17 @@ namespace EOSDigital.API
                 //create a stream to the buffer
                 using var stream = new SDKStream(buffer);
                 //load image into the buffer
-                ErrorHandler.CheckError(this, CanonSDK.EdsGetImage(imgRef,
-                    imageSource,
-                    TargetImageType.RGB,
-                    imageInfo.EffectiveRect,
-                    outputSize,
-                    stream.Reference));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.EdsGetImage(
+                        imgRef,
+                        imageSource,
+                        TargetImageType.RGB,
+                        imageInfo.EffectiveRect,
+                        outputSize,
+                        stream.Reference
+                    )
+                );
 
                 //make BGR from RGB (System.Drawing (i.e. GDI+) uses BGR)
                 unsafe
@@ -310,23 +349,34 @@ namespace EOSDigital.API
                     {
                         for (long i = 0; i < dataLength; i += 3)
                         {
-                            tmp = pix[i];        //Save B value
+                            tmp = pix[i]; //Save B value
                             pix[i] = pix[i + 2]; //Set B value with R value
-                            pix[i + 2] = tmp;    //Set R value with B value
+                            pix[i + 2] = tmp; //Set R value with B value
                         }
                     }
                 }
 
                 //Get pointer to stream data
-                ErrorHandler.CheckError(this, CanonSDK.EdsGetPointer(stream.Reference, out streamPointer));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.EdsGetPointer(stream.Reference, out streamPointer)
+                );
                 //Create bitmap with the data in the buffer
-                return new Bitmap(outputSize.Width, outputSize.Height, dataLength, PixelFormat.Format24bppRgb, streamPointer);
+                return new Bitmap(
+                    outputSize.Width,
+                    outputSize.Height,
+                    dataLength,
+                    PixelFormat.Format24bppRgb,
+                    streamPointer
+                );
             }
             finally
             {
                 //Release all data
-                if (imgStream != IntPtr.Zero) ErrorHandler.CheckError(CanonSDK.EdsRelease(imgStream));
-                if (imgRef != IntPtr.Zero) ErrorHandler.CheckError(CanonSDK.EdsRelease(imgRef));
+                if (imgStream != IntPtr.Zero)
+                    ErrorHandler.CheckError(CanonSDK.EdsRelease(imgStream));
+                if (imgRef != IntPtr.Zero)
+                    ErrorHandler.CheckError(CanonSDK.EdsRelease(imgRef));
             }
         }
 

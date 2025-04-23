@@ -4,5 +4,5 @@ public enum ImageViewResult
 {
     Save,
     Print,
-    Delete
+    Delete,
 }

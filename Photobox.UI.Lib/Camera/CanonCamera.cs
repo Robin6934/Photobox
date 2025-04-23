@@ -8,7 +8,11 @@ using SixLabors.ImageSharp.PixelFormats;
 using Rational = EOSDigital.SDK.Rational;
 
 namespace Photobox.UI.Lib.Camera;
-internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime applicationLifetime) : CameraBase(logger)
+
+internal class CanonCamera(
+    ILogger<CanonCamera> logger,
+    IHostApplicationLifetime applicationLifetime
+) : CameraBase(logger)
 {
     private readonly CanonAPI api = new();
 
@@ -17,7 +21,7 @@ internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime
     private readonly System.Timers.Timer keepAliveTimer = new()
     {
         AutoReset = true,
-        Interval = TimeSpan.FromMinutes(1).TotalMilliseconds
+        Interval = TimeSpan.FromMinutes(1).TotalMilliseconds,
     };
 
     private bool secondTick = false;
@@ -38,7 +42,9 @@ internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime
         {
             camera.SendCommand(CameraCommand.DriveLensEvf, (int)DriveLens.Far1);
         }
-        logger.LogDebug("Keepalive Timer Ticked " + (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds);
+        logger.LogDebug(
+            "Keepalive Timer Ticked " + (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds
+        );
         secondTick ^= true;
     }
 
@@ -69,7 +75,7 @@ internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime
         keepAliveTimer.Start();
 
         camera.OpenSession();
-        
+
         camera.SetSetting(PropertyID.SaveTo, (int)SaveTo.Both);
 
         camera.SetCapacity(4096, int.MaxValue);
@@ -133,6 +139,7 @@ internal class CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime
             }
         }
     }
+
     public override void Disconnect()
     {
         camera.CloseSession();

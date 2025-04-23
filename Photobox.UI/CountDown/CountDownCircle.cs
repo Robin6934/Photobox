@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Options;
-using Photobox.UI.Lib.ConfigModels;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Microsoft.Extensions.Options;
+using Photobox.UI.Lib.ConfigModels;
 
 namespace Photobox.UI.CountDown
 {
@@ -48,16 +48,14 @@ namespace Photobox.UI.CountDown
                 value.Loaded += (o, a) =>
                 {
                     _point = new Point(
-                    Convert.ToInt32(value.Width / 2),
-                    Convert.ToInt32(value.Height / 2)
+                        Convert.ToInt32(value.Width / 2),
+                        Convert.ToInt32(value.Height / 2)
                     );
                 };
                 field = value;
             }
-
             get => field;
         }
-
 
         /// <summary>
         /// This class is used to create a countdown which will be displayed on the screen
@@ -71,11 +69,14 @@ namespace Photobox.UI.CountDown
         {
             _totalTime = TimeSpan.FromSeconds(config.CurrentValue.CountDown.TotalSeconds);
 
-            TimeSpan earlyTime = _totalTime - TimeSpan.FromSeconds(config.CurrentValue.CountDown.EarlySeconds);
+            TimeSpan earlyTime =
+                _totalTime - TimeSpan.FromSeconds(config.CurrentValue.CountDown.EarlySeconds);
 
             if (earlyTime > _totalTime)
             {
-                throw new ArgumentException("Early seconds cant be lager than the total countdown time!!");
+                throw new ArgumentException(
+                    "Early seconds cant be lager than the total countdown time!!"
+                );
             }
 
             _angle = StartAngle;
@@ -151,7 +152,8 @@ namespace Photobox.UI.CountDown
             // Calculate the end point of the arc based on the current angle
             var endPoint = new Point(
                 _point.X + _circumference * -Math.Sin(_angle * Math.PI / 180),
-                _point.Y + _circumference * -Math.Cos(_angle * Math.PI / 180));
+                _point.Y + _circumference * -Math.Cos(_angle * Math.PI / 180)
+            );
 
             // Update the ArcSegment properties
             _arc.Point = endPoint;
@@ -173,7 +175,7 @@ namespace Photobox.UI.CountDown
 
             // Set the stroke (outline) color and thickness
             _path.Stroke = Brushes.Black; // You can change this color as needed
-            _path.StrokeThickness = 20;   // You can change this thickness as needed
+            _path.StrokeThickness = 20; // You can change this thickness as needed
 
             // Position the path so it's centered on _point
             Canvas.SetLeft(_path, _point.X - _circumference);
@@ -194,8 +196,9 @@ namespace Photobox.UI.CountDown
 
             // Calculate the end point based on the new angle
             var endPoint = new Point(
-               _point.X + _circumference * -Math.Sin(_angle * Math.PI / 180),
-               _point.Y + _circumference * -Math.Cos(_angle * Math.PI / 180));
+                _point.X + _circumference * -Math.Sin(_angle * Math.PI / 180),
+                _point.Y + _circumference * -Math.Cos(_angle * Math.PI / 180)
+            );
 
             // Update the arc properties
             _arc.Point = endPoint;

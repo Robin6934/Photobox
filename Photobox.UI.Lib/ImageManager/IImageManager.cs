@@ -2,6 +2,7 @@
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.UI.Lib.ImageManager;
+
 public interface IImageManager
 {
     public Task PrintAndSaveAsync(Image<Rgb24> image);

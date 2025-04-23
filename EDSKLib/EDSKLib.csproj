@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -7,7 +6,6 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="CSharpier.MsBuild">
       <PrivateAssets>all</PrivateAssets>
@@ -15,7 +13,6 @@
     </PackageReference>
     <PackageReference Include="System.Drawing.Common" />
   </ItemGroup>
-
   <ItemGroup>
     <None Update="EDSDK.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -24,5 +21,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>
