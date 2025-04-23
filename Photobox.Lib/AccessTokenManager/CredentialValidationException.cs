@@ -15,7 +15,8 @@ public class CredentialValidationException : Exception
     /// with a specified error message.
     /// </summary>
     /// <param name="message">The message that describes the error.</param>
-    public CredentialValidationException(string message) : base(message) { }
+    public CredentialValidationException(string message)
+        : base(message) { }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CredentialValidationException"/> class
@@ -23,5 +24,6 @@ public class CredentialValidationException : Exception
     /// </summary>
     /// <param name="message">The message that describes the error.</param>
     /// <param name="inner">The exception that is the cause of the current exception.</param>
-    public CredentialValidationException(string message, Exception inner) : base(message, inner) { }
+    public CredentialValidationException(string message, Exception inner)
+        : base(message, inner) { }
 }

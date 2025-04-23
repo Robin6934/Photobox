@@ -7,7 +7,13 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.UI.Lib.ImageManager;
-public class ImageManager(ILogger<ImageManager> logger, IOptionsMonitor<PhotoboxConfig> options, IPrinter printer, IImageUploadService imageUploadService) : IImageManager
+
+public class ImageManager(
+    ILogger<ImageManager> logger,
+    IOptionsMonitor<PhotoboxConfig> options,
+    IPrinter printer,
+    IImageUploadService imageUploadService
+) : IImageManager
 {
     private readonly ILogger<ImageManager> logger = logger;
 
@@ -23,10 +29,7 @@ public class ImageManager(ILogger<ImageManager> logger, IOptionsMonitor<Photobox
         {
             string imageName = Folders.NewImageName;
 
-            string newImagePath = Path.Combine(
-                Folders.PhotoboxBaseDir,
-                Folders.Deleted,
-                imageName);
+            string newImagePath = Path.Combine(Folders.PhotoboxBaseDir, Folders.Deleted, imageName);
 
             await image.SaveAsJpegAsync(newImagePath);
 
@@ -45,10 +48,7 @@ public class ImageManager(ILogger<ImageManager> logger, IOptionsMonitor<Photobox
     {
         string imageName = Folders.NewImageName;
 
-        string newImagePath = Path.Combine(
-            Folders.PhotoboxBaseDir,
-            Folders.Photos,
-            imageName);
+        string newImagePath = Path.Combine(Folders.PhotoboxBaseDir, Folders.Photos, imageName);
 
         await image.SaveAsJpegAsync(newImagePath);
 

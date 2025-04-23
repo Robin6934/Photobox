@@ -10,9 +10,7 @@ namespace Photobox.Web.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "SerialNumber",
-                table: "PhotoBoxModels");
+            migrationBuilder.DropColumn(name: "SerialNumber", table: "PhotoBoxModels");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
@@ -21,7 +19,8 @@ namespace Photobox.Web.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "text");
+                oldType: "text"
+            );
 
             migrationBuilder.AlterColumn<string>(
                 name: "ApplicationUserId",
@@ -30,7 +29,8 @@ namespace Photobox.Web.Migrations
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "text");
+                oldType: "text"
+            );
 
             migrationBuilder.AddColumn<string>(
                 name: "PhotoboxId",
@@ -38,15 +38,14 @@ namespace Photobox.Web.Migrations
                 type: "character varying(52)",
                 maxLength: 52,
                 nullable: false,
-                defaultValue: "");
+                defaultValue: ""
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "PhotoboxId",
-                table: "PhotoBoxModels");
+            migrationBuilder.DropColumn(name: "PhotoboxId", table: "PhotoBoxModels");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
@@ -55,7 +54,8 @@ namespace Photobox.Web.Migrations
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "character varying(50)",
-                oldMaxLength: 50);
+                oldMaxLength: 50
+            );
 
             migrationBuilder.AlterColumn<string>(
                 name: "ApplicationUserId",
@@ -64,14 +64,16 @@ namespace Photobox.Web.Migrations
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "character varying(50)",
-                oldMaxLength: 50);
+                oldMaxLength: 50
+            );
 
             migrationBuilder.AddColumn<string>(
                 name: "SerialNumber",
                 table: "PhotoBoxModels",
                 type: "text",
                 nullable: false,
-                defaultValue: "");
+                defaultValue: ""
+            );
         }
     }
 }

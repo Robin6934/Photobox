@@ -508,26 +508,28 @@ namespace EOSDigital.SDK
         /// Notifies all property events.
         /// </summary>
         All = 0x00000100,
+
         /// <summary>
-        /// Notifies that a camera property value has been changed. 
-        /// The changed property can be retrieved from event data. 
-        /// The changed value can be retrieved by means of EdsGetPropertyData. 
-        /// In the case of type 1 protocol standard cameras, 
-        /// notification of changed properties can only be issued for custom functions (CFn). 
-        /// If the property type is 0x0000FFFF, the changed property cannot be identified. 
+        /// Notifies that a camera property value has been changed.
+        /// The changed property can be retrieved from event data.
+        /// The changed value can be retrieved by means of EdsGetPropertyData.
+        /// In the case of type 1 protocol standard cameras,
+        /// notification of changed properties can only be issued for custom functions (CFn).
+        /// If the property type is 0x0000FFFF, the changed property cannot be identified.
         /// Thus, retrieve all required properties repeatedly.
         /// </summary>
         PropertyChanged = 0x00000101,
+
         /// <summary>
-        /// Notifies of changes in the list of camera properties with configurable values. 
-        /// The list of configurable values for property IDs indicated in event data 
-        /// can be retrieved by means of EdsGetPropertyDesc. 
+        /// Notifies of changes in the list of camera properties with configurable values.
+        /// The list of configurable values for property IDs indicated in event data
+        /// can be retrieved by means of EdsGetPropertyDesc.
         /// For type 1 protocol standard cameras, the property ID is identified as "Unknown"
-        /// during notification. 
+        /// during notification.
         /// Thus, you must retrieve a list of configurable values for all properties and
-        /// retrieve the property values repeatedly. 
+        /// retrieve the property values repeatedly.
         /// (For details on properties for which you can retrieve a list of configurable
-        /// properties, see the description of EdsGetPropertyDesc). 
+        /// properties, see the description of EdsGetPropertyDesc).
         /// </summary>
         PropertyDescChanged = 0x00000102,
     }
@@ -541,96 +543,106 @@ namespace EOSDigital.SDK
         /// Notifies all object events.
         /// </summary>
         All = 0x00000200,
+
         /// <summary>
         /// Notifies that the volume object (memory card) state (VolumeInfo)
-        /// has been changed. 
-        /// Changed objects are indicated by event data. 
-        /// The changed value can be retrieved by means of EdsGetVolumeInfo. 
+        /// has been changed.
+        /// Changed objects are indicated by event data.
+        /// The changed value can be retrieved by means of EdsGetVolumeInfo.
         /// Notification of this event is not issued for type 1 protocol standard cameras.
         /// </summary>
         VolumeInfoChanged = 0x00000201,
+
         /// <summary>
         /// Notifies if the designated volume on a camera has been formatted.
         /// If notification of this event is received, get sub-items of the designated
-        /// volume again as needed. 
-        /// Changed volume objects can be retrieved from event data. 
+        /// volume again as needed.
+        /// Changed volume objects can be retrieved from event data.
         /// Objects cannot be identified on cameras earlier than the D30
-        /// if files are added or deleted. 
+        /// if files are added or deleted.
         /// Thus, these events are subject to notification.
         /// </summary>
         VolumeUpdateItems = 0x00000202,
+
         /// <summary>
         /// Notifies if many images are deleted in a designated folder on a camera.
         /// If notification of this event is received, get sub-items of the designated
-        /// folder again as needed. 
+        /// folder again as needed.
         /// Changed folders (specifically, directory item objects) can be retrieved
         /// from event data.
         /// </summary>
         FolderUpdateItems = 0x00000203,
+
         /// <summary>
         /// Notifies of the creation of objects such as new folders or files
-        /// on a camera compact flash card or the like. 
+        /// on a camera compact flash card or the like.
         /// This event is generated if the camera has been set to store captured
         /// images simultaneously on the camera and a computer,
         /// for example, but not if the camera is set to store images
-        /// on the computer alone. 
-        /// Newly created objects are indicated by event data. 
+        /// on the computer alone.
+        /// Newly created objects are indicated by event data.
         /// Because objects are not indicated for type 1 protocol standard cameras,
         /// (that is, objects are indicated as NULL),
-        /// you must again retrieve child objects under the camera object to 
+        /// you must again retrieve child objects under the camera object to
         /// identify the new objects.
         /// </summary>
         DirItemCreated = 0x00000204,
+
         /// <summary>
         /// Notifies of the deletion of objects such as folders or files on a camera
-        /// compact flash card or the like. 
-        /// Deleted objects are indicated in event data. 
-        /// Because objects are not indicated for type 1 protocol standard cameras, 
+        /// compact flash card or the like.
+        /// Deleted objects are indicated in event data.
+        /// Because objects are not indicated for type 1 protocol standard cameras,
         /// you must again retrieve child objects under the camera object to
         /// identify deleted objects.
         /// </summary>
         DirItemRemoved = 0x00000205,
+
         /// <summary>
-        /// Notifies that information of DirItem objects has been changed. 
-        /// Changed objects are indicated by event data. 
-        /// The changed value can be retrieved by means of EdsGetDirectoryItemInfo. 
+        /// Notifies that information of DirItem objects has been changed.
+        /// Changed objects are indicated by event data.
+        /// The changed value can be retrieved by means of EdsGetDirectoryItemInfo.
         /// Notification of this event is not issued for type 1 protocol standard cameras.
         /// </summary>
         DirItemInfoChanged = 0x00000206,
+
         /// <summary>
         /// Notifies that header information has been updated, as for rotation information
-        /// of image files on the camera. 
-        /// If this event is received, get the file header information again, as needed. 
+        /// of image files on the camera.
+        /// If this event is received, get the file header information again, as needed.
         /// This function is for type 2 protocol standard cameras only.
         /// </summary>
         DirItemContentChanged = 0x00000207,
+
         /// <summary>
-        /// Notifies that there are objects on a camera to be transferred to a computer. 
+        /// Notifies that there are objects on a camera to be transferred to a computer.
         /// This event is generated after remote release from a computer or local release
-        /// from a camera. 
+        /// from a camera.
         /// If this event is received, objects indicated in the event data must be downloaded.
         /// Furthermore, if the application does not require the objects, instead
         /// of downloading them,
-        /// execute EdsDownloadCancel and release resources held by the camera. 
+        /// execute EdsDownloadCancel and release resources held by the camera.
         /// The order of downloading from type 1 protocol standard cameras must be the order
         /// in which the events are received.
         /// </summary>
         DirItemRequestTransfer = 0x00000208,
+
         /// <summary>
-        /// Notifies if the camera's direct transfer button is pressed. 
-        /// If this event is received, objects indicated in the event data must be downloaded. 
+        /// Notifies if the camera's direct transfer button is pressed.
+        /// If this event is received, objects indicated in the event data must be downloaded.
         /// Furthermore, if the application does not require the objects, instead of
-        /// downloading them, 
-        /// execute EdsDownloadCancel and release resources held by the camera. 
+        /// downloading them,
+        /// execute EdsDownloadCancel and release resources held by the camera.
         /// Notification of this event is not issued for type 1 protocol standard cameras.
         /// </summary>
         DirItemRequestTransferDT = 0x00000209,
+
         /// <summary>
-        /// Notifies of requests from a camera to cancel object transfer 
-        /// if the button to cancel direct transfer is pressed on the camera. 
+        /// Notifies of requests from a camera to cancel object transfer
+        /// if the button to cancel direct transfer is pressed on the camera.
         /// If the parameter is 0, it means that cancellation of transfer is requested for
         /// objects still not downloaded,
-        /// with these objects indicated by kEdsObjectEvent_DirItemRequestTransferDT. 
+        /// with these objects indicated by kEdsObjectEvent_DirItemRequestTransferDT.
         /// Notification of this event is not issued for type 1 protocol standard cameras.
         /// </summary>
         DirItemCancelTransferDT = 0x0000020A,
@@ -647,56 +659,64 @@ namespace EOSDigital.SDK
         /// Notifies all state events.
         /// </summary>
         All = 0x00000300,
+
         /// <summary>
-        /// Indicates that a camera is no longer connected to a computer, 
+        /// Indicates that a camera is no longer connected to a computer,
         /// whether it was disconnected by unplugging a cord, opening
-        /// the compact flash compartment, 
+        /// the compact flash compartment,
         /// turning the camera off, auto shut-off, or by other means.
         /// </summary>
         Shutdown = 0x00000301,
+
         /// <summary>
         /// Notifies of whether or not there are objects waiting to
-        /// be transferred to a host computer. 
-        /// This is useful when ensuring all shot images have been transferred 
-        /// when the application is closed. 
-        /// Notification of this event is not issued for type 1 protocol 
+        /// be transferred to a host computer.
+        /// This is useful when ensuring all shot images have been transferred
+        /// when the application is closed.
+        /// Notification of this event is not issued for type 1 protocol
         /// standard cameras.
         /// </summary>
         JobStatusChanged = 0x00000302,
+
         /// <summary>
-        /// Notifies that the camera will shut down after a specific period. 
-        /// Generated only if auto shut-off is set. 
+        /// Notifies that the camera will shut down after a specific period.
+        /// Generated only if auto shut-off is set.
         /// Exactly when notification is issued (that is, the number of
-        /// seconds until shutdown) varies depending on the camera model. 
+        /// seconds until shutdown) varies depending on the camera model.
         /// To continue operation without having the camera shut down,
         /// use EdsSendCommand to extend the auto shut-off timer.
         /// The time in seconds until the camera shuts down is returned
         /// as the initial value.
         /// </summary>
         WillSoonShutDown = 0x00000303,
+
         /// <summary>
         /// As the counterpart event to kEdsStateEvent_WillSoonShutDown,
         /// this event notifies of updates to the number of seconds until
-        /// a camera shuts down. 
+        /// a camera shuts down.
         /// After the update, the period until shutdown is model-dependent.
         /// </summary>
         ShutDownTimerUpdate = 0x00000304,
+
         /// <summary>
         /// Notifies that a requested release has failed, due to focus
         /// failure or similar factors.
         /// </summary>
         CaptureError = 0x00000305,
+
         /// <summary>
-        /// Notifies of internal SDK errors. 
+        /// Notifies of internal SDK errors.
         /// If this error event is received, the issuing device will probably
         /// not be able to continue working properly,
         /// so cancel the remote connection.
         /// </summary>
         InternalError = 0x00000306,
+
         /// <summary>
         /// The autofocus is done working.
         /// </summary>
         AfResult = 0x00000309,
+
         /// <summary>
         /// The bulb exposure time has changed.
         /// </summary>
@@ -746,20 +766,24 @@ namespace EOSDigital.SDK
         /// Creates a new file. An error occurs if the designated file already exists
         /// </summary>
         CreateNew = 0,
+
         /// <summary>
         /// Creates a new file. If the designated file already
         /// exists, that file is overwritten and existing attributes
         /// </summary>
         CreateAlways = 1,
+
         /// <summary>
         /// Opens a file. An error occurs if the designated file does not exist.
         /// </summary>
         OpenExisting = 2,
+
         /// <summary>
         /// If the file exists, it is opened. If the designated file
         /// does not exist, a new file is created.
         /// </summary>
         OpenAlways = 3,
+
         /// <summary>
         /// Opens a file and sets the file size to 0 bytes.
         /// </summary>
@@ -815,54 +839,67 @@ namespace EOSDigital.SDK
         /// Jpeg Large
         /// </summary>
         LargeJpeg = 0x0010FF0F,
+
         /// <summary>
         /// Jpeg Middle1
         /// </summary>
         Middle1Jpeg = 0x0510FF0F,
+
         /// <summary>
         /// Jpeg Middle2
         /// </summary>
         Middle2Jpeg = 0x0610FF0F,
+
         /// <summary>
         /// Jpeg Small
         /// </summary>
         SmallJpeg = 0x0210FF0F,
+
         /// <summary>
         /// Jpeg Small2
         /// </summary>
         Small2Jpeg = 0x0F13FF0F,
+
         /// <summary>
         /// Jpeg Small3
         /// </summary>
         Small3Jpeg = 0x1013FF0F,
+
         /// <summary>
         /// Jpeg Large Fine
         /// </summary>
         LargeJpegFine = 0x0013FF0F,
+
         /// <summary>
         /// Jpeg Large Normal
         /// </summary>
         LargeJpegNormal = 0x0012FF0F,
+
         /// <summary>
         /// Jpeg Middle Fine
         /// </summary>
         MiddleJpegFine = 0x0113FF0F,
+
         /// <summary>
         /// Jpeg Middle Normal
         /// </summary>
         MiddleJpegNormal = 0x0112FF0F,
+
         /// <summary>
         /// Jpeg Small Fine
         /// </summary>
         SmallJpegFine = 0x0213FF0F,
+
         /// <summary>
         /// Jpeg Small Normal
         /// </summary>
         SmallJpegNormal = 0x0212FF0F,
+
         /// <summary>
         /// Jpeg Small1 Fine
         /// </summary>
         Small1JpegFine = 0x0E13FF0F,
+
         /// <summary>
         /// Jpeg Small1 Normal
         /// </summary>
@@ -872,58 +909,72 @@ namespace EOSDigital.SDK
         /// RAW
         /// </summary>
         RAW = 0x0064FF0F,
+
         /// <summary>
         /// RAW + Jpeg Large Fine
         /// </summary>
         RAW_LargeJpegFine = 0x00640013,
+
         /// <summary>
         /// RAW + Jpeg Large Normal
         /// </summary>
         RAW_LargeJpegNormal = 0x00640012,
+
         /// <summary>
         /// RAW + Jpeg Middle Fine
         /// </summary>
         RAW_MiddleJpegFine = 0x00640113,
+
         /// <summary>
         /// RAW + Jpeg Middle Normal
         /// </summary>
         RAW_MiddleJpegNormal = 0x00640112,
+
         /// <summary>
         /// RAW + Jpeg Small Fine
         /// </summary>
         RAW_SmallJpegFine = 0x00640213,
+
         /// <summary>
         /// RAW + Jpeg Small Normal
         /// </summary>
         RAW_SmallJpegNormal = 0x00640212,
+
         /// <summary>
         /// RAW + Jpeg Small1 Fine
         /// </summary>
         RAW_Small1JpegFine = 0x00640E13,
+
         /// <summary>
         /// RAW + Jpeg Small1 Normal
         /// </summary>
         RAW_Small1JpegNormal = 0x00640E12,
+
         /// <summary>
         /// RAW + Jpeg Small2
         /// </summary>
         RAW_Small2Jpeg = 0x00640F13,
+
         /// <summary>
         /// RAW + Jpeg Small3
         /// </summary>
         RAW_Small3Jpeg = 0x00641013,
+
         /// <summary>
         /// RAW + Jpeg Large
         /// </summary>
         RAW_LargeJpeg = 0x00640010,
+
         /// <summary>
         /// RAW + Jpeg Middle1
         /// </summary>
         RAW_Middle1Jpeg = 0x00640510,
+
         /// <summary>
         /// RAW + Jpeg Middle2
         /// </summary>
         RAW_Middle2Jpeg = 0x00640610,
+
         /// <summary>
         /// RAW + Jpeg Small
         /// </summary>
@@ -933,58 +984,72 @@ namespace EOSDigital.SDK
         /// MRAW(SRAW1)
         /// </summary>
         MRAW = 0x0164FF0F,
+
         /// <summary>
         /// MRAW(SRAW1) + Jpeg Large Fine
         /// </summary>
         MRAW_LargeJpegFine = 0x01640013,
+
         /// <summary>
         /// MRAW(SRAW1) + Jpeg Large Normal
         /// </summary>
         MRAW_LargeJpegNormal = 0x01640012,
+
         /// <summary>
         /// MRAW(SRAW1) + Jpeg Middle Fine
         /// </summary>
         MRAW_MiddleJpegFine = 0x01640113,
+
         /// <summary>
         /// MRAW(SRAW1) + Jpeg Middle Normal
         /// </summary>
         MRAW_MiddleJpegNormal = 0x01640112,
+
         /// <summary>
         /// MRAW(SRAW1) + Jpeg Small Fine
         /// </summary>
         MRAW_SmallJpegFine = 0x01640213,
+
         /// <summary>
         /// MRAW(SRAW1) + Jpeg Small Normal
         /// </summary>
         MRAW_SmallJpegNormal = 0x01640212,
+
         /// <summary>
         /// MRAW(SRAW1) + Jpeg Small1 Fine
         /// </summary>
         MRAW_Small1JpegFine = 0x01640E13,
+
         /// <summary>
         /// MRAW(SRAW1) + Jpeg Small1 Normal
         /// </summary>
         MRAW_Small1JpegNormal = 0x01640E12,
+
         /// <summary>
         /// MRAW(SRAW1) + Jpeg Small2
         /// </summary>
         MRAW_Small2Jpeg = 0x01640F13,
+
         /// <summary>
         /// MRAW(SRAW1) + Jpeg Small3
         /// </summary>
         MRAW_Small3Jpeg = 0x01641013,
+
         /// <summary>
         /// MRAW(SRAW1) + Jpeg Large
         /// </summary>
         MRAW_LargeJpeg = 0x01640010,
+
         /// <summary>
         /// MRAW(SRAW1) + Jpeg Middle1
         /// </summary>
         MRAW_Middle1Jpeg = 0x01640510,
+
         /// <summary>
         /// MRAW(SRAW1) + Jpeg Middle2
         /// </summary>
         MRAW_Middle2Jpeg = 0x01640610,
+
         /// <summary>
         /// MRAW(SRAW1) + Jpeg Small
         /// </summary>
@@ -994,58 +1059,72 @@ namespace EOSDigital.SDK
         /// SRAW(SRAW2)
         /// </summary>
         SRAW = 0x0264FF0F,
+
         /// <summary>
         /// SRAW(SRAW2) + Jpeg Large Fine
         /// </summary>
         SRAW_LargeJpegFine = 0x02640013,
+
         /// <summary>
         /// SRAW(SRAW2) + Jpeg Large Normal
         /// </summary>
         SRAW_LargeJpegNormal = 0x02640012,
+
         /// <summary>
         /// SRAW(SRAW2) + Jpeg Middle Fine
         /// </summary>
         SRAW_MiddleJpegFine = 0x02640113,
+
         /// <summary>
         /// SRAW(SRAW2) + Jpeg Middle Normal
         /// </summary>
         SRAW_MiddleJpegNormal = 0x02640112,
+
         /// <summary>
         /// SRAW(SRAW2) + Jpeg Small Fine
         /// </summary>
         SRAW_SmallJpegFine = 0x02640213,
+
         /// <summary>
         /// SRAW(SRAW2) + Jpeg Small Normal
         /// </summary>
         SRAW_SmallJpegNormal = 0x02640212,
+
         /// <summary>
         /// SRAW(SRAW2) + Jpeg Small1 Fine
         /// </summary>
         SRAW_Small1JpegFine = 0x02640E13,
+
         /// <summary>
         /// SRAW(SRAW2) + Jpeg Small1 Normal
         /// </summary>
         SRAW_Small1JpegNormal = 0x02640E12,
+
         /// <summary>
         /// SRAW(SRAW2) + Jpeg Small2
         /// </summary>
         SRAW_Small2Jpeg = 0x02640F13,
+
         /// <summary>
         /// SRAW(SRAW2) + Jpeg Small3
         /// </summary>
         SRAW_Small3Jpeg = 0x02641013,
+
         /// <summary>
         /// SRAW(SRAW2) + Jpeg Large
         /// </summary>
         SRAW_LargeJpeg = 0x02640010,
+
         /// <summary>
         /// SRAW(SRAW2) + Jpeg Middle1
         /// </summary>
         SRAW_Middle1Jpeg = 0x02640510,
+
         /// <summary>
         /// SRAW(SRAW2) + Jpeg Middle2
         /// </summary>
         SRAW_Middle2Jpeg = 0x02640610,
+
         /// <summary>
         /// SRAW(SRAW2) + Jpeg Small
         /// </summary>
@@ -1063,38 +1142,47 @@ namespace EOSDigital.SDK
         /// Jpeg Large
         /// </summary>
         LJ = 0x001F000F,
+
         /// <summary>
         /// Jpeg Middle1
         /// </summary>
         M1J = 0x051F000F,
+
         /// <summary>
         /// Jpeg Middle2
         /// </summary>
         M2J = 0x061F000F,
+
         /// <summary>
         /// Jpeg Small
         /// </summary>
         SJ = 0x021F000F,
+
         /// <summary>
         /// Jpeg Large Fine
         /// </summary>
         LJF = 0x00130000,
+
         /// <summary>
         /// Jpeg Large Normal
         /// </summary>
         LJN = 0x00120000,
+
         /// <summary>
         /// Jpeg Middle Fine
         /// </summary>
         MJF = 0x01130000,
+
         /// <summary>
         /// Jpeg Middle Normal
         /// </summary>
         MJN = 0x01120000,
+
         /// <summary>
         /// Jpeg Small Fine
         /// </summary>
         SJF = 0x02130000,
+
         /// <summary>
         /// Jpeg Small Normal
         /// </summary>
@@ -1104,26 +1192,32 @@ namespace EOSDigital.SDK
         ///  RAW
         /// </summary>
         LR = 0x00240000,
+
         /// <summary>
         /// RAW + Jpeg Large Fine
         /// </summary>
         LRLJF = 0x00240013,
+
         /// <summary>
         /// RAW + Jpeg Large Normal
         /// </summary>
         LRLJN = 0x00240012,
+
         /// <summary>
         /// RAW + Jpeg Middle Fine
         /// </summary>
         LRMJF = 0x00240113,
+
         /// <summary>
         /// RAW + Jpeg Middle Normal
         /// </summary>
         LRMJN = 0x00240112,
+
         /// <summary>
         /// RAW + Jpeg Small Fine
         /// </summary>
         LRSJF = 0x00240213,
+
         /// <summary>
         /// RAW + Jpeg Small Normal
         /// </summary>
@@ -1133,18 +1227,22 @@ namespace EOSDigital.SDK
         /// RAW
         /// </summary>
         LR2 = 0x002F000F,
+
         /// <summary>
         /// RAW + Jpeg Large
         /// </summary>
         LR2LJ = 0x002F001F,
+
         /// <summary>
         /// RAW + Jpeg Middle1
         /// </summary>
         LR2M1J = 0x002F051F,
+
         /// <summary>
         /// RAW + Jpeg Middle2
         /// </summary>
         LR2M2J = 0x002F061F,
+
         /// <summary>
         /// RAW + Jpeg Small
         /// </summary>
@@ -1212,6 +1310,7 @@ namespace EOSDigital.SDK
         Normal = 80,
         High = 69,
         Quarter = 19,
+
         //Error = 0,
         //BCLevel = 0,
         AC = unchecked((int)0xFFFFFFFF),
@@ -1441,14 +1540,17 @@ namespace EOSDigital.SDK
         /// The 0th row is at the visual top of the image, and the 0th column is on the visual left-hand side
         /// </summary>
         ULRD = 1,
+
         /// <summary>
         /// The 0th row is at the visual bottom of the image, and the 0th column is on the visual right-hand side
         /// </summary>
         DRLU = 3,
+
         /// <summary>
         /// The 0th row is on the visual right-hand side of the image, and the 0th column is at the visual top
         /// </summary>
         LDUR = 6,
+
         /// <summary>
         /// The 0th row is on the visual left-hand side of the image, and the 0th column is at the visual bottom
         /// </summary>

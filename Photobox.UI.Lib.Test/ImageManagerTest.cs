@@ -19,14 +19,16 @@ public class ImageManagerTest
 
         var logger = Substitute.For<ILogger<ImageManager.ImageManager>>();
 
-        IImageManager imageService = new ImageManager.ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer, Substitute.For<IImageUploadService>());
+        IImageManager imageService = new ImageManager.ImageManager(
+            logger,
+            Substitute.For<IOptionsMonitor<PhotoboxConfig>>(),
+            printer,
+            Substitute.For<IImageUploadService>()
+        );
 
         string imageName = Folders.NewImageName;
 
-        string newImagePath = Path.Combine(
-            Folders.PhotoboxBaseDir,
-            Folders.Photos,
-            imageName);
+        string newImagePath = Path.Combine(Folders.PhotoboxBaseDir, Folders.Photos, imageName);
 
         try
         {
@@ -50,14 +52,16 @@ public class ImageManagerTest
 
         var logger = Substitute.For<ILogger<ImageManager.ImageManager>>();
 
-        IImageManager imageService = new ImageManager.ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer, Substitute.For<IImageUploadService>());
+        IImageManager imageService = new ImageManager.ImageManager(
+            logger,
+            Substitute.For<IOptionsMonitor<PhotoboxConfig>>(),
+            printer,
+            Substitute.For<IImageUploadService>()
+        );
 
         string imageName = Folders.NewImageName;
 
-        string newImagePath = Path.Combine(
-            Folders.PhotoboxBaseDir,
-            Folders.Photos,
-            imageName);
+        string newImagePath = Path.Combine(Folders.PhotoboxBaseDir, Folders.Photos, imageName);
 
         try
         {
@@ -83,14 +87,16 @@ public class ImageManagerTest
 
         var logger = Substitute.For<ILogger<ImageManager.ImageManager>>();
 
-        IImageManager imageService = new ImageManager.ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer, Substitute.For<IImageUploadService>());
+        IImageManager imageService = new ImageManager.ImageManager(
+            logger,
+            Substitute.For<IOptionsMonitor<PhotoboxConfig>>(),
+            printer,
+            Substitute.For<IImageUploadService>()
+        );
 
         string imageName = Folders.NewImageName;
 
-        string newImagePath = Path.Combine(
-            Folders.PhotoboxBaseDir,
-            Folders.Photos,
-            imageName);
+        string newImagePath = Path.Combine(Folders.PhotoboxBaseDir, Folders.Photos, imageName);
 
         try
         {
@@ -116,16 +122,18 @@ public class ImageManagerTest
 
         var logger = Substitute.For<ILogger<ImageManager.ImageManager>>();
 
-        IImageManager imageService = new ImageManager.ImageManager(logger, Substitute.For<IOptionsMonitor<PhotoboxConfig>>(), printer, Substitute.For<IImageUploadService>());
+        IImageManager imageService = new ImageManager.ImageManager(
+            logger,
+            Substitute.For<IOptionsMonitor<PhotoboxConfig>>(),
+            printer,
+            Substitute.For<IImageUploadService>()
+        );
 
         string imageName = Folders.NewImageName;
 
         Folders.NewImageName.Returns(imageName);
 
-        string newImagePath = Path.Combine(
-            Folders.PhotoboxBaseDir,
-            Folders.Deleted,
-            imageName);
+        string newImagePath = Path.Combine(Folders.PhotoboxBaseDir, Folders.Deleted, imageName);
 
         try
         {
