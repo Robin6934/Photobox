@@ -1,13 +1,14 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Collections.Concurrent;
+using Microsoft.Extensions.Logging;
 using Photobox.Lib.Extensions;
 using Photobox.Lib.RestApi;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Collections.Concurrent;
 
 namespace Photobox.UI.Lib.ImageUploadService;
 
-public class ImageUploadService(ILogger<ImageUploadService> logger, IImageClient client) : IImageUploadService
+public class ImageUploadService(ILogger<ImageUploadService> logger, IImageClient client)
+    : IImageUploadService
 {
     private readonly ILogger<ImageUploadService> _logger = logger;
 
@@ -45,7 +46,6 @@ public class ImageUploadService(ILogger<ImageUploadService> logger, IImageClient
                 // Do nothing, as the image will retry the upload next round only stop the loop
                 break;
             }
-
         }
     }
 }

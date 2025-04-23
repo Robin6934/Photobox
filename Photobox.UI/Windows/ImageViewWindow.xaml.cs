@@ -1,15 +1,14 @@
-﻿using Photobox.Lib;
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using Photobox.Lib;
 using Photobox.Lib.Helper;
 using Photobox.UI.ImageViewer;
 using Photobox.WpfHelpers;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media.Imaging;
 
 namespace Photobox.UI.Windows;
-
 
 public delegate void ResultHander(object? sender, ImageViewResult r);
 
@@ -20,9 +19,8 @@ public partial class ImageViewWindow : Window, IDisposable
     private readonly Image<Rgb24> image = default!;
 
     public new event ResultHander Closed = default!;
-    
-    private readonly AspectRatio _imageAspectRatio;
 
+    private readonly AspectRatio _imageAspectRatio;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ImageViewWindow"/> class.
@@ -42,19 +40,28 @@ public partial class ImageViewWindow : Window, IDisposable
         }
     }
 
-    private void BorderSave_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void BorderSave_MouseLeftButtonDown(
+        object sender,
+        System.Windows.Input.MouseButtonEventArgs e
+    )
     {
         Close();
         Closed?.Invoke(this, ImageViewResult.Save);
     }
 
-    private void BorderDelete_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void BorderDelete_MouseLeftButtonDown(
+        object sender,
+        System.Windows.Input.MouseButtonEventArgs e
+    )
     {
         Close();
         Closed?.Invoke(this, ImageViewResult.Delete);
     }
 
-    private void BorderPrint_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void BorderPrint_MouseLeftButtonDown(
+        object sender,
+        System.Windows.Input.MouseButtonEventArgs e
+    )
     {
         Close();
         Closed?.Invoke(this, ImageViewResult.Print);
@@ -126,4 +133,3 @@ public partial class ImageViewWindow : Window, IDisposable
         Dispose(false);
     }
 }
-

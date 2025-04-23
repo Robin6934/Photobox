@@ -1,11 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Net.Http;
+using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Photobox.Lib.AccessTokenManager;
 using Photobox.Lib.RestApi;
 using Photobox.UI.CountDown;
 using Photobox.UI.ImageViewer;
-using Photobox.Lib.AccessTokenManager;
 using Photobox.UI.Lib.Camera;
 using Photobox.UI.Lib.ConfigModels;
 using Photobox.UI.Lib.ImageHandler;
@@ -14,10 +16,9 @@ using Photobox.UI.Lib.ImageUploadService;
 using Photobox.UI.Lib.Printer;
 using Photobox.UI.Windows;
 using Serilog;
-using System.Windows;
-using System.Net.Http;
 
 namespace Photobox.UI;
+
 /// <summary>
 /// Interaction logic for App.xaml
 /// </summary>
@@ -28,7 +29,7 @@ public partial class App
     protected override async void OnStartup(StartupEventArgs e)
     {
         _host = CreateHostBuilder(e.Args).Build();
-        
+
         ImageClient.AccessTokenManager = _host.Services.GetService<IAccessTokenManager>();
 
         await _host.StartAsync();
@@ -49,19 +50,25 @@ public partial class App
 
         builder.Services.AddSingleton<IImageUploadService, ImageUploadService>();
         builder.Services.AddSingleton<CameraFactory>();
-        builder.Services.AddSingleton(
-            s => s.GetRequiredService<CameraFactory>()
-                    .Create(s.GetRequiredService<IOptions<PhotoboxConfig>>().Value.Camera));
+        builder.Services.AddSingleton(s =>
+            s.GetRequiredService<CameraFactory>()
+                .Create(s.GetRequiredService<IOptions<PhotoboxConfig>>().Value.Camera)
+        );
         builder.Services.AddSingleton<IImageViewer, ImageViewerLocal>();
         builder.Services.AddSingleton<IImageManager, ImageManager>();
         builder.Services.AddSingleton<IPrinter, Printer>();
         builder.Services.Configure<PhotoboxConfig>(
-            builder.Configuration.GetSection(PhotoboxConfig.Photobox));
+            builder.Configuration.GetSection(PhotoboxConfig.Photobox)
+        );
         builder.Services.AddSingleton<ICountDown, CountDownCircle>();
         builder.Services.AddSingleton<IImageHandler, ImageHandler>();
-        builder.Services.AddSingleton<IImageClient, ImageClient>(_ => new ImageClient("https://localhost"));
+        builder.Services.AddSingleton<IImageClient, ImageClient>(_ => new ImageClient(
+            "https://localhost"
+        ));
         builder.Services.AddSingleton<IClient, Client>(s => new Client("https://localhost"));
-        builder.Services.AddSingleton<IPhotoBoxClient, PhotoBoxClient>(_ => new PhotoBoxClient("https://localhost"));
+        builder.Services.AddSingleton<IPhotoBoxClient, PhotoBoxClient>(_ => new PhotoBoxClient(
+            "https://localhost"
+        ));
         builder.Services.AddSingleton<IAccessTokenManager, AccessTokenManager>();
         builder.Logging.ClearProviders();
 
@@ -78,4 +85,3 @@ public partial class App
         return builder;
     }
 }
-

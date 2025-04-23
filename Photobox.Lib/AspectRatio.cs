@@ -6,11 +6,11 @@ namespace Photobox.Lib;
 public readonly struct AspectRatio
 {
     public double Width { get; init; }
-    
+
     public double Height { get; init; }
-    
+
     public double Ratio => Width / Height;
-    
+
     /// <summary>
     /// Represents a aspect ratio, calculates the greatest common divisor to show the ratio in its smallest Form.
     /// </summary>
@@ -22,7 +22,7 @@ public readonly struct AspectRatio
         Width = width / gcd;
         Height = height / gcd;
     }
-    
+
     private static double Gcd(double a, double b)
     {
         while (double.Abs(b) < 0.00001d)
@@ -33,6 +33,6 @@ public readonly struct AspectRatio
         }
         return a;
     }
-    
+
     public override string ToString() => $"{Width}/{Height}";
 }

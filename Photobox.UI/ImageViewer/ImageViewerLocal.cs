@@ -5,9 +5,8 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.UI.ImageViewer;
-public class ImageViewerLocal(
-    ILogger<ImageViewerLocal> logger,
-    IPrinter printer) : IImageViewer
+
+public class ImageViewerLocal(ILogger<ImageViewerLocal> logger, IPrinter printer) : IImageViewer
 {
     private readonly ILogger<ImageViewerLocal> logger = logger;
 

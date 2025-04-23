@@ -10,17 +10,19 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.UI.Lib.Camera;
 
-public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime applicationLifetime) : CameraBase(logger)
+public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime applicationLifetime)
+    : CameraBase(logger)
 {
     private VideoCapture? _capture = default;
 
     private readonly ILogger<WebCam> _logger = logger;
 
     private readonly IHostApplicationLifetime _applicationLifetime = applicationLifetime;
-    
+
     private readonly RecyclableMemoryStreamManager _manager = new();
 
-    public override AspectRatio ImageAspectRatio => new ((int)_capture.Get(CapProp.FrameWidth), (int)_capture.Get(CapProp.FrameHeight));
+    public override AspectRatio ImageAspectRatio =>
+        new((int)_capture.Get(CapProp.FrameWidth), (int)_capture.Get(CapProp.FrameHeight));
 
     public override void Connect()
     {
@@ -47,19 +49,24 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
     public override void StartStream()
     {
         LiveViewActive = true;
-        Task.Run(() =>
-        {
-            using Mat frame = new();
-            while (!_applicationLifetime.ApplicationStopping.IsCancellationRequested
-                && LiveViewActive)
+        Task.Run(
+            () =>
             {
-                _capture?.Read(frame);
+                using Mat frame = new();
+                while (
+                    !_applicationLifetime.ApplicationStopping.IsCancellationRequested
+                    && LiveViewActive
+                )
+                {
+                    _capture?.Read(frame);
 
-                byte[] data = frame.ToImage<Rgb, byte>().ToJpegData();
+                    byte[] data = frame.ToImage<Rgb, byte>().ToJpegData();
 
-                OnNewStreamImage(new MemoryStream(data));
-            }
-        }, _applicationLifetime.ApplicationStopping);
+                    OnNewStreamImage(new MemoryStream(data));
+                }
+            },
+            _applicationLifetime.ApplicationStopping
+        );
         _logger.LogInformation("[WebCam] liveView started.");
     }
 

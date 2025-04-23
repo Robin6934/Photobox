@@ -1,6 +1,6 @@
-﻿using Photobox.Web.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Photobox.Web.Models;
 
 namespace Photobox.Web.Photobox;
 

@@ -18,5 +18,5 @@ public enum PrinterEnabledOptions
     /// <summary>
     /// When a printer is connected via USB, printing is enabled; otherwise, it is disabled.
     /// </summary>
-    Automatic
+    Automatic,
 }

@@ -2,6 +2,7 @@
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.UI.Lib.Printer;
+
 public interface IPrinter
 {
     public bool Enabled { get; }

@@ -21,28 +21,29 @@ public abstract class CameraBase(ILogger logger) : ICamera
     public virtual AspectRatio ImageAspectRatio { get; }
 
     private readonly ResiliencePipeline pipeline = new ResiliencePipelineBuilder()
-        .AddTimeout(new TimeoutStrategyOptions
-        {
-            Timeout = TimeSpan.FromSeconds(5)
-        })
-        .AddRetry(new RetryStrategyOptions
-        {
-            Delay = TimeSpan.FromSeconds(1),
-            MaxRetryAttempts = 5,
-            ShouldHandle = args =>
+        .AddTimeout(new TimeoutStrategyOptions { Timeout = TimeSpan.FromSeconds(5) })
+        .AddRetry(
+            new RetryStrategyOptions
             {
-                if (args.Outcome.Exception is CameraNotFoundException ex)
+                Delay = TimeSpan.FromSeconds(1),
+                MaxRetryAttempts = 5,
+                ShouldHandle = args =>
                 {
-                    // Add logging here
-                    logger.LogWarning("Retrying due to CameraNotFoundException: {Message}", ex.Message);
+                    if (args.Outcome.Exception is CameraNotFoundException ex)
+                    {
+                        // Add logging here
+                        logger.LogWarning(
+                            "Retrying due to CameraNotFoundException: {Message}",
+                            ex.Message
+                        );
 
-                    // Return PredicateResult.True() to retry
-                    return PredicateResult.True();
-                }
-                return PredicateResult.False();
+                        // Return PredicateResult.True() to retry
+                        return PredicateResult.True();
+                    }
+                    return PredicateResult.False();
+                },
             }
-
-        })
+        )
         .Build();
 
     public virtual void ResilientConnect() => pipeline.Execute(Connect);

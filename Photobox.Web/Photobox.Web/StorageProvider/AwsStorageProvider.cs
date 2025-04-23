@@ -1,9 +1,9 @@
-﻿using Amazon;
+﻿using System.Collections.Concurrent;
+using System.Xml.Linq;
+using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Collections.Concurrent;
-using System.Xml.Linq;
 
 namespace Photobox.Web.StorageProvider;
 
@@ -33,9 +33,9 @@ public class AwsStorageProvider(IAmazonS3 amazonS3) : IStorageProvider
                 BucketName = Aws.Aws.BucketName,
                 DisablePayloadSigning = true,
                 Key = imageName,
-                InputStream = imageStream
+                InputStream = imageStream,
             };
-            
+
             await amazonS3.PutObjectAsync(request);
 
             imageBuffer.Remove(imageName, out _);
@@ -44,11 +44,7 @@ public class AwsStorageProvider(IAmazonS3 amazonS3) : IStorageProvider
 
     public async Task<Image<Rgb24>> GetImageAsync(string name)
     {
-        var request = new GetObjectRequest
-        {
-            BucketName = Aws.Aws.BucketName,
-            Key = name
-        };
+        var request = new GetObjectRequest { BucketName = Aws.Aws.BucketName, Key = name };
 
         if (imageBuffer.TryGetValue(name, out var image))
         {
@@ -64,11 +60,7 @@ public class AwsStorageProvider(IAmazonS3 amazonS3) : IStorageProvider
 
     public Task DeleteImageAsync(string name)
     {
-        var request = new DeleteObjectRequest()
-        {
-            BucketName = Aws.Aws.BucketName,
-            Key = name
-        };
+        var request = new DeleteObjectRequest() { BucketName = Aws.Aws.BucketName, Key = name };
 
         return amazonS3.DeleteObjectAsync(request);
     }

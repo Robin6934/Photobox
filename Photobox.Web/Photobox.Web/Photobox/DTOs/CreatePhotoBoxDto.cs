@@ -9,6 +9,4 @@ public class CreatePhotoBoxDto
     public required string Password { get; set; }
 
     public required string PhotoBoxName { get; set; }
-
-
 }
