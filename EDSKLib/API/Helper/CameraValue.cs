@@ -11,14 +11,17 @@ namespace EOSDigital.API
         /// The value as a string
         /// </summary>
         public string StringValue { get; protected set; }
+
         /// <summary>
         /// The value as an UInt
         /// </summary>
         public int IntValue { get; protected set; }
+
         /// <summary>
         /// The value as a double
         /// </summary>
         public double DoubleValue { get; protected set; }
+
         /// <summary>
         /// The property ID of this value
         /// </summary>
@@ -203,6 +206,7 @@ namespace EOSDigital.API
 
             return x.IntValue == y.IntValue && x.ValueType == y.ValueType;
         }
+
         /// <summary>
         /// Determines whether the specified <see cref="CameraValue"/>s are unequal to each other.
         /// </summary>
@@ -213,6 +217,7 @@ namespace EOSDigital.API
         {
             return !(x == y);
         }
+
         /// <summary>
         /// Determines whether the specified <see cref="object"/> is equal to the current <see cref="CameraValue"/>.
         /// </summary>
@@ -226,12 +231,15 @@ namespace EOSDigital.API
             }
 
             // If both are null, or both are same instance, return true.
-            if (ReferenceEquals(this, obj)) return true;
+            if (ReferenceEquals(this, obj))
+                return true;
 
-            if (obj is not CameraValue cv) return false;
+            if (obj is not CameraValue cv)
+                return false;
 
             return IntValue == cv.IntValue && ValueType == cv.ValueType;
         }
+
         /// <summary>
         /// Serves as a hash function for a <see cref="CameraValue"/>.
         /// </summary>

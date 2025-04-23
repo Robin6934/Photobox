@@ -1,23 +1,23 @@
-﻿using Photobox.Lib.AccessTokenManager;
-using System.Windows;
+﻿using System.Windows;
+using Photobox.Lib.AccessTokenManager;
 
 namespace Photobox.UI.Windows;
 
 public partial class LoginWindow : Window
 {
     public delegate void LoginCanceled(object sender, RoutedEventArgs e);
-    
+
     public event LoginCanceled? OnLoginCanceled;
-    
+
     private readonly IAccessTokenManager _accessTokenManager;
-    
+
     public LoginWindow(IAccessTokenManager accessTokenManager)
     {
         _accessTokenManager = accessTokenManager;
-        
+
         InitializeComponent();
     }
-    
+
     private async void LoginButton_Click(object sender, RoutedEventArgs e)
     {
         string email = EmailTextBox.Text.Trim();
@@ -37,7 +37,7 @@ public partial class LoginWindow : Window
             MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
-        
+
         try
         {
             await _accessTokenManager.LoginAsync(email, password);
@@ -48,7 +48,8 @@ public partial class LoginWindow : Window
                 "Either the username or password is incorrect. Would you like to try again?",
                 "Login Failed",
                 MessageBoxButton.YesNo,
-                MessageBoxImage.Warning);
+                MessageBoxImage.Warning
+            );
 
             if (result == MessageBoxResult.No)
             {
@@ -58,18 +59,18 @@ public partial class LoginWindow : Window
         }
         catch (Exception)
         {
-            MessageBox.Show("An error occurred while logging in. Please check your internet connection and try again.",
+            MessageBox.Show(
+                "An error occurred while logging in. Please check your internet connection and try again.",
                 "Error",
                 MessageBoxButton.OK,
-                MessageBoxImage.Error);
+                MessageBoxImage.Error
+            );
             Application.Current.Shutdown();
             return;
         }
 
-        
         Close();
     }
-
 
     private void CancelButton_Click(object sender, RoutedEventArgs e)
     {

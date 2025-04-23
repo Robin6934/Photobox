@@ -6,8 +6,5 @@ namespace Photobox.Web.Photobox;
 
 public class PhotoBoxService(AppDbContext dbContext, ILogger<PhotoBoxService> logger)
 {
-    public async Task CreatePhotoBoxAsync()
-    {
-
-    }
+    public async Task CreatePhotoBoxAsync() { }
 }

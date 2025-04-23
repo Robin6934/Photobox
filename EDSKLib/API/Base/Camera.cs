@@ -14,14 +14,17 @@ namespace EOSDigital.API
         /// The SDK object event
         /// </summary>
         protected event SDKObjectEventHandler SDKObjectEvent = default!;
+
         /// <summary>
         /// The SDK progress event
         /// </summary>
         protected event SDKProgressCallback SDKProgressCallbackEvent = default!;
+
         /// <summary>
         /// The SDK property event
         /// </summary>
         protected event SDKPropertyEventHandler SDKPropertyEvent = default!;
+
         /// <summary>
         /// The SDK state event
         /// </summary>
@@ -31,31 +34,38 @@ namespace EOSDigital.API
         /// Fires if any process reports progress
         /// </summary>
         public event ProgressHandler ProgressChanged = default!;
+
         /// <summary>
         /// Fires if the live view image is updated
         /// </summary>
         public event LiveViewUpdate LiveViewUpdated = default!;
+
         /// <summary>
         /// Fires if an image is ready for download.
         /// Call the <see cref="DownloadFile(DownloadInfo,string)"/> or <see cref="DownloadFile(DownloadInfo)"/> method to get the image or <see cref="CancelDownload"/> to cancel.
         /// </summary>
         public event DownloadHandler DownloadReady = default!;
+
         /// <summary>
         /// Fires if a property has changed
         /// </summary>
         public event PropertyChangeHandler PropertyChanged = default!;
+
         /// <summary>
         /// Fires if a state has changed
         /// </summary>
         public event StateChangeHandler StateChanged = default!;
+
         /// <summary>
         /// Fires if an object has changed
         /// </summary>
         public event ObjectChangeHandler ObjectChanged = default!;
+
         /// <summary>
         /// This event fires if the camera is disconnected or has shut down
         /// </summary>
         public event CameraUpdateHandler CameraHasShutdown = default!;
+
         /// <summary>
         /// This event fires when the live view loop has ended
         /// </summary>
@@ -69,6 +79,7 @@ namespace EOSDigital.API
         /// Info about this camera (can be retrieved without an open session)
         /// </summary>
         protected DeviceInfo Info = default!;
+
         /// <summary>
         /// Thread for executing SDK commands
         /// </summary>
@@ -81,6 +92,7 @@ namespace EOSDigital.API
         {
             get { return CamRef; }
         }
+
         /// <summary>
         /// An ID for the camera object in this session. It's essentially the pointer of the Canon SDK camera object
         /// </summary>
@@ -88,6 +100,7 @@ namespace EOSDigital.API
         {
             get { return CamRef.ToInt64(); }
         }
+
         /// <summary>
         /// States if a session with this camera is open
         /// </summary>
@@ -96,6 +109,7 @@ namespace EOSDigital.API
             get { return _SessionOpen; }
             protected set { _SessionOpen = value; }
         }
+
         /// <summary>
         /// States if the camera is disposed. If true, it can't be used anymore
         /// </summary>
@@ -103,6 +117,7 @@ namespace EOSDigital.API
         {
             get { return _IsDisposed; }
         }
+
         /// <summary>
         /// The name of the camera (can be retrieved without an open session)
         /// </summary>
@@ -110,6 +125,7 @@ namespace EOSDigital.API
         {
             get { return Info.DeviceDescription; }
         }
+
         /// <summary>
         /// The name of the port the camera is connected to (can be retrieved without an open session)
         /// </summary>
@@ -117,6 +133,7 @@ namespace EOSDigital.API
         {
             get { return Info.PortName; }
         }
+
         /// <summary>
         /// States if the live view is running on the computer or not
         /// </summary>
@@ -125,6 +142,7 @@ namespace EOSDigital.API
             get { return _IsLiveViewOn; }
             protected set { _IsLiveViewOn = value; }
         }
+
         /// <summary>
         /// States if Record property is available for this camera
         /// </summary>
@@ -137,38 +155,47 @@ namespace EOSDigital.API
         /// Pointer to the camera object
         /// </summary>
         private readonly IntPtr CamRef = default!;
+
         /// <summary>
         /// Variable to let the live view download loop continue or stop
         /// </summary>
         private bool KeepLVAlive = false;
+
         /// <summary>
         /// Thread for the live view download routine
         /// </summary>
         private Thread LVThread = default!;
+
         /// <summary>
         /// Field for the public <see cref="IsLiveViewOn"/> property
         /// </summary>
         private bool _IsLiveViewOn;
+
         /// <summary>
         /// Field for the public <see cref="IsDisposed"/> property
         /// </summary>
         private bool _IsDisposed;
+
         /// <summary>
         /// Field for the public <see cref="SessionOpen"/> property
         /// </summary>
         private bool _SessionOpen;
+
         /// <summary>
         /// Field for the public <see cref="IsRecordAvailable"/> property
         /// </summary>
         private bool _IsRecordAvailable;
+
         /// <summary>
         /// Object to set a lock around starting/stopping the live view thread
         /// </summary>
         private readonly Lock lvThreadLockObj = new();
+
         /// <summary>
         /// States if a film should be downloaded after filming or not
         /// </summary>
         private bool saveFilm;
+
         /// <summary>
         /// States if the live view should be shown on the PC while filming
         /// </summary>
@@ -186,11 +213,14 @@ namespace EOSDigital.API
         /// <exception cref="SDKException">An SDK call failed</exception>
         internal protected Camera(IntPtr camRef)
         {
-            if (camRef == IntPtr.Zero) throw new ArgumentNullException(nameof(camRef));
+            if (camRef == IntPtr.Zero)
+                throw new ArgumentNullException(nameof(camRef));
             CamRef = camRef;
             MainThread = new STAThread();
             MainThread.Start();
-            MainThread.Invoke(() => ErrorHandler.CheckError(this, CanonSDK.EdsGetDeviceInfo(CamRef, out Info)));
+            MainThread.Invoke(() =>
+                ErrorHandler.CheckError(this, CanonSDK.EdsGetDeviceInfo(CamRef, out Info))
+            );
         }
 
         /// <summary>
@@ -218,16 +248,44 @@ namespace EOSDigital.API
                     ErrorHandler.CheckError(this, CanonSDK.EdsOpenSession(CamRef));
 
                     //Check if Record is available
-                    _IsRecordAvailable = CanonSDK.GetPropertyData(CamRef, PropertyID.Record, 0, out int property) == ErrorCode.OK;
+                    _IsRecordAvailable =
+                        CanonSDK.GetPropertyData(CamRef, PropertyID.Record, 0, out int property)
+                        == ErrorCode.OK;
 
                     //Subscribe to events
                     SDKStateEvent += new SDKStateEventHandler(Camera_SDKStateEvent);
                     SDKPropertyEvent += new SDKPropertyEventHandler(Camera_SDKPropertyEvent);
-                    SDKProgressCallbackEvent += new SDKProgressCallback(Camera_SDKProgressCallbackEvent);
+                    SDKProgressCallbackEvent += new SDKProgressCallback(
+                        Camera_SDKProgressCallbackEvent
+                    );
                     SDKObjectEvent += new SDKObjectEventHandler(Camera_SDKObjectEvent);
-                    ErrorHandler.CheckError(this, CanonSDK.EdsSetCameraStateEventHandler(CamRef, StateEventID.All, SDKStateEvent, CamRef));
-                    ErrorHandler.CheckError(this, CanonSDK.EdsSetObjectEventHandler(CamRef, ObjectEventID.All, SDKObjectEvent, CamRef));
-                    ErrorHandler.CheckError(this, CanonSDK.EdsSetPropertyEventHandler(CamRef, PropertyEventID.All, SDKPropertyEvent, CamRef));
+                    ErrorHandler.CheckError(
+                        this,
+                        CanonSDK.EdsSetCameraStateEventHandler(
+                            CamRef,
+                            StateEventID.All,
+                            SDKStateEvent,
+                            CamRef
+                        )
+                    );
+                    ErrorHandler.CheckError(
+                        this,
+                        CanonSDK.EdsSetObjectEventHandler(
+                            CamRef,
+                            ObjectEventID.All,
+                            SDKObjectEvent,
+                            CamRef
+                        )
+                    );
+                    ErrorHandler.CheckError(
+                        this,
+                        CanonSDK.EdsSetPropertyEventHandler(
+                            CamRef,
+                            PropertyEventID.All,
+                            SDKPropertyEvent,
+                            CamRef
+                        )
+                    );
 
                     SessionOpen = true;
                 });
@@ -298,12 +356,12 @@ namespace EOSDigital.API
                     if (CanonAPI.IsSDKInitialized)
                     {
                         //If it's open, close the session
-                        if (SessionOpen) CanonSDK.EdsCloseSession(CamRef);
+                        if (SessionOpen)
+                            CanonSDK.EdsCloseSession(CamRef);
                         //Release the camera
 #pragma warning disable CA1806
                         CanonSDK.EdsRelease(CamRef);
 #pragma warning restore CA1806
-
                     }
                     _IsDisposed = true;
                 });
@@ -338,101 +396,162 @@ namespace EOSDigital.API
 
         #region SDK Eventhandling
 
-        private ErrorCode Camera_SDKObjectEvent(ObjectEventID inEvent, IntPtr inRef, IntPtr inContext)
+        private ErrorCode Camera_SDKObjectEvent(
+            ObjectEventID inEvent,
+            IntPtr inRef,
+            IntPtr inContext
+        )
         {
-            ThreadPool.QueueUserWorkItem((state) =>
-            {
-                try
+            ThreadPool.QueueUserWorkItem(
+                (state) =>
                 {
-                    var DownloadReadyEvent = DownloadReady;
-
-                    if (inEvent == ObjectEventID.DirItemRequestTransfer && DownloadReadyEvent != null)
+                    try
                     {
-                        DownloadReadyEvent(this, new DownloadInfo(inRef));
-                    }
-                    else if (inEvent == ObjectEventID.DirItemCreated && saveFilm && DownloadReadyEvent != null)
-                    {
-                        saveFilm = false;
-                        DownloadReadyEvent(this, new DownloadInfo(inRef));
-                    }
-                }
-                catch (Exception ex) when (!IsDisposed && !ErrorHandler.ReportError(this, ex))
-                {
-                    throw;
-                }
+                        var DownloadReadyEvent = DownloadReady;
 
-                ObjectChanged?.Invoke(this, inEvent, inRef);
-            });
-            return ErrorCode.OK;
-        }
-
-        private ErrorCode Camera_SDKProgressCallbackEvent(int inPercent, IntPtr inContext, ref bool outCancel)
-        {
-            ThreadPool.QueueUserWorkItem((state) =>
-            {
-                try
-                {
-                    ProgressChanged?.Invoke(this, inPercent);
-                }
-                catch (Exception ex) when (!IsDisposed && !ErrorHandler.ReportError(this, ex))
-                {
-                    throw;
-                }
-            });
-            return ErrorCode.OK;
-        }
-
-        private ErrorCode Camera_SDKPropertyEvent(PropertyEventID inEvent, PropertyID inPropertyID, int inParameter, IntPtr inContext)
-        {
-            ThreadPool.QueueUserWorkItem((state) =>
-            {
-                try
-                {
-                    if (inPropertyID == PropertyID.Evf_OutputDevice || inPropertyID == PropertyID.Record)
-                    {
-                        lock (lvThreadLockObj)
+                        if (
+                            inEvent == ObjectEventID.DirItemRequestTransfer
+                            && DownloadReadyEvent != null
+                        )
                         {
-                            EvfOutputDevice outDevice = GetEvf_OutputDevice();
-                            Recording recordState = IsRecordAvailable ? ((Recording)GetInt32Setting(PropertyID.Record)) : Recording.Off;
-
-                            if (outDevice == EvfOutputDevice.PC || (recordState == Recording.Ready && outDevice == EvfOutputDevice.Filming) ||
-                               (useFilmingPcLv && recordState == Recording.On && (outDevice == EvfOutputDevice.Filming || outDevice == EvfOutputDevice.Camera)))
-                            {
-                                if (!KeepLVAlive)
-                                {
-                                    KeepLVAlive = true;
-                                    LVThread = STAThread.CreateThread(DownloadEvf);
-                                    LVThread.Start();
-                                }
-                            }
-                            else if (KeepLVAlive) { KeepLVAlive = false; }
+                            DownloadReadyEvent(this, new DownloadInfo(inRef));
+                        }
+                        else if (
+                            inEvent == ObjectEventID.DirItemCreated
+                            && saveFilm
+                            && DownloadReadyEvent != null
+                        )
+                        {
+                            saveFilm = false;
+                            DownloadReadyEvent(this, new DownloadInfo(inRef));
                         }
                     }
-                }
-                catch (Exception ex) { if (!IsDisposed && !ErrorHandler.ReportError(this, ex)) throw; }
+                    catch (Exception ex) when (!IsDisposed && !ErrorHandler.ReportError(this, ex))
+                    {
+                        throw;
+                    }
 
-                PropertyChanged?.Invoke(this, inEvent, inPropertyID, inParameter);
-            });
+                    ObjectChanged?.Invoke(this, inEvent, inRef);
+                }
+            );
             return ErrorCode.OK;
         }
 
-        private ErrorCode Camera_SDKStateEvent(StateEventID inEvent, int inParameter, IntPtr inContext)
+        private ErrorCode Camera_SDKProgressCallbackEvent(
+            int inPercent,
+            IntPtr inContext,
+            ref bool outCancel
+        )
         {
-            ThreadPool.QueueUserWorkItem((state) =>
-            {
-                try
+            ThreadPool.QueueUserWorkItem(
+                (state) =>
                 {
-                    if (inEvent == StateEventID.Shutdown)
+                    try
                     {
-                        SessionOpen = false;
-                        Dispose(true);
-                        CameraHasShutdown?.Invoke(this);
+                        ProgressChanged?.Invoke(this, inPercent);
+                    }
+                    catch (Exception ex) when (!IsDisposed && !ErrorHandler.ReportError(this, ex))
+                    {
+                        throw;
                     }
                 }
-                catch (Exception ex) { if (!IsDisposed && !ErrorHandler.ReportError(this, ex)) throw; }
+            );
+            return ErrorCode.OK;
+        }
 
-                StateChanged?.Invoke(this, inEvent, inParameter);
-            });
+        private ErrorCode Camera_SDKPropertyEvent(
+            PropertyEventID inEvent,
+            PropertyID inPropertyID,
+            int inParameter,
+            IntPtr inContext
+        )
+        {
+            ThreadPool.QueueUserWorkItem(
+                (state) =>
+                {
+                    try
+                    {
+                        if (
+                            inPropertyID == PropertyID.Evf_OutputDevice
+                            || inPropertyID == PropertyID.Record
+                        )
+                        {
+                            lock (lvThreadLockObj)
+                            {
+                                EvfOutputDevice outDevice = GetEvf_OutputDevice();
+                                Recording recordState = IsRecordAvailable
+                                    ? ((Recording)GetInt32Setting(PropertyID.Record))
+                                    : Recording.Off;
+
+                                if (
+                                    outDevice == EvfOutputDevice.PC
+                                    || (
+                                        recordState == Recording.Ready
+                                        && outDevice == EvfOutputDevice.Filming
+                                    )
+                                    || (
+                                        useFilmingPcLv
+                                        && recordState == Recording.On
+                                        && (
+                                            outDevice == EvfOutputDevice.Filming
+                                            || outDevice == EvfOutputDevice.Camera
+                                        )
+                                    )
+                                )
+                                {
+                                    if (!KeepLVAlive)
+                                    {
+                                        KeepLVAlive = true;
+                                        LVThread = STAThread.CreateThread(DownloadEvf);
+                                        LVThread.Start();
+                                    }
+                                }
+                                else if (KeepLVAlive)
+                                {
+                                    KeepLVAlive = false;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!IsDisposed && !ErrorHandler.ReportError(this, ex))
+                            throw;
+                    }
+
+                    PropertyChanged?.Invoke(this, inEvent, inPropertyID, inParameter);
+                }
+            );
+            return ErrorCode.OK;
+        }
+
+        private ErrorCode Camera_SDKStateEvent(
+            StateEventID inEvent,
+            int inParameter,
+            IntPtr inContext
+        )
+        {
+            ThreadPool.QueueUserWorkItem(
+                (state) =>
+                {
+                    try
+                    {
+                        if (inEvent == StateEventID.Shutdown)
+                        {
+                            SessionOpen = false;
+                            Dispose(true);
+                            CameraHasShutdown?.Invoke(this);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!IsDisposed && !ErrorHandler.ReportError(this, ex))
+                            throw;
+                    }
+
+                    StateChanged?.Invoke(this, inEvent, inParameter);
+                }
+            );
             return ErrorCode.OK;
         }
 
@@ -465,8 +584,15 @@ namespace EOSDigital.API
             CheckState();
             await Task.Run(() =>
             {
-                try { SendCommand(CameraCommand.TakePicture); }
-                catch (Exception ex) { if (!ErrorHandler.ReportError(this, ex)) throw; }
+                try
+                {
+                    SendCommand(CameraCommand.TakePicture);
+                }
+                catch (Exception ex)
+                {
+                    if (!ErrorHandler.ReportError(this, ex))
+                        throw;
+                }
             });
         }
 
@@ -501,11 +627,18 @@ namespace EOSDigital.API
                 {
                     MainThread.Invoke(() =>
                     {
-                        SendCommand(CameraCommand.PressShutterButton, (int)ShutterButton.Completely);
+                        SendCommand(
+                            CameraCommand.PressShutterButton,
+                            (int)ShutterButton.Completely
+                        );
                         SendCommand(CameraCommand.PressShutterButton, (int)ShutterButton.OFF);
                     });
                 }
-                catch (Exception ex) { if (!ErrorHandler.ReportError(this, ex)) throw; }
+                catch (Exception ex)
+                {
+                    if (!ErrorHandler.ReportError(this, ex))
+                        throw;
+                }
             });
         }
 
@@ -546,7 +679,11 @@ namespace EOSDigital.API
                 await Task.Delay(bulbTime);
                 SendCommand(CameraCommand.BulbEnd);
             }
-            catch (Exception ex) { if (!ErrorHandler.ReportError(this, ex)) throw; }
+            catch (Exception ex)
+            {
+                if (!ErrorHandler.ReportError(this, ex))
+                    throw;
+            }
         }
 
         #endregion
@@ -557,7 +694,7 @@ namespace EOSDigital.API
         /// Downloads a file to given directory with the filename in the <see cref="DownloadInfo"/>
         /// </summary>
         /// <param name="Info">The <see cref="DownloadInfo"/> that is provided by the <see cref="DownloadReady"/> event</param>
-        /// <param name="directory">The directory where the file will be saved to if it ends with a 
+        /// <param name="directory">The directory where the file will be saved to if it ends with a
         /// filename then this one will eb chosen else the one created in camera will be used</param>
         /// <exception cref="ObjectDisposedException">Camera is disposed</exception>
         /// <exception cref="CameraSessionException">Session is closed</exception>
@@ -580,7 +717,8 @@ namespace EOSDigital.API
                 currentFile = Path.Combine(directory, Info.FileName);
             }
 
-            if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
             DownloadToFile(Info, currentFile);
         }
 
@@ -673,8 +811,11 @@ namespace EOSDigital.API
         public void FormatVolume(CameraFileEntry volume)
         {
             CheckState();
-            if (!volume.IsVolume) throw new ArgumentException("CameraFileEntry must be a volume");
-            MainThread.Invoke(() => ErrorHandler.CheckError(this, CanonSDK.EdsFormatVolume(volume.Reference)));
+            if (!volume.IsVolume)
+                throw new ArgumentException("CameraFileEntry must be a volume");
+            MainThread.Invoke(() =>
+                ErrorHandler.CheckError(this, CanonSDK.EdsFormatVolume(volume.Reference))
+            );
         }
 
         /// <summary>
@@ -693,9 +834,12 @@ namespace EOSDigital.API
         public void DownloadFiles(string folderPath, CameraFileEntry[] files)
         {
             CheckState();
-            if (files == null) return;
-            if (folderPath == null || string.IsNullOrEmpty(folderPath.Trim())) folderPath = ".";
-            if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+            if (files == null)
+                return;
+            if (folderPath == null || string.IsNullOrEmpty(folderPath.Trim()))
+                folderPath = ".";
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
 
             for (int i = 0; i < files.Length; i++)
             {
@@ -720,13 +864,17 @@ namespace EOSDigital.API
         public void DeleteFiles(CameraFileEntry[] files)
         {
             CheckState();
-            if (files == null || files.Length == 0) return;
+            if (files == null || files.Length == 0)
+                return;
 
             for (int i = 0; i < files.Length; i++)
             {
                 if (!files[i].IsFolder && !files[i].IsDisposed)
                 {
-                    ErrorHandler.CheckError(this, CanonSDK.EdsDeleteDirectoryItem(files[i].Reference));
+                    ErrorHandler.CheckError(
+                        this,
+                        CanonSDK.EdsDeleteDirectoryItem(files[i].Reference)
+                    );
                     files[i].IsDisposed = true;
                 }
             }
@@ -765,8 +913,10 @@ namespace EOSDigital.API
         /// <exception cref="SDKException">An SDK call failed</exception>
         public void UILock(bool lockState)
         {
-            if (lockState) SendStatusCommand(CameraStatusCommand.UILock);
-            else SendStatusCommand(CameraStatusCommand.UIUnLock);
+            if (lockState)
+                SendStatusCommand(CameraStatusCommand.UILock);
+            else
+                SendStatusCommand(CameraStatusCommand.UIUnLock);
         }
 
         /// <summary>
@@ -779,17 +929,30 @@ namespace EOSDigital.API
         {
             CheckState();
 
-            if (propId == PropertyID.AEModeSelect || propId == PropertyID.ISO || propId == PropertyID.Av || propId == PropertyID.Tv
-                || propId == PropertyID.MeteringMode || propId == PropertyID.ExposureCompensation)
+            if (
+                propId == PropertyID.AEModeSelect
+                || propId == PropertyID.ISO
+                || propId == PropertyID.Av
+                || propId == PropertyID.Tv
+                || propId == PropertyID.MeteringMode
+                || propId == PropertyID.ExposureCompensation
+            )
             {
                 CameraValue[] values = default!;
                 PropertyDesc des = default;
-                MainThread.Invoke(() => ErrorHandler.CheckError(this, CanonSDK.EdsGetPropertyDesc(CamRef, propId, out des)));
+                MainThread.Invoke(() =>
+                    ErrorHandler.CheckError(
+                        this,
+                        CanonSDK.EdsGetPropertyDesc(CamRef, propId, out des)
+                    )
+                );
                 values = new CameraValue[des.NumElements];
-                for (int i = 0; i < values.Length; i++) values[i] = new CameraValue(des.PropDesc![i], propId);
+                for (int i = 0; i < values.Length; i++)
+                    values[i] = new CameraValue(des.PropDesc![i], propId);
                 return values;
             }
-            else throw new ArgumentException($"Method cannot be used with Property ID {propId}");
+            else
+                throw new ArgumentException($"Method cannot be used with Property ID {propId}");
         }
 
         /// <summary>
@@ -804,7 +967,9 @@ namespace EOSDigital.API
         public void SendCommand(CameraCommand command, int inParam = 0)
         {
             CheckState();
-            MainThread.Invoke(() => ErrorHandler.CheckError(this, CanonSDK.EdsSendCommand(CamRef, command, inParam)));
+            MainThread.Invoke(() =>
+                ErrorHandler.CheckError(this, CanonSDK.EdsSendCommand(CamRef, command, inParam))
+            );
         }
 
         /// <summary>
@@ -819,7 +984,12 @@ namespace EOSDigital.API
         public void SendStatusCommand(CameraStatusCommand command, int inParam = 0)
         {
             CheckState();
-            MainThread.Invoke(() => ErrorHandler.CheckError(this, CanonSDK.EdsSendStatusCommand(CamRef, command, inParam)));
+            MainThread.Invoke(() =>
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.EdsSendStatusCommand(CamRef, command, inParam)
+                )
+            );
         }
 
         /// <summary>
@@ -832,7 +1002,8 @@ namespace EOSDigital.API
         public void StartLiveView()
         {
             CheckState();
-            if (!IsLiveViewOn) SetSetting(PropertyID.Evf_OutputDevice, (int)EvfOutputDevice.PC);
+            if (!IsLiveViewOn)
+                SetSetting(PropertyID.Evf_OutputDevice, (int)EvfOutputDevice.PC);
         }
 
         /// <summary>
@@ -846,8 +1017,10 @@ namespace EOSDigital.API
         public void StopLiveView(bool LVOff = true)
         {
             CheckState();
-            if (LVOff) SetSetting(PropertyID.Evf_OutputDevice, (int)EvfOutputDevice.Off);
-            else SetSetting(PropertyID.Evf_OutputDevice, (int)EvfOutputDevice.Camera);
+            if (LVOff)
+                SetSetting(PropertyID.Evf_OutputDevice, (int)EvfOutputDevice.Off);
+            else
+                SetSetting(PropertyID.Evf_OutputDevice, (int)EvfOutputDevice.Camera);
         }
 
         /// <summary>
@@ -868,7 +1041,10 @@ namespace EOSDigital.API
             Recording state = (Recording)GetInt32Setting(PropertyID.Record);
             if (state != Recording.On)
             {
-                if (state != Recording.Ready) throw new InvalidOperationException("The camera is not ready to film. The Record property has to be Recording.Ready");
+                if (state != Recording.Ready)
+                    throw new InvalidOperationException(
+                        "The camera is not ready to film. The Record property has to be Recording.Ready"
+                    );
                 useFilmingPcLv = PCLiveView;
                 //When recording videos, it has to be saved on the camera internal memory
                 SetSetting(PropertyID.SaveTo, (int)SaveTo.Camera);
@@ -910,7 +1086,8 @@ namespace EOSDigital.API
                 //Stop video recording
                 SetSetting(PropertyID.Record, (int)Recording.Off);
                 useFilmingPcLv = false;
-                if (IsLiveViewOn && stopLiveView) StopLiveView(false);
+                if (IsLiveViewOn && stopLiveView)
+                    StopLiveView(false);
             }
         }
 
@@ -934,8 +1111,20 @@ namespace EOSDigital.API
 
             MainThread.Invoke(() =>
             {
-                ErrorHandler.CheckError(this, CanonSDK.EdsGetPropertySize(CamRef, propID, inParam, out DataType propertyType, out int propertySize));
-                ErrorHandler.CheckError(this, CanonSDK.EdsSetPropertyData(CamRef, propID, inParam, propertySize, value));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.EdsGetPropertySize(
+                        CamRef,
+                        propID,
+                        inParam,
+                        out DataType propertyType,
+                        out int propertySize
+                    )
+                );
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.EdsSetPropertyData(CamRef, propID, inParam, propertySize, value)
+                );
             });
         }
 
@@ -964,8 +1153,16 @@ namespace EOSDigital.API
             byte[] propBytes = System.Text.Encoding.ASCII.GetBytes(value + '\0');
             MainThread.Invoke(() =>
             {
-                ErrorHandler.CheckError(this, CanonSDK.EdsSetPropertyData(CamRef,
-                propID, inParam, propBytes.Length, propBytes));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.EdsSetPropertyData(
+                        CamRef,
+                        propID,
+                        inParam,
+                        propBytes.Length,
+                        propBytes
+                    )
+                );
             });
         }
 
@@ -980,7 +1177,8 @@ namespace EOSDigital.API
         /// <exception cref="SDKStateException">Canon SDK is not initialized</exception>
         /// <exception cref="SDKException">An SDK call failed</exception>
         [Obsolete("Use SetSetting directly because internally it does the same")]
-        public void SetStructSetting<T>(PropertyID propID, T value, int inParam = 0) where T : struct
+        public void SetStructSetting<T>(PropertyID propID, T value, int inParam = 0)
+            where T : struct
         {
             SetSetting(propID, value, inParam);
         }
@@ -1005,7 +1203,10 @@ namespace EOSDigital.API
 
             return MainThread.Invoke(() =>
             {
-                ErrorHandler.CheckError(this, CanonSDK.GetPropertyData(CamRef, propID, inParam, out bool property));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.GetPropertyData(CamRef, propID, inParam, out bool property)
+                );
                 return property;
             });
         }
@@ -1026,7 +1227,10 @@ namespace EOSDigital.API
 
             return MainThread.Invoke(() =>
             {
-                ErrorHandler.CheckError(this, CanonSDK.GetPropertyData(CamRef, propID, inParam, out byte property));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.GetPropertyData(CamRef, propID, inParam, out byte property)
+                );
                 return property;
             });
         }
@@ -1047,7 +1251,10 @@ namespace EOSDigital.API
 
             return MainThread.Invoke(() =>
             {
-                ErrorHandler.CheckError(this, CanonSDK.GetPropertyData(CamRef, propID, inParam, out short property));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.GetPropertyData(CamRef, propID, inParam, out short property)
+                );
                 return property;
             });
         }
@@ -1068,7 +1275,10 @@ namespace EOSDigital.API
 
             return MainThread.Invoke(() =>
             {
-                ErrorHandler.CheckError(this, CanonSDK.GetPropertyData(CamRef, propID, inParam, out ushort property));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.GetPropertyData(CamRef, propID, inParam, out ushort property)
+                );
                 return property;
             });
         }
@@ -1089,7 +1299,10 @@ namespace EOSDigital.API
 
             return MainThread.Invoke(() =>
             {
-                ErrorHandler.CheckError(this, CanonSDK.GetPropertyData(CamRef, propID, inParam, out uint property));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.GetPropertyData(CamRef, propID, inParam, out uint property)
+                );
                 return property;
             });
         }
@@ -1110,7 +1323,10 @@ namespace EOSDigital.API
 
             return MainThread.Invoke(() =>
             {
-                ErrorHandler.CheckError(this, CanonSDK.GetPropertyData(CamRef, propID, inParam, out int property));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.GetPropertyData(CamRef, propID, inParam, out int property)
+                );
                 return property;
             });
         }
@@ -1131,11 +1347,13 @@ namespace EOSDigital.API
 
             return MainThread.Invoke(() =>
             {
-                ErrorHandler.CheckError(this, CanonSDK.GetPropertyData(CamRef, propID, inParam, out string property));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.GetPropertyData(CamRef, propID, inParam, out string property)
+                );
                 return property;
             });
         }
-
 
         /// <summary>
         /// Gets the current setting of given property ID as a integer array
@@ -1153,7 +1371,10 @@ namespace EOSDigital.API
 
             return MainThread.Invoke(() =>
             {
-                ErrorHandler.CheckError(this, CanonSDK.GetPropertyData(CamRef, propID, inParam, out bool[] data));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.GetPropertyData(CamRef, propID, inParam, out bool[] data)
+                );
                 return data;
             });
         }
@@ -1174,7 +1395,10 @@ namespace EOSDigital.API
 
             return MainThread.Invoke(() =>
             {
-                ErrorHandler.CheckError(this, CanonSDK.GetPropertyData(CamRef, propID, inParam, out short[] data));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.GetPropertyData(CamRef, propID, inParam, out short[] data)
+                );
                 return data;
             });
         }
@@ -1195,7 +1419,10 @@ namespace EOSDigital.API
 
             return MainThread.Invoke(() =>
             {
-                ErrorHandler.CheckError(this, CanonSDK.GetPropertyData(CamRef, propID, inParam, out int[] data));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.GetPropertyData(CamRef, propID, inParam, out int[] data)
+                );
                 return data;
             });
         }
@@ -1216,7 +1443,10 @@ namespace EOSDigital.API
 
             return MainThread.Invoke(() =>
             {
-                ErrorHandler.CheckError(this, CanonSDK.GetPropertyData(CamRef, propID, inParam, out byte[] data));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.GetPropertyData(CamRef, propID, inParam, out byte[] data)
+                );
                 return data;
             });
         }
@@ -1237,7 +1467,10 @@ namespace EOSDigital.API
 
             return MainThread.Invoke(() =>
             {
-                ErrorHandler.CheckError(this, CanonSDK.GetPropertyData(CamRef, propID, inParam, out uint[] data));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.GetPropertyData(CamRef, propID, inParam, out uint[] data)
+                );
                 return data;
             });
         }
@@ -1258,7 +1491,10 @@ namespace EOSDigital.API
 
             return MainThread.Invoke(() =>
             {
-                ErrorHandler.CheckError(this, CanonSDK.GetPropertyData(CamRef, propID, inParam, out Rational[] data));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.GetPropertyData(CamRef, propID, inParam, out Rational[] data)
+                );
                 return data;
             });
         }
@@ -1274,17 +1510,20 @@ namespace EOSDigital.API
         /// <exception cref="CameraSessionException">Session is closed</exception>
         /// <exception cref="SDKStateException">Canon SDK is not initialized</exception>
         /// <exception cref="SDKException">An SDK call failed</exception>
-        public T GetStructSetting<T>(PropertyID propID, int inParam = 0) where T : struct
+        public T GetStructSetting<T>(PropertyID propID, int inParam = 0)
+            where T : struct
         {
             CheckState();
 
             return MainThread.Invoke(() =>
             {
-                ErrorHandler.CheckError(this, CanonSDK.GetPropertyData<T>(CamRef, propID, inParam, out T property));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.GetPropertyData<T>(CamRef, propID, inParam, out T property)
+                );
                 return property;
             });
         }
-
 
         /// <summary>
         /// There is an overflow bug in the SDK that messes up the Evf_OutputDevice property.
@@ -1294,12 +1533,14 @@ namespace EOSDigital.API
         public EvfOutputDevice GetEvf_OutputDevice()
         {
             int value = GetInt32Setting(PropertyID.Evf_OutputDevice);
-
             unchecked
             {
-                if ((value > 2147483600 || value < -2147483640) && value != (int)0xFFFFFFFF) return (EvfOutputDevice)(int.MinValue + value);
-                else return (EvfOutputDevice)value;
-            };
+                if ((value > 2147483600 || value < -2147483640) && value != (int)0xFFFFFFFF)
+                    return (EvfOutputDevice)(int.MinValue + value);
+                else
+                    return (EvfOutputDevice)value;
+            }
+            ;
         }
 
         #endregion
@@ -1333,12 +1574,20 @@ namespace EOSDigital.API
                     lock (STAThread.ExecLock)
                     {
                         err = CanonSDK.EdsCreateEvfImageRef(stream.Reference, out evfImageRef);
-                        if (err == ErrorCode.OK) err = CanonSDK.EdsDownloadEvfImage(CamRef, evfImageRef);
+                        if (err == ErrorCode.OK)
+                            err = CanonSDK.EdsDownloadEvfImage(CamRef, evfImageRef);
                     }
 
                     //Check for errors
-                    if (err == ErrorCode.OBJECT_NOTREADY) { continue; }
-                    else if (err != ErrorCode.OK) { ErrorHandler.CheckError(err); continue; }
+                    if (err == ErrorCode.OBJECT_NOTREADY)
+                    {
+                        continue;
+                    }
+                    else if (err != ErrorCode.OK)
+                    {
+                        ErrorHandler.CheckError(err);
+                        continue;
+                    }
 
                     //Release current evf image
 #pragma warning disable CA1806
@@ -1352,7 +1601,11 @@ namespace EOSDigital.API
                     LiveViewUpdated?.Invoke(this, stream);
                 }
             }
-            catch (Exception ex) { if (ex is ThreadAbortException || !ErrorHandler.ReportError(this, ex)) throw; }
+            catch (Exception ex)
+            {
+                if (ex is ThreadAbortException || !ErrorHandler.ReportError(this, ex))
+                    throw;
+            }
             finally
             {
                 IsLiveViewOn = false;
@@ -1373,10 +1626,26 @@ namespace EOSDigital.API
                 try
                 {
                     //Set the progress callback
-                    ErrorHandler.CheckError(this, CanonSDK.EdsSetProgressCallback(stream, SDKProgressCallbackEvent, ProgressOption.Periodically, Info.Reference));
+                    ErrorHandler.CheckError(
+                        this,
+                        CanonSDK.EdsSetProgressCallback(
+                            stream,
+                            SDKProgressCallbackEvent,
+                            ProgressOption.Periodically,
+                            Info.Reference
+                        )
+                    );
                     //Check which SDK version is used and download the data with the correct method
-                    if (CanonSDK.IsVerGE34) ErrorHandler.CheckError(this, CanonSDK.EdsDownload(Info.Reference, Info.Size64, stream));
-                    else ErrorHandler.CheckError(this, CanonSDK.EdsDownload(Info.Reference, Info.Size, stream));
+                    if (CanonSDK.IsVerGE34)
+                        ErrorHandler.CheckError(
+                            this,
+                            CanonSDK.EdsDownload(Info.Reference, Info.Size64, stream)
+                        );
+                    else
+                        ErrorHandler.CheckError(
+                            this,
+                            CanonSDK.EdsDownload(Info.Reference, Info.Size, stream)
+                        );
                 }
                 finally
                 {
@@ -1395,7 +1664,11 @@ namespace EOSDigital.API
         /// <exception cref="SDKException">An SDK call failed</exception>
         protected void DownloadToFile(DownloadInfo Info, string filePath)
         {
-            using var stream = new SDKStream(filePath, FileCreateDisposition.CreateAlways, FileAccess.ReadWrite);
+            using var stream = new SDKStream(
+                filePath,
+                FileCreateDisposition.CreateAlways,
+                FileAccess.ReadWrite
+            );
 
             DownloadData(Info, stream.Reference);
         }
@@ -1423,7 +1696,10 @@ namespace EOSDigital.API
         protected CameraFileEntry[] GetChildren(IntPtr ptr)
         {
             int ChildCount;
-            lock (STAThread.ExecLock) { ErrorHandler.CheckError(this, CanonSDK.EdsGetChildCount(ptr, out ChildCount)); }
+            lock (STAThread.ExecLock)
+            {
+                ErrorHandler.CheckError(this, CanonSDK.EdsGetChildCount(ptr, out ChildCount));
+            }
             if (ChildCount > 0)
             {
                 CameraFileEntry[] MainEntry = new CameraFileEntry[ChildCount];
@@ -1442,7 +1718,8 @@ namespace EOSDigital.API
                 }
                 return MainEntry;
             }
-            else return default!;
+            else
+                return default!;
         }
 
         /// <summary>
@@ -1456,14 +1733,28 @@ namespace EOSDigital.API
         {
             return MainThread.Invoke(() =>
             {
-                ErrorHandler.CheckError(this, CanonSDK.EdsGetChildAtIndex(ptr, index, out nint ChildPtr));
-                ErrorHandler.CheckError(this, CanonSDK.GetDirectoryItemInfo(ChildPtr, out DirectoryItemInfo ChildInfo));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.EdsGetChildAtIndex(ptr, index, out nint ChildPtr)
+                );
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.GetDirectoryItemInfo(ChildPtr, out DirectoryItemInfo ChildInfo)
+                );
 
-                CameraFileEntry outEntry = new(ChildPtr, ChildInfo.FileName, ChildInfo.IsFolder, false);
+                CameraFileEntry outEntry = new(
+                    ChildPtr,
+                    ChildInfo.FileName,
+                    ChildInfo.IsFolder,
+                    false
+                );
                 if (!outEntry.IsFolder)
                 {
                     using var stream = new SDKStream(0);
-                    ErrorHandler.CheckError(this, CanonSDK.EdsDownloadThumbnail(ChildPtr, stream.Reference));
+                    ErrorHandler.CheckError(
+                        this,
+                        CanonSDK.EdsDownloadThumbnail(ChildPtr, stream.Reference)
+                    );
                     outEntry.SetThumb(stream.Reference);
                 }
                 return outEntry;
@@ -1480,8 +1771,10 @@ namespace EOSDigital.API
         protected void CheckState(bool checkSession = true)
         {
             ObjectDisposedException.ThrowIf(IsDisposed, this);
-            if (checkSession && !SessionOpen) throw new CameraSessionException("Session is closed");
-            if (!CanonAPI.IsSDKInitialized) throw new SDKStateException("Canon SDK is not initialized");
+            if (checkSession && !SessionOpen)
+                throw new CameraSessionException("Session is closed");
+            if (!CanonAPI.IsSDKInitialized)
+                throw new SDKStateException("Canon SDK is not initialized");
         }
 
         /// <summary>
@@ -1504,7 +1797,8 @@ namespace EOSDigital.API
             CameraFileEntry MainEntry = new(IntPtr.Zero, DeviceName, true, false);
             CameraFileEntry[] VolumeEntries = GetAllVolumesSub();
 
-            for (int i = 0; i < VolumeEntries.Length; i++) VolumeEntries[i].Entries = GetChildren(VolumeEntries[i].Reference);
+            for (int i = 0; i < VolumeEntries.Length; i++)
+                VolumeEntries[i].Entries = GetChildren(VolumeEntries[i].Reference);
 
             MainEntry.Entries = VolumeEntries;
             return MainEntry;
@@ -1523,16 +1817,30 @@ namespace EOSDigital.API
             for (int i = 0; i < volumes.Length; i++)
             {
                 int ChildCount;
-                lock (STAThread.ExecLock) { ErrorHandler.CheckError(this, CanonSDK.EdsGetChildCount(volumes[i].Reference, out ChildCount)); }
+                lock (STAThread.ExecLock)
+                {
+                    ErrorHandler.CheckError(
+                        this,
+                        CanonSDK.EdsGetChildCount(volumes[i].Reference, out ChildCount)
+                    );
+                }
                 CameraFileEntry[] fileEntries = [];
 
                 for (int j = 0; j < ChildCount; j++)
                 {
                     CameraFileEntry entry = GetChild(volumes[i].Reference, j);
-                    if (entry.IsFolder && entry.Name == "DCIM") { fileEntries = GetChildren(entry.Reference); break; }
+                    if (entry.IsFolder && entry.Name == "DCIM")
+                    {
+                        fileEntries = GetChildren(entry.Reference);
+                        break;
+                    }
                 }
 
-                foreach (CameraFileEntry ve in fileEntries) { if (ve.IsFolder && ve.Entries != null) ImageList.AddRange(ve.Entries.Where(t => !t.IsFolder)); }
+                foreach (CameraFileEntry ve in fileEntries)
+                {
+                    if (ve.IsFolder && ve.Entries != null)
+                        ImageList.AddRange(ve.Entries.Where(t => !t.IsFolder));
+                }
             }
 
             return [.. ImageList];
@@ -1549,13 +1857,30 @@ namespace EOSDigital.API
 
             MainThread.Invoke(() =>
             {
-                ErrorHandler.CheckError(this, CanonSDK.EdsGetChildCount(CamRef, out int VolumeCount));
+                ErrorHandler.CheckError(
+                    this,
+                    CanonSDK.EdsGetChildCount(CamRef, out int VolumeCount)
+                );
 
                 for (int i = 0; i < VolumeCount; i++)
                 {
-                    ErrorHandler.CheckError(this, CanonSDK.EdsGetChildAtIndex(CamRef, i, out nint ChildPtr));
-                    ErrorHandler.CheckError(this, CanonSDK.EdsGetVolumeInfo(ChildPtr, out VolumeInfo volumeInfo));
-                    if (volumeInfo.VolumeLabel != "HDD") VolumeEntries.Add(new CameraFileEntry(ChildPtr, "Volume" + i + "(" + volumeInfo.VolumeLabel + ")", true, true));
+                    ErrorHandler.CheckError(
+                        this,
+                        CanonSDK.EdsGetChildAtIndex(CamRef, i, out nint ChildPtr)
+                    );
+                    ErrorHandler.CheckError(
+                        this,
+                        CanonSDK.EdsGetVolumeInfo(ChildPtr, out VolumeInfo volumeInfo)
+                    );
+                    if (volumeInfo.VolumeLabel != "HDD")
+                        VolumeEntries.Add(
+                            new CameraFileEntry(
+                                ChildPtr,
+                                "Volume" + i + "(" + volumeInfo.VolumeLabel + ")",
+                                true,
+                                true
+                            )
+                        );
                 }
             });
 

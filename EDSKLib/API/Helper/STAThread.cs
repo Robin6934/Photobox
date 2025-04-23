@@ -1,6 +1,4 @@
-﻿
-
-namespace EOSDigital.API
+﻿namespace EOSDigital.API
 {
     /// <summary>
     /// This static class executes things on an STA thread and provides a method to create an STA thread
@@ -13,6 +11,7 @@ namespace EOSDigital.API
         /// Object that is used for the lock keyword to ensure only one SDK command is executed at a time
         /// </summary>
         public static readonly object ExecLock = new();
+
         /// <summary>
         /// States if the calling thread is in a Single Threaded Apartment or not
         /// </summary>
@@ -28,6 +27,7 @@ namespace EOSDigital.API
         {
             get { return isRunning; }
         }
+
         /// <summary>
         /// ID of the associated thread
         /// </summary>
@@ -40,6 +40,7 @@ namespace EOSDigital.API
         /// The main thread where everything will be executed on
         /// </summary>
         private Thread mainThread = default!;
+
         /// <summary>
         /// States if the execution thread is currently running
         /// </summary>
@@ -49,22 +50,27 @@ namespace EOSDigital.API
         /// Lock object to make sure only one command at a time is executed
         /// </summary>
         private readonly Lock runLock = new();
+
         /// <summary>
         /// Lock object to ensure that an action executed on the thread does not invoke on itself
         /// </summary>
         private readonly Lock cmdLock = new();
+
         /// <summary>
         /// Lock object to synchronize between execution and calling thread
         /// </summary>
         protected readonly object threadLock1 = new();
+
         /// <summary>
         /// Lock object to synchronize between execution and calling thread
         /// </summary>
         private readonly object threadLock2 = new();
+
         /// <summary>
         /// States if the first lock is currently blocking or not
         /// </summary>
         protected bool block1 = true;
+
         /// <summary>
         /// States if the second lock is currently blocking or not
         /// </summary>
@@ -74,6 +80,7 @@ namespace EOSDigital.API
         /// The action to be executed
         /// </summary>
         private Action runAction = default!;
+
         /// <summary>
         /// Storage for an exception that might have happened on the execution thread
         /// </summary>
@@ -84,8 +91,7 @@ namespace EOSDigital.API
         /// <summary>
         /// Creates a new instance of the <see cref="STAThread"/> class
         /// </summary>
-        internal STAThread()
-        { }
+        internal STAThread() { }
 
         #region Public Methods
 
@@ -180,7 +186,12 @@ namespace EOSDigital.API
             ArgumentNullException.ThrowIfNull(func);
 
             T result = default!;
-            Invoke(delegate { result = func(); });
+            Invoke(
+                delegate
+                {
+                    result = func();
+                }
+            );
             return result;
         }
 
@@ -217,8 +228,10 @@ namespace EOSDigital.API
                 }
                 catch (Exception ex)
                 {
-                    if (wait) runException = ex;
-                    else throw;
+                    if (wait)
+                        runException = ex;
+                    else
+                        throw;
                 }
             });
 
@@ -243,14 +256,23 @@ namespace EOSDigital.API
         {
             Exception runException = default!;
             T result = default!;
-            Thread thread = CreateThread(delegate
-            {
-                try { result = func(); }
-                catch (Exception ex) { runException = ex; }
-            });
+            Thread thread = CreateThread(
+                delegate
+                {
+                    try
+                    {
+                        result = func();
+                    }
+                    catch (Exception ex)
+                    {
+                        runException = ex;
+                    }
+                }
+            );
             thread.Start();
             thread.Join();
-            if (runException != null) throw new ExecutionException(runException.Message, runException);
+            if (runException != null)
+                throw new ExecutionException(runException.Message, runException);
             return result;
         }
 
@@ -277,7 +299,8 @@ namespace EOSDigital.API
         {
             lock (threadLock2)
             {
-                while (block2) Monitor.Wait(threadLock2);
+                while (block2)
+                    Monitor.Wait(threadLock2);
                 block2 = true;
             }
         }
@@ -301,7 +324,10 @@ namespace EOSDigital.API
         {
             lock (threadLock1)
             {
-                while (block1 && isRunning) { Monitor.Wait(threadLock1); }
+                while (block1 && isRunning)
+                {
+                    Monitor.Wait(threadLock1);
+                }
                 block1 = true;
             }
         }
@@ -320,11 +346,21 @@ namespace EOSDigital.API
                     while (isRunning)
                     {
                         WaitForNotification();
-                        if (!isRunning) return;
+                        if (!isRunning)
+                            return;
 
                         runException = default!;
-                        try { lock (ExecLock) { runAction(); } }
-                        catch (Exception ex) { runException = ex; }
+                        try
+                        {
+                            lock (ExecLock)
+                            {
+                                runAction();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            runException = ex;
+                        }
 
                         ReleaseWait();
                     }

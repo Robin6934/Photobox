@@ -1,3 +1,5 @@
+using System.Reflection;
+using System.Security.Claims;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -18,8 +20,6 @@ using Photobox.Web.StorageProvider;
 using Scalar.AspNetCore;
 using Serilog;
 using SixLabors.ImageSharp.Web.DependencyInjection;
-using System.Reflection;
-using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,14 +27,17 @@ builder.Services.AddControllers();
 
 builder.Services.AddOpenApiDocument(doc =>
 {
-    doc.AddSecurity("bearer", new OpenApiSecurityScheme
-    {
-        Type = OpenApiSecuritySchemeType.ApiKey,
-        Name = "Authorization",
-        In = OpenApiSecurityApiKeyLocation.Header,
-        Description = "Bearer token authorization header",
-    });
-    
+    doc.AddSecurity(
+        "bearer",
+        new OpenApiSecurityScheme
+        {
+            Type = OpenApiSecuritySchemeType.ApiKey,
+            Name = "Authorization",
+            In = OpenApiSecurityApiKeyLocation.Header,
+            Description = "Bearer token authorization header",
+        }
+    );
+
     doc.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("bearer"));
 });
 
@@ -47,36 +50,39 @@ builder.Services.AddAuthorization();
 if (builder.Environment.IsDevelopment() && builder.Environment.ApplicationName is { Length: > 0 })
 {
     var assembly = Assembly.Load(builder.Environment.ApplicationName);
-    
-    builder.Configuration.AddUserSecrets(assembly, optional: true,  reloadOnChange: true);
+
+    builder.Configuration.AddUserSecrets(assembly, optional: true, reloadOnChange: true);
 }
 
-builder.Services.AddAuthentication(IdentityConstants.BearerScheme)
+builder
+    .Services.AddAuthentication(IdentityConstants.BearerScheme)
     .AddCookie(IdentityConstants.ApplicationScheme)
     .AddBearerToken(IdentityConstants.BearerScheme);
 
-builder.Services.AddIdentityCore<ApplicationUser>()
+builder
+    .Services.AddIdentityCore<ApplicationUser>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddApiEndpoints();
 
 // Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveWebAssemblyComponents();
+builder.Services.AddRazorComponents().AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddMudServices();
 
 builder.Services.AddMemoryCache();
 
-builder.Host.UseSerilog((context, services, configuration) =>
-{
-    configuration
-        .Enrich.FromLogContext()
-        .Enrich.WithEnvironmentName()
-        .Enrich.WithMachineName()
-        .Enrich.WithProperty("Source", "Server")
-    .WriteTo.Console()
-    .WriteTo.Seq("http://seq:80");
-});
+builder.Host.UseSerilog(
+    (context, services, configuration) =>
+    {
+        configuration
+            .Enrich.FromLogContext()
+            .Enrich.WithEnvironmentName()
+            .Enrich.WithMachineName()
+            .Enrich.WithProperty("Source", "Server")
+            .WriteTo.Console()
+            .WriteTo.Seq("http://seq:80");
+    }
+);
 
 builder.Services.AddDbContextPool<AppDbContext>(options =>
 {
@@ -97,19 +103,25 @@ var app = builder.Build();
 app.UseSerilogRequestLogging();
 
 //HealthCheck Middleware
-app.MapHealthChecks("/api/health", new HealthCheckOptions()
-{
-    Predicate = _ => true,
-    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-});
+app.MapHealthChecks(
+    "/api/health",
+    new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+    }
+);
 
-app.MapGet("users/me", async (ClaimsPrincipal claims, AppDbContext context) =>
-{
-    string userId = claims.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+app.MapGet(
+        "users/me",
+        async (ClaimsPrincipal claims, AppDbContext context) =>
+        {
+            string userId = claims.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-    return await context.Users.FindAsync(userId);
-})
-.RequireAuthorization();
+            return await context.Users.FindAsync(userId);
+        }
+    )
+    .RequireAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -141,8 +153,9 @@ app.UseAntiforgery();
 // usually it takes the application name and appends .staticwebassets.endpoints.json
 // but here it just takes null, so we need to provide the path manually
 var manifestPath = Path.Combine(
-    AppContext.BaseDirectory, 
-    "Photobox.Web.staticwebassets.endpoints.json");
+    AppContext.BaseDirectory,
+    "Photobox.Web.staticwebassets.endpoints.json"
+);
 
 app.MapStaticAssets(manifestPath);
 

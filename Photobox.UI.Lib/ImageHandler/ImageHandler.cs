@@ -8,7 +8,11 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
 namespace Photobox.UI.Lib.ImageHandler;
-public class ImageHandler(ILogger<ImageHandler> logger, IOptionsMonitor<PhotoboxConfig> optionsMonitor) : IImageHandler
+
+public class ImageHandler(
+    ILogger<ImageHandler> logger,
+    IOptionsMonitor<PhotoboxConfig> optionsMonitor
+) : IImageHandler
 {
     private readonly ILogger<ImageHandler> logger = logger;
 
@@ -26,11 +30,7 @@ public class ImageHandler(ILogger<ImageHandler> logger, IOptionsMonitor<Photobox
 
         var font = fontFamily.CreateFont(TextFontSize, FontStyle.Regular);
 
-        var options = new TextOptions(font)
-        {
-            Dpi = 72,
-            KerningMode = KerningMode.Standard
-        };
+        var options = new TextOptions(font) { Dpi = 72, KerningMode = KerningMode.Standard };
 
         var rect = TextMeasurer.MeasureSize(text, options);
 
@@ -39,17 +39,21 @@ public class ImageHandler(ILogger<ImageHandler> logger, IOptionsMonitor<Photobox
         imageWithText.Mutate(x => x.BackgroundColor(Color.Transparent));
 
         // Draw the text with RGBA color (including transparency)
-        imageWithText.Mutate(x => x.DrawText(
-            text,
-            font,
-            Color.White.WithAlpha(0.93f), // Semi-transparent white
-            new PointF(imageWithText.Width - rect.Width - TextPadding,
-                    imageWithText.Height - rect.Height - TextPadding)));
+        imageWithText.Mutate(x =>
+            x.DrawText(
+                text,
+                font,
+                Color.White.WithAlpha(0.93f), // Semi-transparent white
+                new PointF(
+                    imageWithText.Width - rect.Width - TextPadding,
+                    imageWithText.Height - rect.Height - TextPadding
+                )
+            )
+        );
 
         // Save the image as PNG to preserve transparency
         image.Mutate(x => x.DrawImage(imageWithText, 1.0f));
 
         return image;
     }
-
 }

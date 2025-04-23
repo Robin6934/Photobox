@@ -20,7 +20,8 @@ namespace Photobox.Web.Migrations
                 maxLength: 45,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "text");
+                oldType: "text"
+            );
 
             migrationBuilder.AlterColumn<string>(
                 name: "ImageName",
@@ -29,7 +30,8 @@ namespace Photobox.Web.Migrations
                 maxLength: 64,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "text");
+                oldType: "text"
+            );
 
             migrationBuilder.AlterColumn<string>(
                 name: "DownscaledImageName",
@@ -38,14 +40,15 @@ namespace Photobox.Web.Migrations
                 maxLength: 45,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "text");
+                oldType: "text"
+            );
 
             migrationBuilder.CreateTable(
                 name: "PhotoBoxModels",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
-                    UserId = table.Column<string>(type: "text", nullable: false)
+                    UserId = table.Column<string>(type: "text", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -55,29 +58,30 @@ namespace Photobox.Web.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_ImageModels_ImageName",
                 table: "ImageModels",
-                column: "ImageName");
+                column: "ImageName"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_PhotoBoxModels_UserId",
                 table: "PhotoBoxModels",
-                column: "UserId");
+                column: "UserId"
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "PhotoBoxModels");
+            migrationBuilder.DropTable(name: "PhotoBoxModels");
 
-            migrationBuilder.DropIndex(
-                name: "IX_ImageModels_ImageName",
-                table: "ImageModels");
+            migrationBuilder.DropIndex(name: "IX_ImageModels_ImageName", table: "ImageModels");
 
             migrationBuilder.AlterColumn<string>(
                 name: "UniqueImageName",
@@ -86,7 +90,8 @@ namespace Photobox.Web.Migrations
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "character varying(45)",
-                oldMaxLength: 45);
+                oldMaxLength: 45
+            );
 
             migrationBuilder.AlterColumn<string>(
                 name: "ImageName",
@@ -95,7 +100,8 @@ namespace Photobox.Web.Migrations
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "character varying(64)",
-                oldMaxLength: 64);
+                oldMaxLength: 64
+            );
 
             migrationBuilder.AlterColumn<string>(
                 name: "DownscaledImageName",
@@ -104,7 +110,8 @@ namespace Photobox.Web.Migrations
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "character varying(45)",
-                oldMaxLength: 45);
+                oldMaxLength: 45
+            );
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Net;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Photobox.Lib.Extensions;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Net;
 
 namespace Photobox.Web.Image;
 
@@ -25,7 +25,9 @@ public class ImageController(ImageService imageService) : Controller
             return BadRequest("No file uploaded.");
         }
 
-        using var image = await SixLabors.ImageSharp.Image.LoadAsync<Rgb24>(formFile.OpenReadStream());
+        using var image = await SixLabors.ImageSharp.Image.LoadAsync<Rgb24>(
+            formFile.OpenReadStream()
+        );
 
         if (image is null)
         {
@@ -58,7 +60,6 @@ public class ImageController(ImageService imageService) : Controller
     [HttpGet("{imageName}")]
     public string GetPreviewImagePreSignedUrl(string imageName)
     {
-
         return imageService.GetPreviewImagePreSignedUrl(imageName, TimeSpan.FromMinutes(30));
     }
 

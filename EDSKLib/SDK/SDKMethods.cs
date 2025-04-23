@@ -14,6 +14,7 @@ namespace EOSDigital.SDK
         /// Maximum length of string
         /// </summary>
         public const int MAX_NAME = 256;
+
         /// <summary>
         /// Block size of a data transfer
         /// </summary>
@@ -29,21 +30,13 @@ namespace EOSDigital.SDK
         /// <summary>
         /// Version of the currently used Canon SDK DLL
         /// </summary>
-        public static Version? SDKVersion
-        {
-            get;
-            private set;
-        }
+        public static Version? SDKVersion { get; private set; }
 
         /// <summary>
         /// States if the used SDK version is >=3.4
         /// Call <see cref="InitializeVersion"/> to initialize this property.
         /// </summary>
-        public static bool IsVerGE34
-        {
-            get;
-            private set;
-        }
+        public static bool IsVerGE34 { get; private set; }
 
         /// <summary>
         /// Checks which SDK version is currently used and sets IsVer* properties
@@ -54,7 +47,8 @@ namespace EOSDigital.SDK
             try
             {
                 SDKVersion = GetSDKVersion();
-                if (SDKVersion == null) throw new InvalidOperationException("Could not find SDK version");
+                if (SDKVersion == null)
+                    throw new InvalidOperationException("Could not find SDK version");
 
                 IsVerGE34 = SDKVersion.Major >= 3 && SDKVersion.Minor >= 4;
             }
@@ -78,7 +72,12 @@ namespace EOSDigital.SDK
                 if (name == "edsdk.dll")
                 {
                     FileVersionInfo vi = processModule!.FileVersionInfo;
-                    return new Version(vi.ProductMajorPart, vi.ProductMinorPart, vi.ProductBuildPart, vi.ProductPrivatePart);
+                    return new Version(
+                        vi.ProductMajorPart,
+                        vi.ProductMinorPart,
+                        vi.ProductBuildPart,
+                        vi.ProductPrivatePart
+                    );
                 }
             }
             return default!;
@@ -94,7 +93,7 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsInitializeSDK();
+        public static extern ErrorCode EdsInitializeSDK();
 
         /// <summary>
         /// Terminates the use of the libraries.
@@ -102,7 +101,7 @@ namespace EOSDigital.SDK
         /// </summary>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsTerminateSDK();
+        public static extern ErrorCode EdsTerminateSDK();
 
         /// <summary>
         /// Establishes a logical connection with a remote camera. Use this method after getting the camera object.
@@ -110,7 +109,7 @@ namespace EOSDigital.SDK
         /// <param name="inCameraRef">The reference of the camera.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsOpenSession(IntPtr inCameraRef);
+        public static extern ErrorCode EdsOpenSession(IntPtr inCameraRef);
 
         /// <summary>
         /// Closes a logical connection with a remote camera.
@@ -118,7 +117,7 @@ namespace EOSDigital.SDK
         /// <param name="inCameraRef">The reference of the camera.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsCloseSession(IntPtr inCameraRef);
+        public static extern ErrorCode EdsCloseSession(IntPtr inCameraRef);
 
         #endregion
 
@@ -134,7 +133,13 @@ namespace EOSDigital.SDK
         /// <param name="outSize">Pointer to the buffer that is to receive the property size.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetPropertySize(IntPtr inRef, PropertyID inPropertyID, int inParam, out DataType outDataType, out int outSize);
+        public static extern ErrorCode EdsGetPropertySize(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out DataType outDataType,
+            out int outSize
+        );
 
         /// <summary>
         /// Gets property information from the object designated in inRef.
@@ -146,7 +151,13 @@ namespace EOSDigital.SDK
         /// <param name="outPropertyData">The buffer pointer to receive property-value.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, int inPropertySize, IntPtr outPropertyData);
+        public static extern ErrorCode EdsGetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            int inPropertySize,
+            IntPtr outPropertyData
+        );
 
         /// <summary>
         /// Sets property data for the object designated in inRef.
@@ -158,7 +169,13 @@ namespace EOSDigital.SDK
         /// <param name="inPropertyData">The buffer pointer to set property-value.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsSetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, int inPropertySize, [MarshalAs(UnmanagedType.AsAny), In] object inPropertyData);
+        public static extern ErrorCode EdsSetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            int inPropertySize,
+            [MarshalAs(UnmanagedType.AsAny), In] object inPropertyData
+        );
 
         /// <summary>
         /// Gets a list of property data that can be set for the object designated in inRef,
@@ -169,7 +186,11 @@ namespace EOSDigital.SDK
         /// <param name="outPropertyDesc">Array of the values which can be set up.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetPropertyDesc(IntPtr inRef, PropertyID inPropertyID, out PropertyDesc outPropertyDesc);
+        public static extern ErrorCode EdsGetPropertyDesc(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            out PropertyDesc outPropertyDesc
+        );
 
         #endregion
 
@@ -183,7 +204,11 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Specifies additional command-specific information.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsSendCommand(IntPtr inCameraRef, CameraCommand inCommand, int inParam);
+        public static extern ErrorCode EdsSendCommand(
+            IntPtr inCameraRef,
+            CameraCommand inCommand,
+            int inParam
+        );
 
         /// <summary>
         /// Sets the remote camera state or mode.
@@ -193,23 +218,27 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Specifies additional command-specific information.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsSendStatusCommand(IntPtr inCameraRef, CameraStatusCommand inCameraState, int inParam);
+        public static extern ErrorCode EdsSendStatusCommand(
+            IntPtr inCameraRef,
+            CameraStatusCommand inCameraState,
+            int inParam
+        );
 
         #endregion
 
         #region Camera File System
 
         /// <summary>
-        /// Sets the remaining HDD capacity on the host computer (excluding the portion from image transfer), as calculated by subtracting the portion from the previous time. 
+        /// Sets the remaining HDD capacity on the host computer (excluding the portion from image transfer), as calculated by subtracting the portion from the previous time.
         /// Set a reset flag initially and designate the cluster length and number of free clusters.
-        /// Some type 2 protocol standard cameras can display the number of shots left on the camera based on the available disk capacity of the host computer. 
+        /// Some type 2 protocol standard cameras can display the number of shots left on the camera based on the available disk capacity of the host computer.
         /// For these cameras, after the storage destination is set to the computer, use this method to notify the camera of the available disk capacity of the host computer.
         /// </summary>
         /// <param name="inCameraRef">The reference of the camera which will receive the command.</param>
         /// <param name="inCapacity">The remaining capacity of a transmission place.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsSetCapacity(IntPtr inCameraRef, Capacity inCapacity);
+        public static extern ErrorCode EdsSetCapacity(IntPtr inCameraRef, Capacity inCapacity);
 
         /// <summary>
         /// Gets volume information for a memory card in the camera
@@ -218,7 +247,10 @@ namespace EOSDigital.SDK
         /// <param name="outVolumeInfo"></param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetVolumeInfo(IntPtr inCameraRef, out VolumeInfo outVolumeInfo);
+        public static extern ErrorCode EdsGetVolumeInfo(
+            IntPtr inCameraRef,
+            out VolumeInfo outVolumeInfo
+        );
 
         /// <summary>
         /// Formats a volume.
@@ -226,7 +258,7 @@ namespace EOSDigital.SDK
         /// <param name="inVolumeRef">The reference of the volume.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsFormatVolume(IntPtr inVolumeRef);
+        public static extern ErrorCode EdsFormatVolume(IntPtr inVolumeRef);
 
         /// <summary>
         /// Gets information about the directory or file object on the memory card (volume) in a remote camera.
@@ -235,7 +267,10 @@ namespace EOSDigital.SDK
         /// <param name="outDirItemInfo">Information of the directory item.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetDirectoryItemInfo(IntPtr inDirItemRef, out DirectoryItemInfo outDirItemInfo);
+        public static extern ErrorCode EdsGetDirectoryItemInfo(
+            IntPtr inDirItemRef,
+            out DirectoryItemInfo outDirItemInfo
+        );
 
         /// <summary>
         /// Deletes a camera folder or file.
@@ -246,7 +281,7 @@ namespace EOSDigital.SDK
         /// <param name="inDirItemRef"></param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsDeleteDirectoryItem(IntPtr inDirItemRef);
+        public static extern ErrorCode EdsDeleteDirectoryItem(IntPtr inDirItemRef);
 
         /// <summary>
         /// Gets attributes of files of a camera.
@@ -259,7 +294,10 @@ namespace EOSDigital.SDK
         /// </param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetAttribute(IntPtr inDirItemRef, out FileAttribute outFileAttribute);
+        public static extern ErrorCode EdsGetAttribute(
+            IntPtr inDirItemRef,
+            out FileAttribute outFileAttribute
+        );
 
         /// <summary>
         /// Changes attributes of files on a camera.
@@ -271,7 +309,10 @@ namespace EOSDigital.SDK
         /// </param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsSetAttribute(IntPtr inDirItemRef, FileAttribute inFileAttribute);
+        public static extern ErrorCode EdsSetAttribute(
+            IntPtr inDirItemRef,
+            FileAttribute inFileAttribute
+        );
 
         #endregion
 
@@ -289,7 +330,11 @@ namespace EOSDigital.SDK
         /// <param name="outStream">The reference of the stream.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsDownload(IntPtr inDirItemRef, int inReadSize, IntPtr outStream);
+        public static extern ErrorCode EdsDownload(
+            IntPtr inDirItemRef,
+            int inReadSize,
+            IntPtr outStream
+        );
 
         /// <summary>
         /// Downloads a file on a remote camera (in the camera memory or on a memory card) to the host computer.
@@ -303,7 +348,11 @@ namespace EOSDigital.SDK
         /// <param name="outStream">The reference of the stream.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsDownload(IntPtr inDirItemRef, long inReadSize, IntPtr outStream);
+        public static extern ErrorCode EdsDownload(
+            IntPtr inDirItemRef,
+            long inReadSize,
+            IntPtr outStream
+        );
 
         /// <summary>
         /// Must be executed when downloading of a directory item is canceled.
@@ -314,7 +363,7 @@ namespace EOSDigital.SDK
         /// <param name="inDirItemRef">The reference of the directory item.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsDownloadCancel(IntPtr inDirItemRef);
+        public static extern ErrorCode EdsDownloadCancel(IntPtr inDirItemRef);
 
         /// <summary>
         /// Must be called when downloading of directory items is complete.
@@ -324,7 +373,7 @@ namespace EOSDigital.SDK
         /// <param name="inDirItemRef"></param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsDownloadComplete(IntPtr inDirItemRef);
+        public static extern ErrorCode EdsDownloadComplete(IntPtr inDirItemRef);
 
         /// <summary>
         /// Extracts and downloads thumbnail information from image files in a camera.
@@ -335,14 +384,14 @@ namespace EOSDigital.SDK
         /// <param name="outStream">The reference of the stream.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsDownloadThumbnail(IntPtr inDirItemRef, IntPtr outStream);
+        public static extern ErrorCode EdsDownloadThumbnail(IntPtr inDirItemRef, IntPtr outStream);
 
         #endregion
 
         #region Streams
 
         /// <summary>
-        /// Creates a new file on a host computer (or opens an existing file) and creates a file stream for access to the file. 
+        /// Creates a new file on a host computer (or opens an existing file) and creates a file stream for access to the file.
         /// If a new file is designated before executing this method, the file is actually created following the timing of writing by means of Write or the like with respect to an open stream.
         /// </summary>
         /// <param name="inFileName">Pointer to a null-terminated string that specifies the file name.</param>
@@ -351,7 +400,12 @@ namespace EOSDigital.SDK
         /// <param name="outStream">The reference of the stream</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsCreateFileStream(string inFileName, FileCreateDisposition inCreateDisposition, FileAccess inDesiredAccess, out IntPtr outStream);
+        public static extern ErrorCode EdsCreateFileStream(
+            string inFileName,
+            FileCreateDisposition inCreateDisposition,
+            FileAccess inDesiredAccess,
+            out IntPtr outStream
+        );
 
         /// <summary>
         /// Creates a stream in the memory of a host computer.
@@ -362,7 +416,10 @@ namespace EOSDigital.SDK
         /// <param name="outStream">The reference of the stream.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsCreateMemoryStream(int inBufferSize, out IntPtr outStream);
+        public static extern ErrorCode EdsCreateMemoryStream(
+            int inBufferSize,
+            out IntPtr outStream
+        );
 
         /// <summary>
         /// Creates a stream in the memory of a host computer.
@@ -373,7 +430,10 @@ namespace EOSDigital.SDK
         /// <param name="outStream">The reference of the stream.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsCreateMemoryStream(long inBufferSize, out IntPtr outStream);
+        public static extern ErrorCode EdsCreateMemoryStream(
+            long inBufferSize,
+            out IntPtr outStream
+        );
 
         /// <summary>
         /// An extended version of CreateStreamFromFile.
@@ -385,7 +445,12 @@ namespace EOSDigital.SDK
         /// <param name="outStream">The reference of the stream</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath, CharSet = CharSet.Unicode)]
-        public extern static ErrorCode EdsCreateFileStreamEx(string inFileName, FileCreateDisposition inCreateDisposition, FileAccess inDesiredAccess, out IntPtr outStream);
+        public static extern ErrorCode EdsCreateFileStreamEx(
+            string inFileName,
+            FileCreateDisposition inCreateDisposition,
+            FileAccess inDesiredAccess,
+            out IntPtr outStream
+        );
 
         /// <summary>
         /// Creates a stream from the memory buffer you prepared.
@@ -398,7 +463,11 @@ namespace EOSDigital.SDK
         /// <param name="outStream">The reference of the stream.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsCreateMemoryStreamFromPointer(IntPtr inUserBuffer, int inBufferSize, out IntPtr outStream);
+        public static extern ErrorCode EdsCreateMemoryStreamFromPointer(
+            IntPtr inUserBuffer,
+            int inBufferSize,
+            out IntPtr outStream
+        );
 
         /// <summary>
         /// Creates a stream from the memory buffer you prepared.
@@ -411,7 +480,11 @@ namespace EOSDigital.SDK
         /// <param name="outStream">The reference of the stream.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsCreateMemoryStreamFromPointer(IntPtr inUserBuffer, long inBufferSize, out IntPtr outStream);
+        public static extern ErrorCode EdsCreateMemoryStreamFromPointer(
+            IntPtr inUserBuffer,
+            long inBufferSize,
+            out IntPtr outStream
+        );
 
         /// <summary>
         /// Creates a stream from the memory buffer you prepared.
@@ -423,7 +496,11 @@ namespace EOSDigital.SDK
         /// <param name="outStream">The reference of the stream.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsCreateMemoryStreamFromPointer(byte[] inUserBuffer, int inBufferSize, out IntPtr outStream);
+        public static extern ErrorCode EdsCreateMemoryStreamFromPointer(
+            byte[] inUserBuffer,
+            int inBufferSize,
+            out IntPtr outStream
+        );
 
         /// <summary>
         /// Creates a stream from the memory buffer you prepared.
@@ -435,7 +512,11 @@ namespace EOSDigital.SDK
         /// <param name="outStream">The reference of the stream.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsCreateMemoryStreamFromPointer(byte[] inUserBuffer, long inBufferSize, out IntPtr outStream);
+        public static extern ErrorCode EdsCreateMemoryStreamFromPointer(
+            byte[] inUserBuffer,
+            long inBufferSize,
+            out IntPtr outStream
+        );
 
         /// <summary>
         /// Creates a stream from an existing stream.
@@ -444,19 +525,19 @@ namespace EOSDigital.SDK
         /// <param name="outStreamRef">The reference of the output stream.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsCreateStream(IntPtr inStream, IntPtr outStreamRef);
+        public static extern ErrorCode EdsCreateStream(IntPtr inStream, IntPtr outStreamRef);
 
         /// <summary>
-        /// Gets the pointer to the start address of memory managed by the memory stream. 
-        /// As the EDSDK automatically resizes the buffer, the memory stream provides you with the same access methods as for the file stream. 
-        /// If access is attempted that is excessive with regard to the buffer size for the stream, data before the required buffer size is allocated is copied internally, and new writing occurs. 
+        /// Gets the pointer to the start address of memory managed by the memory stream.
+        /// As the EDSDK automatically resizes the buffer, the memory stream provides you with the same access methods as for the file stream.
+        /// If access is attempted that is excessive with regard to the buffer size for the stream, data before the required buffer size is allocated is copied internally, and new writing occurs.
         /// Thus, the buffer pointer might be switched on an unknown timing. Caution in use is therefore advised.
         /// </summary>
         /// <param name="inStreamRef">Designate the memory stream for the pointer to retrieve.</param>
         /// <param name="outPointer">If successful, returns the pointer to the buffer written in the memory stream.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetPointer(IntPtr inStreamRef, out IntPtr outPointer);
+        public static extern ErrorCode EdsGetPointer(IntPtr inStreamRef, out IntPtr outPointer);
 
         /// <summary>
         /// Reads data the size of inReadSize into the outBuffer buffer, starting at the current read or write position of the stream.
@@ -469,7 +550,12 @@ namespace EOSDigital.SDK
         /// <param name="outReadSize">The actually read number of bytes.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsRead(IntPtr inStreamRef, int inReadSize, IntPtr outBuffer, out int outReadSize);
+        public static extern ErrorCode EdsRead(
+            IntPtr inStreamRef,
+            int inReadSize,
+            IntPtr outBuffer,
+            out int outReadSize
+        );
 
         /// <summary>
         /// Reads data the size of inReadSize into the outBuffer buffer, starting at the current read or write position of the stream.
@@ -482,7 +568,12 @@ namespace EOSDigital.SDK
         /// <param name="outReadSize">The actually read number of bytes.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsRead(IntPtr inStreamRef, long inReadSize, IntPtr outBuffer, out long outReadSize);
+        public static extern ErrorCode EdsRead(
+            IntPtr inStreamRef,
+            long inReadSize,
+            IntPtr outBuffer,
+            out long outReadSize
+        );
 
         /// <summary>
         /// Writes data of a designated buffer to the current read or write position of the stream.
@@ -494,7 +585,12 @@ namespace EOSDigital.SDK
         /// <param name="outWrittenSize"></param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsWrite(IntPtr inStreamRef, int inWriteSize, IntPtr inBuffer, out int outWrittenSize);
+        public static extern ErrorCode EdsWrite(
+            IntPtr inStreamRef,
+            int inWriteSize,
+            IntPtr inBuffer,
+            out int outWrittenSize
+        );
 
         /// <summary>
         /// Writes data of a designated buffer to the current read or write position of the stream.
@@ -506,7 +602,12 @@ namespace EOSDigital.SDK
         /// <param name="outWrittenSize"></param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsWrite(IntPtr inStreamRef, long inWriteSize, IntPtr inBuffer, out long outWrittenSize);
+        public static extern ErrorCode EdsWrite(
+            IntPtr inStreamRef,
+            long inWriteSize,
+            IntPtr inBuffer,
+            out long outWrittenSize
+        );
 
         /// <summary>
         /// Moves the read or write position of the stream (that is, the file position indicator)
@@ -517,7 +618,11 @@ namespace EOSDigital.SDK
         /// <param name="inSeekOrigin">Pointer movement mode.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsSeek(IntPtr inStreamRef, int inSeekOffset, SeekOrigin inSeekOrigin);
+        public static extern ErrorCode EdsSeek(
+            IntPtr inStreamRef,
+            int inSeekOffset,
+            SeekOrigin inSeekOrigin
+        );
 
         /// <summary>
         /// Moves the read or write position of the stream (that is, the file position indicator)
@@ -528,7 +633,11 @@ namespace EOSDigital.SDK
         /// <param name="inSeekOrigin">Pointer movement mode.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsSeek(IntPtr inStreamRef, long inSeekOffset, SeekOrigin inSeekOrigin);
+        public static extern ErrorCode EdsSeek(
+            IntPtr inStreamRef,
+            long inSeekOffset,
+            SeekOrigin inSeekOrigin
+        );
 
         /// <summary>
         /// Gets the current read or write position of the stream (that is, the file position indicator)
@@ -538,7 +647,7 @@ namespace EOSDigital.SDK
         /// <param name="outPosition">The current stream pointer.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetPosition(IntPtr inStreamRef, out int outPosition);
+        public static extern ErrorCode EdsGetPosition(IntPtr inStreamRef, out int outPosition);
 
         /// <summary>
         /// Gets the current read or write position of the stream (that is, the file position indicator)
@@ -548,7 +657,7 @@ namespace EOSDigital.SDK
         /// <param name="outPosition">The current stream pointer.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetPosition(IntPtr inStreamRef, out long outPosition);
+        public static extern ErrorCode EdsGetPosition(IntPtr inStreamRef, out long outPosition);
 
         /// <summary>
         /// Gets the stream size.
@@ -558,7 +667,7 @@ namespace EOSDigital.SDK
         /// <param name="outLength">The length of the stream.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetLength(IntPtr inStreamRef, out int outLength);
+        public static extern ErrorCode EdsGetLength(IntPtr inStreamRef, out int outLength);
 
         /// <summary>
         /// Gets the stream size.
@@ -568,7 +677,7 @@ namespace EOSDigital.SDK
         /// <param name="outLength">The length of the stream.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetLength(IntPtr inStreamRef, out long outLength);
+        public static extern ErrorCode EdsGetLength(IntPtr inStreamRef, out long outLength);
 
         /// <summary>
         /// Copies data from the copy source stream to the copy destination stream.
@@ -582,7 +691,11 @@ namespace EOSDigital.SDK
         /// <param name="outStreamRef">The reference of the stream or image.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsCopyData(IntPtr inStreamRef, int inWriteSize, IntPtr outStreamRef);
+        public static extern ErrorCode EdsCopyData(
+            IntPtr inStreamRef,
+            int inWriteSize,
+            IntPtr outStreamRef
+        );
 
         /// <summary>
         /// Copies data from the copy source stream to the copy destination stream.
@@ -596,7 +709,11 @@ namespace EOSDigital.SDK
         /// <param name="outStreamRef">The reference of the stream or image.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsCopyData(IntPtr inStreamRef, long inWriteSize, IntPtr outStreamRef);
+        public static extern ErrorCode EdsCopyData(
+            IntPtr inStreamRef,
+            long inWriteSize,
+            IntPtr outStreamRef
+        );
 
         #endregion
 
@@ -613,7 +730,10 @@ namespace EOSDigital.SDK
         /// <param name="outImageRef">The reference of the image.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsCreateImageRef(IntPtr inStreamRef, out IntPtr outImageRef);
+        public static extern ErrorCode EdsCreateImageRef(
+            IntPtr inStreamRef,
+            out IntPtr outImageRef
+        );
 
         /// <summary>
         /// Gets image information from a designated image object.
@@ -627,20 +747,24 @@ namespace EOSDigital.SDK
         /// <param name="outImageInfo">Stores the image information designated in inImageSource</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetImageInfo(IntPtr inImageRef, ImageSource inImageSource, out ImageInfo outImageInfo);
+        public static extern ErrorCode EdsGetImageInfo(
+            IntPtr inImageRef,
+            ImageSource inImageSource,
+            out ImageInfo outImageInfo
+        );
 
         /// <summary>
-        /// Gets designated image data from an image file, in the form of a designated rectangle. 
-        /// Returns uncompressed results for JPEGs and processed results in the designated pixel order (RGB, Top-down BGR, and so on) for RAW images. 
-        /// Additionally, by designating the input/output rectangle, it is possible to get reduced, enlarged, or partial images. 
-        /// However, because images corresponding to the designated output rectangle are always returned by the SDK, the SDK does not take the aspect ratio into account. 
+        /// Gets designated image data from an image file, in the form of a designated rectangle.
+        /// Returns uncompressed results for JPEGs and processed results in the designated pixel order (RGB, Top-down BGR, and so on) for RAW images.
+        /// Additionally, by designating the input/output rectangle, it is possible to get reduced, enlarged, or partial images.
+        /// However, because images corresponding to the designated output rectangle are always returned by the SDK, the SDK does not take the aspect ratio into account.
         /// To maintain the aspect ratio, you must keep the aspect ratio in mind when designating the rectangle.
         /// </summary>
         /// <param name="inImageRef">Designate the image object for which to get the image data.</param>
         /// <param name="inImageSource">Designate the type of image data to get from the image file (thumbnail, preview, and so on). Designate values as defined in Enum ImageSource.</param>
         /// <param name="inImageType">
         /// Designate the output image type.
-        /// Because the output format of EdGetImage may only be RGB, only kTargetImageType_RGB or kTargetImageType_RGB16 can be designated. 
+        /// Because the output format of EdGetImage may only be RGB, only kTargetImageType_RGB or kTargetImageType_RGB16 can be designated.
         /// However, image types exceeding the resolution of inImageSource cannot be designated.
         /// </param>
         /// <param name="inSrcRect">Designate the coordinates and size of the rectangle to be retrieved (processed) from the source image. </param>
@@ -648,7 +772,14 @@ namespace EOSDigital.SDK
         /// <param name="outStreamRef">Designate the memory or file stream for output of the image.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetImage(IntPtr inImageRef, ImageSource inImageSource, TargetImageType inImageType, Rectangle inSrcRect, Size inDstSize, IntPtr outStreamRef);
+        public static extern ErrorCode EdsGetImage(
+            IntPtr inImageRef,
+            ImageSource inImageSource,
+            TargetImageType inImageType,
+            Rectangle inSrcRect,
+            Size inDstSize,
+            IntPtr outStreamRef
+        );
 
         /// <summary>
         /// Saves as a designated image type after RAW processing.
@@ -660,7 +791,12 @@ namespace EOSDigital.SDK
         /// <param name="outStreamRef">Specifies the output file stream. The memory stream cannot be specified here.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsSaveImage(IntPtr inImageRef, SaveImageType inImageType, SaveImageSetting inSaveSetting, IntPtr outStreamRef);
+        public static extern ErrorCode EdsSaveImage(
+            IntPtr inImageRef,
+            SaveImageType inImageType,
+            SaveImageSetting inSaveSetting,
+            IntPtr outStreamRef
+        );
 
         /// <summary>
         /// Switches a setting on and off for creation of an image cache in the SDK for a designated image object during extraction (processing) of the image data.
@@ -669,7 +805,7 @@ namespace EOSDigital.SDK
         /// <param name="inUseCache">If cache image data or not. If set to false, the cached image data will be released.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsCacheImage(IntPtr inImageRef, bool inUseCache);
+        public static extern ErrorCode EdsCacheImage(IntPtr inImageRef, bool inUseCache);
 
         /// <summary>
         /// Incorporates image object property changes (effected by means of SetPropertyData) in the stream.
@@ -677,7 +813,7 @@ namespace EOSDigital.SDK
         /// <param name="inImageRef">The reference of the image.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsReflectImageProperty(IntPtr inImageRef);
+        public static extern ErrorCode EdsReflectImageProperty(IntPtr inImageRef);
 
         #endregion
 
@@ -690,7 +826,10 @@ namespace EOSDigital.SDK
         /// <param name="inContext">Specifies an application-defined value to be sent to the callback function pointed to by CallBack parameter.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsSetCameraAddedHandler(SDKCameraAddedHandler inCameraAddedHandler, IntPtr inContext);
+        public static extern ErrorCode EdsSetCameraAddedHandler(
+            SDKCameraAddedHandler inCameraAddedHandler,
+            IntPtr inContext
+        );
 
         /// <summary>
         /// Registers a callback function for receiving status change notification events for property-related camera evens.
@@ -701,7 +840,12 @@ namespace EOSDigital.SDK
         /// <param name="inContext">Designate application information to be passed by means of the callback function.Any data needed for your application can be passed.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsSetPropertyEventHandler(IntPtr inCameraRef, PropertyEventID inEvent, SDKPropertyEventHandler inPropertyEventHandler, IntPtr inContext);
+        public static extern ErrorCode EdsSetPropertyEventHandler(
+            IntPtr inCameraRef,
+            PropertyEventID inEvent,
+            SDKPropertyEventHandler inPropertyEventHandler,
+            IntPtr inContext
+        );
 
         /// <summary>
         /// Registers a callback function for receiving status change notification events for objects on a remote camera.
@@ -713,7 +857,12 @@ namespace EOSDigital.SDK
         /// <param name="inContext">Passes inContext without modification, as designated as an SetObjectEventHandler argument.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsSetObjectEventHandler(IntPtr inCameraRef, ObjectEventID inEvent, SDKObjectEventHandler inObjectEventHandler, IntPtr inContext);
+        public static extern ErrorCode EdsSetObjectEventHandler(
+            IntPtr inCameraRef,
+            ObjectEventID inEvent,
+            SDKObjectEventHandler inObjectEventHandler,
+            IntPtr inContext
+        );
 
         /// <summary>
         /// Registers a callback function for receiving status change notification events for property states on a camera.
@@ -724,12 +873,17 @@ namespace EOSDigital.SDK
         /// <param name="inContext">Designate application information to be passed by means of the callback function. Any data needed for the application can be passed.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsSetCameraStateEventHandler(IntPtr inCameraRef, StateEventID inEvent, SDKStateEventHandler inStateEventHandler, IntPtr inContext);
+        public static extern ErrorCode EdsSetCameraStateEventHandler(
+            IntPtr inCameraRef,
+            StateEventID inEvent,
+            SDKStateEventHandler inStateEventHandler,
+            IntPtr inContext
+        );
 
         /// <summary>
-        /// Register a progress callback function. 
-        /// An event is received as notification of progress during processing that takes a relatively long time, such as downloading files from a remote camera. 
-        /// If you register the callback function, the EDSDK calls the callback function during execution or on completion of the following APIs. 
+        /// Register a progress callback function.
+        /// An event is received as notification of progress during processing that takes a relatively long time, such as downloading files from a remote camera.
+        /// If you register the callback function, the EDSDK calls the callback function during execution or on completion of the following APIs.
         /// This timing can be used in updating on-screen progress bars, for example.
         /// </summary>
         /// <param name="inRef">The reference of the stream or image.</param>
@@ -741,16 +895,21 @@ namespace EOSDigital.SDK
         /// </param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsSetProgressCallback(IntPtr inRef, SDKProgressCallback inProgressFunc, ProgressOption inProgressOption, IntPtr inContext);
+        public static extern ErrorCode EdsSetProgressCallback(
+            IntPtr inRef,
+            SDKProgressCallback inProgressFunc,
+            ProgressOption inProgressOption,
+            IntPtr inContext
+        );
 
         /// <summary>
-        /// This function acquires an event. 
+        /// This function acquires an event.
         /// In console application, please call this function regularly to acquire
         /// the event from a camera.
         /// </summary>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetEvent();
+        public static extern ErrorCode EdsGetEvent();
 
         #endregion
 
@@ -763,7 +922,10 @@ namespace EOSDigital.SDK
         /// <param name="outEvfImageRef">The EVFData reference.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsCreateEvfImageRef(IntPtr inStreamRef, out IntPtr outEvfImageRef);
+        public static extern ErrorCode EdsCreateEvfImageRef(
+            IntPtr inStreamRef,
+            out IntPtr outEvfImageRef
+        );
 
         /// <summary>
         /// Downloads the live view image data set for a camera currently in live view mode.
@@ -779,7 +941,10 @@ namespace EOSDigital.SDK
         /// <param name="outEvfImageRef">The EVFData reference.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsDownloadEvfImage(IntPtr inCameraRef, IntPtr outEvfImageRef);
+        public static extern ErrorCode EdsDownloadEvfImage(
+            IntPtr inCameraRef,
+            IntPtr outEvfImageRef
+        );
 
         #endregion
 
@@ -792,7 +957,7 @@ namespace EOSDigital.SDK
         /// <param name="outCameraListRef">Pointer to the camera-list.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetCameraList(out IntPtr outCameraListRef);
+        public static extern ErrorCode EdsGetCameraList(out IntPtr outCameraListRef);
 
         /// <summary>
         /// Gets device information, such as the device name.
@@ -802,7 +967,10 @@ namespace EOSDigital.SDK
         /// <param name="outDeviceInfo">Information as device of camera.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetDeviceInfo(IntPtr inCameraRef, out DeviceInfo outDeviceInfo);
+        public static extern ErrorCode EdsGetDeviceInfo(
+            IntPtr inCameraRef,
+            out DeviceInfo outDeviceInfo
+        );
 
         /// <summary>
         /// Increments the reference counter of existing objects.
@@ -810,7 +978,7 @@ namespace EOSDigital.SDK
         /// <param name="inRef">The reference for the item</param>
         /// <returns>The number of references for this pointer or 0xFFFFFFFF for an error</returns>
         [DllImport(DllPath)]
-        public extern static int EdsRetain(IntPtr inRef);
+        public static extern int EdsRetain(IntPtr inRef);
 
         /// <summary>
         /// Decrements the reference counter of an object.
@@ -819,7 +987,7 @@ namespace EOSDigital.SDK
         /// <param name="inRef">The reference of the item.</param>
         /// <returns>The number of references for this pointer or 0xFFFFFFFF for an error</returns>
         [DllImport(DllPath)]
-        public extern static int EdsRelease(IntPtr inRef);
+        public static extern int EdsRelease(IntPtr inRef);
 
         /// <summary>
         /// Gets the number of child objects of the designated object.
@@ -829,7 +997,7 @@ namespace EOSDigital.SDK
         /// <param name="outCount">Number of elements in this list.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetChildCount(IntPtr inRef, out int outCount);
+        public static extern ErrorCode EdsGetChildCount(IntPtr inRef, out int outCount);
 
         /// <summary>
         /// Gets an indexed child object of the designated object.
@@ -839,7 +1007,11 @@ namespace EOSDigital.SDK
         /// <param name="outRef">The pointer which receives reference of the specific index.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetChildAtIndex(IntPtr inRef, int inIndex, out IntPtr outRef);
+        public static extern ErrorCode EdsGetChildAtIndex(
+            IntPtr inRef,
+            int inIndex,
+            out IntPtr outRef
+        );
 
         /// <summary>
         /// Gets the parent object of the designated object.
@@ -848,7 +1020,7 @@ namespace EOSDigital.SDK
         /// <param name="outParentRef">The pointer which receives reference.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        public extern static ErrorCode EdsGetParent(IntPtr inRef, out IntPtr outParentRef);
+        public static extern ErrorCode EdsGetParent(IntPtr inRef, out IntPtr outParentRef);
 
         #endregion
 
@@ -861,7 +1033,10 @@ namespace EOSDigital.SDK
         /// <param name="inDirItemRef">The reference of the directory item.</param>
         /// <param name="outDirItemInfo">Information of the directory item.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetDirectoryItemInfo(IntPtr inDirItemRef, out DirectoryItemInfo outDirItemInfo)
+        public static ErrorCode GetDirectoryItemInfo(
+            IntPtr inDirItemRef,
+            out DirectoryItemInfo outDirItemInfo
+        )
         {
             if (IsVerGE34)
             {
@@ -869,7 +1044,10 @@ namespace EOSDigital.SDK
             }
             else
             {
-                ErrorCode errorCode = EdsGetDirectoryItemInfo(inDirItemRef, out DirectoryItemInfo_3_4 tmpValue);
+                ErrorCode errorCode = EdsGetDirectoryItemInfo(
+                    inDirItemRef,
+                    out DirectoryItemInfo_3_4 tmpValue
+                );
                 if (errorCode == ErrorCode.OK)
                 {
                     outDirItemInfo = tmpValue.ToCurrent();
@@ -889,7 +1067,10 @@ namespace EOSDigital.SDK
         /// <param name="outDirItemInfo">Information of the directory item.</param>
         /// <returns>Any of the SDK errors</returns>
         [DllImport(DllPath)]
-        private extern static ErrorCode EdsGetDirectoryItemInfo(IntPtr inDirItemRef, out DirectoryItemInfo_3_4 outDirItemInfo);
+        private static extern ErrorCode EdsGetDirectoryItemInfo(
+            IntPtr inDirItemRef,
+            out DirectoryItemInfo_3_4 outDirItemInfo
+        );
 
         #endregion
 
@@ -905,14 +1086,24 @@ namespace EOSDigital.SDK
         /// <param name="outPropertyData">The value of the property.</param>
         /// <typeparam name="T">The type of a struct. Must be on of the types described in the <see cref="DataType"/> enum</typeparam>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData<T>(IntPtr inRef, PropertyID inPropertyID, int inParam, out T outPropertyData)
+        public static ErrorCode GetPropertyData<T>(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out T outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             outPropertyData = default!;
 
             if (outPropertyData is PictureStyleDesc)
             {
-                errorCode = GetPropertyData(inRef, inPropertyID, inParam, out PictureStyleDesc tmpValue);
+                errorCode = GetPropertyData(
+                    inRef,
+                    inPropertyID,
+                    inParam,
+                    out PictureStyleDesc tmpValue
+                );
                 if (errorCode == ErrorCode.OK)
                 {
                     outPropertyData = (T)(object)tmpValue;
@@ -935,7 +1126,12 @@ namespace EOSDigital.SDK
         /// <param name="outPropertyData">The value of the property.</param>
         /// <typeparam name="T">The type of a struct. Must be on of the types described in the <see cref="DataType"/> enum</typeparam>
         /// <returns>Any of the SDK errors</returns>
-        private static ErrorCode GetPropertyDataSub<T>(IntPtr inRef, PropertyID inPropertyID, int inParam, out T outPropertyData)
+        private static ErrorCode GetPropertyDataSub<T>(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out T outPropertyData
+        )
         {
             IntPtr ptr = IntPtr.Zero;
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
@@ -943,17 +1139,28 @@ namespace EOSDigital.SDK
 
             try
             {
-                errorCode = EdsGetPropertySize(inRef, inPropertyID, inParam, out DataType dt, out int size);
+                errorCode = EdsGetPropertySize(
+                    inRef,
+                    inPropertyID,
+                    inParam,
+                    out DataType dt,
+                    out int size
+                );
 
                 if (errorCode == ErrorCode.OK)
                 {
                     ptr = Marshal.AllocHGlobal(size);
                     errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, size, ptr);
 
-                    if (errorCode == ErrorCode.OK) outPropertyData = Marshal.PtrToStructure<T>(ptr)!;
+                    if (errorCode == ErrorCode.OK)
+                        outPropertyData = Marshal.PtrToStructure<T>(ptr)!;
                 }
             }
-            finally { if (ptr != IntPtr.Zero) Marshal.FreeHGlobal(ptr); }
+            finally
+            {
+                if (ptr != IntPtr.Zero)
+                    Marshal.FreeHGlobal(ptr);
+            }
 
             return errorCode;
         }
@@ -968,7 +1175,12 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out bool outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out bool outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             int size = Marshal.SizeOf<bool>();
@@ -990,7 +1202,12 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out byte outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out byte outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             int size = Marshal.SizeOf<byte>();
@@ -1012,7 +1229,12 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out short outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out short outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             int size = Marshal.SizeOf<short>();
@@ -1034,7 +1256,12 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out ushort outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out ushort outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             int size = Marshal.SizeOf<ushort>();
@@ -1056,7 +1283,12 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out uint outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out uint outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             int size = Marshal.SizeOf<uint>();
@@ -1078,7 +1310,12 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out int outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out int outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             int size = Marshal.SizeOf<int>();
@@ -1100,14 +1337,25 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out string outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out string outPropertyData
+        )
         {
             IntPtr ptr = IntPtr.Zero;
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             outPropertyData = string.Empty;
             try
             {
-                errorCode = EdsGetPropertySize(inRef, inPropertyID, inParam, out DataType dt, out int size);
+                errorCode = EdsGetPropertySize(
+                    inRef,
+                    inPropertyID,
+                    inParam,
+                    out DataType dt,
+                    out int size
+                );
 
                 if (errorCode == ErrorCode.OK)
                 {
@@ -1120,7 +1368,11 @@ namespace EOSDigital.SDK
                     }
                 }
             }
-            finally { if (ptr != IntPtr.Zero) Marshal.FreeHGlobal(ptr); }
+            finally
+            {
+                if (ptr != IntPtr.Zero)
+                    Marshal.FreeHGlobal(ptr);
+            }
             return errorCode;
         }
 
@@ -1136,11 +1388,22 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out bool[] outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out bool[] outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             int typeSize = Marshal.SizeOf<bool>();
-            errorCode = EdsGetPropertySize(inRef, inPropertyID, inParam, out DataType propType, out int propSize);
+            errorCode = EdsGetPropertySize(
+                inRef,
+                inPropertyID,
+                inParam,
+                out DataType propType,
+                out int propSize
+            );
             if (errorCode == ErrorCode.OK)
             {
                 var data = new bool[propSize / typeSize];
@@ -1148,13 +1411,22 @@ namespace EOSDigital.SDK
                 {
                     fixed (bool* dataP = data)
                     {
-                        errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, propSize, (IntPtr)dataP);
+                        errorCode = EdsGetPropertyData(
+                            inRef,
+                            inPropertyID,
+                            inParam,
+                            propSize,
+                            (IntPtr)dataP
+                        );
                     }
                 }
-                if (errorCode == ErrorCode.OK) outPropertyData = data;
-                else outPropertyData = [];
+                if (errorCode == ErrorCode.OK)
+                    outPropertyData = data;
+                else
+                    outPropertyData = [];
             }
-            else outPropertyData = [];
+            else
+                outPropertyData = [];
             return errorCode;
         }
 
@@ -1166,11 +1438,22 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out short[] outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out short[] outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             int typeSize = Marshal.SizeOf<short>();
-            errorCode = EdsGetPropertySize(inRef, inPropertyID, inParam, out DataType propType, out int propSize);
+            errorCode = EdsGetPropertySize(
+                inRef,
+                inPropertyID,
+                inParam,
+                out DataType propType,
+                out int propSize
+            );
             if (errorCode == ErrorCode.OK)
             {
                 var data = new short[propSize / typeSize];
@@ -1178,13 +1461,22 @@ namespace EOSDigital.SDK
                 {
                     fixed (short* dataP = data)
                     {
-                        errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, propSize, (IntPtr)dataP);
+                        errorCode = EdsGetPropertyData(
+                            inRef,
+                            inPropertyID,
+                            inParam,
+                            propSize,
+                            (IntPtr)dataP
+                        );
                     }
                 }
-                if (errorCode == ErrorCode.OK) outPropertyData = data;
-                else outPropertyData = [];
+                if (errorCode == ErrorCode.OK)
+                    outPropertyData = data;
+                else
+                    outPropertyData = [];
             }
-            else outPropertyData = [];
+            else
+                outPropertyData = [];
             return errorCode;
         }
 
@@ -1196,11 +1488,22 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out int[] outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out int[] outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             int typeSize = Marshal.SizeOf<int>();
-            errorCode = EdsGetPropertySize(inRef, inPropertyID, inParam, out DataType propType, out int propSize);
+            errorCode = EdsGetPropertySize(
+                inRef,
+                inPropertyID,
+                inParam,
+                out DataType propType,
+                out int propSize
+            );
             if (errorCode == ErrorCode.OK)
             {
                 var data = new int[propSize / typeSize];
@@ -1208,13 +1511,22 @@ namespace EOSDigital.SDK
                 {
                     fixed (int* dataP = data)
                     {
-                        errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, propSize, (IntPtr)dataP);
+                        errorCode = EdsGetPropertyData(
+                            inRef,
+                            inPropertyID,
+                            inParam,
+                            propSize,
+                            (IntPtr)dataP
+                        );
                     }
                 }
-                if (errorCode == ErrorCode.OK) outPropertyData = data;
-                else outPropertyData = [];
+                if (errorCode == ErrorCode.OK)
+                    outPropertyData = data;
+                else
+                    outPropertyData = [];
             }
-            else outPropertyData = [];
+            else
+                outPropertyData = [];
             return errorCode;
         }
 
@@ -1226,11 +1538,22 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out byte[] outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out byte[] outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             int typeSize = Marshal.SizeOf<byte>();
-            errorCode = EdsGetPropertySize(inRef, inPropertyID, inParam, out DataType propType, out int propSize);
+            errorCode = EdsGetPropertySize(
+                inRef,
+                inPropertyID,
+                inParam,
+                out DataType propType,
+                out int propSize
+            );
             if (errorCode == ErrorCode.OK)
             {
                 var data = new byte[propSize / typeSize];
@@ -1238,13 +1561,22 @@ namespace EOSDigital.SDK
                 {
                     fixed (byte* dataP = data)
                     {
-                        errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, propSize, (IntPtr)dataP);
+                        errorCode = EdsGetPropertyData(
+                            inRef,
+                            inPropertyID,
+                            inParam,
+                            propSize,
+                            (IntPtr)dataP
+                        );
                     }
                 }
-                if (errorCode == ErrorCode.OK) outPropertyData = data;
-                else outPropertyData = [];
+                if (errorCode == ErrorCode.OK)
+                    outPropertyData = data;
+                else
+                    outPropertyData = [];
             }
-            else outPropertyData = [];
+            else
+                outPropertyData = [];
             return errorCode;
         }
 
@@ -1256,11 +1588,22 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out uint[] outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out uint[] outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             int typeSize = Marshal.SizeOf<uint>();
-            errorCode = EdsGetPropertySize(inRef, inPropertyID, inParam, out DataType propType, out int propSize);
+            errorCode = EdsGetPropertySize(
+                inRef,
+                inPropertyID,
+                inParam,
+                out DataType propType,
+                out int propSize
+            );
             if (errorCode == ErrorCode.OK)
             {
                 var data = new uint[propSize / typeSize];
@@ -1268,13 +1611,22 @@ namespace EOSDigital.SDK
                 {
                     fixed (uint* dataP = data)
                     {
-                        errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, propSize, (IntPtr)dataP);
+                        errorCode = EdsGetPropertyData(
+                            inRef,
+                            inPropertyID,
+                            inParam,
+                            propSize,
+                            (IntPtr)dataP
+                        );
                     }
                 }
-                if (errorCode == ErrorCode.OK) outPropertyData = data;
-                else outPropertyData = [];
+                if (errorCode == ErrorCode.OK)
+                    outPropertyData = data;
+                else
+                    outPropertyData = [];
             }
-            else outPropertyData = [];
+            else
+                outPropertyData = [];
             return errorCode;
         }
 
@@ -1286,11 +1638,22 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out Rational[] outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out Rational[] outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             int typeSize = Marshal.SizeOf<Rational>();
-            errorCode = EdsGetPropertySize(inRef, inPropertyID, inParam, out DataType propType, out int propSize);
+            errorCode = EdsGetPropertySize(
+                inRef,
+                inPropertyID,
+                inParam,
+                out DataType propType,
+                out int propSize
+            );
             if (errorCode == ErrorCode.OK)
             {
                 var data = new Rational[propSize / typeSize];
@@ -1298,13 +1661,22 @@ namespace EOSDigital.SDK
                 {
                     fixed (Rational* dataP = data)
                     {
-                        errorCode = EdsGetPropertyData(inRef, inPropertyID, inParam, propSize, (IntPtr)dataP);
+                        errorCode = EdsGetPropertyData(
+                            inRef,
+                            inPropertyID,
+                            inParam,
+                            propSize,
+                            (IntPtr)dataP
+                        );
                     }
                 }
-                if (errorCode == ErrorCode.OK) outPropertyData = data;
-                else outPropertyData = [];
+                if (errorCode == ErrorCode.OK)
+                    outPropertyData = data;
+                else
+                    outPropertyData = [];
             }
-            else outPropertyData = [];
+            else
+                outPropertyData = [];
             return errorCode;
         }
 
@@ -1320,7 +1692,12 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out Time outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out Time outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             int size = Marshal.SizeOf<Time>();
@@ -1342,7 +1719,12 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out FocusInfo outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out FocusInfo outPropertyData
+        )
         {
             IntPtr ptr = IntPtr.Zero;
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
@@ -1354,7 +1736,11 @@ namespace EOSDigital.SDK
 
                 outPropertyData = Marshal.PtrToStructure<FocusInfo>(ptr);
             }
-            finally { if (ptr != IntPtr.Zero) Marshal.FreeHGlobal(ptr); }
+            finally
+            {
+                if (ptr != IntPtr.Zero)
+                    Marshal.FreeHGlobal(ptr);
+            }
             return errorCode;
         }
 
@@ -1366,7 +1752,12 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out FocusPoint outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out FocusPoint outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             int size = Marshal.SizeOf<FocusPoint>();
@@ -1388,7 +1779,12 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out Size outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out Size outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             int size = Marshal.SizeOf<Size>();
@@ -1410,7 +1806,12 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out Rectangle outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out Rectangle outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             int size = Marshal.SizeOf<Rectangle>();
@@ -1432,7 +1833,12 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out Point outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out Point outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             int size = Marshal.SizeOf<Point>();
@@ -1454,7 +1860,12 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out MyMenuItems outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out MyMenuItems outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             int size = Marshal.SizeOf<MyMenuItems>();
@@ -1476,7 +1887,12 @@ namespace EOSDigital.SDK
         /// <param name="inParam">Additional information of property. Used in order to specify an index in case there are two or more values over the same ID.</param>
         /// <param name="outPropertyData">The value of the property.</param>
         /// <returns>Any of the SDK errors</returns>
-        public static ErrorCode GetPropertyData(IntPtr inRef, PropertyID inPropertyID, int inParam, out PictureStyleDesc outPropertyData)
+        public static ErrorCode GetPropertyData(
+            IntPtr inRef,
+            PropertyID inPropertyID,
+            int inParam,
+            out PictureStyleDesc outPropertyData
+        )
         {
             ErrorCode errorCode = ErrorCode.INTERNAL_ERROR;
             outPropertyData = default;
@@ -1490,14 +1906,20 @@ namespace EOSDigital.SDK
                 }
                 else if (size == Marshal.SizeOf<PictureStyleDesc_3_2>())
                 {
-                    errorCode = GetPropertyDataSub(inRef, inPropertyID, inParam, out PictureStyleDesc_3_2 tmpValue);
+                    errorCode = GetPropertyDataSub(
+                        inRef,
+                        inPropertyID,
+                        inParam,
+                        out PictureStyleDesc_3_2 tmpValue
+                    );
                     if (errorCode == ErrorCode.OK)
                     {
                         outPropertyData = tmpValue.ToCurrent();
                         return errorCode;
                     }
                 }
-                else throw new InvalidOperationException("Cannot find correct struct size");
+                else
+                    throw new InvalidOperationException("Cannot find correct struct size");
             }
 
             return errorCode;

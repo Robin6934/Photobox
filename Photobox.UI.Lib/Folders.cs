@@ -10,11 +10,14 @@ public static class Folders
         CheckIfDirectoriesExistElseCreate();
     }
 
-    public static string PhotoboxBaseDir
-        => Path.Combine([Environment.GetFolderPath(Environment.SpecialFolder.MyPictures)
-            , "Pictures"
-            , "Photobox"
-            ]);
+    public static string PhotoboxBaseDir =>
+        Path.Combine(
+            [
+                Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
+                "Pictures",
+                "Photobox",
+            ]
+        );
 
     public static string Deleted => "Deleted";
 
@@ -22,17 +25,14 @@ public static class Folders
 
     public static string Temp => "Temp";
 
-    public static IEnumerable<string> AllFolders
-        => [Deleted, Photos, Temp];
+    public static IEnumerable<string> AllFolders => [Deleted, Photos, Temp];
 
-    public static string GetPath(params string[] path)
-        => Path.Combine(PhotoboxBaseDir, Path.Combine(path));
+    public static string GetPath(params string[] path) =>
+        Path.Combine(PhotoboxBaseDir, Path.Combine(path));
 
-    public static string NewImagePath
-        => Path.Combine(GetPath(Temp), NewImageName);
+    public static string NewImagePath => Path.Combine(GetPath(Temp), NewImageName);
 
-    public static string NewImageName
-        => $"{DateTime.Now:yyyyMMdd_HHmmssfff}.jpg";
+    public static string NewImageName => $"{DateTime.Now:yyyyMMdd_HHmmssfff}.jpg";
 
     public static void CheckIfDirectoriesExistElseCreate()
     {
@@ -46,5 +46,4 @@ public static class Folders
             }
         }
     }
-
 }

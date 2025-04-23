@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.BearerToken;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -7,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Photobox.Web.DbContext;
 using Photobox.Web.Models;
 using Photobox.Web.Photobox.DTOs;
-using System.Security.Claims;
 
 namespace Photobox.Web.Photobox;
 
@@ -16,7 +16,8 @@ namespace Photobox.Web.Photobox;
 public class PhotoBoxController(
     ILogger<PhotoBoxController> logger,
     SignInManager<ApplicationUser> signInManager,
-    AppDbContext dbContext) : Controller
+    AppDbContext dbContext
+) : Controller
 {
     [Authorize(AuthenticationSchemes = "Identity.Bearer")]
     [HttpPost]
@@ -25,34 +26,43 @@ public class PhotoBoxController(
         string userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
         var user = await dbContext.Users.FindAsync(userId);
-        
+
         var photobox = new PhotoBoxModel()
         {
             PhotoboxId = createPhotoBox.PhotoBoxId,
             Name = createPhotoBox.PhotoBoxName,
-            ApplicationUser = user
+            ApplicationUser = user,
         };
-        
+
         return Ok(user);
     }
-    
+
     //https://github.com/dotnet/aspnetcore/blob/9388d498aae571b9575e8252ecc51b54b2b44e22/src/Identity/Core/src/IdentityApiEndpointRouteBuilderExtensions.cs#L90
     [HttpPost]
-    public async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>> Login(LoginPhotoboxDto loginDto)
+    public async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>> Login(
+        LoginPhotoboxDto loginDto
+    )
     {
         signInManager.AuthenticationScheme = IdentityConstants.BearerScheme;
-        
-        var result = await signInManager.PasswordSignInAsync(loginDto.UserName, loginDto.Password, isPersistent: false, lockoutOnFailure: false);
-    
+
+        var result = await signInManager.PasswordSignInAsync(
+            loginDto.UserName,
+            loginDto.Password,
+            isPersistent: false,
+            lockoutOnFailure: false
+        );
+
         if (!result.Succeeded)
         {
-            return TypedResults.Problem(result.ToString(), statusCode: StatusCodes.Status401Unauthorized);
+            return TypedResults.Problem(
+                result.ToString(),
+                statusCode: StatusCodes.Status401Unauthorized
+            );
         }
-        
+
         return TypedResults.Empty;
     }
-    
-    
+
     /// <summary>
     /// Checks if a photobox with the specified ID exists in the database.
     /// </summary>
@@ -64,7 +74,9 @@ public class PhotoBoxController(
     [Authorize(AuthenticationSchemes = "Identity.Bearer")]
     public async Task<IActionResult> CheckIfPhotoboxExists(string photoBoxId)
     {
-        var photoBox = await dbContext.PhotoBoxModels.FirstOrDefaultAsync(p => p.PhotoboxId == photoBoxId);
+        var photoBox = await dbContext.PhotoBoxModels.FirstOrDefaultAsync(p =>
+            p.PhotoboxId == photoBoxId
+        );
 
         if (photoBox == null)
         {
@@ -73,5 +85,4 @@ public class PhotoBoxController(
 
         return Ok();
     }
-
 }

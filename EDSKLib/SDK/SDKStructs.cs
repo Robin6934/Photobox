@@ -17,11 +17,11 @@ namespace EOSDigital.SDK
         /// X Coordinate
         /// </summary>
         public int X = X;
+
         /// <summary>
         /// Y Coordinate
         /// </summary>
         public int Y = Y;
-
 
         /// <summary>
         /// Determines whether the specified <see cref="Point"/>s are equal to each other.
@@ -93,11 +93,11 @@ namespace EOSDigital.SDK
         /// Width
         /// </summary>
         public int Width = Width;
+
         /// <summary>
         /// Height
         /// </summary>
         public int Height = Height;
-
 
         /// <summary>
         /// Determines whether the specified <see cref="Size"/>s are equal to each other.
@@ -173,14 +173,17 @@ namespace EOSDigital.SDK
         /// X Coordinate
         /// </summary>
         public int X = X;
+
         /// <summary>
         /// Y Coordinate
         /// </summary>
         public int Y = Y;
+
         /// <summary>
         /// Width of the rectangle
         /// </summary>
         public int Width = Width;
+
         /// <summary>
         /// Height of the rectangle
         /// </summary>
@@ -192,8 +195,7 @@ namespace EOSDigital.SDK
         /// <param name="Width">Width of the rectangle</param>
         /// <param name="Height">Height of the rectangle</param>
         public Rectangle(int Width, int Height)
-            : this(0, 0, Width, Height)
-        { }
+            : this(0, 0, Width, Height) { }
 
         /// <summary>
         /// Determines whether the specified <see cref="Rectangle"/>s are equal to each other.
@@ -264,11 +266,11 @@ namespace EOSDigital.SDK
         /// Numerator of the rational number
         /// </summary>
         public int Numerator;
+
         /// <summary>
         /// Denominator of the rational number
         /// </summary>
         public int Denominator;
-
 
         /// <summary>
         /// Calculates the value as double
@@ -361,32 +363,46 @@ namespace EOSDigital.SDK
     /// <param name="Second">Second component</param>
     /// <param name="Milliseconds">Milliseconds component</param>
     [StructLayout(LayoutKind.Sequential)]
-    public struct Time(int Year, int Month, int Day, int Hour, int Minute, int Second, int Milliseconds)
+    public struct Time(
+        int Year,
+        int Month,
+        int Day,
+        int Hour,
+        int Minute,
+        int Second,
+        int Milliseconds
+    )
     {
         /// <summary>
         /// Year component
         /// </summary>
         public int Year = Year;
+
         /// <summary>
         /// Month component
         /// </summary>
         public int Month = Month;
+
         /// <summary>
         /// Day component
         /// </summary>
         public int Day = Day;
+
         /// <summary>
         /// Hour component
         /// </summary>
         public int Hour = Hour;
+
         /// <summary>
         /// Minute component
         /// </summary>
         public int Minute = Minute;
+
         /// <summary>
         /// Second component
         /// </summary>
         public int Second = Second;
+
         /// <summary>
         /// Milliseconds component
         /// </summary>
@@ -399,8 +415,7 @@ namespace EOSDigital.SDK
         /// <param name="Month">Month component</param>
         /// <param name="Day">Day component</param>
         public Time(int Year, int Month, int Day)
-            : this(Year, Month, Day, 0, 0, 0, 0)
-        { }
+            : this(Year, Month, Day, 0, 0, 0, 0) { }
 
         /// <summary>
         /// Creates a new instance of the <see cref="Time"/> struct
@@ -410,8 +425,7 @@ namespace EOSDigital.SDK
         /// <param name="Day">Day component</param>
         /// <param name="Hour">Hour component</param>
         public Time(int Year, int Month, int Day, int Hour)
-            : this(Year, Month, Day, Hour, 0, 0, 0)
-        { }
+            : this(Year, Month, Day, Hour, 0, 0, 0) { }
 
         /// <summary>
         /// Creates a new instance of the <see cref="Time"/> struct
@@ -422,8 +436,7 @@ namespace EOSDigital.SDK
         /// <param name="Hour">Hour component</param>
         /// <param name="Minute">Minute component</param>
         public Time(int Year, int Month, int Day, int Hour, int Minute)
-            : this(Year, Month, Day, Hour, Minute, 0, 0)
-        { }
+            : this(Year, Month, Day, Hour, Minute, 0, 0) { }
 
         /// <summary>
         /// Creates a new instance of the <see cref="Time"/> struct
@@ -435,9 +448,7 @@ namespace EOSDigital.SDK
         /// <param name="Minute">Minute component</param>
         /// <param name="Second">Second component</param>
         public Time(int Year, int Month, int Day, int Hour, int Minute, int Second)
-            : this(Year, Month, Day, Hour, Minute, Second, 0)
-        { }
-
+            : this(Year, Month, Day, Hour, Minute, Second, 0) { }
 
         /// <summary>
         /// Implicitly converts <see cref="Time"/> to <see cref="DateTime"/>
@@ -467,8 +478,13 @@ namespace EOSDigital.SDK
         /// <returns>True if the <see cref="Time"/>s are equal; otherwise, false</returns>
         public static bool operator ==(Time x, Time y)
         {
-            return x.Year == y.Year && x.Month == y.Month && x.Day == y.Day && x.Hour == y.Hour
-                && x.Minute == y.Minute && x.Second == y.Second && x.Milliseconds == y.Milliseconds;
+            return x.Year == y.Year
+                && x.Month == y.Month
+                && x.Day == y.Day
+                && x.Hour == y.Hour
+                && x.Minute == y.Minute
+                && x.Second == y.Second
+                && x.Milliseconds == y.Milliseconds;
         }
 
         /// <summary>
@@ -533,11 +549,13 @@ namespace EOSDigital.SDK
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = CanonSDK.MAX_NAME)]
         public string PortName;
+
         /// <summary>
         /// Name of device
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = CanonSDK.MAX_NAME)]
         public string DeviceDescription;
+
         /// <summary>
         /// Device Sub-type
         /// </summary>
@@ -552,7 +570,9 @@ namespace EOSDigital.SDK
         /// <returns>True if the <see cref="DeviceInfo"/>s are equal; otherwise, false</returns>
         public static bool operator ==(DeviceInfo x, DeviceInfo y)
         {
-            return x.PortName == y.PortName && x.DeviceDescription == y.DeviceDescription && x.DeviceSubType == y.DeviceSubType;
+            return x.PortName == y.PortName
+                && x.DeviceDescription == y.DeviceDescription
+                && x.DeviceSubType == y.DeviceSubType;
         }
 
         /// <summary>
@@ -603,18 +623,22 @@ namespace EOSDigital.SDK
         /// Type of storage
         /// </summary>
         public int StorageType;
+
         /// <summary>
         /// Accessibility
         /// </summary>
         public FileAccess Access;
+
         /// <summary>
         /// Maximum capacity
         /// </summary>
         public long MaxCapacity;
+
         /// <summary>
         /// Free space on volume in bytes
         /// </summary>
         public long FreeSpaceInBytes;
+
         /// <summary>
         /// Label/name of the volume
         /// </summary>
@@ -629,8 +653,11 @@ namespace EOSDigital.SDK
         /// <returns>True if the <see cref="VolumeInfo"/>s are equal; otherwise, false</returns>
         public static bool operator ==(VolumeInfo x, VolumeInfo y)
         {
-            return x.StorageType == y.StorageType && x.Access == y.Access && x.MaxCapacity == y.MaxCapacity
-                && x.FreeSpaceInBytes == y.FreeSpaceInBytes && x.VolumeLabel == y.VolumeLabel;
+            return x.StorageType == y.StorageType
+                && x.Access == y.Access
+                && x.MaxCapacity == y.MaxCapacity
+                && x.FreeSpaceInBytes == y.FreeSpaceInBytes
+                && x.VolumeLabel == y.VolumeLabel;
         }
 
         /// <summary>
@@ -688,27 +715,33 @@ namespace EOSDigital.SDK
         /// Size of directory item (as long)
         /// </summary>
         public long Size64;
+
         /// <summary>
         /// Marker if it's a folder or a file
         /// </summary>
         public bool IsFolder;
+
         /// <summary>
         /// Group ID
         /// </summary>
         public int GroupID;
+
         /// <summary>
         /// Option
         /// </summary>
         public int Option;
+
         /// <summary>
         /// File name
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = CanonSDK.MAX_NAME)]
         public string FileName;
+
         /// <summary>
         /// Format
         /// </summary>
         public TargetImageType Format;
+
         /// <summary>
         /// Date time
         /// </summary>
@@ -722,8 +755,13 @@ namespace EOSDigital.SDK
         /// <returns>True if the <see cref="DirectoryItemInfo"/>s are equal; otherwise, false</returns>
         public static bool operator ==(DirectoryItemInfo x, DirectoryItemInfo y)
         {
-            return x.Size == y.Size && x.IsFolder == y.IsFolder && x.GroupID == y.GroupID && x.Option == y.Option
-                && x.FileName == y.FileName && x.Format == y.Format && x.DateTime == y.DateTime;
+            return x.Size == y.Size
+                && x.IsFolder == y.IsFolder
+                && x.GroupID == y.GroupID
+                && x.Option == y.Option
+                && x.FileName == y.FileName
+                && x.Format == y.Format
+                && x.DateTime == y.DateTime;
         }
 
         /// <summary>
@@ -778,6 +816,7 @@ namespace EOSDigital.SDK
         public bool IsFolder;
         public int GroupID;
         public int Option;
+
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = CanonSDK.MAX_NAME)]
         public string FileName;
         public TargetImageType Format;
@@ -807,25 +846,28 @@ namespace EOSDigital.SDK
         /// Width of image
         /// </summary>
         public int Width;
+
         /// <summary>
         /// Height of image
         /// </summary>
         public int Height;
+
         /// <summary>
         /// Number of channels
         /// </summary>
         public int NumOfComponents;
+
         /// <summary>
         /// BitDepth of channels
         /// </summary>
         public int ComponentDepth;
+
         /// <summary>
         /// Effective size of image
         /// </summary>
         public Rectangle EffectiveRect;
         private readonly uint Reserved1;
         private readonly uint Reserved2;
-
 
         /// <summary>
         /// Determines whether the specified <see cref="ImageInfo"/>s are equal to each other.
@@ -835,8 +877,11 @@ namespace EOSDigital.SDK
         /// <returns>True if the <see cref="ImageInfo"/>s are equal; otherwise, false</returns>
         public static bool operator ==(ImageInfo x, ImageInfo y)
         {
-            return x.Width == y.Width && x.Height == y.Height && x.NumOfComponents == y.NumOfComponents
-                && x.ComponentDepth == y.ComponentDepth && x.EffectiveRect == y.EffectiveRect;
+            return x.Width == y.Width
+                && x.Height == y.Height
+                && x.NumOfComponents == y.NumOfComponents
+                && x.ComponentDepth == y.ComponentDepth
+                && x.EffectiveRect == y.EffectiveRect;
         }
 
         /// <summary>
@@ -889,12 +934,12 @@ namespace EOSDigital.SDK
         /// Quality of Jpeg file (1-10)
         /// </summary>
         public int JPEGQuality;
+
         /// <summary>
         /// Pointer to ICC profile stream
         /// </summary>
         public IntPtr ICCProfileStream;
         private readonly uint Reserved;
-
 
         /// <summary>
         /// Determines whether the specified <see cref="SaveImageSetting"/>s are equal to each other.
@@ -954,20 +999,22 @@ namespace EOSDigital.SDK
         /// Form
         /// </summary>
         public int Form;
+
         /// <summary>
         /// Accessibility
         /// </summary>
         public int Access;
+
         /// <summary>
         /// Number of elements
         /// </summary>
         public int NumElements;
+
         /// <summary>
         /// Array of all elements
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 128)]
         public int[] PropDesc;
-
 
         /// <summary>
         /// Determines whether the specified <see cref="PropertyDesc"/>s are equal to each other.
@@ -977,7 +1024,10 @@ namespace EOSDigital.SDK
         /// <returns>True if the <see cref="PropertyDesc"/>s are equal; otherwise, false</returns>
         public static bool operator ==(PropertyDesc x, PropertyDesc y)
         {
-            return x.Form == y.Form && x.Access == y.Access && x.NumElements == y.NumElements && x.PropDesc.SequenceEqual(y.PropDesc);
+            return x.Form == y.Form
+                && x.Access == y.Access
+                && x.NumElements == y.NumElements
+                && x.PropDesc.SequenceEqual(y.PropDesc);
         }
 
         /// <summary>
@@ -1032,41 +1082,54 @@ namespace EOSDigital.SDK
     /// <param name="FilterEffect">Filter Effect</param>
     /// <param name="ToningEffect">Toning Effect</param>
     [StructLayout(LayoutKind.Sequential)]
-    public struct PictureStyleDesc(int Contrast, int Sharpness, int Saturation, int ColorTone, int FilterEffect, int ToningEffect)
+    public struct PictureStyleDesc(
+        int Contrast,
+        int Sharpness,
+        int Saturation,
+        int ColorTone,
+        int FilterEffect,
+        int ToningEffect
+    )
     {
         /// <summary>
         /// Contrast; Range: -4 to 4
         /// </summary>
         public int Contrast = Math.Min(4, Math.Max(-4, Contrast));
+
         /// <summary>
         /// Sharpness; Range: 0 to 7
         /// </summary>
         public int Sharpness = Math.Min(7, Math.Max(0, Sharpness));
+
         /// <summary>
         /// Saturation; Range: -4 to 4
         /// </summary>
         public int Saturation = Math.Min(4, Math.Max(-4, Saturation));
+
         /// <summary>
         /// ColorTone; Range: -4 to 4
         /// </summary>
         public int ColorTone = Math.Min(4, Math.Max(-4, ColorTone));
+
         /// <summary>
         /// Filter Effect
         /// </summary>
         public FilterEffect FilterEffect = (FilterEffect)FilterEffect;
+
         /// <summary>
         /// Toning Effect
         /// </summary>
         public ToningEffect ToningEffect = (ToningEffect)ToningEffect;
+
         /// <summary>
         /// Sharp Fineness
         /// </summary>
         public int SharpFineness = 0;
+
         /// <summary>
         /// Sharp Threshold
         /// </summary>
         public int SharpThreshold = 0;
-
 
         /// <summary>
         /// Determines whether the specified <see cref="PictureStyleDesc"/>s are equal to each other.
@@ -1076,8 +1139,12 @@ namespace EOSDigital.SDK
         /// <returns>True if the <see cref="PictureStyleDesc"/>s are equal; otherwise, false</returns>
         public static bool operator ==(PictureStyleDesc x, PictureStyleDesc y)
         {
-            return x.Contrast == y.Contrast && x.Sharpness == y.Sharpness && x.Saturation == y.Saturation && x.ColorTone == y.ColorTone
-                && x.FilterEffect == y.FilterEffect && x.ToningEffect == y.ToningEffect;
+            return x.Contrast == y.Contrast
+                && x.Sharpness == y.Sharpness
+                && x.Saturation == y.Saturation
+                && x.ColorTone == y.ColorTone
+                && x.FilterEffect == y.FilterEffect
+                && x.ToningEffect == y.ToningEffect;
         }
 
         /// <summary>
@@ -1162,22 +1229,24 @@ namespace EOSDigital.SDK
         /// <para>Note: AF frame coordinates and the array number for storage vary by model.</para>
         /// </summary>
         public int Valid;
+
         /// <summary>
         /// <para>Selected AF frame: 0</para>
         /// <para>Unselected AF frame: 1</para>
         /// </summary>
         public int Selected;
+
         /// <summary>
         /// <para>In focus: 1</para>
         /// <para>Out of focus: 0</para>
         /// </summary>
         public int JustFocus;
+
         /// <summary>
         /// Upper-left and lower-right coordinates of the AF frame
         /// </summary>
         public Rectangle Rectangle;
         private readonly uint Reserved;
-
 
         /// <summary>
         /// Determines whether the specified <see cref="FocusPoint"/>s are equal to each other.
@@ -1187,7 +1256,10 @@ namespace EOSDigital.SDK
         /// <returns>True if the <see cref="FocusPoint"/>s are equal; otherwise, false</returns>
         public static bool operator ==(FocusPoint x, FocusPoint y)
         {
-            return x.Valid == y.Valid && x.Selected == y.Selected && x.JustFocus == y.JustFocus && x.Rectangle == y.Rectangle;
+            return x.Valid == y.Valid
+                && x.Selected == y.Selected
+                && x.JustFocus == y.JustFocus
+                && x.Rectangle == y.Rectangle;
         }
 
         /// <summary>
@@ -1239,20 +1311,22 @@ namespace EOSDigital.SDK
         /// The upper-left coordinates of the image, as well as the width and height
         /// </summary>
         public Rectangle ImageRectangle;
+
         /// <summary>
         /// AF frame number
         /// </summary>
         public int PointNumber;
+
         /// <summary>
         /// Detailed information about focus points
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 128)]
         public FocusPoint[] FocusPoints;
+
         /// <summary>
         /// Execute Mode
         /// </summary>
         public int ExecuteMode;
-
 
         /// <summary>
         /// Determines whether the specified <see cref="FocusInfo"/>s are equal to each other.
@@ -1262,8 +1336,10 @@ namespace EOSDigital.SDK
         /// <returns>True if the <see cref="FocusInfo"/>s are equal; otherwise, false</returns>
         public static bool operator ==(FocusInfo x, FocusInfo y)
         {
-            return x.ImageRectangle == y.ImageRectangle && x.PointNumber == y.PointNumber
-                && x.FocusPoints.SequenceEqual(y.FocusPoints) && x.ExecuteMode == y.ExecuteMode;
+            return x.ImageRectangle == y.ImageRectangle
+                && x.PointNumber == y.PointNumber
+                && x.FocusPoints.SequenceEqual(y.FocusPoints)
+                && x.ExecuteMode == y.ExecuteMode;
         }
 
         /// <summary>
@@ -1315,21 +1391,23 @@ namespace EOSDigital.SDK
         /// Marker if data is valid
         /// </summary>
         public int Valid;
+
         /// <summary>
         /// Size of data
         /// </summary>
         public int DataSize;
+
         /// <summary>
         /// Caption
         /// </summary>
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
         public string Caption;
+
         /// <summary>
         /// Data
         /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1)]
         public byte[] Data;
-
 
         /// <summary>
         /// Determines whether the specified <see cref="UsersetData"/>s are equal to each other.
@@ -1339,7 +1417,10 @@ namespace EOSDigital.SDK
         /// <returns>True if the <see cref="UsersetData"/>s are equal; otherwise, false</returns>
         public static bool operator ==(UsersetData x, UsersetData y)
         {
-            return x.Valid == y.Valid && x.DataSize == y.DataSize && x.Caption == y.Caption && x.Data.SequenceEqual(y.Data);
+            return x.Valid == y.Valid
+                && x.DataSize == y.DataSize
+                && x.Caption == y.Caption
+                && x.Data.SequenceEqual(y.Data);
         }
 
         /// <summary>
@@ -1397,15 +1478,16 @@ namespace EOSDigital.SDK
         /// Number of free clusters on the HD
         /// </summary>
         public int NumberOfFreeClusters = NumberOfFreeClusters;
+
         /// <summary>
         /// Bytes per HD sector
         /// </summary>
         public int BytesPerSector = BytesPerSector;
+
         /// <summary>
         /// Reset flag
         /// </summary>
         public bool Reset = Reset;
-
 
         /// <summary>
         /// Determines whether the specified <see cref="Capacity"/>s are equal to each other.
@@ -1415,7 +1497,9 @@ namespace EOSDigital.SDK
         /// <returns>True if the <see cref="Capacity"/>s are equal; otherwise, false</returns>
         public static bool operator ==(Capacity x, Capacity y)
         {
-            return x.NumberOfFreeClusters == y.NumberOfFreeClusters && x.BytesPerSector == y.BytesPerSector && x.Reset == y.Reset;
+            return x.NumberOfFreeClusters == y.NumberOfFreeClusters
+                && x.BytesPerSector == y.BytesPerSector
+                && x.Reset == y.Reset;
         }
 
         /// <summary>
@@ -1466,22 +1550,27 @@ namespace EOSDigital.SDK
         /// Menu Item 1
         /// </summary>
         public MyMenuID MenuItem1;
+
         /// <summary>
         /// Menu Item 2
         /// </summary>
         public MyMenuID MenuItem2;
+
         /// <summary>
         /// Menu Item 3
         /// </summary>
         public MyMenuID MenuItem3;
+
         /// <summary>
         /// Menu Item 4
         /// </summary>
         public MyMenuID MenuItem4;
+
         /// <summary>
         /// Menu Item 5
         /// </summary>
         public MyMenuID MenuItem5;
+
         /// <summary>
         /// Menu Item 6
         /// </summary>
@@ -1498,14 +1587,19 @@ namespace EOSDigital.SDK
 
             MenuItem1 = MenuItem2 = MenuItem3 = MenuItem4 = MenuItem5 = MenuItem6 = MyMenuID.NotSet;
 
-            if (items.Length > 0) MenuItem1 = items[0];
-            if (items.Length > 1) MenuItem2 = items[1];
-            if (items.Length > 2) MenuItem3 = items[2];
-            if (items.Length > 3) MenuItem4 = items[3];
-            if (items.Length > 4) MenuItem5 = items[4];
-            if (items.Length > 5) MenuItem6 = items[5];
+            if (items.Length > 0)
+                MenuItem1 = items[0];
+            if (items.Length > 1)
+                MenuItem2 = items[1];
+            if (items.Length > 2)
+                MenuItem3 = items[2];
+            if (items.Length > 3)
+                MenuItem4 = items[3];
+            if (items.Length > 4)
+                MenuItem5 = items[4];
+            if (items.Length > 5)
+                MenuItem6 = items[5];
         }
-
 
         /// <summary>
         /// Determines whether the specified <see cref="MyMenuItems"/>s are equal to each other.
