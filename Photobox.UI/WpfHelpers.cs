@@ -1,4 +1,5 @@
-﻿using SixLabors.ImageSharp;
+﻿using Microsoft.IO;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.PixelFormats;
 using System.Drawing;
@@ -27,16 +28,16 @@ public static partial class BitmapToBitmapSource
 
     public static BitmapSource ToBitmapSource<TPixel>(this Image<TPixel> image) where TPixel: unmanaged, IPixel<TPixel>
     {
-        using var memoryStream = new MemoryStream();
+        using var stream = new MemoryStream();
 
         // Save the Image<Rgb24> to a stream in a format BitmapSource understands (e.g., PNG)
-        image.Save(memoryStream, new JpegEncoder());
-        memoryStream.Seek(0, SeekOrigin.Begin);
+        image.Save(stream, new JpegEncoder());
+        stream.Seek(0, SeekOrigin.Begin);
 
         // Create a BitmapImage and load the MemoryStream data
         var bitmapImage = new BitmapImage();
         bitmapImage.BeginInit();
-        bitmapImage.StreamSource = memoryStream;
+        bitmapImage.StreamSource = stream;
         bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
         bitmapImage.EndInit();
 
