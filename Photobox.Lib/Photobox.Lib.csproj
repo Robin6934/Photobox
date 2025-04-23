@@ -9,6 +9,10 @@
 
   <ItemGroup>
     <PackageReference Include="AdysTech.CredentialManager" />
+    <PackageReference Include="CSharpier.MsBuild">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="SixLabors.ImageSharp" />
   </ItemGroup>
