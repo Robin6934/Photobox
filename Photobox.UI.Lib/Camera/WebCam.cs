@@ -3,6 +3,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IO;
 using Photobox.Lib;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -11,34 +12,36 @@ namespace Photobox.UI.Lib.Camera;
 
 public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime applicationLifetime) : CameraBase(logger)
 {
-    private VideoCapture? capture = default;
+    private VideoCapture? _capture = default;
 
-    private readonly ILogger<WebCam> logger = logger;
+    private readonly ILogger<WebCam> _logger = logger;
 
-    private readonly IHostApplicationLifetime applicationLifetime = applicationLifetime;
+    private readonly IHostApplicationLifetime _applicationLifetime = applicationLifetime;
+    
+    private readonly RecyclableMemoryStreamManager _manager = new();
 
-    public override AspectRatio ImageAspectRatio => new ((int)capture.Get(CapProp.FrameWidth), (int)capture.Get(CapProp.FrameHeight));
+    public override AspectRatio ImageAspectRatio => new ((int)_capture.Get(CapProp.FrameWidth), (int)_capture.Get(CapProp.FrameHeight));
 
     public override void Connect()
     {
-        capture = new VideoCapture();
-        capture.Set(CapProp.FrameWidth, 1200);
-        capture.Set(CapProp.FrameHeight, 800);
-        logger.LogInformation("[WebCam] has been connected.");
+        _capture = new VideoCapture();
+        _capture.Set(CapProp.FrameWidth, 1200);
+        _capture.Set(CapProp.FrameHeight, 800);
+        _logger.LogInformation("[WebCam] has been connected.");
     }
 
     public override void Disconnect()
     {
-        capture?.Dispose();
-        capture = null;
-        logger.LogInformation("[WebCam] has been disconnected.");
+        _capture?.Dispose();
+        _capture = null;
+        _logger.LogInformation("[WebCam] has been disconnected.");
     }
 
     public override void Dispose()
     {
-        capture?.Dispose();
-        capture = null;
-        logger.LogInformation("[WebCam] has been disposed.");
+        _capture?.Dispose();
+        _capture = null;
+        _logger.LogInformation("[WebCam] has been disposed.");
     }
 
     public override void StartStream()
@@ -47,40 +50,40 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
         Task.Run(() =>
         {
             using Mat frame = new();
-            while (!applicationLifetime.ApplicationStopping.IsCancellationRequested
+            while (!_applicationLifetime.ApplicationStopping.IsCancellationRequested
                 && LiveViewActive)
             {
-                capture?.Read(frame);
+                _capture?.Read(frame);
 
-                byte[] data = frame.ToImage<Rgb, byte>(false).ToJpegData();
+                byte[] data = frame.ToImage<Rgb, byte>().ToJpegData();
 
                 OnNewStreamImage(new MemoryStream(data));
             }
-        }, applicationLifetime.ApplicationStopping);
-        logger.LogInformation("[WebCam] liveView started.");
+        }, _applicationLifetime.ApplicationStopping);
+        _logger.LogInformation("[WebCam] liveView started.");
     }
 
     public override void StopStream()
     {
         LiveViewActive = false;
-        logger.LogInformation("[WebCam] liveView stopped.");
+        _logger.LogInformation("[WebCam] liveView stopped.");
     }
 
     public override async Task<Image<Rgb24>> TakePictureAsync()
     {
         using Mat frame = new();
-        capture?.Read(frame);
+        _capture?.Read(frame);
 
-        logger.LogInformation("[WebCam] picture has been taken.");
+        _logger.LogInformation("[WebCam] picture has been taken.");
 
         await Task.CompletedTask;
 
-        return Image.Load<Rgb24>(frame.ToImage<Rgb, byte>(false).ToJpegData());
+        return Image.Load<Rgb24>(frame.ToImage<Rgb, byte>().ToJpegData());
     }
 
     public override void Focus()
     {
-        logger.LogInformation("[WebCam] has focused.");
+        _logger.LogInformation("[WebCam] has focused.");
     }
 
     public static bool Connected()

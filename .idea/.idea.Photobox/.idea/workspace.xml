@@ -16,12 +16,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5e8b0e95-3a53-45a9-9f99-610719a87e94" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/CredentialValidationException.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Components/Pages/Register.cshtml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Components/Pages/Register.cshtml.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Photobox/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Photobox/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/AccessTokenManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/AccessTokenManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/IAccessTokenManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/IAccessTokenManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI/Windows/LoginWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/Windows/LoginWindow.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI/Windows/MainWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/Windows/MainWindow.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Directory.Packages.props" beforeDir="false" afterPath="$PROJECT_DIR$/Directory.Packages.props" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Documentation/chapters/program/program.tex" beforeDir="false" afterPath="$PROJECT_DIR$/Documentation/chapters/program/program.tex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Documentation/main.tex" beforeDir="false" afterPath="$PROJECT_DIR$/Documentation/main.tex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EDSKLib/EDSKLib.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/EDSKLib.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Lib.Test/Photobox.Lib.Test.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib.Test/Photobox.Lib.Test.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Lib/Photobox.Lib.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/Photobox.Lib.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Lib/RestApi/Client.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/RestApi/Client.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib.Test/Photobox.UI.Lib.Test.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib.Test/Photobox.UI.Lib.Test.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/WebCam.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/WebCam.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Photobox.UI.Lib.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Photobox.UI.Lib.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI/Photobox.UI.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/Photobox.UI.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.UI/WpfHelpers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/WpfHelpers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/Photobox.Web.Client.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/Photobox.Web.Client.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/OpenAPI/swagger.json" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/OpenAPI/swagger.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox.Web.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox.Web.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,13 +54,24 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4df8f5bc5fe446529195de16421420d4dce00/54/0b6e9a77/IInputArray.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4df8f5bc5fe446529195de16421420d4dce00/79/8625b279/Mat.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4df8f5bc5fe446529195de16421420d4dce00/90/1b2cb25a/UnmanagedVector.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4df8f5bc5fe446529195de16421420d4dce00/92/1f7493aa/Image`2.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4df8f5bc5fe446529195de16421420d4dce00/b1/1cae91fe/CvInvoke.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4df8f5bc5fe446529195de16421420d4dce00/b4/1d835376/VectorOfByte.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4df8f5bc5fe446529195de16421420d4dce00/c2/b6be335b/IInputArrayOfArrays.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4df8f5bc5fe446529195de16421420d4dce00/d5/423f194f/IOutputArray.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/57cb3d39cf80483da78de29bf08ab76a5800/9c/80870e33/CredentialAPIException.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/76803a04e31b4fee99d90bcbfc5a6bdde8e930/d5/09c49b64/ExceptionDispatchInfo.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/76803a04e31b4fee99d90bcbfc5a6bdde8e930/f6/7f2e779e/StackFrameIterator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/abffd0563eba4c969adf2f1bbd1f8bc2222918/c9/48bfb832/Dispatcher.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/5046e3df38622fa96aaf18517b7fc77c1fb255137d54b03ffcc513518edfa58/RecyclableMemoryStreamManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/69b8ee739126db8ad6a2c3d5a87138316eedf3c7e61798cc50a7ef87c32b2d/HttpClientHandler.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/85dc19c375617d74ab949ac1a9a4b89081d58851c46bf2d86ea27b6ad4adc7/RecyclableMemoryStream.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c439425da351c75ac7d966a1cc8324b51a9c471865af79d2f2f3fcb65e392/HttpClient.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c8ff5426bce7f781e6035a111b49b195bab86ffe24e39c7112cc02a4361/InputManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f4fc2bdcaf03941c8c7d73af6ddc7b4ba73414260e39719e0a4feb05113510/System.Management.notsupported.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Photobox.Web/Photobox.Web/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Photobox.Web/Photobox.Web/nswag.json" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -71,29 +94,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.Photobox.UI.executor": "Run",
-    ".NET Launch Settings Profile.Photobox.Web: https.executor": "Run",
-    ".NET Project.ConsoleApp1.executor": "Run",
-    "ATTACH_DIALOG_SELECTED_CONTAINER": "photobox-photobox.web-1",
-    "Docker.Photobox.Web/Dockerfile.executor": "Debug",
-    "Docker.docker-compose.yml.photobox.web: Compose Deployment.executor": "Run",
-    "Docker.docker-compose.yml: Compose Deployment.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "XThreadsFramesViewSplitterKey": "0.42680776",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.Photobox.UI.executor&quot;: &quot;Debug&quot;,
+    &quot;.NET Launch Settings Profile.Photobox.Web: https.executor&quot;: &quot;Run&quot;,
+    &quot;.NET Project.ConsoleApp1.executor&quot;: &quot;Run&quot;,
+    &quot;ATTACH_DIALOG_SELECTED_CONTAINER&quot;: &quot;photobox-photobox.web-1&quot;,
+    &quot;Docker.Photobox.Web/Dockerfile.executor&quot;: &quot;Debug&quot;,
+    &quot;Docker.docker-compose.yml.photobox.web: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compose.yml: Compose Deployment.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.42680776&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;MonitoringPageId&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="QodanaReportsService">
     <option name="descriptions">
       <ReportDescription localRun="true" path="C:\Users\Robin\AppData\Local\Temp\qodana_output\qodana.sarif.json" reportGuid="0f694b94-cc76-4de0-a405-f0e883426139" reportId="Photobox/qodana/2025-03-15" />
@@ -327,7 +350,9 @@
       <workItem from="1744365725045" duration="2226000" />
       <workItem from="1744891348126" duration="976000" />
       <workItem from="1744990548421" duration="1053000" />
-      <workItem from="1745089122333" duration="4252000" />
+      <workItem from="1745089122333" duration="4853000" />
+      <workItem from="1745142159633" duration="9024000" />
+      <workItem from="1745415896006" duration="4991000" />
     </task>
     <servers />
   </component>

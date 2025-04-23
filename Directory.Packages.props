@@ -21,6 +21,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
+    <PackageVersion Include="CSharpier.MsBuild" Version="1.0.0" />
     <PackageVersion Include="DeviceId" Version="6.9.0" />
     <PackageVersion Include="DeviceId.Windows.Wmi" Version="6.9.0" />
     <PackageVersion Include="Emgu.CV" Version="4.10.0.5680" />
@@ -43,6 +44,7 @@
     <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.4" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.4" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.4" />
+    <PackageVersion Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.2" />
     <PackageVersion Include="MudBlazor" Version="8.5.1" />
@@ -58,7 +60,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
     <PackageVersion Include="Polly" Version="8.5.2" />
-    <PackageVersion Include="Scalar.AspNetCore" Version="2.1.16" />
+    <PackageVersion Include="Scalar.AspNetCore" Version="2.1.18" />
     <PackageVersion Include="Serilog" Version="4.2.0" />
     <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageVersion Include="Serilog.Enrichers.Environment" Version="3.0.1" />
