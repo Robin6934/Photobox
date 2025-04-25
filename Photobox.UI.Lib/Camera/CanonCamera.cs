@@ -52,7 +52,7 @@ internal class CanonCamera(
     {
         if (LiveViewActive)
         {
-            WrapStream wrapStream = new(img);
+            using WrapStream wrapStream = new(img);
             OnNewStreamImage(wrapStream);
         }
     }
