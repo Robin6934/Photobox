@@ -16,95 +16,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5e8b0e95-3a53-45a9-9f99-610719a87e94" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Photobox.UI.Lib/ImageTrigger/IImageTrigger.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Photobox.UI.Lib/ImageTrigger/PalmDetector.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Resources/hand_landmarker.task" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Photobox/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Photobox/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Documentation/chapters/program/program.tex" beforeDir="false" afterPath="$PROJECT_DIR$/Documentation/chapters/program/program.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EDSKLib/API/Base/Camera.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/API/Base/Camera.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EDSKLib/API/Base/CanonAPI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/API/Base/CanonAPI.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EDSKLib/API/Helper/CameraValue.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/API/Helper/CameraValue.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EDSKLib/API/Helper/Delegates.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/API/Helper/Delegates.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EDSKLib/API/Helper/ExceptionHandling.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/API/Helper/ExceptionHandling.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EDSKLib/API/Helper/IO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/API/Helper/IO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EDSKLib/API/Helper/STAThread.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/API/Helper/STAThread.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EDSKLib/API/Helper/ValueCollections.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/API/Helper/ValueCollections.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EDSKLib/EDSKLib.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/EDSKLib.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EDSKLib/SDK/SDKDelegates.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/SDK/SDKDelegates.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EDSKLib/SDK/SDKEnums.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/SDK/SDKEnums.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EDSKLib/SDK/SDKMethods.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/SDK/SDKMethods.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EDSKLib/SDK/SDKStructs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/EDSKLib/SDK/SDKStructs.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Lib.Test/AccessTokenManagerTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib.Test/AccessTokenManagerTest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Lib.Test/Photobox.Lib.Test.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib.Test/Photobox.Lib.Test.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/AccessTokenManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/AccessTokenManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/CredentialValidationException.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/CredentialValidationException.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/IAccessTokenManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/AccessTokenManager/IAccessTokenManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Lib/AspectRatio.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/AspectRatio.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Lib/Extensions/ImageExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/Extensions/ImageExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Lib/Helper/ImageHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/Helper/ImageHelper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Lib/Photobox.Lib.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/Photobox.Lib.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Lib/RestApi/Client.Extension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/RestApi/Client.Extension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib.Test/ImageManagerTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib.Test/ImageManagerTest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib.Test/Photobox.UI.Lib.Test.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib.Test/Photobox.UI.Lib.Test.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraBase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraException.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraException.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraFactory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraNotFoundException.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraNotFoundException.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CameraType.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Lib/RestApi/Client.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Lib/RestApi/Client.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CanonCamera.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/CanonCamera.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/WebCam.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/WebCam.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/WrappingStream.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Camera/WrappingStream.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/ConfigModels/CountDownConfig.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/ConfigModels/CountDownConfig.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/ConfigModels/PhotoboxConfig.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/ConfigModels/PhotoboxConfig.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Folders.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Folders.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/GlobalSuppressions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/GlobalSuppressions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Helper/PhotoboxHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Helper/PhotoboxHelper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/ImageHandler/ImageHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/ImageHandler/ImageHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/ImageManager/IImageManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/ImageManager/IImageManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/ImageManager/ImageManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/ImageManager/ImageManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/ImageUploadService/IImageUploadService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/ImageUploadService/IImageUploadService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/ImageUploadService/ImageUploadService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/ImageUploadService/ImageUploadService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Photobox.UI.Lib.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Photobox.UI.Lib.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Printer/IPrinter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Printer/IPrinter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Printer/Printer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Printer/Printer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI.Lib/Printer/PrinterEnabledOptions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI.Lib/Printer/PrinterEnabledOptions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI/App.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/App.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI/AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/AssemblyInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI/CountDown/CountDownCircle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/CountDown/CountDownCircle.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI/CountDown/ICountDown.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/CountDown/ICountDown.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI/ImageViewer/IImageViewer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/ImageViewer/IImageViewer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI/ImageViewer/ImageViewResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/ImageViewer/ImageViewResult.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI/ImageViewer/ImageViewerLocal.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/ImageViewer/ImageViewerLocal.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI/Photobox.UI.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/Photobox.UI.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI/Windows/ImageViewWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/Windows/ImageViewWindow.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI/Windows/LogWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/Windows/LogWindow.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI/Windows/LoginWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/Windows/LoginWindow.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI/Windows/MainWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/Windows/MainWindow.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.UI/WpfHelpers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.UI/WpfHelpers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/MouseService/IMouseService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/MouseService/IMouseService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/MouseService/MouseService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/MouseService/MouseService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/Pages/Components/ImageObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/Pages/Components/ImageObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/Photobox.Web.Client.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/Photobox.Web.Client.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Aws/Aws.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Aws/Aws.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Components/Pages/Register.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Components/Pages/Register.cshtml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/DbContext/AppDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/DbContext/AppDbContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/GlobalSuppressions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/GlobalSuppressions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/HealthCheck/HealthCheck.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/HealthCheck/HealthCheck.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/HealthCheck/HealthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/HealthCheck/HealthController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/HealthCheck/MemoryHealthCheck.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/HealthCheck/MemoryHealthCheck.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Image/ImageController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Image/ImageController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Image/ImageModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Image/ImageModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Image/ImageService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Image/ImageService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20241201190630_InitialCreate.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20241201190630_InitialCreate.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20241206105802_UpdatedAppdcoontextToInheritIdentityDbCOntext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20241206105802_UpdatedAppdcoontextToInheritIdentityDbCOntext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20241206164258_AddedPhotoBoxModelWithRelationToUser.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20241206164258_AddedPhotoBoxModelWithRelationToUser.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20241207103250_UpdatedPhotoBoxModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20241207103250_UpdatedPhotoBoxModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20250211183747_update.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Migrations/20250211183747_update.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox.Web.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox.Web.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox/DTOs/CreatePhotoBoxDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox/DTOs/CreatePhotoBoxDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox/PhotoBoxController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox/PhotoBoxController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox/PhotoBoxModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox/PhotoBoxModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox/PhotoBoxService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Photobox/PhotoBoxService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/StorageProvider/AwsStorageProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/StorageProvider/AwsStorageProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/OpenAPI/swagger.json" beforeDir="false" afterPath="$PROJECT_DIR$/Photobox.Web/Photobox.Web/OpenAPI/swagger.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,24 +45,28 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4df8f5bc5fe446529195de16421420d4dce00/54/0b6e9a77/IInputArray.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4df8f5bc5fe446529195de16421420d4dce00/79/8625b279/Mat.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4df8f5bc5fe446529195de16421420d4dce00/90/1b2cb25a/UnmanagedVector.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4df8f5bc5fe446529195de16421420d4dce00/92/1f7493aa/Image`2.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4df8f5bc5fe446529195de16421420d4dce00/b1/1cae91fe/CvInvoke.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4df8f5bc5fe446529195de16421420d4dce00/b4/1d835376/VectorOfByte.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4df8f5bc5fe446529195de16421420d4dce00/c2/b6be335b/IInputArrayOfArrays.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4df8f5bc5fe446529195de16421420d4dce00/d5/423f194f/IOutputArray.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/57cb3d39cf80483da78de29bf08ab76a5800/9c/80870e33/CredentialAPIException.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/76803a04e31b4fee99d90bcbfc5a6bdde8e930/d5/09c49b64/ExceptionDispatchInfo.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/76803a04e31b4fee99d90bcbfc5a6bdde8e930/f6/7f2e779e/StackFrameIterator.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/abffd0563eba4c969adf2f1bbd1f8bc2222918/c9/48bfb832/Dispatcher.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/5046e3df38622fa96aaf18517b7fc77c1fb255137d54b03ffcc513518edfa58/RecyclableMemoryStreamManager.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/69b8ee739126db8ad6a2c3d5a87138316eedf3c7e61798cc50a7ef87c32b2d/HttpClientHandler.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/85dc19c375617d74ab949ac1a9a4b89081d58851c46bf2d86ea27b6ad4adc7/RecyclableMemoryStream.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c439425da351c75ac7d966a1cc8324b51a9c471865af79d2f2f3fcb65e392/HttpClient.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c8ff5426bce7f781e6035a111b49b195bab86ffe24e39c7112cc02a4361/InputManager.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f4fc2bdcaf03941c8c7d73af6ddc7b4ba73414260e39719e0a4feb05113510/System.Management.notsupported.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/ILViewer/2ec8774ab1a1427ca23daf542cec0f509e00/aa/f4e1bff2/02000019pdb9.il" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/ILViewer/76803a04e31b4fee99d90bcbfc5a6bdde8e930/9d/f779a9a5/02000732pdb379.il" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/ILViewer/76803a04e31b4fee99d90bcbfc5a6bdde8e930/b1/3882273c/02000310pdb1193.il" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/ILViewer/a16f6d85d3af44e2ab80041364c5b8f81ba00/d1/ff74eff5/02000064pdb7.il" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/76803a04e31b4fee99d90bcbfc5a6bdde8e930/57/c28347f5/SeekOrigin.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/bb06f64c178142b0b2d10172f56d4911e8e928/9d/cf5fea9f/SafeFileHandle.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/cf05811bd1134b2ba7a1f27a9f82d7e613c00/17/bee02878/StatusOrPoller`1.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/cf05811bd1134b2ba7a1f27a9f82d7e613c00/35/8bddd990/StringPacket.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/cf05811bd1134b2ba7a1f27a9f82d7e613c00/68/46fc167e/UnsafeNativeMethods.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/cf05811bd1134b2ba7a1f27a9f82d7e613c00/7f/962dac1c/OutputStreamPoller`1.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/cf05811bd1134b2ba7a1f27a9f82d7e613c00/bd/fec092cc/MpResourceHandle.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/cf05811bd1134b2ba7a1f27a9f82d7e613c00/d7/442028ac/CalculatorGraph.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/cf05811bd1134b2ba7a1f27a9f82d7e613c00/ef/5937eb77/Packet`1.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/1bbf1a30d4ced2216e71269a345f51394b03ebc2bc041a5f5077e87cb649b6/ValueTask.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/2721cada6353657afeaf98241282549744da626723ffab52a5d153ff57f8a635/ArrayPoolEventSource.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/2f657497243c260bae22d6d2c67ab907371015db851628463cc13adfaf325/Int64.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/47bfed48817fad7d8e1a89bf3530e4be7277b022a9c7477c5a243031605a5f/ReadOnlySpan.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/5259d3b492565eee74334a7de8f55cbaac1fe860ecd250567891931a1ab5b7e/ArrayPool.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9a6b1457cbcf17db31a383ba49ef9bcc786cf3ef77146d997eee499b27a46d/Object.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d1287462d4ec4078c61b8e92a0952fb7de3e7e877d279e390a4c136a6365126/Stream.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/dbe1667f9e724348c55a94d9cc7c620ab6f425b9c81b567afc6da3692b2a4bd/SharedArrayPool.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/ffe782c4f6ef8bcf4b9553bd1994664a7a43716541d94db9cd64e63a59496/Unsafe.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Photobox.Web/Photobox.Web/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Photobox.Web/Photobox.Web/nswag.json" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -204,13 +128,8 @@
       <option name="WORKING_DIRECTORY" value="" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
-      <option name="ENV_FILE_PATHS" value="" />
-      <option name="REDIRECT_INPUT_PATH" value="" />
-      <option name="PTY_MODE" value="Auto" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
-      <option name="AUTO_ATTACH_CHILDREN" value="0" />
-      <option name="MIXED_MODE_DEBUG" value="0" />
       <option name="PROJECT_PATH" value="$PROJECT_DIR$/ConsoleApp1/ConsoleApp1.csproj" />
       <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
       <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
@@ -227,13 +146,8 @@
       <option name="WORKING_DIRECTORY" value="" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
-      <option name="ENV_FILE_PATHS" value="" />
-      <option name="REDIRECT_INPUT_PATH" value="" />
-      <option name="PTY_MODE" value="Auto" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
-      <option name="AUTO_ATTACH_CHILDREN" value="0" />
-      <option name="MIXED_MODE_DEBUG" value="0" />
       <option name="PROJECT_PATH" value="$PROJECT_DIR$/Photobox.Lib.Test/Photobox.Lib.Test.csproj" />
       <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
       <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
@@ -250,13 +164,8 @@
       <option name="WORKING_DIRECTORY" value="" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
-      <option name="ENV_FILE_PATHS" value="" />
-      <option name="REDIRECT_INPUT_PATH" value="" />
-      <option name="PTY_MODE" value="Auto" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
-      <option name="AUTO_ATTACH_CHILDREN" value="0" />
-      <option name="MIXED_MODE_DEBUG" value="0" />
       <option name="PROJECT_PATH" value="$PROJECT_DIR$/Photobox.Web/Photobox.Web.Client/Photobox.Web.Client.csproj" />
       <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
       <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
@@ -424,6 +333,7 @@
       <workItem from="1745089122333" duration="4853000" />
       <workItem from="1745142159633" duration="9024000" />
       <workItem from="1745415896006" duration="5589000" />
+      <workItem from="1745476658256" duration="6190000" />
     </task>
     <servers />
   </component>
