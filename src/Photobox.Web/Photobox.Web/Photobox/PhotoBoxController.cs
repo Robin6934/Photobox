@@ -13,13 +13,13 @@ namespace Photobox.Web.Photobox;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
+[Authorize(AuthenticationSchemes = "Identity.Bearer")]
 public class PhotoBoxController(
     ILogger<PhotoBoxController> logger,
     SignInManager<ApplicationUser> signInManager,
     AppDbContext dbContext
 ) : Controller
 {
-    [Authorize(AuthenticationSchemes = "Identity.Bearer")]
     [HttpPost]
     public async Task<IActionResult> Create(CreatePhotoBoxDto createPhotoBox)
     {
@@ -27,7 +27,7 @@ public class PhotoBoxController(
 
         var user = await dbContext.Users.FindAsync(userId);
 
-        var photobox = new PhotoBoxModel()
+        var photobox = new PhotoBoxModel
         {
             PhotoboxId = createPhotoBox.PhotoBoxId,
             Name = createPhotoBox.PhotoBoxName,
@@ -78,7 +78,7 @@ public class PhotoBoxController(
             p.PhotoboxId == photoBoxId
         );
 
-        if (photoBox == null)
+        if (photoBox is null)
         {
             return NotFound();
         }

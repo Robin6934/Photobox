@@ -14,6 +14,8 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
     private DateTime _accessTokenExpiry = DateTime.Now;
 
     private const string RefreshTokenTarget = "PhotoboxRefreshToken";
+    
+    public Lazy<AccessTokenManager> Instance = new Lazy<AccessTokenManager>(() => new AccessTokenManager(photoBoxClient));
 
     private string? RefreshToken
     {
