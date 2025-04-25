@@ -12,33 +12,31 @@
         /// <summary>
         /// Gets a value indicating whether the current stream supports reading.
         /// </summary>
-        public override bool CanRead => Base.CanRead;
+        public override bool CanRead => inStream.CanRead;
 
         /// <summary>
         /// Gets a value indicating whether the current stream supports seeking.
         /// </summary>
-        public override bool CanSeek => Base.CanSeek;
+        public override bool CanSeek => inStream.CanSeek;
 
         /// <summary>
         /// Gets a value indicating whether the current stream supports writing.
         /// </summary>
-        public override bool CanWrite => Base.CanWrite;
+        public override bool CanWrite => inStream.CanWrite;
 
         /// <summary>
         /// Gets the length in bytes of the stream.
         /// </summary>
-        public override long Length => Base.Length;
+        public override long Length => inStream.Length;
 
         /// <summary>
         /// Gets or sets the position within the current stream.
         /// </summary>
         public override long Position
         {
-            get => Base.Position;
-            set => Base.Position = value;
+            get => inStream.Position;
+            set => inStream.Position = value;
         }
-
-        private readonly Stream Base = inStream;
 
         /// <summary>
         /// reads a sequence of bytes from the current stream and advances
@@ -54,7 +52,7 @@
         /// number of bytes requested if that many bytes are not currently available,
         /// or zero (0) if the end of the stream has been reached.</returns>
         public override int Read(byte[] buffer, int offset, int count) =>
-            Base.Read(buffer, offset, count);
+            inStream.Read(buffer, offset, count);
 
         /// <summary>
         /// When overridden in a derived class, writes a sequence of bytes to the current
@@ -66,7 +64,7 @@
         /// current stream.</param>
         /// <param name="count">The number of bytes to be written to the current stream.</param>
         public override void Write(byte[] buffer, int offset, int count) =>
-            Base.Write(buffer, offset, count);
+            inStream.Write(buffer, offset, count);
 
         /// <summary>
         /// sets the position within the current stream.
@@ -76,17 +74,17 @@
         /// used
         /// to obtain the new position.</param>
         /// <returns>The new position within the current stream.</returns>
-        public override long Seek(long offset, SeekOrigin origin) => Base.Seek(offset, origin);
+        public override long Seek(long offset, SeekOrigin origin) => inStream.Seek(offset, origin);
 
         /// <summary>
         /// Clears all buffers for this stream and causes any buffered data to be written to the underlying device.
         /// </summary>
-        public override void Flush() => Base.Flush();
+        public override void Flush() => inStream.Flush();
 
         /// <summary>
         /// Sets the length of the current stream.
         /// </summary>
         /// <param name="value">The desired length of the current stream in bytes.</param>
-        public override void SetLength(long value) => Base.SetLength(value);
+        public override void SetLength(long value) => inStream.SetLength(value);
     }
 }
