@@ -14,6 +14,9 @@ public class PhotoBoxModel
     [MaxLength(50)]
     public required string Name { get; set; }
 
+    [Column(TypeName = "char(6)")]
+    public required string GalleryId { get; set; }
+
     [Required]
     [MaxLength(52)]
     public required string PhotoboxId { get; set; }
