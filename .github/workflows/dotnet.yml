@@ -17,7 +17,7 @@ jobs:
     env:
       SOLUTION_FILE_PATH: ${{ github.workspace }}/src/Photobox.sln
       PROJECT_FILE_PATH: ${{ github.workspace }}/src/Photobox.UI/Photobox.UI.csproj
-      TEST_FILE_PATH: ${{ github.workspace }}/src/Photobox.UI.Test/Photobox.UI.Test.csproj
+      TEST_FILE_PATH: ${{ github.workspace }}/src/Photobox.UI.Lib.Test/Photobox.UI.Lib.Test.csproj
 
     steps:
     - uses: actions/checkout@v4
