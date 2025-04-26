@@ -13,12 +13,16 @@ public class ImageController(ImageService imageService) : Controller
     /// <summary>
     /// Uploads a picture to the server.
     /// </summary>
+    /// <param name="photoBoxId">The unique identifier of the photobox that has taken the picture.</param>
     /// <param name="formFile">The picture file to upload.</param>
     /// <response code="200">Image has been uploaded successfully</response>
     [HttpPost]
     [ProducesResponseType<ImageUploadResult>((int)HttpStatusCode.OK)]
     [Authorize]
-    public async Task<IActionResult> UploadImage(IFormFile formFile)
+    public async Task<IActionResult> UploadImage(
+        [FromHeader(Name = "X-PhotoBox-Id")] string photoBoxId,
+        IFormFile formFile
+    )
     {
         if (formFile == null || formFile.Length == 0)
         {

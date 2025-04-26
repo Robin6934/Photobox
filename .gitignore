@@ -407,3 +407,4 @@ EDSKLib/EDSDK.dll
 
 # LaTeX
 /Documentation/out
+src/Photobox.Web/Photobox.Web/OpenAPI/swagger.json

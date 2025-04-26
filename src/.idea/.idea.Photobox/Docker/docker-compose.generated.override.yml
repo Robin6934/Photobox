@@ -2,7 +2,7 @@
 services:
   photobox.web:
     build:
-      context: "C:\\Users\\Robin\\Documents\\GitHub\\Photobox"
+      context: "C:\\Users\\Robin\\Documents\\GitHub\\Photobox\\src"
       dockerfile: "Photobox.Web/Photobox.Web/Dockerfile"
       target: "base"
     command: []
@@ -15,7 +15,7 @@ services:
     image: "photoboxweb:dev"
     ports: []
     volumes:
-    - "C:\\Users\\Robin\\Documents\\GitHub\\Photobox\\Photobox.Web\\Photobox.Web:/app:rw"
-    - "C:\\Users\\Robin\\Documents\\GitHub\\Photobox:/src:rw"
+    - "C:\\Users\\Robin\\Documents\\GitHub\\Photobox\\src\\Photobox.Web\\Photobox.Web:/app:rw"
+    - "C:\\Users\\Robin\\Documents\\GitHub\\Photobox\\src:/src:rw"
     - "C:\\Users\\Robin\\.nuget\\packages:/home/app/.nuget/packages"
     working_dir: "/app"

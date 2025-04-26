@@ -31,6 +31,7 @@ public partial class App
         _host = CreateHostBuilder(e.Args).Build();
 
         ImageClient.AccessTokenManager = _host.Services.GetService<IAccessTokenManager>();
+        PhotoBoxClient.AccessTokenManager = _host.Services.GetService<IAccessTokenManager>();
 
         await _host.StartAsync();
     }
