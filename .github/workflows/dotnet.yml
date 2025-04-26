@@ -15,7 +15,9 @@ jobs:
     runs-on: windows-latest
     
     env:
-      SOLUTION_FILE_PATH: ${{ github.workspace }}/Photobox.sln
+      SOLUTION_FILE_PATH: ${{ github.workspace }}/src/Photobox.sln
+      PROJECT_FILE_PATH: ${{ github.workspace }}/src/Photobox.UI/Photobox.UI.csproj
+      TEST_FILE_PATH: ${{ github.workspace }}/src/Photobox.UI.Test/Photobox.UI.Test.csproj
 
     steps:
     - uses: actions/checkout@v4
@@ -24,8 +26,8 @@ jobs:
       with:
         dotnet-version: 9.0.x
     - name: Restore dependencies
-      run: dotnet restore ${{env.SOLUTION_FILE_PATH}}
+      run: dotnet restore ${{env.PROJECT_FILE_PATH}}
     - name: Build
-      run: dotnet build ${{env.SOLUTION_FILE_PATH}} --no-restore
+      run: dotnet build ${{env.PROJECT_FILE_PATH}} --no-restore
     - name: Test
-      run: dotnet test ${{env.SOLUTION_FILE_PATH}} --no-build --verbosity normal
+      run: dotnet test ${{env.TEST_FILE_PATH}} --no-build --verbosity normal
