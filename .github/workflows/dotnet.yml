@@ -30,4 +30,4 @@ jobs:
     - name: Build
       run: dotnet build ${{env.PROJECT_FILE_PATH}} --no-restore
     - name: Test
-      run: dotnet test ${{env.TEST_FILE_PATH}} --no-build --verbosity normal
+      run: dotnet test ${{env.TEST_FILE_PATH}} --verbosity normal
