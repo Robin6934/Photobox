@@ -13,13 +13,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="DeviceId" />
-    <PackageReference Include="DeviceId.Windows.Wmi" />
     <PackageReference Include="Emgu.CV" />
     <PackageReference Include="Emgu.CV.Bitmap" />
     <PackageReference Include="Emgu.CV.runtime.windows" />
     <PackageReference Include="Mediapipe.Net" />
     <PackageReference Include="Mediapipe.Net.Runtime.CPU" />
+    <PackageReference Include="MethodTimer.Fody" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Microsoft.Extensions.Logging" />

@@ -1,12 +1,9 @@
 using System.Reflection;
 using System.Security.Claims;
 using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using MudBlazor.Services;
 using NSwag;
 using NSwag.Generation.Processors.Security;
@@ -16,6 +13,7 @@ using Photobox.Web.DbContext;
 using Photobox.Web.HealthCheck;
 using Photobox.Web.Image;
 using Photobox.Web.Models;
+using Photobox.Web.OperationProcessors;
 using Photobox.Web.StorageProvider;
 using Scalar.AspNetCore;
 using Serilog;
@@ -37,6 +35,8 @@ builder.Services.AddOpenApiDocument(doc =>
             Description = "Bearer token authorization header",
         }
     );
+
+    doc.OperationProcessors.Add(new PhotoboxIdHeaderProcessor());
 
     doc.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("bearer"));
 });

@@ -398,6 +398,16 @@
           "PhotoBox"
         ],
         "operationId": "PhotoBox_Create",
+        "parameters": [
+          {
+            "name": "X-PhotoBox-Id",
+            "in": "header",
+            "description": "Custom header to identify the PhotoBox",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "x-name": "createPhotoBox",
           "content": {
@@ -430,24 +440,22 @@
         ]
       }
     },
-    "/api/PhotoBox/Login": {
-      "post": {
+    "/api/PhotoBox/GetGalleryCode": {
+      "get": {
         "tags": [
           "PhotoBox"
         ],
-        "operationId": "PhotoBox_Login",
-        "requestBody": {
-          "x-name": "loginDto",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoginPhotoboxDto"
-              }
+        "operationId": "PhotoBox_GetGalleryCode",
+        "parameters": [
+          {
+            "name": "X-PhotoBox-Id",
+            "in": "header",
+            "description": "Custom header to identify the PhotoBox",
+            "schema": {
+              "type": "string"
             }
-          },
-          "required": true,
-          "x-position": 1
-        },
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -460,10 +468,15 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
-    "/api/PhotoBox/CheckIfPhotoboxExists/{photoBoxId}": {
+    "/api/PhotoBox/CheckIfPhotoboxExists": {
       "get": {
         "tags": [
           "PhotoBox"
@@ -472,14 +485,12 @@
         "operationId": "PhotoBox_CheckIfPhotoboxExists",
         "parameters": [
           {
-            "name": "photoBoxId",
-            "in": "path",
-            "required": true,
-            "description": "The ID of the photobox to check.",
+            "name": "X-PhotoBox-Id",
+            "in": "header",
+            "description": "Custom header to identify the PhotoBox",
             "schema": {
               "type": "string"
-            },
-            "x-position": 1
+            }
           }
         ],
         "responses": {
@@ -509,6 +520,26 @@
         ],
         "summary": "Uploads a picture to the server.",
         "operationId": "Image_UploadImage",
+        "parameters": [
+          {
+            "name": "X-PhotoBox-Id",
+            "x-originalName": "photoBoxId",
+            "in": "header",
+            "description": "The unique identifier of the photobox that has taken the picture.",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "X-PhotoBox-Id",
+            "in": "header",
+            "description": "Custom header to identify the PhotoBox",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -768,6 +799,9 @@
             "type": "string",
             "maxLength": 50,
             "minLength": 1
+          },
+          "galleryId": {
+            "type": "string"
           },
           "photoboxId": {
             "type": "string",
@@ -1103,33 +1137,8 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "photoBoxId": {
-            "type": "string"
-          },
-          "userName": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
           "photoBoxName": {
             "type": "string"
-          }
-        }
-      },
-      "LoginPhotoboxDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "userName": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "photoBoxId": {
-            "type": "string",
-            "format": "guid"
           }
         }
       },

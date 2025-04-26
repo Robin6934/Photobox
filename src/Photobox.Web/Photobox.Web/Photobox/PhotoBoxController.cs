@@ -1,10 +1,10 @@
 ﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NSwag.Annotations;
+using Photobox.Lib.Helper;
 using Photobox.Web.DbContext;
 using Photobox.Web.Models;
 using Photobox.Web.Photobox.DTOs;
@@ -21,61 +21,60 @@ public class PhotoBoxController(
 ) : Controller
 {
     [HttpPost]
-    public async Task<IActionResult> Create(CreatePhotoBoxDto createPhotoBox)
+    public async Task<IActionResult> Create(
+        CreatePhotoBoxDto createPhotoBox,
+        [FromHeader(Name = "X-PhotoBox-Id"), OpenApiIgnore] string photoBoxId,
+        CancellationToken cancellationToken
+    )
     {
         string userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-        var user = await dbContext.Users.FindAsync(userId);
+        var user = await dbContext.Users.FindAsync([userId], cancellationToken);
+
+        if (user is null)
+        {
+            logger.LogInformation("User with id {UserId} not found", userId);
+            return Unauthorized();
+        }
 
         var photobox = new PhotoBoxModel
         {
-            PhotoboxId = createPhotoBox.PhotoBoxId,
+            PhotoboxId = photoBoxId,
+            GalleryId = PhotoboxHelper.GenerateGalleryId(),
             Name = createPhotoBox.PhotoBoxName,
             ApplicationUser = user,
         };
 
+        logger.LogInformation("Photobox {PhotoBoxId} created.", photobox.PhotoboxId);
+
         return Ok(user);
     }
 
-    //https://github.com/dotnet/aspnetcore/blob/9388d498aae571b9575e8252ecc51b54b2b44e22/src/Identity/Core/src/IdentityApiEndpointRouteBuilderExtensions.cs#L90
-    [HttpPost]
-    public async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>> Login(
-        LoginPhotoboxDto loginDto
+    public async Task<IActionResult> GetGalleryCode(
+        [FromHeader(Name = "X-PhotoBox-Id"), OpenApiIgnore] string photoBoxId,
+        CancellationToken cancellationToken
     )
     {
-        signInManager.AuthenticationScheme = IdentityConstants.BearerScheme;
-
-        var result = await signInManager.PasswordSignInAsync(
-            loginDto.UserName,
-            loginDto.Password,
-            isPersistent: false,
-            lockoutOnFailure: false
-        );
-
-        if (!result.Succeeded)
-        {
-            return TypedResults.Problem(
-                result.ToString(),
-                statusCode: StatusCodes.Status401Unauthorized
-            );
-        }
-
-        return TypedResults.Empty;
+        return null;
     }
 
     /// <summary>
     /// Checks if a photobox with the specified ID exists in the database.
     /// </summary>
     /// <param name="photoBoxId">The ID of the photobox to check.</param>
+    /// <param name="cancellationToken">The cancellationToken passed in by the runtime.</param>
     /// <returns>An IActionResult indicating the result of the operation.</returns>
     /// <response code="200">Photobox exists in the database.</response>
     /// <response code="404">Photobox not found in the database.</response>
     [HttpGet("{photoBoxId}")]
-    [Authorize(AuthenticationSchemes = "Identity.Bearer")]
-    public async Task<IActionResult> CheckIfPhotoboxExists(string photoBoxId)
+    public async Task<IActionResult> CheckIfPhotoboxExists(
+        [FromHeader(Name = "X-PhotoBox-Id"), OpenApiIgnore] string photoBoxId,
+        CancellationToken cancellationToken
+    )
     {
-        var photoBox = await dbContext.PhotoBoxModels.FirstOrDefaultAsync(p =>
-            p.PhotoboxId == photoBoxId
+        var photoBox = await dbContext.PhotoBoxModels.FirstOrDefaultAsync(
+            p => p.PhotoboxId == photoBoxId,
+            cancellationToken
         );
 
         if (photoBox is null)

@@ -88,7 +88,9 @@
       "generateDefaultValues": true,
       "generateDataAnnotations": true,
       "excludedTypeNames": [],
-      "excludedParameterNames": [],
+      "excludedParameterNames": [
+        "X-PhotoBox-Id"
+      ],
       "handleReferences": false,
       "generateImmutableArrayProperties": false,
       "generateImmutableDictionaryProperties": false,
