@@ -4,7 +4,7 @@ using Photobox.Web.DbContext;
 using Photobox.Web.StorageProvider;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace Photobox.Web.Image;
+namespace Photobox.Web.Services;
 
 public class ImageService(
     AppDbContext dbContext,
@@ -17,7 +17,7 @@ public class ImageService(
 
     public async Task StoreImageAsync(Image<Rgb24> image, string imageName)
     {
-        ImageModel imageModel = new()
+        Models.Image imageModel = new()
         {
             UniqueImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}",
             ImageName = imageName,

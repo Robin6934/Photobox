@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
-namespace Photobox.Web.Image;
+namespace Photobox.Web.Models;
 
 [Index(nameof(ImageName))]
-public class ImageModel
+public class Image
 {
     [Key]
     public long Id { get; set; }

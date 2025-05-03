@@ -1,4 +1,4 @@
-﻿namespace Photobox.Web.Photobox.DTOs;
+﻿namespace Photobox.Web.Responses;
 
 public class CheckPhotoboxResponse
 {

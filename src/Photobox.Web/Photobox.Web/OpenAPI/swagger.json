@@ -397,6 +397,7 @@
         "tags": [
           "PhotoBox"
         ],
+        "summary": "",
         "operationId": "PhotoBox_Register",
         "parameters": [
           {
@@ -742,6 +743,38 @@
         "responses": {
           "200": {
             "description": ""
+          }
+        }
+      }
+    },
+    "/api/Health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Get Health",
+        "description": "Provides an indication about the health of the API",
+        "operationId": "Health_Get",
+        "responses": {
+          "200": {
+            "description": "API is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthReport"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "API is unhealthy or in degraded state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthReport"
+                }
+              }
+            }
           }
         }
       }
@@ -1141,6 +1174,1108 @@
             "type": "string"
           }
         }
+      },
+      "HealthReport": {
+        "type": "object",
+        "description": "Represents the result of executing a group of IHealthCheck instances.",
+        "additionalProperties": false,
+        "properties": {
+          "entries": {
+            "type": "object",
+            "description": "A IReadOnlyDictionary`2 containing the results from each health check.",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/HealthReportEntry"
+            }
+          },
+          "status": {
+            "description": "Gets a HealthStatus representing the aggregate status of all the health checks. The value of Status\nwill be the most severe status reported by a health check. If no checks were executed, the value is always Healthy.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/HealthStatus"
+              }
+            ]
+          },
+          "totalDuration": {
+            "type": "string",
+            "description": "Gets the time the health check service took to execute.",
+            "format": "duration"
+          }
+        }
+      },
+      "HealthReportEntry": {
+        "type": "object",
+        "description": "Represents an entry in a HealthReport. Corresponds to the result of a single IHealthCheck.",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "object",
+            "description": "Gets additional key-value pairs describing the health of the component.",
+            "additionalProperties": {}
+          },
+          "description": {
+            "type": "string",
+            "description": "Gets a human-readable description of the status of the component that was checked.",
+            "nullable": true
+          },
+          "duration": {
+            "type": "string",
+            "description": "Gets the health check execution duration.",
+            "format": "duration"
+          },
+          "exception": {
+            "description": "Gets an Exception representing the exception that was thrown when checking for status (if any).",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Exception"
+              }
+            ]
+          },
+          "status": {
+            "description": "Gets the health status of the component that was checked.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/HealthStatus"
+              }
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "description": "Gets the tags associated with the health check.",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Exception": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "targetSite": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/MethodBase"
+              }
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {}
+          },
+          "innerException": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Exception"
+              }
+            ]
+          },
+          "helpLink": {
+            "type": "string",
+            "nullable": true
+          },
+          "source": {
+            "type": "string",
+            "nullable": true
+          },
+          "hResult": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "stackTrace": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "MethodBase": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MemberInfo"
+          },
+          {
+            "type": "object",
+            "x-abstract": true,
+            "additionalProperties": false,
+            "properties": {
+              "attributes": {
+                "$ref": "#/components/schemas/MethodAttributes"
+              },
+              "methodImplementationFlags": {
+                "$ref": "#/components/schemas/MethodImplAttributes"
+              },
+              "callingConvention": {
+                "$ref": "#/components/schemas/CallingConventions"
+              },
+              "isAbstract": {
+                "type": "boolean"
+              },
+              "isConstructor": {
+                "type": "boolean"
+              },
+              "isFinal": {
+                "type": "boolean"
+              },
+              "isHideBySig": {
+                "type": "boolean"
+              },
+              "isSpecialName": {
+                "type": "boolean"
+              },
+              "isStatic": {
+                "type": "boolean"
+              },
+              "isVirtual": {
+                "type": "boolean"
+              },
+              "isAssembly": {
+                "type": "boolean"
+              },
+              "isFamily": {
+                "type": "boolean"
+              },
+              "isFamilyAndAssembly": {
+                "type": "boolean"
+              },
+              "isFamilyOrAssembly": {
+                "type": "boolean"
+              },
+              "isPrivate": {
+                "type": "boolean"
+              },
+              "isPublic": {
+                "type": "boolean"
+              },
+              "isConstructedGenericMethod": {
+                "type": "boolean"
+              },
+              "isGenericMethod": {
+                "type": "boolean"
+              },
+              "isGenericMethodDefinition": {
+                "type": "boolean"
+              },
+              "containsGenericParameters": {
+                "type": "boolean"
+              },
+              "methodHandle": {
+                "$ref": "#/components/schemas/RuntimeMethodHandle"
+              },
+              "isSecurityCritical": {
+                "type": "boolean"
+              },
+              "isSecuritySafeCritical": {
+                "type": "boolean"
+              },
+              "isSecurityTransparent": {
+                "type": "boolean"
+              }
+            }
+          }
+        ]
+      },
+      "MethodAttributes": {
+        "type": "integer",
+        "description": "",
+        "x-enumFlags": true,
+        "x-enumNames": [
+          "PrivateScope",
+          "ReuseSlot",
+          "Private",
+          "FamANDAssem",
+          "Assembly",
+          "Family",
+          "FamORAssem",
+          "Public",
+          "MemberAccessMask",
+          "UnmanagedExport",
+          "Static",
+          "Final",
+          "Virtual",
+          "HideBySig",
+          "NewSlot",
+          "VtableLayoutMask",
+          "CheckAccessOnOverride",
+          "Abstract",
+          "SpecialName",
+          "RTSpecialName",
+          "PinvokeImpl",
+          "HasSecurity",
+          "RequireSecObject",
+          "ReservedMask"
+        ],
+        "enum": [
+          0,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          16,
+          32,
+          64,
+          128,
+          256,
+          256,
+          512,
+          1024,
+          2048,
+          4096,
+          8192,
+          16384,
+          32768,
+          53248
+        ]
+      },
+      "MethodImplAttributes": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "IL",
+          "Managed",
+          "Native",
+          "OPTIL",
+          "CodeTypeMask",
+          "Runtime",
+          "ManagedMask",
+          "Unmanaged",
+          "NoInlining",
+          "ForwardRef",
+          "Synchronized",
+          "NoOptimization",
+          "PreserveSig",
+          "AggressiveInlining",
+          "AggressiveOptimization",
+          "InternalCall",
+          "MaxMethodImplVal"
+        ],
+        "enum": [
+          0,
+          0,
+          1,
+          2,
+          3,
+          3,
+          4,
+          4,
+          8,
+          16,
+          32,
+          64,
+          128,
+          256,
+          512,
+          4096,
+          65535
+        ]
+      },
+      "CallingConventions": {
+        "type": "integer",
+        "description": "",
+        "x-enumFlags": true,
+        "x-enumNames": [
+          "Standard",
+          "VarArgs",
+          "Any",
+          "HasThis",
+          "ExplicitThis"
+        ],
+        "enum": [
+          1,
+          2,
+          3,
+          32,
+          64
+        ]
+      },
+      "RuntimeMethodHandle": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "$ref": "#/components/schemas/IntPtr"
+          }
+        }
+      },
+      "IntPtr": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "MemberInfo": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false,
+        "properties": {
+          "memberType": {
+            "$ref": "#/components/schemas/MemberTypes"
+          },
+          "name": {
+            "type": "string"
+          },
+          "declaringType": {
+            "type": "string",
+            "nullable": true
+          },
+          "reflectedType": {
+            "type": "string",
+            "nullable": true
+          },
+          "module": {
+            "$ref": "#/components/schemas/Module"
+          },
+          "customAttributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomAttributeData"
+            }
+          },
+          "isCollectible": {
+            "type": "boolean"
+          },
+          "metadataToken": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "MemberTypes": {
+        "type": "integer",
+        "description": "",
+        "x-enumFlags": true,
+        "x-enumNames": [
+          "Constructor",
+          "Event",
+          "Field",
+          "Method",
+          "Property",
+          "TypeInfo",
+          "Custom",
+          "NestedType",
+          "All"
+        ],
+        "enum": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64,
+          128,
+          191
+        ]
+      },
+      "Module": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false,
+        "properties": {
+          "assembly": {
+            "$ref": "#/components/schemas/Assembly"
+          },
+          "fullyQualifiedName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "mdStreamVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "moduleVersionId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "scopeName": {
+            "type": "string"
+          },
+          "moduleHandle": {
+            "$ref": "#/components/schemas/ModuleHandle"
+          },
+          "customAttributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomAttributeData"
+            }
+          },
+          "metadataToken": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "Assembly": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false,
+        "properties": {
+          "definedTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TypeInfo"
+            }
+          },
+          "exportedTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "codeBase": {
+            "type": "string",
+            "deprecated": true,
+            "x-deprecatedMessage": "Assembly.CodeBase and Assembly.EscapedCodeBase are only included for .NET Framework compatibility. Use Assembly.Location.",
+            "nullable": true
+          },
+          "entryPoint": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/MethodInfo"
+              }
+            ]
+          },
+          "fullName": {
+            "type": "string",
+            "nullable": true
+          },
+          "imageRuntimeVersion": {
+            "type": "string"
+          },
+          "isDynamic": {
+            "type": "boolean"
+          },
+          "location": {
+            "type": "string"
+          },
+          "reflectionOnly": {
+            "type": "boolean"
+          },
+          "isCollectible": {
+            "type": "boolean"
+          },
+          "isFullyTrusted": {
+            "type": "boolean"
+          },
+          "customAttributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomAttributeData"
+            }
+          },
+          "escapedCodeBase": {
+            "type": "string",
+            "deprecated": true,
+            "x-deprecatedMessage": "Assembly.CodeBase and Assembly.EscapedCodeBase are only included for .NET Framework compatibility. Use Assembly.Location."
+          },
+          "manifestModule": {
+            "$ref": "#/components/schemas/Module"
+          },
+          "modules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Module"
+            }
+          },
+          "globalAssemblyCache": {
+            "type": "boolean",
+            "deprecated": true,
+            "x-deprecatedMessage": "The Global Assembly Cache is not supported."
+          },
+          "hostContext": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "securityRuleSet": {
+            "$ref": "#/components/schemas/SecurityRuleSet"
+          }
+        }
+      },
+      "TypeInfo": {
+        "allOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "x-abstract": true,
+            "additionalProperties": false,
+            "properties": {
+              "genericTypeParameters": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "declaredConstructors": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ConstructorInfo"
+                }
+              },
+              "declaredEvents": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/EventInfo"
+                }
+              },
+              "declaredFields": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/FieldInfo"
+                }
+              },
+              "declaredMembers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MemberInfo"
+                }
+              },
+              "declaredMethods": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MethodInfo"
+                }
+              },
+              "declaredNestedTypes": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TypeInfo"
+                }
+              },
+              "declaredProperties": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PropertyInfo"
+                }
+              },
+              "implementedInterfaces": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ConstructorInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MethodBase"
+          },
+          {
+            "type": "object",
+            "x-abstract": true,
+            "additionalProperties": false,
+            "properties": {
+              "memberType": {
+                "$ref": "#/components/schemas/MemberTypes"
+              }
+            }
+          }
+        ]
+      },
+      "EventInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MemberInfo"
+          },
+          {
+            "type": "object",
+            "x-abstract": true,
+            "additionalProperties": false,
+            "properties": {
+              "memberType": {
+                "$ref": "#/components/schemas/MemberTypes"
+              },
+              "attributes": {
+                "$ref": "#/components/schemas/EventAttributes"
+              },
+              "isSpecialName": {
+                "type": "boolean"
+              },
+              "addMethod": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/MethodInfo"
+                  }
+                ]
+              },
+              "removeMethod": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/MethodInfo"
+                  }
+                ]
+              },
+              "raiseMethod": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/MethodInfo"
+                  }
+                ]
+              },
+              "isMulticast": {
+                "type": "boolean"
+              },
+              "eventHandlerType": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "EventAttributes": {
+        "type": "integer",
+        "description": "",
+        "x-enumFlags": true,
+        "x-enumNames": [
+          "None",
+          "SpecialName",
+          "RTSpecialName",
+          "ReservedMask"
+        ],
+        "enum": [
+          0,
+          512,
+          1024,
+          1024
+        ]
+      },
+      "MethodInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MethodBase"
+          },
+          {
+            "type": "object",
+            "x-abstract": true,
+            "additionalProperties": false,
+            "properties": {
+              "memberType": {
+                "$ref": "#/components/schemas/MemberTypes"
+              },
+              "returnParameter": {
+                "$ref": "#/components/schemas/ParameterInfo"
+              },
+              "returnType": {
+                "type": "string"
+              },
+              "returnTypeCustomAttributes": {
+                "$ref": "#/components/schemas/ICustomAttributeProvider"
+              },
+              "genericParameterCount": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ]
+      },
+      "ParameterInfo": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "attributes": {
+            "$ref": "#/components/schemas/ParameterAttributes"
+          },
+          "member": {
+            "$ref": "#/components/schemas/MemberInfo"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "parameterType": {
+            "type": "string"
+          },
+          "position": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isIn": {
+            "type": "boolean"
+          },
+          "isLcid": {
+            "type": "boolean"
+          },
+          "isOptional": {
+            "type": "boolean"
+          },
+          "isOut": {
+            "type": "boolean"
+          },
+          "isRetval": {
+            "type": "boolean"
+          },
+          "defaultValue": {
+            "nullable": true
+          },
+          "rawDefaultValue": {
+            "nullable": true
+          },
+          "hasDefaultValue": {
+            "type": "boolean"
+          },
+          "customAttributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomAttributeData"
+            }
+          },
+          "metadataToken": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ParameterAttributes": {
+        "type": "integer",
+        "description": "",
+        "x-enumFlags": true,
+        "x-enumNames": [
+          "None",
+          "In",
+          "Out",
+          "Lcid",
+          "Retval",
+          "Optional",
+          "HasDefault",
+          "HasFieldMarshal",
+          "Reserved3",
+          "Reserved4",
+          "ReservedMask"
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          4,
+          8,
+          16,
+          4096,
+          8192,
+          16384,
+          32768,
+          61440
+        ]
+      },
+      "CustomAttributeData": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "attributeType": {
+            "type": "string"
+          },
+          "constructor": {
+            "$ref": "#/components/schemas/ConstructorInfo"
+          },
+          "constructorArguments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomAttributeTypedArgument"
+            }
+          },
+          "namedArguments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomAttributeNamedArgument"
+            }
+          }
+        }
+      },
+      "CustomAttributeTypedArgument": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "argumentType": {
+            "type": "string"
+          },
+          "value": {
+            "nullable": true
+          }
+        }
+      },
+      "CustomAttributeNamedArgument": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "argumentType": {
+            "type": "string"
+          },
+          "memberInfo": {
+            "$ref": "#/components/schemas/MemberInfo"
+          },
+          "typedValue": {
+            "$ref": "#/components/schemas/CustomAttributeTypedArgument"
+          },
+          "memberName": {
+            "type": "string"
+          },
+          "isField": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ICustomAttributeProvider": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false
+      },
+      "FieldInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MemberInfo"
+          },
+          {
+            "type": "object",
+            "x-abstract": true,
+            "additionalProperties": false,
+            "properties": {
+              "memberType": {
+                "$ref": "#/components/schemas/MemberTypes"
+              },
+              "attributes": {
+                "$ref": "#/components/schemas/FieldAttributes"
+              },
+              "fieldType": {
+                "type": "string"
+              },
+              "isInitOnly": {
+                "type": "boolean"
+              },
+              "isLiteral": {
+                "type": "boolean"
+              },
+              "isNotSerialized": {
+                "type": "boolean",
+                "deprecated": true,
+                "x-deprecatedMessage": "Formatter-based serialization is obsolete and should not be used."
+              },
+              "isPinvokeImpl": {
+                "type": "boolean"
+              },
+              "isSpecialName": {
+                "type": "boolean"
+              },
+              "isStatic": {
+                "type": "boolean"
+              },
+              "isAssembly": {
+                "type": "boolean"
+              },
+              "isFamily": {
+                "type": "boolean"
+              },
+              "isFamilyAndAssembly": {
+                "type": "boolean"
+              },
+              "isFamilyOrAssembly": {
+                "type": "boolean"
+              },
+              "isPrivate": {
+                "type": "boolean"
+              },
+              "isPublic": {
+                "type": "boolean"
+              },
+              "isSecurityCritical": {
+                "type": "boolean"
+              },
+              "isSecuritySafeCritical": {
+                "type": "boolean"
+              },
+              "isSecurityTransparent": {
+                "type": "boolean"
+              },
+              "fieldHandle": {
+                "$ref": "#/components/schemas/RuntimeFieldHandle"
+              }
+            }
+          }
+        ]
+      },
+      "FieldAttributes": {
+        "type": "integer",
+        "description": "",
+        "x-enumFlags": true,
+        "x-enumNames": [
+          "PrivateScope",
+          "Private",
+          "FamANDAssem",
+          "Assembly",
+          "Family",
+          "FamORAssem",
+          "Public",
+          "FieldAccessMask",
+          "Static",
+          "InitOnly",
+          "Literal",
+          "NotSerialized",
+          "HasFieldRVA",
+          "SpecialName",
+          "RTSpecialName",
+          "HasFieldMarshal",
+          "PinvokeImpl",
+          "HasDefault",
+          "ReservedMask"
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          16,
+          32,
+          64,
+          128,
+          256,
+          512,
+          1024,
+          4096,
+          8192,
+          32768,
+          38144
+        ]
+      },
+      "RuntimeFieldHandle": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "$ref": "#/components/schemas/IntPtr"
+          }
+        }
+      },
+      "PropertyInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MemberInfo"
+          },
+          {
+            "type": "object",
+            "x-abstract": true,
+            "additionalProperties": false,
+            "properties": {
+              "memberType": {
+                "$ref": "#/components/schemas/MemberTypes"
+              },
+              "propertyType": {
+                "type": "string"
+              },
+              "attributes": {
+                "$ref": "#/components/schemas/PropertyAttributes"
+              },
+              "isSpecialName": {
+                "type": "boolean"
+              },
+              "canRead": {
+                "type": "boolean"
+              },
+              "canWrite": {
+                "type": "boolean"
+              },
+              "getMethod": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/MethodInfo"
+                  }
+                ]
+              },
+              "setMethod": {
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/MethodInfo"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "PropertyAttributes": {
+        "type": "integer",
+        "description": "",
+        "x-enumFlags": true,
+        "x-enumNames": [
+          "None",
+          "SpecialName",
+          "RTSpecialName",
+          "HasDefault",
+          "Reserved2",
+          "Reserved3",
+          "Reserved4",
+          "ReservedMask"
+        ],
+        "enum": [
+          0,
+          512,
+          1024,
+          4096,
+          8192,
+          16384,
+          32768,
+          62464
+        ]
+      },
+      "SecurityRuleSet": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "None",
+          "Level1",
+          "Level2"
+        ],
+        "enum": [
+          0,
+          1,
+          2
+        ]
+      },
+      "ModuleHandle": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "mdStreamVersion": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "HealthStatus": {
+        "type": "integer",
+        "description": "Represents the reported status of a health check result.",
+        "x-enumNames": [
+          "Unhealthy",
+          "Degraded",
+          "Healthy"
+        ],
+        "enum": [
+          0,
+          1,
+          2
+        ]
       }
     },
     "securitySchemes": {

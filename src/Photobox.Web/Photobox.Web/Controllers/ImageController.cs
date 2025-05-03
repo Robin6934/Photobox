@@ -1,10 +1,12 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Photobox.Lib.Extensions;
+using Photobox.Web.Responses;
+using Photobox.Web.Services;
 using SixLabors.ImageSharp.PixelFormats;
+using System.Net;
 
-namespace Photobox.Web.Image;
+namespace Photobox.Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
@@ -17,7 +19,7 @@ public class ImageController(ImageService imageService) : Controller
     /// <param name="formFile">The picture file to upload.</param>
     /// <response code="200">Image has been uploaded successfully</response>
     [HttpPost]
-    [ProducesResponseType<ImageUploadResult>((int)HttpStatusCode.OK)]
+    [ProducesResponseType<ImageUploadResponse>((int)HttpStatusCode.OK)]
     [Authorize]
     public async Task<IActionResult> UploadImage(
         [FromHeader(Name = "X-PhotoBox-Id")] string photoBoxId,
@@ -40,7 +42,7 @@ public class ImageController(ImageService imageService) : Controller
 
         await imageService.StoreImageAsync(image, formFile.FileName);
 
-        return Ok(new ImageUploadResult { FileName = formFile.FileName });
+        return Ok(new ImageUploadResponse { FileName = formFile.FileName });
     }
 
     [HttpGet("{imageName}")]

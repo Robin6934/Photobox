@@ -1,15 +1,13 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NSwag.Annotations;
-using Photobox.Lib.Helper;
 using Photobox.Web.DbContext;
 using Photobox.Web.Models;
-using Photobox.Web.Photobox.DTOs;
+using Photobox.Web.Responses;
+using System.Security.Claims;
 
-namespace Photobox.Web.Photobox;
+namespace Photobox.Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
@@ -20,9 +18,8 @@ public class PhotoBoxController(
     AppDbContext dbContext
 ) : Controller
 {
-    
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="registerPhotoBox"></param>
     /// <param name="photoBoxId"></param>
@@ -34,7 +31,7 @@ public class PhotoBoxController(
     [ProducesResponseType(StatusCodes.Status200OK)]
     [HttpPost]
     public async Task<IActionResult> Register(
-        RegisterPhotoBoxDto registerPhotoBox,
+        RegisterPhotoBoxResponse registerPhotoBox,
         [FromHeader(Name = "X-PhotoBox-Id")] string photoBoxId,
         CancellationToken cancellationToken
     )
@@ -69,7 +66,7 @@ public class PhotoBoxController(
             );
         }
 
-        var photobox = new PhotoBoxModel
+        var photobox = new PhotoBox
         {
             PhotoboxId = photoBoxId,
             Name = registerPhotoBox.PhotoBoxName,
@@ -83,7 +80,7 @@ public class PhotoBoxController(
 
         return Ok(new { photobox.PhotoboxId, photobox.Name });
     }
-    
+
     public async Task<IActionResult> GetGalleryCode(
         [FromHeader(Name = "X-PhotoBox-Id")] string photoBoxId,
         CancellationToken cancellationToken
