@@ -85,4 +85,7 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\fonts\ShortBaby.ttf" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Requests\" />
+  </ItemGroup>
 </Project>

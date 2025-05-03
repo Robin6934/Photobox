@@ -1,17 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Photobox.Web.Image;
 using Photobox.Web.Models;
-using Photobox.Web.Photobox;
 
 namespace Photobox.Web.DbContext;
 
 public class AppDbContext(DbContextOptions<AppDbContext> context)
     : IdentityDbContext<ApplicationUser>(context)
 {
-    public virtual DbSet<ImageModel> ImageModels { get; init; }
+    public virtual DbSet<Models.Image> ImageModels { get; init; }
 
-    public virtual DbSet<PhotoBoxModel> PhotoBoxModels { get; init; }
+    public virtual DbSet<PhotoBox> PhotoBoxModels { get; init; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

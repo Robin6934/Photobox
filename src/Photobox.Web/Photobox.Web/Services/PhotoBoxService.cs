@@ -1,8 +1,6 @@
 ﻿using Photobox.Web.DbContext;
-using Photobox.Web.Image;
-using Photobox.Web.StorageProvider;
 
-namespace Photobox.Web.Photobox;
+namespace Photobox.Web.Services;
 
 public class PhotoBoxService(AppDbContext dbContext, ILogger<PhotoBoxService> logger)
 {
