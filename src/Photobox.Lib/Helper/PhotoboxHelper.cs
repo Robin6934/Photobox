@@ -16,8 +16,7 @@ public static class PhotoboxHelper
             if (string.IsNullOrEmpty(field))
             {
                 field = new DeviceIdBuilder()
-                    .AddMacAddress()
-                    .OnWindows(windows => windows.AddProcessorId().AddMotherboardSerialNumber())
+                    .OnWindows(windows => windows.AddWindowsDeviceId())
                     .ToString();
             }
 

@@ -26,7 +26,8 @@
                         <TextBox Name="EmailTextBox"
                                  Width="200"
                                  Height="30"
-                                 VerticalContentAlignment="Center"/>
+                                 VerticalContentAlignment="Center"
+                                 Text="Test@gmail.com"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal"
@@ -38,7 +39,8 @@
                         <PasswordBox Name="PasswordTextBox"
                                      Width="200"
                                      Height="30"
-                                     VerticalContentAlignment="Center"/>
+                                     VerticalContentAlignment="Center"
+                                     Password="Test@1234"/>
                     </StackPanel>
                 </StackPanel>
 

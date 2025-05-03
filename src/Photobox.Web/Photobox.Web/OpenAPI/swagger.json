@@ -392,12 +392,12 @@
         ]
       }
     },
-    "/api/PhotoBox/Create": {
+    "/api/PhotoBox/Register": {
       "post": {
         "tags": [
           "PhotoBox"
         ],
-        "operationId": "PhotoBox_Create",
+        "operationId": "PhotoBox_Register",
         "parameters": [
           {
             "name": "X-PhotoBox-Id",
@@ -409,11 +409,11 @@
           }
         ],
         "requestBody": {
-          "x-name": "createPhotoBox",
+          "x-name": "registerPhotoBox",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreatePhotoBoxDto"
+                "$ref": "#/components/schemas/RegisterPhotoBoxDto"
               }
             }
           },
@@ -421,16 +421,38 @@
           "x-position": 1
         },
         "responses": {
-          "200": {
+          "401": {
             "description": "",
             "content": {
-              "application/octet-stream": {
+              "application/json": {
                 "schema": {
-                  "type": "string",
-                  "format": "binary"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": ""
           }
         },
         "security": [
@@ -497,10 +519,9 @@
           "200": {
             "description": "Photobox exists in the database.",
             "content": {
-              "application/octet-stream": {
+              "application/json": {
                 "schema": {
-                  "type": "string",
-                  "format": "binary"
+                  "$ref": "#/components/schemas/CheckPhotoboxResponse"
                 }
               }
             }
@@ -800,9 +821,6 @@
             "maxLength": 50,
             "minLength": 1
           },
-          "galleryId": {
-            "type": "string"
-          },
           "photoboxId": {
             "type": "string",
             "maxLength": 52,
@@ -811,9 +829,6 @@
           "applicationUserId": {
             "type": "string",
             "maxLength": 50
-          },
-          "applicationUser": {
-            "$ref": "#/components/schemas/ApplicationUser"
           }
         }
       },
@@ -1133,11 +1148,23 @@
           }
         }
       },
-      "CreatePhotoBoxDto": {
+      "RegisterPhotoBoxDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "photoBoxName": {
+            "type": "string"
+          }
+        }
+      },
+      "CheckPhotoboxResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "exists": {
+            "type": "boolean"
+          },
+          "photoboxId": {
             "type": "string"
           }
         }
