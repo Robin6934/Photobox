@@ -20,6 +20,14 @@ public class PhotoBoxController(
     AppDbContext dbContext
 ) : Controller
 {
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="registerPhotoBox"></param>
+    /// <param name="photoBoxId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError)]
@@ -27,7 +35,7 @@ public class PhotoBoxController(
     [HttpPost]
     public async Task<IActionResult> Register(
         RegisterPhotoBoxDto registerPhotoBox,
-        [FromHeader(Name = "X-PhotoBox-Id"), OpenApiIgnore] string photoBoxId,
+        [FromHeader(Name = "X-PhotoBox-Id")] string photoBoxId,
         CancellationToken cancellationToken
     )
     {
@@ -75,9 +83,9 @@ public class PhotoBoxController(
 
         return Ok(new { photobox.PhotoboxId, photobox.Name });
     }
-
+    
     public async Task<IActionResult> GetGalleryCode(
-        [FromHeader(Name = "X-PhotoBox-Id"), OpenApiIgnore] string photoBoxId,
+        [FromHeader(Name = "X-PhotoBox-Id")] string photoBoxId,
         CancellationToken cancellationToken
     )
     {
@@ -105,7 +113,7 @@ public class PhotoBoxController(
     [HttpGet]
     [ProducesResponseType<CheckPhotoboxResponse>(StatusCodes.Status200OK)]
     public async Task<IActionResult> CheckIfPhotoboxExists(
-        [FromHeader(Name = "X-PhotoBox-Id"), OpenApiIgnore] string photoBoxId,
+        [FromHeader(Name = "X-PhotoBox-Id")] string photoBoxId,
         CancellationToken cancellationToken
     )
     {
