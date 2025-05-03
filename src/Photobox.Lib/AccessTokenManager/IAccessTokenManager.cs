@@ -24,7 +24,7 @@ public interface IAccessTokenManager
     /// </summary>
     /// <exception cref="CredentialValidationException">Refresh token not valid or not available.</exception>
     /// <exception cref="InvalidOperationException">Another error happened.</exception>
-    Task CheckIfRefreshTokenValid();
+    Task<bool> CheckIfRefreshTokenValid();
 
     /// <summary>
     /// Logs in the user with the given email and password.

@@ -3,6 +3,8 @@ using System.Windows;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Photobox.Lib.AccessTokenManager;
+using Photobox.Lib.PhotoboxSettingsManager;
+using Photobox.Lib.RestApi;
 using Photobox.UI.CountDown;
 using Photobox.UI.ImageViewer;
 using Photobox.UI.Lib.Camera;
@@ -12,26 +14,23 @@ using Photobox.WpfHelpers;
 using Serilog;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using Exception = System.Exception;
 
 namespace Photobox.UI.Windows;
 
 public partial class MainWindow : Window, IHostedService
 {
-    private readonly ICamera camera;
+    private readonly ICamera _camera;
 
-    private readonly IImageViewer imageViewer;
+    private readonly ILogger<MainWindow> _logger;
 
-    private readonly ILogger<MainWindow> logger;
+    private readonly ICountDown _countDown;
 
-    private readonly ICountDown countDown;
-
-    private readonly IHostApplicationLifetime applicationLifetime;
-
-    private readonly IImageHandler imageHandler;
-
-    private readonly IImageManager imageManager;
+    private readonly IHostApplicationLifetime _applicationLifetime;
 
     private readonly IAccessTokenManager _accessTokenManager;
+
+    private readonly IPhotoboxSettingsManager _photoboxSettingsManager;
 
     public MainWindow(
         ICamera camera,
@@ -41,26 +40,26 @@ public partial class MainWindow : Window, IHostedService
         IHostApplicationLifetime applicationLifetime,
         IImageHandler imageHandler,
         IImageManager imageManager,
-        IAccessTokenManager accessTokenManager
+        IAccessTokenManager accessTokenManager,
+        IPhotoBoxClient photoBoxClient,
+        IPhotoboxSettingsManager photoboxSettingsManager
     )
     {
         InitializeComponent();
 
-        this.camera = camera;
+        this._camera = camera;
 
-        this.imageViewer = imageViewer;
+        IImageViewer imageViewer1 = imageViewer;
 
-        this.logger = logger;
+        _logger = logger;
 
-        this.countDown = countDown;
+        _countDown = countDown;
 
-        this.applicationLifetime = applicationLifetime;
-
-        this.imageHandler = imageHandler;
-
-        this.imageManager = imageManager;
+        _applicationLifetime = applicationLifetime;
 
         _accessTokenManager = accessTokenManager;
+
+        _photoboxSettingsManager = photoboxSettingsManager;
 
         countDown.Panel = GridLiveView;
 
@@ -72,9 +71,9 @@ public partial class MainWindow : Window, IHostedService
         {
             camera.Focus();
 
-            Image<Rgb24> image = await this.camera.TakePictureAsync();
+            Image<Rgb24> image = await this._camera.TakePictureAsync();
 
-            ImageViewResult result = await this.imageViewer.ShowImage(image);
+            ImageViewResult result = await imageViewer1.ShowImage(image);
 
             MemoryStream stream = new();
 
@@ -98,9 +97,9 @@ public partial class MainWindow : Window, IHostedService
             }
         };
 
-        this.logger.LogInformation("Mainwindow created");
+        this._logger.LogInformation("Mainwindow created");
 
-        this.camera.CameraStream += (o, s) =>
+        this._camera.CameraStream += (o, s) =>
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
@@ -115,21 +114,22 @@ public partial class MainWindow : Window, IHostedService
     {
         Start();
         Show();
-        applicationLifetime.ApplicationStopping.Register(Close);
-        logger.LogInformation("The main window has started.");
-
-        if (!_accessTokenManager.RefreshTokenAvailable)
-        {
-            Login();
-        }
+        _applicationLifetime.ApplicationStopping.Register(Close);
+        _logger.LogInformation("The main window has started.");
 
         try
         {
-            await _accessTokenManager.CheckIfRefreshTokenValid().ConfigureAwait(false);
-        }
-        catch (CredentialValidationException e)
-        {
-            Dispatcher.Invoke(Login);
+            bool refreshTokenValid = await _accessTokenManager.CheckIfRefreshTokenValid();
+
+            if (!refreshTokenValid)
+            {
+                await LoginAsync();
+            }
+
+            if (!await _photoboxSettingsManager.CheckIfPhotoboxIsRegistered())
+            {
+                await RegisterAsync();
+            }
         }
         catch (Exception e)
         {
@@ -139,27 +139,48 @@ public partial class MainWindow : Window, IHostedService
                 MessageBoxButton.OK,
                 MessageBoxImage.Error
             );
-            Application.Current.Shutdown();
         }
     }
 
-    private void Login()
+    private async Task<bool> LoginAsync()
     {
-        var loginWindow = new LoginWindow(_accessTokenManager);
-        loginWindow.OnLoginCanceled += (s, e) => applicationLifetime.StopApplication();
-        loginWindow.ShowDialog();
+        var loginWindow = new LoginWindow(_accessTokenManager, _applicationLifetime);
+        loginWindow.Show();
+
+        var result = await loginWindow.Completion;
+
+        if (result == LoginResult.Success)
+        {
+            return true;
+        }
+
+        _applicationLifetime.StopApplication();
+        return false;
+    }
+
+    private async Task RegisterAsync()
+    {
+        var registerWindow = new RegisterPhotoboxWindow(_photoboxSettingsManager);
+        registerWindow.Show();
+
+        bool success = await registerWindow.Completion;
+
+        if (!success)
+        {
+            _applicationLifetime.StopApplication();
+        }
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
         Close();
-        logger.LogInformation("The main window has been closed.");
+        _logger.LogInformation("The main window has been closed.");
         return Task.CompletedTask;
     }
 
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
-        logger.LogInformation("The main window has been loaded.");
+        _logger.LogInformation("The main window has been loaded.");
         SetCanvasSize();
     }
 
@@ -170,25 +191,25 @@ public partial class MainWindow : Window, IHostedService
 
     private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
     {
-        camera.StopStream();
-        applicationLifetime.StopApplication();
-        logger.LogInformation("The main window is closing.");
+        _camera.StopStream();
+        _applicationLifetime.StopApplication();
+        _logger.LogInformation("The main window is closing.");
     }
 
     private void Window_Closed(object sender, EventArgs e)
     {
-        logger.LogInformation("The main window has been closed.");
+        _logger.LogInformation("The main window has been closed.");
     }
 
     public void Start()
     {
-        camera.ResilientConnect();
-        camera.StartStream();
+        _camera.ResilientConnect();
+        _camera.StartStream();
     }
 
     private void TakePictureButton_Click(object sender, RoutedEventArgs e)
     {
-        countDown.StartCountDown();
+        _countDown.StartCountDown();
     }
 
     /// <summary>
@@ -196,7 +217,7 @@ public partial class MainWindow : Window, IHostedService
     /// </summary>
     private void SetCanvasSize()
     {
-        double imageAspectRatio = camera.ImageAspectRatio.Ratio;
+        double imageAspectRatio = _camera.ImageAspectRatio.Ratio;
 
         // Available window dimensions
         double availableHeight = ActualHeight;

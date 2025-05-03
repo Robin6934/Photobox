@@ -1,21 +1,41 @@
 ﻿using System.Windows;
+using Microsoft.Extensions.Hosting;
 using Photobox.Lib.AccessTokenManager;
+using Photobox.Lib.RestApi;
+using Exception = System.Exception;
 
 namespace Photobox.UI.Windows;
 
+public enum LoginResult
+{
+    Success,
+    Canceled,
+    Error,
+}
+
 public partial class LoginWindow : Window
 {
-    public delegate void LoginCanceled(object sender, RoutedEventArgs e);
-
-    public event LoginCanceled? OnLoginCanceled;
-
     private readonly IAccessTokenManager _accessTokenManager;
+    private readonly TaskCompletionSource<LoginResult> _completionSource = new();
 
-    public LoginWindow(IAccessTokenManager accessTokenManager)
+    public Task<LoginResult> Completion => _completionSource.Task;
+
+    public LoginWindow(
+        IAccessTokenManager accessTokenManager,
+        IHostApplicationLifetime applicationLifetime
+    )
     {
         _accessTokenManager = accessTokenManager;
-
         InitializeComponent();
+
+        applicationLifetime.ApplicationStopping.Register(() =>
+        {
+            if (!_completionSource.Task.IsCompleted)
+            {
+                _completionSource.TrySetResult(LoginResult.Canceled);
+                Close();
+            }
+        });
     }
 
     private async void LoginButton_Click(object sender, RoutedEventArgs e)
@@ -23,16 +43,13 @@ public partial class LoginWindow : Window
         string email = EmailTextBox.Text.Trim();
         string password = PasswordTextBox.Password.Trim();
 
-        // Validate inputs
         if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
         {
-            // Construct a single error message
-            string errorMessage = string.Empty;
-
-            if (string.IsNullOrEmpty(email))
-                errorMessage += "Please enter an email address.\n";
-            if (string.IsNullOrEmpty(password))
-                errorMessage += "Please enter a password.";
+            var errorMessage = string.Join(
+                "\n",
+                string.IsNullOrEmpty(email) ? "Please enter an email address." : null,
+                string.IsNullOrEmpty(password) ? "Please enter a password." : null
+            );
 
             MessageBox.Show(errorMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             return;
@@ -41,6 +58,7 @@ public partial class LoginWindow : Window
         try
         {
             await _accessTokenManager.LoginAsync(email, password);
+            _completionSource.TrySetResult(LoginResult.Success);
         }
         catch (CredentialValidationException)
         {
@@ -53,9 +71,8 @@ public partial class LoginWindow : Window
 
             if (result == MessageBoxResult.No)
             {
-                Application.Current.Shutdown();
+                CancelLogin();
             }
-            return;
         }
         catch (Exception)
         {
@@ -65,16 +82,26 @@ public partial class LoginWindow : Window
                 MessageBoxButton.OK,
                 MessageBoxImage.Error
             );
-            Application.Current.Shutdown();
-            return;
+            CancelLogin();
         }
-
-        Close();
+        finally
+        {
+            if (_completionSource.Task.IsCompleted)
+            {
+                Close();
+            }
+        }
     }
 
     private void CancelButton_Click(object sender, RoutedEventArgs e)
     {
-        OnLoginCanceled?.Invoke(this, e);
-        this.Close();
+        CancelLogin();
+    }
+
+    private void CancelLogin()
+    {
+        _accessTokenManager.Logout();
+        _completionSource.TrySetResult(LoginResult.Canceled);
+        Close();
     }
 }
