@@ -23,7 +23,5 @@ public class AppDbContext(DbContextOptions<AppDbContext> context)
             .WithOne(p => p.ApplicationUser)
             .HasForeignKey(p => p.ApplicationUserId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<PhotoBoxModel>().HasIndex(e => e.GalleryId).IsUnique();
     }
 }

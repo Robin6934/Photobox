@@ -1130,7 +1130,7 @@ namespace Photobox.Lib.RestApi
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> CreateAsync(CreatePhotoBoxDto createPhotoBox, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task RegisterAsync(RegisterPhotoBoxDto registerPhotoBox, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1142,7 +1142,7 @@ namespace Photobox.Lib.RestApi
         /// </summary>
         /// <returns>Photobox exists in the database.</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FileResponse> CheckIfPhotoboxExistsAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<CheckPhotoboxResponse> CheckIfPhotoboxExistsAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
     }
 
@@ -1194,10 +1194,10 @@ namespace Photobox.Lib.RestApi
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse> CreateAsync(CreatePhotoBoxDto createPhotoBox, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task RegisterAsync(RegisterPhotoBoxDto registerPhotoBox, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (createPhotoBox == null)
-                throw new System.ArgumentNullException("createPhotoBox");
+            if (registerPhotoBox == null)
+                throw new System.ArgumentNullException("registerPhotoBox");
 
             var client_ = new System.Net.Http.HttpClient();
             var disposeClient_ = true;
@@ -1205,17 +1205,16 @@ namespace Photobox.Lib.RestApi
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(createPhotoBox, JsonSerializerSettings);
+                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(registerPhotoBox, JsonSerializerSettings);
                     var content_ = new System.Net.Http.StringContent(json_);
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/octet-stream"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "api/PhotoBox/Create"
-                    urlBuilder_.Append("api/PhotoBox/Create");
+                    // Operation Path: "api/PhotoBox/Register"
+                    urlBuilder_.Append("api/PhotoBox/Register");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -1240,12 +1239,39 @@ namespace Photobox.Lib.RestApi
                         ProcessResponse(client_, response_);
 
                         var status_ = (int)response_.StatusCode;
-                        if (status_ == 200 || status_ == 206)
+                        if (status_ == 401)
                         {
-                            var responseStream_ = response_.Content == null ? System.IO.Stream.Null : await response_.Content.ReadAsStreamAsync().ConfigureAwait(false);
-                            var fileResponse_ = new FileResponse(status_, headers_, responseStream_, client_, response_);
-                            disposeClient_ = false; disposeResponse_ = false; // response and client are disposed by FileResponse
-                            return fileResponse_;
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 409)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 500)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("A server side error occurred.", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 200)
+                        {
+                            return;
                         }
                         else
                         {
@@ -1341,7 +1367,7 @@ namespace Photobox.Lib.RestApi
         /// </summary>
         /// <returns>Photobox exists in the database.</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FileResponse> CheckIfPhotoboxExistsAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<CheckPhotoboxResponse> CheckIfPhotoboxExistsAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = new System.Net.Http.HttpClient();
             var disposeClient_ = true;
@@ -1350,7 +1376,7 @@ namespace Photobox.Lib.RestApi
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
                     request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/octet-stream"));
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
@@ -1380,12 +1406,14 @@ namespace Photobox.Lib.RestApi
                         ProcessResponse(client_, response_);
 
                         var status_ = (int)response_.StatusCode;
-                        if (status_ == 200 || status_ == 206)
+                        if (status_ == 200)
                         {
-                            var responseStream_ = response_.Content == null ? System.IO.Stream.Null : await response_.Content.ReadAsStreamAsync().ConfigureAwait(false);
-                            var fileResponse_ = new FileResponse(status_, headers_, responseStream_, client_, response_);
-                            disposeClient_ = false; disposeResponse_ = false; // response and client are disposed by FileResponse
-                            return fileResponse_;
+                            var objectResponse_ = await ReadObjectResponseAsync<CheckPhotoboxResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
                         }
                         else
                         {
@@ -2505,9 +2533,6 @@ namespace Photobox.Lib.RestApi
         [System.ComponentModel.DataAnnotations.StringLength(50, MinimumLength = 1)]
         public string Name { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("galleryId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string GalleryId { get; set; }
-
         [Newtonsoft.Json.JsonProperty("photoboxId", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required]
         [System.ComponentModel.DataAnnotations.StringLength(52, MinimumLength = 1)]
@@ -2516,9 +2541,6 @@ namespace Photobox.Lib.RestApi
         [Newtonsoft.Json.JsonProperty("applicationUserId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [System.ComponentModel.DataAnnotations.StringLength(50)]
         public string ApplicationUserId { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("applicationUser", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ApplicationUser ApplicationUser { get; set; }
 
     }
 
@@ -2815,10 +2837,21 @@ namespace Photobox.Lib.RestApi
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.3.0.0 (NJsonSchema v11.2.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial record CreatePhotoBoxDto
+    public partial record RegisterPhotoBoxDto
     {
         [Newtonsoft.Json.JsonProperty("photoBoxName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string PhotoBoxName { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.3.0.0 (NJsonSchema v11.2.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial record CheckPhotoboxResponse
+    {
+        [Newtonsoft.Json.JsonProperty("exists", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool Exists { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("photoboxId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string PhotoboxId { get; set; }
 
     }
 

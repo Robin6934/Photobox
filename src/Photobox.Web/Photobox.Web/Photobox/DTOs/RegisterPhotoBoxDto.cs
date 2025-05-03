@@ -1,6 +1,6 @@
 ﻿namespace Photobox.Web.Photobox.DTOs;
 
-public class CreatePhotoBoxDto
+public class RegisterPhotoBoxDto
 {
     public required string PhotoBoxName { get; set; }
 }
