@@ -62,7 +62,9 @@ public class WebCam(ILogger<WebCam> logger, IHostApplicationLifetime application
 
                     byte[] data = frame.ToImage<Rgb, byte>().ToJpegData();
 
-                    OnNewStreamImage(new MemoryStream(data));
+                    using var stream = new MemoryStream(data);
+
+                    OnNewStreamImage(stream);
                 }
             },
             _applicationLifetime.ApplicationStopping

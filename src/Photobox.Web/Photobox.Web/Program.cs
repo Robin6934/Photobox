@@ -13,7 +13,6 @@ using Photobox.Web.DbContext;
 using Photobox.Web.HealthCheck;
 using Photobox.Web.Image;
 using Photobox.Web.Models;
-using Photobox.Web.OperationProcessors;
 using Photobox.Web.StorageProvider;
 using Scalar.AspNetCore;
 using Serilog;
@@ -35,9 +34,7 @@ builder.Services.AddOpenApiDocument(doc =>
             Description = "Bearer token authorization header",
         }
     );
-
-    doc.OperationProcessors.Add(new PhotoboxIdHeaderProcessor());
-
+    
     doc.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("bearer"));
 });
 
