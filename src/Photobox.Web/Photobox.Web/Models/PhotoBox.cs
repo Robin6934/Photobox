@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using Photobox.Web.Models;
 
-namespace Photobox.Web.Photobox;
+namespace Photobox.Web.Models;
 
-public class PhotoBoxModel
+public class PhotoBox
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
