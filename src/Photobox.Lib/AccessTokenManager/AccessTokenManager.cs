@@ -42,11 +42,11 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
 
     public bool RefreshTokenAvailable => !string.IsNullOrEmpty(RefreshToken);
 
-    public async Task CheckIfRefreshTokenValid()
+    public async Task<bool> CheckIfRefreshTokenValid()
     {
         if (!RefreshTokenAvailable)
         {
-            throw new CredentialValidationException("No refresh token available.");
+            return false;
         }
 
         var refreshRequest = new RefreshRequest { RefreshToken = RefreshToken };
@@ -59,10 +59,13 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
         }
         catch (ApiException e) when (e.StatusCode == (int)HttpStatusCode.Unauthorized)
         {
-            throw new CredentialValidationException("The Refresh Token is not valid.", e);
+            // The token is not valid, the user needs to log in
+            Logout();
+            return false;
         }
         catch (Exception e)
         {
+            Logout();
             throw new InvalidOperationException(
                 "An error occurred while trying to access the refresh token.",
                 e
@@ -74,6 +77,8 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
         RefreshToken = accessTokenResponse.RefreshToken;
 
         _accessTokenExpiry = DateTime.Now.AddSeconds(accessTokenResponse.ExpiresIn);
+
+        return true;
     }
 
     public async Task LoginAsync(string email, string password)
@@ -109,10 +114,10 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
         _accessToken = null;
         _accessTokenExpiry = DateTime.Now;
 
-        var credential = CredentialManager.GetICredential("PhotoboxRefreshToken");
+        var credential = CredentialManager.GetICredential(RefreshTokenTarget);
         if (credential is not null)
         {
-            CredentialManager.RemoveCredentials("PhotoboxRefreshToken");
+            CredentialManager.RemoveCredentials(RefreshTokenTarget);
         }
     }
 

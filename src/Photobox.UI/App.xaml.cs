@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Photobox.Lib.AccessTokenManager;
+using Photobox.Lib.PhotoboxSettingsManager;
 using Photobox.Lib.RestApi;
 using Photobox.UI.CountDown;
 using Photobox.UI.ImageViewer;
@@ -71,6 +72,7 @@ public partial class App
             "https://localhost"
         ));
         builder.Services.AddSingleton<IAccessTokenManager, AccessTokenManager>();
+        builder.Services.AddSingleton<IPhotoboxSettingsManager, PhotoboxSettingsManager>();
         builder.Logging.ClearProviders();
 
         var logger = new LoggerConfiguration()
