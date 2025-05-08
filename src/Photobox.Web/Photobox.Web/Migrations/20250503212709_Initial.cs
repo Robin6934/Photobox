@@ -7,13 +7,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Photobox.Web.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdatedAppdcoontextToInheritIdentityDbCOntext : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(name: "UserModels");
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -218,6 +216,120 @@ namespace Photobox.Web.Migrations
                 }
             );
 
+            migrationBuilder.CreateTable(
+                name: "EventModels",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    ApplicationUserId = table.Column<string>(
+                        type: "character varying(50)",
+                        maxLength: 50,
+                        nullable: false
+                    ),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventModels", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EventModels_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
+
+            migrationBuilder.CreateTable(
+                name: "PhotoBoxModels",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(
+                        type: "character varying(50)",
+                        maxLength: 50,
+                        nullable: false
+                    ),
+                    PhotoboxId = table.Column<string>(
+                        type: "character varying(52)",
+                        maxLength: 52,
+                        nullable: false
+                    ),
+                    ApplicationUserId = table.Column<string>(
+                        type: "character varying(50)",
+                        maxLength: 50,
+                        nullable: false
+                    ),
+                    EventId = table.Column<Guid>(type: "uuid", nullable: true),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PhotoBoxModels", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PhotoBoxModels_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade
+                    );
+                    table.ForeignKey(
+                        name: "FK_PhotoBoxModels_EventModels_EventId",
+                        column: x => x.EventId,
+                        principalTable: "EventModels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull
+                    );
+                }
+            );
+
+            migrationBuilder.CreateTable(
+                name: "ImageModels",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ImageName = table.Column<string>(
+                        type: "character varying(64)",
+                        maxLength: 64,
+                        nullable: false
+                    ),
+                    UniqueImageName = table.Column<string>(
+                        type: "character varying(45)",
+                        maxLength: 45,
+                        nullable: false
+                    ),
+                    DownscaledImageName = table.Column<string>(
+                        type: "character varying(45)",
+                        maxLength: 45,
+                        nullable: false
+                    ),
+                    TakenAt = table.Column<DateTime>(
+                        type: "timestamp with time zone",
+                        nullable: false
+                    ),
+                    PhotoboxId = table.Column<Guid>(type: "uuid", nullable: true),
+                    EventId = table.Column<Guid>(type: "uuid", nullable: false),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ImageModels", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ImageModels_EventModels_EventId",
+                        column: x => x.EventId,
+                        principalTable: "EventModels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade
+                    );
+                    table.ForeignKey(
+                        name: "FK_ImageModels_PhotoBoxModels_PhotoboxId",
+                        column: x => x.PhotoboxId,
+                        principalTable: "PhotoBoxModels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull
+                    );
+                }
+            );
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -261,6 +373,48 @@ namespace Photobox.Web.Migrations
                 column: "NormalizedUserName",
                 unique: true
             );
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EventModels_ApplicationUserId",
+                table: "EventModels",
+                column: "ApplicationUserId"
+            );
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ImageModels_EventId",
+                table: "ImageModels",
+                column: "EventId"
+            );
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ImageModels_ImageName",
+                table: "ImageModels",
+                column: "ImageName"
+            );
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ImageModels_PhotoboxId",
+                table: "ImageModels",
+                column: "PhotoboxId"
+            );
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PhotoBoxModels_ApplicationUserId",
+                table: "PhotoBoxModels",
+                column: "ApplicationUserId"
+            );
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PhotoBoxModels_EventId",
+                table: "PhotoBoxModels",
+                column: "EventId"
+            );
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PhotoBoxModels_PhotoboxId",
+                table: "PhotoBoxModels",
+                column: "PhotoboxId"
+            );
         }
 
         /// <inheritdoc />
@@ -276,43 +430,15 @@ namespace Photobox.Web.Migrations
 
             migrationBuilder.DropTable(name: "AspNetUserTokens");
 
+            migrationBuilder.DropTable(name: "ImageModels");
+
             migrationBuilder.DropTable(name: "AspNetRoles");
 
-            migrationBuilder.DropTable(name: "AspNetUsers");
+            migrationBuilder.DropTable(name: "PhotoBoxModels");
 
-            migrationBuilder.CreateTable(
-                name: "UserModels",
-                columns: table => new
-                {
-                    Id = table
-                        .Column<long>(type: "bigint", nullable: false)
-                        .Annotation(
-                            "Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn
-                        ),
-                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
-                    Email = table.Column<string>(type: "text", nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(
-                        type: "timestamp with time zone",
-                        nullable: true
-                    ),
-                    NormalizedEmail = table.Column<string>(type: "text", nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "text", nullable: true),
-                    PasswordHash = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
-                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    UserName = table.Column<string>(type: "text", nullable: true),
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserModels", x => x.Id);
-                }
-            );
+            migrationBuilder.DropTable(name: "EventModels");
+
+            migrationBuilder.DropTable(name: "AspNetUsers");
         }
     }
 }
