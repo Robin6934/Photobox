@@ -1,22 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Photobox.Web.DbContext;
-using Photobox.Web.StorageProvider;
+using Photobox.Web.Database;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.Web.Services;
 
 public class ImageService(
     AppDbContext dbContext,
-    IStorageProvider storageProvider,
+    IStorageService storageService,
     ILogger<ImageService> logger,
     IMemoryCache memoryCache
 )
 {
     private readonly ILogger<ImageService> _logger = logger;
 
-    public async Task StoreImageAsync(Image<Rgb24> image, string imageName)
+    public async Task StoreImageAsync(Image<Rgb24> image, string imageName, string photoBoxId)
     {
+        var photobox = dbContext
+            .PhotoBoxes.Include(photobox => photobox.Event)
+            .Single(photoBox => photoBox.HardwareId == photoBoxId);
+
         Models.Image imageModel = new()
         {
             UniqueImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}",
@@ -24,20 +27,21 @@ public class ImageService(
             DownscaledImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}",
             //TODO: 1.12.2024 cant use dateTime.now with postgress need to fix later
             TakenAt = DateTime.UtcNow,
+            Event = photobox.Event,
         };
 
         int newWidth = image.Width < 1000 ? image.Width : 1000;
 
         using var downScaledImage = image.Clone(i => i.Resize(newWidth, 0));
 
-        var storeDownscaledTask = storageProvider.StoreImageAsync(
+        var storeDownscaledTask = storageService.StoreImageAsync(
             downScaledImage,
             imageModel.DownscaledImageName
         );
 
-        var fullSizeTask = storageProvider.StoreImageAsync(image, imageModel.UniqueImageName);
+        var fullSizeTask = storageService.StoreImageAsync(image, imageModel.UniqueImageName);
 
-        var dbTask = dbContext.ImageModels.AddAsync(imageModel);
+        var dbTask = dbContext.Images.AddAsync(imageModel);
 
         await Task.WhenAll(storeDownscaledTask, fullSizeTask, dbTask.AsTask());
 
@@ -47,10 +51,10 @@ public class ImageService(
     public async Task<Image<Rgb24>> GetImageAsync(string imageName)
     {
         var imageModel = await dbContext
-            .ImageModels.Where(model => model.ImageName == imageName)
+            .Images.Where(model => model.ImageName == imageName)
             .FirstAsync();
 
-        var image = await storageProvider.GetImageAsync(imageModel.UniqueImageName);
+        var image = await storageService.GetImageAsync(imageModel.UniqueImageName);
 
         return image;
     }
@@ -58,33 +62,30 @@ public class ImageService(
     public async Task<Image<Rgb24>> GetPreviewImageAsync(string imageName)
     {
         var imageModel = await dbContext
-            .ImageModels.Where(model => model.ImageName == imageName)
+            .Images.Where(model => model.ImageName == imageName)
             .FirstAsync();
 
-        var image = await storageProvider.GetImageAsync(imageModel.DownscaledImageName);
+        var image = await storageService.GetImageAsync(imageModel.DownscaledImageName);
 
         return image;
     }
 
     public Task<List<string>> ListImagesAsync()
     {
-        return dbContext.ImageModels.Select(image => image.ImageName).ToListAsync();
+        return dbContext.Images.Select(image => image.ImageName).ToListAsync();
     }
 
-    public async Task DeleteImagesAsync()
+    public Task DeleteImagesAsync(IEnumerable<Photobox.Web.Models.Image> images)
     {
-        var images = await dbContext.ImageModels.ToArrayAsync();
+        var imageNames = images.SelectMany(i => new[] { i.UniqueImageName, i.DownscaledImageName });
 
-        foreach (var image in images)
-        {
-            await DeleteImageAsync(image.ImageName);
-        }
+        return storageService.DeleteImagesAsync(imageNames);
     }
 
     public async Task DeleteImageAsync(string imageName)
     {
         var imageModel = await dbContext
-            .ImageModels.Where(image => image.ImageName == imageName)
+            .Images.Where(image => image.ImageName == imageName)
             .FirstOrDefaultAsync();
 
         if (imageModel is null)
@@ -92,27 +93,30 @@ public class ImageService(
             return;
         }
 
-        await storageProvider.DeleteImageAsync(imageName);
+        await storageService.DeleteImageAsync(imageModel.UniqueImageName);
 
-        await storageProvider.DeleteImageAsync(imageName);
+        await storageService.DeleteImageAsync(imageModel.DownscaledImageName);
 
-        dbContext.ImageModels.Remove(imageModel);
+        dbContext.Images.Remove(imageModel);
 
         await dbContext.SaveChangesAsync();
     }
 
-    public string GetPreviewImagePreSignedUrl(string imageName, TimeSpan validFor = default)
+    public async Task<string> GetPreviewImagePreSignedUrl(
+        string imageName,
+        TimeSpan validFor = default
+    )
     {
         if (validFor == default)
         {
             validFor = TimeSpan.FromMinutes(30);
         }
 
-        var imageModel = dbContext.ImageModels.Where(model => model.ImageName == imageName).First();
+        var imageModel = dbContext.Images.Where(model => model.ImageName == imageName).First();
 
         if (!memoryCache.TryGetValue(imageModel.DownscaledImageName, out string preSignedUrl))
         {
-            preSignedUrl = storageProvider.GetPreSignedUrl(
+            preSignedUrl = await storageService.GetPreSignedUrl(
                 imageModel.DownscaledImageName,
                 validFor
             );

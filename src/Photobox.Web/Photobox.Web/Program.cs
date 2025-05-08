@@ -7,13 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using NSwag;
 using NSwag.Generation.Processors.Security;
+using Photobox.Web;
 using Photobox.Web.Aws;
 using Photobox.Web.Components;
-using Photobox.Web.DbContext;
+using Photobox.Web.Database;
 using Photobox.Web.HealthCheck;
 using Photobox.Web.Models;
-using Photobox.Web.Services;
-using Photobox.Web.StorageProvider;
 using Scalar.AspNetCore;
 using Serilog;
 using SixLabors.ImageSharp.Web.DependencyInjection;
@@ -87,9 +86,7 @@ builder.Services.AddDbContextPool<AppDbContext>(options =>
     options.UseNpgsql(connectionString);
 });
 
-builder.Services.AddScoped<ImageService>();
-
-builder.Services.AddSingleton<IStorageProvider, AwsStorageProvider>();
+builder.Services.AddApplication();
 
 builder.Services.ConfigureAws(builder.Configuration);
 
