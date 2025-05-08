@@ -392,151 +392,36 @@
         ]
       }
     },
-    "/api/PhotoBox/Register": {
-      "post": {
-        "tags": [
-          "PhotoBox"
-        ],
-        "summary": "",
-        "operationId": "PhotoBox_Register",
-        "parameters": [
-          {
-            "name": "X-PhotoBox-Id",
-            "x-originalName": "photoBoxId",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            },
-            "x-position": 2
-          }
-        ],
-        "requestBody": {
-          "x-name": "registerPhotoBox",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegisterPhotoBoxDto"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "401": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "200": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/api/PhotoBox/GetGalleryCode": {
+    "/api/Health": {
       "get": {
         "tags": [
-          "PhotoBox"
+          "Health"
         ],
-        "operationId": "PhotoBox_GetGalleryCode",
-        "parameters": [
-          {
-            "name": "X-PhotoBox-Id",
-            "x-originalName": "photoBoxId",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            },
-            "x-position": 1
-          }
-        ],
+        "summary": "Get Health",
+        "description": "Provides an indication about the health of the API",
+        "operationId": "Health_Get",
         "responses": {
           "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/api/PhotoBox/CheckIfPhotoboxExists": {
-      "get": {
-        "tags": [
-          "PhotoBox"
-        ],
-        "summary": "Checks if a photobox with the specified ID exists in the database.",
-        "operationId": "PhotoBox_CheckIfPhotoboxExists",
-        "parameters": [
-          {
-            "name": "X-PhotoBox-Id",
-            "x-originalName": "photoBoxId",
-            "in": "header",
-            "description": "The ID of the photobox to check.",
-            "schema": {
-              "type": "string"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Photobox exists in the database.",
+            "description": "API is healthy",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CheckPhotoboxResponse"
+                  "$ref": "#/components/schemas/HealthReport"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "API is unhealthy or in degraded state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthReport"
                 }
               }
             }
           }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
+        }
       }
     },
     "/api/Image/UploadImage": {
@@ -548,7 +433,7 @@
         "operationId": "Image_UploadImage",
         "parameters": [
           {
-            "name": "X-PhotoBox-Id",
+            "name": "X-Hardware-Id",
             "x-originalName": "photoBoxId",
             "in": "header",
             "description": "The unique identifier of the photobox that has taken the picture.",
@@ -580,7 +465,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ImageUploadResult"
+                  "$ref": "#/components/schemas/ImageUploadResponse"
                 }
               }
             }
@@ -747,36 +632,104 @@
         }
       }
     },
-    "/api/Health": {
-      "get": {
+    "/api/PhotoBox/Register": {
+      "post": {
         "tags": [
-          "Health"
+          "PhotoBox"
         ],
-        "summary": "Get Health",
-        "description": "Provides an indication about the health of the API",
-        "operationId": "Health_Get",
+        "summary": "",
+        "operationId": "PhotoBox_Register",
+        "parameters": [
+          {
+            "name": "X-Hardware-Id",
+            "x-originalName": "hardwareId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 2
+          }
+        ],
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterPhotoboxRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
-          "200": {
-            "description": "API is healthy",
+          "409": {
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HealthReport"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
           },
-          "503": {
-            "description": "API is unhealthy or in degraded state",
+          "500": {
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HealthReport"
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/PhotoBox/CheckIfPhotoboxExists": {
+      "get": {
+        "tags": [
+          "PhotoBox"
+        ],
+        "summary": "Checks if a photobox with the specified ID exists in the database.",
+        "operationId": "PhotoBox_CheckIfPhotoboxExists",
+        "parameters": [
+          {
+            "name": "X-Hardware-Id",
+            "x-originalName": "hardwareId",
+            "in": "header",
+            "description": "The ID of the photobox to check.",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Photobox exists in the database.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckPhotoboxResponse"
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     }
   },
@@ -794,38 +747,119 @@
               "photoBoxes": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/PhotoBoxModel"
+                  "$ref": "#/components/schemas/PhotoBox"
+                }
+              },
+              "events": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Event"
                 }
               }
             }
           }
         ]
       },
-      "PhotoBoxModel": {
+      "PhotoBox": {
         "type": "object",
         "additionalProperties": false,
         "required": [
           "name",
-          "photoboxId"
+          "hardwareId"
         ],
         "properties": {
           "id": {
             "type": "string",
+            "description": "Primary key of the PhotoBox (generated as GUID v7).",
             "format": "guid"
           },
           "name": {
             "type": "string",
-            "maxLength": 50,
+            "description": "Display name of the photobox, shown in the UI. Max length: 50.",
+            "maxLength": 256,
             "minLength": 1
           },
-          "photoboxId": {
+          "hardwareId": {
             "type": "string",
+            "description": "Stable identifier assigned to a specific device. Used for registration.",
             "maxLength": 52,
             "minLength": 1
           },
           "applicationUserId": {
             "type": "string",
+            "description": "Foreign key to the owning application user.",
             "maxLength": 50
+          },
+          "eventId": {
+            "type": "string",
+            "description": "Foreign key to the owning event.",
+            "format": "guid",
+            "nullable": true
+          }
+        }
+      },
+      "Event": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Primary key of the PhotoBox (generated as GUID v7).",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the current Event"
+          },
+          "photoBox": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PhotoBox"
+              }
+            ]
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Image"
+            }
+          },
+          "applicationUserId": {
+            "type": "string",
+            "description": "Foreign key to the owning application user.",
+            "maxLength": 50
+          }
+        }
+      },
+      "Image": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Primary key of the Image (generated as GUID v7).",
+            "format": "guid"
+          },
+          "imageName": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "uniqueImageName": {
+            "type": "string",
+            "maxLength": 45
+          },
+          "downscaledImageName": {
+            "type": "string",
+            "maxLength": 45
+          },
+          "takenAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "eventId": {
+            "type": "string",
+            "format": "guid"
           }
         }
       },
@@ -1142,36 +1176,6 @@
           "oldPassword": {
             "type": "string",
             "nullable": true
-          }
-        }
-      },
-      "RegisterPhotoBoxDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "photoBoxName": {
-            "type": "string"
-          }
-        }
-      },
-      "CheckPhotoboxResponse": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "exists": {
-            "type": "boolean"
-          },
-          "photoboxId": {
-            "type": "string"
-          }
-        }
-      },
-      "ImageUploadResult": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "fileName": {
-            "type": "string"
           }
         }
       },
@@ -2276,6 +2280,36 @@
           1,
           2
         ]
+      },
+      "ImageUploadResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "fileName": {
+            "type": "string"
+          }
+        }
+      },
+      "RegisterPhotoboxRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "photoBoxName": {
+            "type": "string"
+          }
+        }
+      },
+      "CheckPhotoboxResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "exists": {
+            "type": "boolean"
+          },
+          "photoboxId": {
+            "type": "string"
+          }
+        }
       }
     },
     "securitySchemes": {

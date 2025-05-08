@@ -89,7 +89,7 @@
       "generateDataAnnotations": true,
       "excludedTypeNames": [],
       "excludedParameterNames": [
-        "X-PhotoBox-Id"
+        "X-Hardware-Id"
       ],
       "handleReferences": false,
       "generateImmutableArrayProperties": false,

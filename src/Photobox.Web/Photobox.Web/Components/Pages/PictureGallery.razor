@@ -9,13 +9,13 @@
 <h1 class="heading">Gallery</h1>
 
 
-@if (_imageNames.Count > 0)
+@if (_images.Count > 0)
 {
     <div class="gallery">
-        @foreach (var imageName in _imageNames)
+        @foreach (var imageName in _images.Keys)
         {
             <div class="container">
-                <MudImage Src="@GetImagePath(imageName)" Alt="Description" Class="image" />
+                <MudImage Src="@_images[imageName]" Alt="Description" Class="image" />
 
                 <div class="button-left">
                     <MudButton Variant="Variant.Filled" Href="@GetDownloadLink(@imageName)" Size="Size.Large" StartIcon="@Icons.Material.Filled.Download" Color="Color.Info">Download</MudButton>
@@ -34,19 +34,18 @@ else
 }
 
 @code {
-    private List<string> _imageNames = [];
-
+    private Dictionary<string, string> _images = [];
+    
     protected override async Task OnInitializedAsync()
     {
-        _imageNames = await imageService.ListImagesAsync();
+        var imageNames = await imageService.ListImagesAsync();
+        imageNames.Reverse();
 
-        _imageNames.Reverse();
-
-    }
-
-    private string GetImagePath(string imageName)
-    {
-	    return imageService.GetPreviewImagePreSignedUrl(imageName);
+        foreach (var name in imageNames)
+        {
+            _images[name] = await imageService.GetPreviewImagePreSignedUrl(name);
+        }
+        
     }
 
     private static string GetDownloadLink(string imageName)

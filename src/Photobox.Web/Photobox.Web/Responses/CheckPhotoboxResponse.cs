@@ -1,6 +1,6 @@
 ﻿namespace Photobox.Web.Responses;
 
-public class CheckPhotoboxResponse
+public record CheckPhotoboxResponse
 {
     public bool Exists { get; set; }
     public string PhotoboxId { get; set; } = string.Empty;

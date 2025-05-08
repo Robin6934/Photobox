@@ -18,7 +18,7 @@ public partial class ImageClient
         if (!string.IsNullOrEmpty(accessToken))
         {
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            request.Headers.Add("X-PhotoBox-Id", PhotoboxHelper.PhotoboxId);
+            request.Headers.Add(PhotoboxHeaders.HardwareId, PhotoboxHelper.PhotoboxId);
         }
     }
 }
@@ -36,7 +36,7 @@ public partial class PhotoBoxClient
         if (!string.IsNullOrEmpty(accessToken))
         {
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            request.Headers.Add("X-PhotoBox-Id", PhotoboxHelper.PhotoboxId);
+            request.Headers.Add(PhotoboxHeaders.HardwareId, PhotoboxHelper.PhotoboxId);
         }
     }
 }
