@@ -1,16 +1,18 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Net;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Photobox.Lib;
 using Photobox.Lib.Extensions;
+using Photobox.Web.Database;
 using Photobox.Web.Responses;
 using Photobox.Web.Services;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Net;
 
 namespace Photobox.Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class ImageController(ImageService imageService) : Controller
+public class ImageController(ImageService imageService, AppDbContext dbContext) : Controller
 {
     /// <summary>
     /// Uploads a picture to the server.
@@ -22,11 +24,11 @@ public class ImageController(ImageService imageService) : Controller
     [ProducesResponseType<ImageUploadResponse>((int)HttpStatusCode.OK)]
     [Authorize]
     public async Task<IActionResult> UploadImage(
-        [FromHeader(Name = "X-PhotoBox-Id")] string photoBoxId,
-        IFormFile formFile
+        [FromHeader(Name = PhotoboxHeaders.HardwareId)] string photoBoxId,
+        IFormFile? formFile
     )
     {
-        if (formFile == null || formFile.Length == 0)
+        if (formFile is null || formFile.Length == 0)
         {
             return BadRequest("No file uploaded.");
         }
@@ -40,7 +42,7 @@ public class ImageController(ImageService imageService) : Controller
             return BadRequest("File has wrong format.");
         }
 
-        await imageService.StoreImageAsync(image, formFile.FileName);
+        await imageService.StoreImageAsync(image, formFile.FileName, photoBoxId);
 
         return Ok(new ImageUploadResponse { FileName = formFile.FileName });
     }
@@ -64,7 +66,7 @@ public class ImageController(ImageService imageService) : Controller
     }
 
     [HttpGet("{imageName}")]
-    public string GetPreviewImagePreSignedUrl(string imageName)
+    public Task<string> GetPreviewImagePreSignedUrl(string imageName)
     {
         return imageService.GetPreviewImagePreSignedUrl(imageName, TimeSpan.FromMinutes(30));
     }
@@ -78,7 +80,7 @@ public class ImageController(ImageService imageService) : Controller
     [HttpDelete]
     public Task DeleteImages()
     {
-        return imageService.DeleteImagesAsync();
+        return imageService.DeleteImagesAsync(dbContext.Images);
     }
 
     [HttpDelete]

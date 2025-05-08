@@ -15,7 +15,7 @@ public class PhotoboxSettingsManager(IPhotoBoxClient photoBoxClient) : IPhotobox
 
     public async Task Register(PhotoboxSettings settings)
     {
-        var request = new RegisterPhotoBoxDto { PhotoBoxName = settings.Name };
+        var request = new RegisterPhotoboxRequest() { PhotoBoxName = settings.Name };
 
         try
         {
