@@ -770,12 +770,12 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Primary key of the PhotoBox (generated as GUID v7).",
+            "description": "Primary key of the PhotoBox.",
             "format": "guid"
           },
           "name": {
             "type": "string",
-            "description": "Display name of the photobox, shown in the UI. Max length: 50.",
+            "description": "Display name of the Photobox, shown in the UI. Max length: 256.",
             "maxLength": 256,
             "minLength": 1
           },
@@ -784,40 +784,6 @@
             "description": "Stable identifier assigned to a specific device. Used for registration.",
             "maxLength": 52,
             "minLength": 1
-          },
-          "applicationUserId": {
-            "type": "string",
-            "description": "Foreign key to the owning application user.",
-            "maxLength": 50
-          },
-          "eventId": {
-            "type": "string",
-            "description": "Foreign key to the owning event.",
-            "format": "guid",
-            "nullable": true
-          }
-        }
-      },
-      "Event": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Primary key of the PhotoBox (generated as GUID v7).",
-            "format": "guid"
-          },
-          "name": {
-            "type": "string",
-            "description": "Name of the current Event"
-          },
-          "photoBox": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/PhotoBox"
-              }
-            ]
           },
           "images": {
             "type": "array",
@@ -829,37 +795,144 @@
             "type": "string",
             "description": "Foreign key to the owning application user.",
             "maxLength": 50
+          },
+          "applicationUser": {
+            "description": "Navigation property to the owning application user.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ApplicationUser"
+              }
+            ]
+          },
+          "eventId": {
+            "type": "string",
+            "description": "Foreign key to the owning event.",
+            "format": "guid",
+            "nullable": true
+          },
+          "event": {
+            "description": "Navigation property to the owning event.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Event"
+              }
+            ]
           }
         }
       },
       "Image": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "photoboxHardwareId",
+          "photoBox",
+          "event"
+        ],
         "properties": {
           "id": {
             "type": "string",
-            "description": "Primary key of the Image (generated as GUID v7).",
+            "description": "Primary key of the Image.",
             "format": "guid"
           },
           "imageName": {
             "type": "string",
+            "description": "The Name of the image, which got uploaded.",
             "maxLength": 64
           },
           "uniqueImageName": {
             "type": "string",
+            "description": "A Unique image name, used to store the image in the bucket storage.\n            ",
             "maxLength": 45
           },
           "downscaledImageName": {
             "type": "string",
+            "description": " ",
             "maxLength": 45
           },
           "takenAt": {
             "type": "string",
             "format": "date-time"
           },
-          "eventId": {
+          "photoboxHardwareId": {
+            "type": "string",
+            "description": "HardwareId of the Photobox that took the image.",
+            "maxLength": 52,
+            "minLength": 1
+          },
+          "photoBoxId": {
             "type": "string",
             "format": "guid"
+          },
+          "photoBox": {
+            "$ref": "#/components/schemas/PhotoBox"
+          },
+          "eventId": {
+            "type": "string",
+            "format": "guid",
+            "nullable": true
+          },
+          "event": {
+            "$ref": "#/components/schemas/Event"
+          }
+        }
+      },
+      "Event": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Primary key of the PhotoBox.",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the current Event",
+            "maxLength": 256,
+            "minLength": 1
+          },
+          "startDate": {
+            "type": "string",
+            "description": "The date, when the Event starts.",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "The date, when teh Event ends.",
+            "format": "date-time"
+          },
+          "photoBox": {
+            "description": "The Photobox that is used during the event",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PhotoBox"
+              }
+            ]
+          },
+          "images": {
+            "type": "array",
+            "description": "All images taken during the event.",
+            "items": {
+              "$ref": "#/components/schemas/Image"
+            }
+          },
+          "applicationUserId": {
+            "type": "string",
+            "description": "Foreign key to the owning application user.",
+            "maxLength": 50
+          },
+          "applicationUser": {
+            "description": "Navigation property to the owning application user.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ApplicationUser"
+              }
+            ]
           }
         }
       },
@@ -1181,53 +1254,40 @@
       },
       "HealthReport": {
         "type": "object",
-        "description": "Represents the result of executing a group of IHealthCheck instances.",
         "additionalProperties": false,
         "properties": {
           "entries": {
             "type": "object",
-            "description": "A IReadOnlyDictionary`2 containing the results from each health check.",
             "additionalProperties": {
               "$ref": "#/components/schemas/HealthReportEntry"
             }
           },
           "status": {
-            "description": "Gets a HealthStatus representing the aggregate status of all the health checks. The value of Status\nwill be the most severe status reported by a health check. If no checks were executed, the value is always Healthy.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/HealthStatus"
-              }
-            ]
+            "$ref": "#/components/schemas/HealthStatus"
           },
           "totalDuration": {
             "type": "string",
-            "description": "Gets the time the health check service took to execute.",
             "format": "duration"
           }
         }
       },
       "HealthReportEntry": {
         "type": "object",
-        "description": "Represents an entry in a HealthReport. Corresponds to the result of a single IHealthCheck.",
         "additionalProperties": false,
         "properties": {
           "data": {
             "type": "object",
-            "description": "Gets additional key-value pairs describing the health of the component.",
             "additionalProperties": {}
           },
           "description": {
             "type": "string",
-            "description": "Gets a human-readable description of the status of the component that was checked.",
             "nullable": true
           },
           "duration": {
             "type": "string",
-            "description": "Gets the health check execution duration.",
             "format": "duration"
           },
           "exception": {
-            "description": "Gets an Exception representing the exception that was thrown when checking for status (if any).",
             "nullable": true,
             "oneOf": [
               {
@@ -1236,16 +1296,10 @@
             ]
           },
           "status": {
-            "description": "Gets the health status of the component that was checked.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/HealthStatus"
-              }
-            ]
+            "$ref": "#/components/schemas/HealthStatus"
           },
           "tags": {
             "type": "array",
-            "description": "Gets the tags associated with the health check.",
             "items": {
               "type": "string"
             }
@@ -2269,7 +2323,7 @@
       },
       "HealthStatus": {
         "type": "integer",
-        "description": "Represents the reported status of a health check result.",
+        "description": "",
         "x-enumNames": [
           "Unhealthy",
           "Degraded",
