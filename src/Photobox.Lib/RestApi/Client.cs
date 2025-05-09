@@ -2447,13 +2447,13 @@ namespace Photobox.Lib.RestApi
     public partial record PhotoBox
     {
         /// <summary>
-        /// Primary key of the PhotoBox (generated as GUID v7).
+        /// Primary key of the PhotoBox.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Guid Id { get; set; }
 
         /// <summary>
-        /// Display name of the photobox, shown in the UI. Max length: 50.
+        /// Display name of the Photobox, shown in the UI. Max length: 256.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required]
@@ -2468,39 +2468,6 @@ namespace Photobox.Lib.RestApi
         [System.ComponentModel.DataAnnotations.StringLength(52, MinimumLength = 1)]
         public string HardwareId { get; set; }
 
-        /// <summary>
-        /// Foreign key to the owning application user.
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("applicationUserId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [System.ComponentModel.DataAnnotations.StringLength(50)]
-        public string ApplicationUserId { get; set; }
-
-        /// <summary>
-        /// Foreign key to the owning event.
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("eventId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid? EventId { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.3.0.0 (NJsonSchema v11.2.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial record Event
-    {
-        /// <summary>
-        /// Primary key of the PhotoBox (generated as GUID v7).
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid Id { get; set; }
-
-        /// <summary>
-        /// Name of the current Event
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("photoBox", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public PhotoBox PhotoBox { get; set; }
-
         [Newtonsoft.Json.JsonProperty("images", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<Image> Images { get; set; }
 
@@ -2511,25 +2478,53 @@ namespace Photobox.Lib.RestApi
         [System.ComponentModel.DataAnnotations.StringLength(50)]
         public string ApplicationUserId { get; set; }
 
+        /// <summary>
+        /// Navigation property to the owning application user.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("applicationUser", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ApplicationUser ApplicationUser { get; set; }
+
+        /// <summary>
+        /// Foreign key to the owning event.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("eventId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid? EventId { get; set; }
+
+        /// <summary>
+        /// Navigation property to the owning event.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("event", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public Event Event { get; set; }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.3.0.0 (NJsonSchema v11.2.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record Image
     {
         /// <summary>
-        /// Primary key of the Image (generated as GUID v7).
+        /// Primary key of the Image.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Guid Id { get; set; }
 
+        /// <summary>
+        /// The Name of the image, which got uploaded.
+        /// </summary>
         [Newtonsoft.Json.JsonProperty("imageName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [System.ComponentModel.DataAnnotations.StringLength(64)]
         public string ImageName { get; set; }
 
+        /// <summary>
+        /// A Unique image name, used to store the image in the bucket storage.
+        /// <br/>            
+        /// </summary>
         [Newtonsoft.Json.JsonProperty("uniqueImageName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [System.ComponentModel.DataAnnotations.StringLength(45)]
         public string UniqueImageName { get; set; }
 
+        /// <summary>
+        ///  
+        /// </summary>
         [Newtonsoft.Json.JsonProperty("downscaledImageName", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [System.ComponentModel.DataAnnotations.StringLength(45)]
         public string DownscaledImageName { get; set; }
@@ -2537,8 +2532,83 @@ namespace Photobox.Lib.RestApi
         [Newtonsoft.Json.JsonProperty("takenAt", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.DateTimeOffset TakenAt { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("eventId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Guid EventId { get; set; }
+        /// <summary>
+        /// HardwareId of the Photobox that took the image.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("photoboxHardwareId", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.StringLength(52, MinimumLength = 1)]
+        public string PhotoboxHardwareId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("photoBoxId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid PhotoBoxId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("photoBox", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public PhotoBox PhotoBox { get; set; } = new PhotoBox();
+
+        [Newtonsoft.Json.JsonProperty("eventId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid? EventId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("event", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        public Event Event { get; set; } = new Event();
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.3.0.0 (NJsonSchema v11.2.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial record Event
+    {
+        /// <summary>
+        /// Primary key of the PhotoBox.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; set; }
+
+        /// <summary>
+        /// Name of the current Event
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.StringLength(256, MinimumLength = 1)]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// The date, when the Event starts.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("startDate", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.DateTimeOffset StartDate { get; set; }
+
+        /// <summary>
+        /// The date, when teh Event ends.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("endDate", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.DateTimeOffset EndDate { get; set; }
+
+        /// <summary>
+        /// The Photobox that is used during the event
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("photoBox", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public PhotoBox PhotoBox { get; set; }
+
+        /// <summary>
+        /// All images taken during the event.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("images", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<Image> Images { get; set; }
+
+        /// <summary>
+        /// Foreign key to the owning application user.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("applicationUserId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [System.ComponentModel.DataAnnotations.StringLength(50)]
+        public string ApplicationUserId { get; set; }
+
+        /// <summary>
+        /// Navigation property to the owning application user.
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty("applicationUser", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ApplicationUser ApplicationUser { get; set; }
 
     }
 
@@ -2834,72 +2904,38 @@ namespace Photobox.Lib.RestApi
 
     }
 
-    /// <summary>
-    /// Represents the result of executing a group of IHealthCheck instances.
-    /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.3.0.0 (NJsonSchema v11.2.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record HealthReport
     {
-        /// <summary>
-        /// A IReadOnlyDictionary`2 containing the results from each health check.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("entries", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.IDictionary<string, HealthReportEntry> Entries { get; set; }
 
-        /// <summary>
-        /// Gets a HealthStatus representing the aggregate status of all the health checks. The value of Status
-        /// <br/>will be the most severe status reported by a health check. If no checks were executed, the value is always Healthy.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public HealthStatus Status { get; set; }
 
-        /// <summary>
-        /// Gets the time the health check service took to execute.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("totalDuration", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.TimeSpan TotalDuration { get; set; }
 
     }
 
-    /// <summary>
-    /// Represents an entry in a HealthReport. Corresponds to the result of a single IHealthCheck.
-    /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.3.0.0 (NJsonSchema v11.2.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record HealthReportEntry
     {
-        /// <summary>
-        /// Gets additional key-value pairs describing the health of the component.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.IDictionary<string, object> Data { get; set; }
 
-        /// <summary>
-        /// Gets a human-readable description of the status of the component that was checked.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Description { get; set; }
 
-        /// <summary>
-        /// Gets the health check execution duration.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("duration", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.TimeSpan Duration { get; set; }
 
-        /// <summary>
-        /// Gets an Exception representing the exception that was thrown when checking for status (if any).
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("exception", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public Exception Exception { get; set; }
 
-        /// <summary>
-        /// Gets the health status of the component that was checked.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public HealthStatus Status { get; set; }
 
-        /// <summary>
-        /// Gets the tags associated with the health check.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("tags", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<string> Tags { get; set; }
 
@@ -3664,9 +3700,6 @@ namespace Photobox.Lib.RestApi
 
     }
 
-    /// <summary>
-    /// Represents the reported status of a health check result.
-    /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.3.0.0 (NJsonSchema v11.2.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public enum HealthStatus
     {

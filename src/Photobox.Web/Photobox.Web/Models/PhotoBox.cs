@@ -9,14 +9,14 @@ namespace Photobox.Web.Models;
 public class PhotoBox
 {
     /// <summary>
-    /// Primary key of the PhotoBox (generated as GUID v7).
+    /// Primary key of the PhotoBox.
     /// </summary>
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 
     /// <summary>
-    /// Display name of the photobox, shown in the UI. Max length: 50.
+    /// Display name of the Photobox, shown in the UI. Max length: 256.
     /// </summary>
     [Required]
     [MaxLength(256)]
@@ -29,6 +29,8 @@ public class PhotoBox
     [MaxLength(52)]
     public required string HardwareId { get; set; }
 
+    public ICollection<Image> Images { get; } = [];
+
     /// <summary>
     /// Foreign key to the owning application user.
     /// </summary>
@@ -38,7 +40,6 @@ public class PhotoBox
     /// <summary>
     /// Navigation property to the owning application user.
     /// </summary>
-    [JsonIgnore]
     [ForeignKey(nameof(ApplicationUserId))]
     public ApplicationUser ApplicationUser { get; set; }
 
@@ -50,7 +51,6 @@ public class PhotoBox
     /// <summary>
     /// Navigation property to the owning event.
     /// </summary>
-    [JsonIgnore]
     [ForeignKey(nameof(EventId))]
     public Event? Event { get; set; }
 }

@@ -14,20 +14,26 @@ public class ImageService(
 {
     private readonly ILogger<ImageService> _logger = logger;
 
-    public async Task StoreImageAsync(Image<Rgb24> image, string imageName, string photoBoxId)
+    public async Task StoreImageAsync(
+        Image<Rgb24> image,
+        string imageName,
+        string photoboxHardwareId
+    )
     {
         var photobox = dbContext
             .PhotoBoxes.Include(photobox => photobox.Event)
-            .Single(photoBox => photoBox.HardwareId == photoBoxId);
+            .Single(photoBox => photoBox.HardwareId == photoboxHardwareId);
 
         Models.Image imageModel = new()
         {
+            Id = Guid.CreateVersion7(),
             UniqueImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}",
             ImageName = imageName,
             DownscaledImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}",
             //TODO: 1.12.2024 cant use dateTime.now with postgress need to fix later
             TakenAt = DateTime.UtcNow,
             Event = photobox.Event,
+            PhotoboxHardwareId = photoboxHardwareId,
         };
 
         int newWidth = image.Width < 1000 ? image.Width : 1000;
@@ -75,11 +81,14 @@ public class ImageService(
         return dbContext.Images.Select(image => image.ImageName).ToListAsync();
     }
 
-    public Task DeleteImagesAsync(IEnumerable<Photobox.Web.Models.Image> images)
+    public Task DeleteImagesAsync(
+        IEnumerable<Photobox.Web.Models.Image> images,
+        CancellationToken cancellationToken = default
+    )
     {
         var imageNames = images.SelectMany(i => new[] { i.UniqueImageName, i.DownscaledImageName });
 
-        return storageService.DeleteImagesAsync(imageNames);
+        return storageService.DeleteImagesAsync(imageNames, cancellationToken);
     }
 
     public async Task DeleteImageAsync(string imageName)

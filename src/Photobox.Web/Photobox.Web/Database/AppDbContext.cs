@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Photobox.Web.Models;
 using Photobox.Web.Services;
@@ -6,7 +7,7 @@ using Image = Photobox.Web.Models.Image;
 
 namespace Photobox.Web.Database;
 
-public class AppDbContext(DbContextOptions<AppDbContext> context, ImageService imageService)
+public class AppDbContext(DbContextOptions<AppDbContext> context)
     : IdentityDbContext<ApplicationUser>(context)
 {
     public virtual DbSet<Image> Images { get; init; }
@@ -46,25 +47,5 @@ public class AppDbContext(DbContextOptions<AppDbContext> context, ImageService i
             .WithOne(i => i.Event)
             .HasForeignKey(i => i.EventId)
             .OnDelete(DeleteBehavior.Cascade);
-    }
-
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        var deletedEvents = ChangeTracker
-            .Entries<Event>()
-            .Where(e => e.State == EntityState.Deleted)
-            .Select(e => e.Entity)
-            .ToList();
-
-        if (deletedEvents.Count != 0)
-        {
-            var imageKeysToDelete = await Images
-                .Where(i => deletedEvents.Select(ev => ev.Id).Contains(i.EventId))
-                .ToListAsync(cancellationToken);
-
-            await imageService.DeleteImagesAsync(imageKeysToDelete);
-        }
-
-        return await base.SaveChangesAsync(cancellationToken);
     }
 }
