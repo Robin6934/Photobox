@@ -7,7 +7,7 @@ public class PhotoboxValidator : AbstractValidator<PhotoBox>
 {
     public PhotoboxValidator()
     {
-        RuleFor(p => p.Id).NotEmpty().WithMessage("PhotoBox ID is required.");
+        RuleFor(p => p.Id).NotEmpty().WithMessage("PhotoBox primary key is required.");
 
         RuleFor(p => p.Name)
             .NotEmpty()
