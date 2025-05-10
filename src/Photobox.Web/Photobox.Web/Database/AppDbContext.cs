@@ -36,10 +36,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> context)
 
         builder
             .Entity<Event>()
-            .HasOne(e => e.PhotoBox)
-            .WithOne(e => e.Event)
-            .HasForeignKey<PhotoBox>(e => e.EventId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .HasOne(e => e.UsedPhotoBox)
+            .WithOne()
+            .HasForeignKey<Event>(e => e.UsedPhotoBoxId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder
             .Entity<Event>()
