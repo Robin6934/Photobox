@@ -29,8 +29,6 @@ public class PhotoBox
     [MaxLength(52)]
     public required string HardwareId { get; set; }
 
-    public ICollection<Image> Images { get; } = [];
-
     /// <summary>
     /// Foreign key to the owning application user.
     /// </summary>
@@ -39,17 +37,5 @@ public class PhotoBox
     /// <summary>
     /// Navigation property to the owning application user.
     /// </summary>
-    [ForeignKey(nameof(ApplicationUserId))]
     public ApplicationUser ApplicationUser { get; set; }
-
-    /// <summary>
-    /// Foreign key to the owning event.
-    /// </summary>
-    public Guid? EventId { get; set; }
-
-    /// <summary>
-    /// Navigation property to the owning event.
-    /// </summary>
-    [ForeignKey(nameof(EventId))]
-    public Event? Event { get; set; }
 }

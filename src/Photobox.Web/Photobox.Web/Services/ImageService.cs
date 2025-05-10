@@ -15,50 +15,37 @@ public class ImageService(
     private readonly ILogger<ImageService> _logger = logger;
 
     public async Task StoreImageAsync(
+        Models.Image imageModel,
         Image<Rgb24> image,
-        string imageName,
-        string photoboxHardwareId
+        CancellationToken cancellationToken = default
     )
     {
-        var photobox = dbContext
-            .PhotoBoxes.Include(photobox => photobox.Event)
-            .Single(photoBox => photoBox.HardwareId == photoboxHardwareId);
-
-        Models.Image imageModel = new()
-        {
-            Id = Guid.CreateVersion7(),
-            UniqueImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}",
-            ImageName = imageName,
-            DownscaledImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}",
-            //TODO: 1.12.2024 cant use dateTime.now with postgress need to fix later
-            TakenAt = DateTime.UtcNow,
-            Event = photobox.Event,
-            PhotoboxHardwareId = photoboxHardwareId,
-        };
-
         int newWidth = image.Width < 1000 ? image.Width : 1000;
 
         using var downScaledImage = image.Clone(i => i.Resize(newWidth, 0));
 
         var storeDownscaledTask = storageService.StoreImageAsync(
             downScaledImage,
-            imageModel.DownscaledImageName
+            imageModel.DownscaledImageName,
+            cancellationToken
         );
 
-        var fullSizeTask = storageService.StoreImageAsync(image, imageModel.UniqueImageName);
+        var fullSizeTask = storageService.StoreImageAsync(
+            image,
+            imageModel.UniqueImageName,
+            cancellationToken
+        );
 
-        var dbTask = dbContext.Images.AddAsync(imageModel);
+        var dbTask = dbContext.Images.AddAsync(imageModel, cancellationToken);
 
         await Task.WhenAll(storeDownscaledTask, fullSizeTask, dbTask.AsTask());
 
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<Image<Rgb24>> GetImageAsync(string imageName)
     {
-        var imageModel = await dbContext
-            .Images.Where(model => model.ImageName == imageName)
-            .FirstAsync();
+        var imageModel = await dbContext.Images.FirstAsync(model => model.ImageName == imageName);
 
         var image = await storageService.GetImageAsync(imageModel.UniqueImageName);
 
@@ -67,9 +54,7 @@ public class ImageService(
 
     public async Task<Image<Rgb24>> GetPreviewImageAsync(string imageName)
     {
-        var imageModel = await dbContext
-            .Images.Where(model => model.ImageName == imageName)
-            .FirstAsync();
+        var imageModel = await dbContext.Images.FirstAsync(model => model.ImageName == imageName);
 
         var image = await storageService.GetImageAsync(imageModel.DownscaledImageName);
 

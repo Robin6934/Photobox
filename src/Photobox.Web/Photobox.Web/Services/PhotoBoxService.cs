@@ -35,4 +35,17 @@ public class PhotoBoxService(
 
         return photobox;
     }
+
+    public async Task<PhotoBox?> GetFromIdAsync(
+        Guid id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var photobox = await dbContext.PhotoBoxes.FirstOrDefaultAsync(
+            p => p.Id == id,
+            cancellationToken
+        );
+
+        return photobox;
+    }
 }

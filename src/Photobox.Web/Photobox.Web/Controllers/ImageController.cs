@@ -12,7 +12,12 @@ namespace Photobox.Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public class ImageController(ImageService imageService, AppDbContext dbContext) : Controller
+public class ImageController(
+    ImageService imageService,
+    AppDbContext dbContext,
+    PhotoBoxService photoBoxService,
+    EventService eventService
+) : Controller
 {
     /// <summary>
     /// Uploads a picture to the server.
@@ -24,8 +29,9 @@ public class ImageController(ImageService imageService, AppDbContext dbContext) 
     [ProducesResponseType<ImageUploadResponse>((int)HttpStatusCode.OK)]
     [Authorize]
     public async Task<IActionResult> UploadImage(
-        [FromHeader(Name = PhotoboxHeaders.HardwareId)] string photoBoxId,
-        IFormFile? formFile
+        [FromHeader(Name = PhotoboxHeaders.HardwareId)] string hardwareId,
+        IFormFile? formFile,
+        CancellationToken cancellationToken
     )
     {
         if (formFile is null || formFile.Length == 0)
@@ -42,7 +48,24 @@ public class ImageController(ImageService imageService, AppDbContext dbContext) 
             return BadRequest("File has wrong format.");
         }
 
-        await imageService.StoreImageAsync(image, formFile.FileName, photoBoxId);
+        string imageName = formFile.FileName;
+
+        var photobox = await photoBoxService.GetFromHardwareIdAsync(hardwareId, cancellationToken);
+
+        var currentEvent = await eventService.GetEventFromPhotbox(photobox, cancellationToken);
+
+        Models.Image imageModel = new()
+        {
+            Id = Guid.CreateVersion7(),
+            UniqueImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}",
+            ImageName = imageName,
+            DownscaledImageName = $"{Guid.NewGuid()}{Path.GetExtension(imageName)}",
+            //TODO: 1.12.2024 cant use dateTime.now with postgress need to fix later
+            TakenAt = DateTime.UtcNow,
+            Event = currentEvent,
+        };
+
+        await imageService.StoreImageAsync(imageModel, image, cancellationToken);
 
         return Ok(new ImageUploadResponse { FileName = formFile.FileName });
     }

@@ -26,14 +26,24 @@ public class Event
     public DateTime StartDate { get; set; }
 
     /// <summary>
-    /// The date, when teh Event ends.
+    /// The date, when the Event ends.
     /// </summary>
     public DateTime EndDate { get; set; }
 
     /// <summary>
-    /// The Photobox that is used during the event
+    /// Indicates, wheter the current event is active.
     /// </summary>
-    public PhotoBox? PhotoBox { get; set; }
+    public bool IsActive { get; set; }
+
+    /// <summary>
+    /// Foreign key to the owning application user.
+    /// </summary>
+    public Guid UsedPhotoBoxId { get; set; }
+
+    /// <summary>
+    /// The Photobox that is used during the event.
+    /// </summary>
+    public PhotoBox UsedPhotoBox { get; set; }
 
     /// <summary>
     /// All images taken during the event.
@@ -48,6 +58,5 @@ public class Event
     /// <summary>
     /// Navigation property to the owning application user.
     /// </summary>
-    [ForeignKey(nameof(ApplicationUserId))]
     public required ApplicationUser ApplicationUser { get; set; }
 }

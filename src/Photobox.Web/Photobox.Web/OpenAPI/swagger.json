@@ -434,9 +434,8 @@
         "parameters": [
           {
             "name": "X-Hardware-Id",
-            "x-originalName": "photoBoxId",
+            "x-originalName": "hardwareId",
             "in": "header",
-            "description": "The unique identifier of the photobox that has taken the picture.",
             "schema": {
               "type": "string"
             },
@@ -683,8 +682,15 @@
               }
             }
           },
-          "200": {
-            "description": ""
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterPhotoBoxResponse"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -789,12 +795,6 @@
             "maxLength": 52,
             "minLength": 1
           },
-          "images": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Image"
-            }
-          },
           "applicationUserId": {
             "type": "string",
             "description": "Foreign key to the owning application user.",
@@ -807,77 +807,6 @@
                 "$ref": "#/components/schemas/ApplicationUser"
               }
             ]
-          },
-          "eventId": {
-            "type": "string",
-            "description": "Foreign key to the owning event.",
-            "format": "guid",
-            "nullable": true
-          },
-          "event": {
-            "description": "Navigation property to the owning event.",
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/Event"
-              }
-            ]
-          }
-        }
-      },
-      "Image": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "photoboxHardwareId",
-          "photoBox",
-          "event"
-        ],
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Primary key of the Image.",
-            "format": "guid"
-          },
-          "imageName": {
-            "type": "string",
-            "description": "The Name of the image, which got uploaded.",
-            "maxLength": 64
-          },
-          "uniqueImageName": {
-            "type": "string",
-            "description": "A Unique image name, used to store the image in the bucket storage.\n            ",
-            "maxLength": 45
-          },
-          "downscaledImageName": {
-            "type": "string",
-            "description": " ",
-            "maxLength": 45
-          },
-          "takenAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "photoboxHardwareId": {
-            "type": "string",
-            "description": "HardwareId of the Photobox that took the image.",
-            "maxLength": 52,
-            "minLength": 1
-          },
-          "photoBoxId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "photoBox": {
-            "$ref": "#/components/schemas/PhotoBox"
-          },
-          "eventId": {
-            "type": "string",
-            "format": "guid",
-            "nullable": true
-          },
-          "event": {
-            "$ref": "#/components/schemas/Event"
           }
         }
       },
@@ -906,12 +835,20 @@
           },
           "endDate": {
             "type": "string",
-            "description": "The date, when teh Event ends.",
+            "description": "The date, when the Event ends.",
             "format": "date-time"
           },
-          "photoBox": {
-            "description": "The Photobox that is used during the event",
-            "nullable": true,
+          "isActive": {
+            "type": "boolean",
+            "description": "Indicates, wheter the current event is active."
+          },
+          "usedPhotoBoxId": {
+            "type": "string",
+            "description": "Foreign key to the owning application user.",
+            "format": "guid"
+          },
+          "usedPhotoBox": {
+            "description": "The Photobox that is used during the event.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/PhotoBox"
@@ -937,6 +874,46 @@
                 "$ref": "#/components/schemas/ApplicationUser"
               }
             ]
+          }
+        }
+      },
+      "Image": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "event"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Primary key of the Image.",
+            "format": "guid"
+          },
+          "imageName": {
+            "type": "string",
+            "description": "The Name of the image, which got uploaded.",
+            "maxLength": 64
+          },
+          "uniqueImageName": {
+            "type": "string",
+            "description": "A Unique image name, used to store the image in the bucket storage.\n            ",
+            "maxLength": 45
+          },
+          "downscaledImageName": {
+            "type": "string",
+            "description": " ",
+            "maxLength": 45
+          },
+          "takenAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "eventId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "event": {
+            "$ref": "#/components/schemas/Event"
           }
         }
       },
@@ -2332,6 +2309,18 @@
         "additionalProperties": false,
         "properties": {
           "fileName": {
+            "type": "string"
+          }
+        }
+      },
+      "RegisterPhotoBoxResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "hardwareId": {
+            "type": "string"
+          },
+          "photoBoxName": {
             "type": "string"
           }
         }
