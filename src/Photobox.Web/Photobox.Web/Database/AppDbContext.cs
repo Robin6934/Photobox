@@ -8,7 +8,7 @@ using Image = Photobox.Web.Models.Image;
 namespace Photobox.Web.Database;
 
 public class AppDbContext(DbContextOptions<AppDbContext> context)
-    : IdentityDbContext<ApplicationUser>(context)
+    : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>(context)
 {
     public virtual DbSet<Image> Images { get; init; }
 

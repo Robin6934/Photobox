@@ -16,7 +16,7 @@ namespace Photobox.Web.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(
                         type: "character varying(256)",
                         maxLength: 256,
@@ -39,7 +39,7 @@ namespace Photobox.Web.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserName = table.Column<string>(
                         type: "character varying(256)",
                         maxLength: 256,
@@ -90,7 +90,7 @@ namespace Photobox.Web.Migrations
                             "Npgsql:ValueGenerationStrategy",
                             NpgsqlValueGenerationStrategy.IdentityByDefaultColumn
                         ),
-                    RoleId = table.Column<string>(type: "text", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
                     ClaimType = table.Column<string>(type: "text", nullable: true),
                     ClaimValue = table.Column<string>(type: "text", nullable: true),
                 },
@@ -117,7 +117,7 @@ namespace Photobox.Web.Migrations
                             "Npgsql:ValueGenerationStrategy",
                             NpgsqlValueGenerationStrategy.IdentityByDefaultColumn
                         ),
-                    UserId = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     ClaimType = table.Column<string>(type: "text", nullable: true),
                     ClaimValue = table.Column<string>(type: "text", nullable: true),
                 },
@@ -141,7 +141,7 @@ namespace Photobox.Web.Migrations
                     LoginProvider = table.Column<string>(type: "text", nullable: false),
                     ProviderKey = table.Column<string>(type: "text", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
-                    UserId = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -163,8 +163,8 @@ namespace Photobox.Web.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    RoleId = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -190,7 +190,7 @@ namespace Photobox.Web.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     LoginProvider = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Value = table.Column<string>(type: "text", nullable: true),
@@ -217,22 +217,30 @@ namespace Photobox.Web.Migrations
             );
 
             migrationBuilder.CreateTable(
-                name: "EventModels",
+                name: "Events",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    ApplicationUserId = table.Column<string>(
-                        type: "character varying(50)",
-                        maxLength: 50,
+                    Name = table.Column<string>(
+                        type: "character varying(256)",
+                        maxLength: 256,
                         nullable: false
                     ),
+                    StartDate = table.Column<DateTime>(
+                        type: "timestamp with time zone",
+                        nullable: false
+                    ),
+                    EndDate = table.Column<DateTime>(
+                        type: "timestamp with time zone",
+                        nullable: false
+                    ),
+                    ApplicationUserId = table.Column<Guid>(type: "uuid", nullable: false),
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EventModels", x => x.Id);
+                    table.PrimaryKey("PK_Events", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EventModels_AspNetUsers_ApplicationUserId",
+                        name: "FK_Events_AspNetUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -242,41 +250,37 @@ namespace Photobox.Web.Migrations
             );
 
             migrationBuilder.CreateTable(
-                name: "PhotoBoxModels",
+                name: "PhotoBoxes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(
-                        type: "character varying(50)",
-                        maxLength: 50,
+                        type: "character varying(256)",
+                        maxLength: 256,
                         nullable: false
                     ),
-                    PhotoboxId = table.Column<string>(
+                    HardwareId = table.Column<string>(
                         type: "character varying(52)",
                         maxLength: 52,
                         nullable: false
                     ),
-                    ApplicationUserId = table.Column<string>(
-                        type: "character varying(50)",
-                        maxLength: 50,
-                        nullable: false
-                    ),
+                    ApplicationUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     EventId = table.Column<Guid>(type: "uuid", nullable: true),
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PhotoBoxModels", x => x.Id);
+                    table.PrimaryKey("PK_PhotoBoxes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PhotoBoxModels_AspNetUsers_ApplicationUserId",
+                        name: "FK_PhotoBoxes_AspNetUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade
                     );
                     table.ForeignKey(
-                        name: "FK_PhotoBoxModels_EventModels_EventId",
+                        name: "FK_PhotoBoxes_Events_EventId",
                         column: x => x.EventId,
-                        principalTable: "EventModels",
+                        principalTable: "Events",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull
                     );
@@ -284,7 +288,7 @@ namespace Photobox.Web.Migrations
             );
 
             migrationBuilder.CreateTable(
-                name: "ImageModels",
+                name: "Images",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -307,25 +311,30 @@ namespace Photobox.Web.Migrations
                         type: "timestamp with time zone",
                         nullable: false
                     ),
-                    PhotoboxId = table.Column<Guid>(type: "uuid", nullable: true),
+                    PhotoboxHardwareId = table.Column<string>(
+                        type: "character varying(52)",
+                        maxLength: 52,
+                        nullable: false
+                    ),
+                    PhotoBoxId = table.Column<Guid>(type: "uuid", nullable: false),
                     EventId = table.Column<Guid>(type: "uuid", nullable: false),
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ImageModels", x => x.Id);
+                    table.PrimaryKey("PK_Images", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ImageModels_EventModels_EventId",
+                        name: "FK_Images_Events_EventId",
                         column: x => x.EventId,
-                        principalTable: "EventModels",
+                        principalTable: "Events",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade
                     );
                     table.ForeignKey(
-                        name: "FK_ImageModels_PhotoBoxModels_PhotoboxId",
-                        column: x => x.PhotoboxId,
-                        principalTable: "PhotoBoxModels",
+                        name: "FK_Images_PhotoBoxes_PhotoBoxId",
+                        column: x => x.PhotoBoxId,
+                        principalTable: "PhotoBoxes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull
+                        onDelete: ReferentialAction.Cascade
                     );
                 }
             );
@@ -375,45 +384,46 @@ namespace Photobox.Web.Migrations
             );
 
             migrationBuilder.CreateIndex(
-                name: "IX_EventModels_ApplicationUserId",
-                table: "EventModels",
+                name: "IX_Events_ApplicationUserId",
+                table: "Events",
                 column: "ApplicationUserId"
             );
 
             migrationBuilder.CreateIndex(
-                name: "IX_ImageModels_EventId",
-                table: "ImageModels",
+                name: "IX_Images_EventId",
+                table: "Images",
                 column: "EventId"
             );
 
             migrationBuilder.CreateIndex(
-                name: "IX_ImageModels_ImageName",
-                table: "ImageModels",
+                name: "IX_Images_ImageName",
+                table: "Images",
                 column: "ImageName"
             );
 
             migrationBuilder.CreateIndex(
-                name: "IX_ImageModels_PhotoboxId",
-                table: "ImageModels",
-                column: "PhotoboxId"
+                name: "IX_Images_PhotoBoxId",
+                table: "Images",
+                column: "PhotoBoxId"
             );
 
             migrationBuilder.CreateIndex(
-                name: "IX_PhotoBoxModels_ApplicationUserId",
-                table: "PhotoBoxModels",
+                name: "IX_PhotoBoxes_ApplicationUserId",
+                table: "PhotoBoxes",
                 column: "ApplicationUserId"
             );
 
             migrationBuilder.CreateIndex(
-                name: "IX_PhotoBoxModels_EventId",
-                table: "PhotoBoxModels",
-                column: "EventId"
+                name: "IX_PhotoBoxes_EventId",
+                table: "PhotoBoxes",
+                column: "EventId",
+                unique: true
             );
 
             migrationBuilder.CreateIndex(
-                name: "IX_PhotoBoxModels_PhotoboxId",
-                table: "PhotoBoxModels",
-                column: "PhotoboxId"
+                name: "IX_PhotoBoxes_HardwareId",
+                table: "PhotoBoxes",
+                column: "HardwareId"
             );
         }
 
@@ -430,13 +440,13 @@ namespace Photobox.Web.Migrations
 
             migrationBuilder.DropTable(name: "AspNetUserTokens");
 
-            migrationBuilder.DropTable(name: "ImageModels");
+            migrationBuilder.DropTable(name: "Images");
 
             migrationBuilder.DropTable(name: "AspNetRoles");
 
-            migrationBuilder.DropTable(name: "PhotoBoxModels");
+            migrationBuilder.DropTable(name: "PhotoBoxes");
 
-            migrationBuilder.DropTable(name: "EventModels");
+            migrationBuilder.DropTable(name: "Events");
 
             migrationBuilder.DropTable(name: "AspNetUsers");
         }
