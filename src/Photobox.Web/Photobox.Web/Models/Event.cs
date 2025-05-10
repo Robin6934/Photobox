@@ -43,12 +43,11 @@ public class Event
     /// <summary>
     /// Foreign key to the owning application user.
     /// </summary>
-    [MaxLength(50)]
-    public string ApplicationUserId { get; set; }
+    public Guid ApplicationUserId { get; set; }
 
     /// <summary>
     /// Navigation property to the owning application user.
     /// </summary>
     [ForeignKey(nameof(ApplicationUserId))]
-    public ApplicationUser ApplicationUser { get; set; }
+    public required ApplicationUser ApplicationUser { get; set; }
 }
