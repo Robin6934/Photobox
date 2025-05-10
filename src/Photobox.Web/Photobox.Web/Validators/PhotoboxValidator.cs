@@ -21,11 +21,7 @@ public class PhotoboxValidator : AbstractValidator<PhotoBox>
             .MaximumLength(52)
             .WithMessage("HardwareId cannot exceed 52 characters.");
 
-        RuleFor(p => p.ApplicationUserId)
-            .NotEmpty()
-            .WithMessage("ApplicationUserId is required.")
-            .MaximumLength(50)
-            .WithMessage("ApplicationUserId cannot exceed 50 characters.");
+        RuleFor(p => p.ApplicationUserId).NotNull().WithMessage("ApplicationUserId is required.");
 
         RuleFor(p => p.ApplicationUser)
             .NotNull()

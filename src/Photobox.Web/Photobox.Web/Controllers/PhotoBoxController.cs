@@ -39,7 +39,7 @@ public class PhotoBoxController(
         CancellationToken cancellationToken
     )
     {
-        string userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+        var userId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
         var user = await dbContext
             .Users.Include(e => e.PhotoBoxes)

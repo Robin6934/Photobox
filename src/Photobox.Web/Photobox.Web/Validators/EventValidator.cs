@@ -20,8 +20,7 @@ public class EventValidator : AbstractValidator<Event>
             .WithMessage("StartDate must be before or equal to EndDate.");
 
         RuleFor(e => e.ApplicationUserId)
-            .MaximumLength(50)
-            .WithMessage("ApplicationUserId cannot exceed 50 characters.")
-            .When(e => !string.IsNullOrWhiteSpace(e.ApplicationUserId));
+            .NotNull()
+            .WithMessage("ApplicationUserId cannot exceed 50 characters.");
     }
 }

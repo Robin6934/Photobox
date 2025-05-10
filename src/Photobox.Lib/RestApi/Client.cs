@@ -2433,8 +2433,11 @@ namespace Photobox.Lib.RestApi
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.3.0.0 (NJsonSchema v11.2.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial record ApplicationUser : IdentityUser
+    public partial record ApplicationUser : IdentityUserOfGuid
     {
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; set; }
+
         [Newtonsoft.Json.JsonProperty("photoBoxes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<PhotoBox> PhotoBoxes { get; set; }
 
@@ -2475,8 +2478,7 @@ namespace Photobox.Lib.RestApi
         /// Foreign key to the owning application user.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("applicationUserId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [System.ComponentModel.DataAnnotations.StringLength(50)]
-        public string ApplicationUserId { get; set; }
+        public System.Guid ApplicationUserId { get; set; }
 
         /// <summary>
         /// Navigation property to the owning application user.
@@ -2601,8 +2603,7 @@ namespace Photobox.Lib.RestApi
         /// Foreign key to the owning application user.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("applicationUserId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [System.ComponentModel.DataAnnotations.StringLength(50)]
-        public string ApplicationUserId { get; set; }
+        public System.Guid ApplicationUserId { get; set; }
 
         /// <summary>
         /// Navigation property to the owning application user.
@@ -2613,25 +2614,16 @@ namespace Photobox.Lib.RestApi
     }
 
     /// <summary>
-    /// The default implementation of IdentityUser`1 which uses a string as a primary key.
-    /// </summary>
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.3.0.0 (NJsonSchema v11.2.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial record IdentityUser : IdentityUserOfString
-    {
-
-    }
-
-    /// <summary>
     /// Represents a user in the identity system
     /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.3.0.0 (NJsonSchema v11.2.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial record IdentityUserOfString
+    public partial record IdentityUserOfGuid
     {
         /// <summary>
         /// Gets or sets the primary key for this user.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets the user name for this user.

@@ -738,12 +738,16 @@
       "ApplicationUser": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/IdentityUser"
+            "$ref": "#/components/schemas/IdentityUserOfGuid"
           },
           {
             "type": "object",
             "additionalProperties": false,
             "properties": {
+              "id": {
+                "type": "string",
+                "format": "guid"
+              },
               "photoBoxes": {
                 "type": "array",
                 "items": {
@@ -794,7 +798,7 @@
           "applicationUserId": {
             "type": "string",
             "description": "Foreign key to the owning application user.",
-            "maxLength": 50
+            "format": "guid"
           },
           "applicationUser": {
             "description": "Navigation property to the owning application user.",
@@ -924,7 +928,7 @@
           "applicationUserId": {
             "type": "string",
             "description": "Foreign key to the owning application user.",
-            "maxLength": 50
+            "format": "guid"
           },
           "applicationUser": {
             "description": "Navigation property to the owning application user.",
@@ -936,19 +940,7 @@
           }
         }
       },
-      "IdentityUser": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/IdentityUserOfString"
-          },
-          {
-            "type": "object",
-            "description": "The default implementation of IdentityUser`1 which uses a string as a primary key.",
-            "additionalProperties": false
-          }
-        ]
-      },
-      "IdentityUserOfString": {
+      "IdentityUserOfGuid": {
         "type": "object",
         "description": "Represents a user in the identity system",
         "additionalProperties": false,
@@ -956,7 +948,7 @@
           "id": {
             "type": "string",
             "description": "Gets or sets the primary key for this user.",
-            "nullable": true
+            "format": "guid"
           },
           "userName": {
             "type": "string",
