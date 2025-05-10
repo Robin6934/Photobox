@@ -228,6 +228,9 @@ namespace Photobox.Web.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -236,11 +239,17 @@ namespace Photobox.Web.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("UsedPhotoBoxId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Events", (string)null);
+                    b.HasIndex("UsedPhotoBoxId")
+                        .IsUnique();
+
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("Photobox.Web.Models.Image", b =>
@@ -253,21 +262,13 @@ namespace Photobox.Web.Migrations
                         .HasMaxLength(45)
                         .HasColumnType("character varying(45)");
 
-                    b.Property<Guid>("EventId")
+                    b.Property<Guid?>("EventId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ImageName")
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
-
-                    b.Property<Guid>("PhotoBoxId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("PhotoboxHardwareId")
-                        .IsRequired()
-                        .HasMaxLength(52)
-                        .HasColumnType("character varying(52)");
 
                     b.Property<DateTime>("TakenAt")
                         .HasColumnType("timestamp with time zone");
@@ -283,9 +284,7 @@ namespace Photobox.Web.Migrations
 
                     b.HasIndex("ImageName");
 
-                    b.HasIndex("PhotoBoxId");
-
-                    b.ToTable("Images", (string)null);
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("Photobox.Web.Models.PhotoBox", b =>
@@ -294,9 +293,6 @@ namespace Photobox.Web.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ApplicationUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("EventId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("HardwareId")
@@ -313,12 +309,9 @@ namespace Photobox.Web.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("EventId")
-                        .IsUnique();
-
                     b.HasIndex("HardwareId");
 
-                    b.ToTable("PhotoBoxes", (string)null);
+                    b.ToTable("PhotoBoxes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -380,7 +373,15 @@ namespace Photobox.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Photobox.Web.Models.PhotoBox", "UsedPhotoBox")
+                        .WithOne()
+                        .HasForeignKey("Photobox.Web.Models.Event", "UsedPhotoBoxId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.Navigation("ApplicationUser");
+
+                    b.Navigation("UsedPhotoBox");
                 });
 
             modelBuilder.Entity("Photobox.Web.Models.Image", b =>
@@ -388,18 +389,9 @@ namespace Photobox.Web.Migrations
                     b.HasOne("Photobox.Web.Models.Event", "Event")
                         .WithMany("Images")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Photobox.Web.Models.PhotoBox", "PhotoBox")
-                        .WithMany("Images")
-                        .HasForeignKey("PhotoBoxId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Event");
-
-                    b.Navigation("PhotoBox");
                 });
 
             modelBuilder.Entity("Photobox.Web.Models.PhotoBox", b =>
@@ -410,14 +402,7 @@ namespace Photobox.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Photobox.Web.Models.Event", "Event")
-                        .WithOne("PhotoBox")
-                        .HasForeignKey("Photobox.Web.Models.PhotoBox", "EventId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.Navigation("ApplicationUser");
-
-                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("Photobox.Web.Models.ApplicationUser", b =>
@@ -428,13 +413,6 @@ namespace Photobox.Web.Migrations
                 });
 
             modelBuilder.Entity("Photobox.Web.Models.Event", b =>
-                {
-                    b.Navigation("Images");
-
-                    b.Navigation("PhotoBox");
-                });
-
-            modelBuilder.Entity("Photobox.Web.Models.PhotoBox", b =>
                 {
                     b.Navigation("Images");
                 });

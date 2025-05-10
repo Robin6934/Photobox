@@ -36,22 +36,8 @@ public class Image
 
     public required DateTime TakenAt { get; set; }
 
-    /// <summary>
-    /// HardwareId of the Photobox that took the image.
-    /// </summary>
+    public Guid EventId { get; set; }
+
     [Required]
-    [MaxLength(52)]
-    public required string PhotoboxHardwareId { get; set; }
-
-    public Guid PhotoBoxId { get; set; }
-
-    [ForeignKey(nameof(PhotoBoxId))]
-    [Required]
-    public PhotoBox? PhotoBox { get; set; }
-
-    public Guid? EventId { get; set; }
-
-    [ForeignKey(nameof(EventId))]
-    [Required]
-    public Event? Event { get; set; }
+    public required Event Event { get; set; }
 }

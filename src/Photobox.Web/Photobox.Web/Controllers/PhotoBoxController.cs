@@ -31,7 +31,7 @@ public class PhotoBoxController(
     /// <returns></returns>
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType<RegisterPhotoBoxResponse>(StatusCodes.Status201Created)]
     [HttpPost]
     public async Task<IActionResult> Register(
         RegisterPhotoboxRequest request,
