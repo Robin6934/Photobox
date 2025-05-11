@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Photobox.Web.Components.Account;
 using Photobox.Web.Services;
 
 namespace Photobox.Web;
@@ -14,6 +15,8 @@ public static class ApplicationServiceCollectionExtensions
         services.AddSingleton<IStorageService, AwsStorageService>();
 
         services.AddValidatorsFromAssemblyContaining<IApplicationMarker>(ServiceLifetime.Singleton);
+
+        services.AddScoped<IdentityRedirectManager>();
 
         return services;
     }
