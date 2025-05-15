@@ -58,10 +58,6 @@ if (builder.Environment.IsDevelopment() && builder.Environment.ApplicationName i
     builder.Configuration.AddUserSecrets(assembly, optional: true, reloadOnChange: true);
 }
 
-// builder
-//     .Services.AddAuthentication(IdentityConstants.BearerScheme)
-//     .AddCookie(IdentityConstants.ApplicationScheme)
-//     .AddBearerToken(IdentityConstants.BearerScheme);
 builder
     .Services.AddAuthentication(options =>
     {
