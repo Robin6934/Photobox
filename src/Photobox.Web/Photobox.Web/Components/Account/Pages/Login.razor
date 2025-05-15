@@ -50,6 +50,11 @@
             </MudItem>
         </MudGrid>
     </MudItem>
+    <MudItem md="6">
+        <MudText GutterBottom="true" Typo="Typo.body1">Use another service to log in.</MudText>
+
+        <ExternalLoginPicker/>
+    </MudItem>
 </MudGrid>
 
 @code {
@@ -63,11 +68,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // if (HttpMethods.IsGet(HttpContext.Request.Method))
-        // {
-        //     // Clear the existing external cookie to ensure a clean login process
-        //     await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-        // }
+        if (HttpMethods.IsGet(HttpContext.Request.Method))
+        {
+            // Clear the existing external cookie to ensure a clean login process
+            //await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+        }
     }
 
     public async Task LoginUser()
