@@ -86,6 +86,22 @@
   </ItemGroup>
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\fonts\ShortBaby.ttf" />
+    <_ContentIncludedByDefault Remove="Components\Account\Pages\Login.razor" />
+    <_ContentIncludedByDefault Remove="Components\Account\Pages\Register.razor" />
+    <_ContentIncludedByDefault Remove="Components\Account\Pages\_Imports.razor" />
+    <_ContentIncludedByDefault Remove="Components\Account\Shared\ExternalLoginPicker.razor" />
+    <_ContentIncludedByDefault Remove="Components\Account\Shared\ManageLayout.razor" />
+    <_ContentIncludedByDefault Remove="Components\Account\Shared\ManageNavMenu.razor" />
+    <_ContentIncludedByDefault Remove="Components\Account\Shared\RedirectToLogin.razor" />
+    <_ContentIncludedByDefault Remove="Components\Account\Shared\ShowRecoveryCodes.razor" />
+    <_ContentIncludedByDefault Remove="Components\Account\Shared\StatusMessage.razor" />
+    <_ContentIncludedByDefault Remove="Components\App.razor" />
+    <_ContentIncludedByDefault Remove="Components\Layout\MainLayout.razor" />
+    <_ContentIncludedByDefault Remove="Components\Layout\NavMenu.razor" />
+    <_ContentIncludedByDefault Remove="Components\Pages\Error.razor" />
+    <_ContentIncludedByDefault Remove="Components\Pages\PictureGallery.razor" />
+    <_ContentIncludedByDefault Remove="Components\Routes.razor" />
+    <_ContentIncludedByDefault Remove="Components\_Imports.razor" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations\" />

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Components.Authorization;
 using Photobox.Web.Components.Account;
 using Photobox.Web.Services;
 
@@ -17,6 +18,13 @@ public static class ApplicationServiceCollectionExtensions
         services.AddValidatorsFromAssemblyContaining<IApplicationMarker>(ServiceLifetime.Singleton);
 
         services.AddScoped<IdentityRedirectManager>();
+
+        services.AddScoped<IdentityUserAccessor>();
+
+        services.AddScoped<
+            AuthenticationStateProvider,
+            IdentityRevalidatingAuthenticationStateProvider
+        >();
 
         return services;
     }
