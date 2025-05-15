@@ -49,6 +49,8 @@ builder.Services.AddImageSharp();
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddCascadingAuthenticationState();
+
 if (builder.Environment.IsDevelopment() && builder.Environment.ApplicationName is { Length: > 0 })
 {
     var assembly = Assembly.Load(builder.Environment.ApplicationName);
@@ -56,10 +58,18 @@ if (builder.Environment.IsDevelopment() && builder.Environment.ApplicationName i
     builder.Configuration.AddUserSecrets(assembly, optional: true, reloadOnChange: true);
 }
 
+// builder
+//     .Services.AddAuthentication(IdentityConstants.BearerScheme)
+//     .AddCookie(IdentityConstants.ApplicationScheme)
+//     .AddBearerToken(IdentityConstants.BearerScheme);
 builder
-    .Services.AddAuthentication(IdentityConstants.BearerScheme)
-    .AddCookie(IdentityConstants.ApplicationScheme)
-    .AddBearerToken(IdentityConstants.BearerScheme);
+    .Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = IdentityConstants.ApplicationScheme;
+        options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+    })
+    .AddBearerToken(IdentityConstants.BearerScheme)
+    .AddIdentityCookies();
 
 builder
     .Services.AddIdentityCore<ApplicationUser>()
@@ -67,7 +77,10 @@ builder
     .AddApiEndpoints();
 
 // Add services to the container.
-builder.Services.AddRazorComponents().AddInteractiveWebAssemblyComponents();
+builder
+    .Services.AddRazorComponents()
+    .AddInteractiveWebAssemblyComponents()
+    .AddInteractiveServerComponents();
 
 builder.Services.AddMudServices();
 
@@ -163,6 +176,7 @@ app.UseStaticFiles();
 
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
+    .AddInteractiveServerRenderMode()
     .AddAdditionalAssemblies(typeof(Photobox.Web.Client._Imports).Assembly);
 
 app.MapIdentityApi<ApplicationUser>();
