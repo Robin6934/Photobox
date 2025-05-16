@@ -58,6 +58,11 @@ if (builder.Environment.IsDevelopment() && builder.Environment.ApplicationName i
     builder.Configuration.AddUserSecrets(assembly, optional: true, reloadOnChange: true);
 }
 
+if (builder.Environment.IsStaging())
+{
+    builder.Configuration.AddEnvironmentVariables();
+}
+
 builder
     .Services.AddAuthentication(options =>
     {
