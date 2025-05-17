@@ -34,43 +34,43 @@ namespace Photobox.Lib.RestApi
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task PostRegisterAsync(RegisterRequest registration, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task PostApiRegisterAsync(RegisterRequest registration, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<AccessTokenResponse> PostLoginAsync(LoginRequest login, bool? useCookies = null, bool? useSessionCookies = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<AccessTokenResponse> PostApiLoginAsync(LoginRequest login, bool? useCookies = null, bool? useSessionCookies = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<AccessTokenResponse> PostRefreshAsync(RefreshRequest refreshRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<AccessTokenResponse> PostApiRefreshAsync(RefreshRequest refreshRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task GetConfirmEmailAsync(string userId, string code, string changedEmail = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task GetApiConfirmEmailAsync(string userId, string code, string changedEmail = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task PostResendConfirmationEmailAsync(ResendConfirmationEmailRequest resendRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task PostApiResendConfirmationEmailAsync(ResendConfirmationEmailRequest resendRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task PostForgotPasswordAsync(ForgotPasswordRequest resetRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task PostApiForgotPasswordAsync(ForgotPasswordRequest resetRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task PostResetPasswordAsync(ResetPasswordRequest resetRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task PostApiResetPasswordAsync(ResetPasswordRequest resetRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<TwoFactorResponse> PostManage2faAsync(TwoFactorRequest tfaRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<TwoFactorResponse> PostApiManage2faAsync(TwoFactorRequest tfaRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<InfoResponse> GetManageInfoAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<InfoResponse> GetApiManageInfoAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<InfoResponse> PostManageInfoAsync(InfoRequest infoRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<InfoResponse> PostApiManageInfoAsync(InfoRequest infoRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -208,7 +208,7 @@ namespace Photobox.Lib.RestApi
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task PostRegisterAsync(RegisterRequest registration, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task PostApiRegisterAsync(RegisterRequest registration, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (registration == null)
                 throw new System.ArgumentNullException("registration");
@@ -227,8 +227,8 @@ namespace Photobox.Lib.RestApi
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "register"
-                    urlBuilder_.Append("register");
+                    // Operation Path: "api/register"
+                    urlBuilder_.Append("api/register");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -289,7 +289,7 @@ namespace Photobox.Lib.RestApi
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<AccessTokenResponse> PostLoginAsync(LoginRequest login, bool? useCookies = null, bool? useSessionCookies = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<AccessTokenResponse> PostApiLoginAsync(LoginRequest login, bool? useCookies = null, bool? useSessionCookies = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (login == null)
                 throw new System.ArgumentNullException("login");
@@ -309,8 +309,8 @@ namespace Photobox.Lib.RestApi
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "login"
-                    urlBuilder_.Append("login");
+                    // Operation Path: "api/login"
+                    urlBuilder_.Append("api/login");
                     urlBuilder_.Append('?');
                     if (useCookies != null)
                     {
@@ -376,7 +376,7 @@ namespace Photobox.Lib.RestApi
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<AccessTokenResponse> PostRefreshAsync(RefreshRequest refreshRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<AccessTokenResponse> PostApiRefreshAsync(RefreshRequest refreshRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (refreshRequest == null)
                 throw new System.ArgumentNullException("refreshRequest");
@@ -396,8 +396,8 @@ namespace Photobox.Lib.RestApi
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "refresh"
-                    urlBuilder_.Append("refresh");
+                    // Operation Path: "api/refresh"
+                    urlBuilder_.Append("api/refresh");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -453,7 +453,7 @@ namespace Photobox.Lib.RestApi
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task GetConfirmEmailAsync(string userId, string code, string changedEmail = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task GetApiConfirmEmailAsync(string userId, string code, string changedEmail = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = new System.Net.Http.HttpClient();
             var disposeClient_ = true;
@@ -465,8 +465,8 @@ namespace Photobox.Lib.RestApi
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "confirmEmail"
-                    urlBuilder_.Append("confirmEmail");
+                    // Operation Path: "api/confirmEmail"
+                    urlBuilder_.Append("api/confirmEmail");
                     urlBuilder_.Append('?');
                     urlBuilder_.Append(System.Uri.EscapeDataString("userId")).Append('=').Append(System.Uri.EscapeDataString(userId != null ? ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture) : "")).Append('&');
                     urlBuilder_.Append(System.Uri.EscapeDataString("code")).Append('=').Append(System.Uri.EscapeDataString(code != null ? ConvertToString(code, System.Globalization.CultureInfo.InvariantCulture) : "")).Append('&');
@@ -525,7 +525,7 @@ namespace Photobox.Lib.RestApi
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task PostResendConfirmationEmailAsync(ResendConfirmationEmailRequest resendRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task PostApiResendConfirmationEmailAsync(ResendConfirmationEmailRequest resendRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (resendRequest == null)
                 throw new System.ArgumentNullException("resendRequest");
@@ -544,8 +544,8 @@ namespace Photobox.Lib.RestApi
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "resendConfirmationEmail"
-                    urlBuilder_.Append("resendConfirmationEmail");
+                    // Operation Path: "api/resendConfirmationEmail"
+                    urlBuilder_.Append("api/resendConfirmationEmail");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -596,7 +596,7 @@ namespace Photobox.Lib.RestApi
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task PostForgotPasswordAsync(ForgotPasswordRequest resetRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task PostApiForgotPasswordAsync(ForgotPasswordRequest resetRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (resetRequest == null)
                 throw new System.ArgumentNullException("resetRequest");
@@ -615,8 +615,8 @@ namespace Photobox.Lib.RestApi
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "forgotPassword"
-                    urlBuilder_.Append("forgotPassword");
+                    // Operation Path: "api/forgotPassword"
+                    urlBuilder_.Append("api/forgotPassword");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -677,7 +677,7 @@ namespace Photobox.Lib.RestApi
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task PostResetPasswordAsync(ResetPasswordRequest resetRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task PostApiResetPasswordAsync(ResetPasswordRequest resetRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (resetRequest == null)
                 throw new System.ArgumentNullException("resetRequest");
@@ -696,8 +696,8 @@ namespace Photobox.Lib.RestApi
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "resetPassword"
-                    urlBuilder_.Append("resetPassword");
+                    // Operation Path: "api/resetPassword"
+                    urlBuilder_.Append("api/resetPassword");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -758,7 +758,7 @@ namespace Photobox.Lib.RestApi
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<TwoFactorResponse> PostManage2faAsync(TwoFactorRequest tfaRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<TwoFactorResponse> PostApiManage2faAsync(TwoFactorRequest tfaRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (tfaRequest == null)
                 throw new System.ArgumentNullException("tfaRequest");
@@ -778,8 +778,8 @@ namespace Photobox.Lib.RestApi
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "manage/2fa"
-                    urlBuilder_.Append("manage/2fa");
+                    // Operation Path: "api/manage/2fa"
+                    urlBuilder_.Append("api/manage/2fa");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -851,7 +851,7 @@ namespace Photobox.Lib.RestApi
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<InfoResponse> GetManageInfoAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<InfoResponse> GetApiManageInfoAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             var client_ = new System.Net.Http.HttpClient();
             var disposeClient_ = true;
@@ -864,8 +864,8 @@ namespace Photobox.Lib.RestApi
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "manage/info"
-                    urlBuilder_.Append("manage/info");
+                    // Operation Path: "api/manage/info"
+                    urlBuilder_.Append("api/manage/info");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -937,7 +937,7 @@ namespace Photobox.Lib.RestApi
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<InfoResponse> PostManageInfoAsync(InfoRequest infoRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public virtual async System.Threading.Tasks.Task<InfoResponse> PostApiManageInfoAsync(InfoRequest infoRequest, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (infoRequest == null)
                 throw new System.ArgumentNullException("infoRequest");
@@ -957,8 +957,8 @@ namespace Photobox.Lib.RestApi
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                     if (!string.IsNullOrEmpty(_baseUrl)) urlBuilder_.Append(_baseUrl);
-                    // Operation Path: "manage/info"
-                    urlBuilder_.Append("manage/info");
+                    // Operation Path: "api/manage/info"
+                    urlBuilder_.Append("api/manage/info");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
