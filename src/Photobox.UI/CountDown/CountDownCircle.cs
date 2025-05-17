@@ -98,22 +98,30 @@ namespace Photobox.UI.CountDown
                 SetAngleBasedOnTime();
             };
 
-            _earlyTimer.Interval = earlyTime;
-
-            _earlyTimer.Tick += (s, e) =>
+            if (earlyTime > TimeSpan.FromMilliseconds(100))
             {
-                CountDownEarly?.Invoke(this);
-                ((DispatcherTimer)s!).Stop();
-            };
+                _earlyTimer.Interval = earlyTime;
+
+                _earlyTimer.Tick += (s, e) =>
+                {
+                    CountDownEarly?.Invoke(this);
+                    ((DispatcherTimer)s!).Stop();
+                };
+            }
 
             _expiredTimer.Interval = _totalTime;
 
             _expiredTimer.Tick += (s, e) =>
             {
                 ((DispatcherTimer)s!).Stop();
-                CountDownExpired?.Invoke(this);
                 Panel.Children.Remove(_textBlockCountdown);
                 Panel.Children.Remove(_path);
+                if (earlyTime <= TimeSpan.FromMilliseconds(100))
+                {
+                    _earlyTimer.Stop();
+                    CountDownEarly?.Invoke(this);
+                }
+                CountDownExpired?.Invoke(this);
             };
         }
 

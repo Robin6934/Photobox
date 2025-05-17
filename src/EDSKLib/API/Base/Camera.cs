@@ -347,7 +347,7 @@ namespace EOSDigital.API
                 if (IsLiveViewOn)
                 {
                     KeepLVAlive = false;
-                    LVThread.Join();
+                    LVThread.Join(1000);
                 }
                 IsLiveViewOn = false;
 
