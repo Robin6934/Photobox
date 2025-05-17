@@ -1,4 +1,4 @@
-﻿@page "/PictureGallery"
+﻿@page "/"
 @using Photobox.Web.Services
 
 @inject ImageService imageService;
@@ -20,9 +20,9 @@
                     <MudButton Variant="Variant.Filled" Href="@GetDownloadLink(@imageName)" Size="Size.Large" StartIcon="@Icons.Material.Filled.Download" Color="Color.Info">Download</MudButton>
                 </div>
 
-                <div class="button-right">
-                    <MudButton Variant="Variant.Filled" Href="@GetPrintLink(@imageName)" Size="Size.Large" StartIcon="@Icons.Material.Filled.Print" Color="Color.Info">Print</MudButton>
-                </div>
+                @* <div class="button-right"> *@
+                @*     <MudButton Variant="Variant.Filled" Href="@GetPrintLink(@imageName)" Size="Size.Large" StartIcon="@Icons.Material.Filled.Print" Color="Color.Info">Print</MudButton> *@
+                @* </div> *@
             </div>
         }
     </div>
