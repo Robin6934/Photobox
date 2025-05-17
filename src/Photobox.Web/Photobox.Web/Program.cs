@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
@@ -12,13 +13,13 @@ using NSwag.Generation.Processors.Security;
 using Photobox.Web;
 using Photobox.Web.Aws;
 using Photobox.Web.Components;
+using Photobox.Web.Components.Account;
 using Photobox.Web.Database;
 using Photobox.Web.HealthCheck;
 using Photobox.Web.Models;
 using Scalar.AspNetCore;
 using Serilog;
 using SixLabors.ImageSharp.Web.DependencyInjection;
-using System.Net.NetworkInformation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,7 +67,6 @@ builder
     .Services.AddAuthentication(options =>
     {
         options.DefaultScheme = IdentityConstants.ApplicationScheme;
-        options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
     })
     .AddBearerToken(IdentityConstants.BearerScheme)
     .AddIdentityCookies();
@@ -195,5 +195,7 @@ app.MapRazorComponents<App>()
     .AddAdditionalAssemblies(typeof(Photobox.Web.Client._Imports).Assembly);
 
 app.MapIdentityApi<ApplicationUser>();
+
+app.MapAdditionalIdentityEndpoints();
 
 app.Run();
