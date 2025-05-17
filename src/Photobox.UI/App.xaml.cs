@@ -48,7 +48,7 @@ public partial class App
     {
         var builder = Host.CreateApplicationBuilder(args);
 
-        string url = "localhost";
+        string url = "https://localhost";
 
         builder.Services.AddHostedService<MainWindow>();
 
