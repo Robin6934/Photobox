@@ -48,6 +48,8 @@ public partial class App
     {
         var builder = Host.CreateApplicationBuilder(args);
 
+        string url = "localhost";
+
         builder.Services.AddHostedService<MainWindow>();
 
         builder.Services.AddSingleton<IImageUploadService, ImageUploadService>();
@@ -64,12 +66,10 @@ public partial class App
         );
         builder.Services.AddSingleton<ICountDown, CountDownCircle>();
         builder.Services.AddSingleton<IImageHandler, ImageHandler>();
-        builder.Services.AddSingleton<IImageClient, ImageClient>(_ => new ImageClient(
-            "https://localhost"
-        ));
-        builder.Services.AddSingleton<IClient, Client>(s => new Client("https://localhost"));
+        builder.Services.AddSingleton<IImageClient, ImageClient>(_ => new ImageClient(url));
+        builder.Services.AddSingleton<IClient, Client>(s => new Client(url));
         builder.Services.AddSingleton<IPhotoBoxClient, PhotoBoxClient>(_ => new PhotoBoxClient(
-            "https://localhost"
+            url
         ));
         builder.Services.AddSingleton<IAccessTokenManager, AccessTokenManager>();
         builder.Services.AddSingleton<IPhotoboxSettingsManager, PhotoboxSettingsManager>();
