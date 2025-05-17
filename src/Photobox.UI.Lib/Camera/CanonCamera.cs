@@ -149,7 +149,6 @@ internal class CanonCamera(
     public override void Dispose()
     {
         StopStream();
-        Disconnect();
         camera.Dispose();
         api.Dispose();
         keepAliveTimer.Stop();

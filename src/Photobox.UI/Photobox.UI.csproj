@@ -63,7 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.json">

@@ -63,17 +63,18 @@ public partial class MainWindow : Window, IHostedService
 
         countDown.Panel = GridLiveView;
 
-        countDown.CountDownEarly += (s) => {
-            //camera.Focus();
+        countDown.CountDownEarly += (s) =>
+        {
+            camera.Focus();
         };
 
         countDown.CountDownExpired += async (o) =>
         {
-            camera.Focus();
-
             Image<Rgb24> image = await this._camera.TakePictureAsync();
 
             ImageViewResult result = await imageViewer1.ShowImage(image);
+
+            BorderText.Visibility = Visibility.Visible;
 
             MemoryStream stream = new();
 
@@ -99,15 +100,15 @@ public partial class MainWindow : Window, IHostedService
 
         this._logger.LogInformation("Mainwindow created");
 
-        this._camera.CameraStream += (o, s) =>
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                GridLiveView.Background = s.ToBitmapSource();
-            });
-        };
+        this._camera.CameraStream += CameraStreamHandler;
+    }
 
-        Closing += (o, i) => camera.Dispose();
+    private void CameraStreamHandler(object o, Stream s)
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            GridLiveView.Background = s.ToBitmapSource();
+        });
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -191,7 +192,8 @@ public partial class MainWindow : Window, IHostedService
 
     private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
     {
-        _camera.StopStream();
+        this._camera.CameraStream -= CameraStreamHandler;
+        _camera.Dispose();
         _applicationLifetime.StopApplication();
         _logger.LogInformation("The main window is closing.");
     }
@@ -209,6 +211,7 @@ public partial class MainWindow : Window, IHostedService
 
     private void TakePictureButton_Click(object sender, RoutedEventArgs e)
     {
+        BorderText.Visibility = Visibility.Hidden;
         _countDown.StartCountDown();
     }
 
