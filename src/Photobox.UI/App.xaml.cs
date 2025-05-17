@@ -48,7 +48,9 @@ public partial class App
     {
         var builder = Host.CreateApplicationBuilder(args);
 
-        string url = "https://localhost";
+        string url =
+            builder.Configuration.GetSection(PhotoboxConfig.Photobox)["ServerUrl"]
+            ?? "https://localhost";
 
         builder.Services.AddHostedService<MainWindow>();
 

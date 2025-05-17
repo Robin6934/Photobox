@@ -13,6 +13,8 @@ public static class ApplicationServiceCollectionExtensions
 
         services.AddScoped<PhotoBoxService>();
 
+        services.AddScoped<EventService>();
+
         services.AddSingleton<IStorageService, AwsStorageService>();
 
         services.AddValidatorsFromAssemblyContaining<IApplicationMarker>(ServiceLifetime.Singleton);

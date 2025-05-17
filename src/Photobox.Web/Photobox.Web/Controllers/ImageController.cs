@@ -27,7 +27,7 @@ public class ImageController(
     /// <response code="200">Image has been uploaded successfully</response>
     [HttpPost]
     [ProducesResponseType<ImageUploadResponse>((int)HttpStatusCode.OK)]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Identity.Bearer")]
     public async Task<IActionResult> UploadImage(
         [FromHeader(Name = PhotoboxHeaders.HardwareId)] string hardwareId,
         IFormFile? formFile,
