@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using System.Text.Json;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
@@ -10,7 +9,7 @@ using Photobox.Web.Components.Account.Pages;
 using Photobox.Web.Components.Account.Pages.Manage;
 using Photobox.Web.Models;
 
-namespace Microsoft.AspNetCore.Routing;
+namespace Photobox.Web.Components.Account;
 
 internal static class IdentityComponentsEndpointRouteBuilderExtensions
 {
