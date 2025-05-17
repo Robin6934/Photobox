@@ -33,7 +33,7 @@ public class AccessTokenManagerTests
         };
 
         _photoBoxClient
-            .PostLoginAsync(
+            .PostApiLoginAsync(
                 Arg.Any<LoginRequest>(),
                 false,
                 false,
@@ -62,7 +62,7 @@ public class AccessTokenManagerTests
         };
 
         _photoBoxClient
-            .PostRefreshAsync(Arg.Any<RefreshRequest>(), TestContext.Current.CancellationToken)
+            .PostApiRefreshAsync(Arg.Any<RefreshRequest>(), TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(refreshTokenResponse));
 
         // Act
@@ -119,7 +119,7 @@ public class AccessTokenManagerTests
         };
 
         _photoBoxClient
-            .PostLoginAsync(
+            .PostApiLoginAsync(
                 Arg.Any<LoginRequest>(),
                 false,
                 false,
@@ -152,7 +152,7 @@ public class AccessTokenManagerTests
         };
 
         _photoBoxClient
-            .PostLoginAsync(
+            .PostApiLoginAsync(
                 Arg.Any<LoginRequest>(),
                 false,
                 false,
@@ -172,7 +172,7 @@ public class AccessTokenManagerTests
         };
 
         _photoBoxClient
-            .PostRefreshAsync(Arg.Any<RefreshRequest>(), TestContext.Current.CancellationToken)
+            .PostApiRefreshAsync(Arg.Any<RefreshRequest>(), TestContext.Current.CancellationToken)
             .Returns(Task.FromResult(refreshTokenResponse));
 
         await Task.Delay(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
@@ -213,7 +213,7 @@ public class AccessTokenManagerTests
         };
 
         _photoBoxClient
-            .PostLoginAsync(
+            .PostApiLoginAsync(
                 Arg.Any<LoginRequest>(),
                 false,
                 false,
