@@ -18,6 +18,7 @@ using Photobox.Web.Models;
 using Scalar.AspNetCore;
 using Serilog;
 using SixLabors.ImageSharp.Web.DependencyInjection;
+using System.Net.NetworkInformation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -101,6 +102,7 @@ builder.Host.UseSerilog(
 builder.Services.AddDbContextPool<AppDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("PhotoboxConnectionString");
+    Console.WriteLine("Connecting to db: " + connectionString);
     options.UseNpgsql(connectionString);
 });
 
