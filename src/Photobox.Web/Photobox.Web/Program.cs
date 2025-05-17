@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
@@ -58,10 +59,7 @@ if (builder.Environment.IsDevelopment() && builder.Environment.ApplicationName i
     builder.Configuration.AddUserSecrets(assembly, optional: true, reloadOnChange: true);
 }
 
-if (builder.Environment.IsStaging())
-{
-    builder.Configuration.AddEnvironmentVariables();
-}
+builder.Configuration.AddEnvironmentVariables();
 
 builder
     .Services.AddAuthentication(options =>
@@ -113,6 +111,20 @@ builder.Services.ConfigureAws(builder.Configuration);
 builder.Services.ConfigureHealthChecks(builder.Configuration);
 
 var app = builder.Build();
+
+var enviroment = Environment.GetEnvironmentVariables();
+
+Console.WriteLine("Enviroment");
+foreach (DictionaryEntry variable in enviroment)
+{
+    Console.WriteLine($"{variable.Key} = {variable.Value}");
+}
+
+Console.WriteLine("Config");
+foreach (var config in builder.Configuration.AsEnumerable())
+{
+    Console.WriteLine($"{config.Key} = {config.Value}");
+}
 
 app.UseSerilogRequestLogging();
 
