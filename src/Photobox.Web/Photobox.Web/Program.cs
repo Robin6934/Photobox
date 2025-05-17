@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
 using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -64,12 +66,57 @@ if (builder.Environment.IsDevelopment() && builder.Environment.ApplicationName i
 builder.Configuration.AddEnvironmentVariables();
 
 builder
-    .Services.AddAuthentication(options =>
-    {
-        options.DefaultScheme = IdentityConstants.ApplicationScheme;
-    })
-    .AddBearerToken(IdentityConstants.BearerScheme)
-    .AddIdentityCookies();
+    .Services.AddAuthentication(IdentityConstants.ApplicationScheme)
+    .AddCookie(
+        IdentityConstants.ApplicationScheme,
+        options =>
+        {
+            options.LoginPath = "/account/login"; // for Razor Pages
+            options.Events.OnRedirectToLogin = context =>
+            {
+                if (context.Request.Path.StartsWithSegments("/api"))
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    return Task.CompletedTask;
+                }
+                context.Response.Redirect(context.RedirectUri);
+                return Task.CompletedTask;
+            };
+
+            options.Events.OnRedirectToAccessDenied = context =>
+            {
+                if (context.Request.Path.StartsWithSegments("/api"))
+                {
+                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                    return Task.CompletedTask;
+                }
+                context.Response.Redirect(context.RedirectUri);
+                return Task.CompletedTask;
+            };
+        }
+    )
+    .AddBearerToken(IdentityConstants.BearerScheme);
+
+// builder
+//     .Services.AddAuthentication(options =>
+//     {
+//         options.DefaultScheme = IdentityConstants.ApplicationScheme;
+//     })
+//     .AddBearerToken(IdentityConstants.BearerScheme)
+//     .AddCookie();
+//
+//
+//
+// builder.Services.AddAuthorization(options =>
+// {
+//     var defaultAuthorizationPolicy = new AuthorizationPolicyBuilder(
+//         IdentityConstants.ApplicationScheme,
+//         IdentityConstants.BearerScheme);
+//
+//     options.DefaultPolicy = defaultAuthorizationPolicy.RequireAuthenticatedUser().Build();
+//
+//     options.AddPolicy();
+// });
 
 builder
     .Services.AddIdentityCore<ApplicationUser>()
@@ -194,7 +241,7 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddAdditionalAssemblies(typeof(Photobox.Web.Client._Imports).Assembly);
 
-app.MapIdentityApi<ApplicationUser>();
+app.MapGroup("api").MapIdentityApi<ApplicationUser>();
 
 app.MapAdditionalIdentityEndpoints();
 

@@ -55,7 +55,7 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
 
         try
         {
-            accessTokenResponse = await photoBoxClient.PostRefreshAsync(refreshRequest);
+            accessTokenResponse = await photoBoxClient.PostApiRefreshAsync(refreshRequest);
         }
         catch (ApiException e) when (e.StatusCode == (int)HttpStatusCode.Unauthorized)
         {
@@ -88,7 +88,7 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
         AccessTokenResponse loginResponse;
         try
         {
-            loginResponse = await photoBoxClient.PostLoginAsync(loginRequest, false, false);
+            loginResponse = await photoBoxClient.PostApiLoginAsync(loginRequest, false, false);
         }
         catch (ApiException e) when (e.StatusCode == (int)HttpStatusCode.Unauthorized)
         {
@@ -136,7 +136,7 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
         var refreshTokenRequest = new RefreshRequest { RefreshToken = RefreshToken };
 
         var refreshTokenResponse = await photoBoxClient
-            .PostRefreshAsync(refreshTokenRequest)
+            .PostApiRefreshAsync(refreshTokenRequest)
             .ConfigureAwait(false);
 
         _accessToken = refreshTokenResponse.AccessToken;

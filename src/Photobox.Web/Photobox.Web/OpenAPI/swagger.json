@@ -28,9 +28,9 @@
         ]
       }
     },
-    "/register": {
+    "/api/register": {
       "post": {
-        "operationId": "PostRegister",
+        "operationId": "PostApiRegister",
         "requestBody": {
           "x-name": "registration",
           "content": {
@@ -60,9 +60,9 @@
         }
       }
     },
-    "/login": {
+    "/api/login": {
       "post": {
-        "operationId": "PostLogin",
+        "operationId": "PostApiLogin",
         "parameters": [
           {
             "name": "useCookies",
@@ -109,9 +109,9 @@
         }
       }
     },
-    "/refresh": {
+    "/api/refresh": {
       "post": {
-        "operationId": "PostRefresh",
+        "operationId": "PostApiRefresh",
         "requestBody": {
           "x-name": "refreshRequest",
           "content": {
@@ -138,9 +138,9 @@
         }
       }
     },
-    "/confirmEmail": {
+    "/api/confirmEmail": {
       "get": {
-        "operationId": "GetConfirmEmail",
+        "operationId": "GetApiConfirmEmail",
         "parameters": [
           {
             "name": "userId",
@@ -179,9 +179,9 @@
         }
       }
     },
-    "/resendConfirmationEmail": {
+    "/api/resendConfirmationEmail": {
       "post": {
-        "operationId": "PostResendConfirmationEmail",
+        "operationId": "PostApiResendConfirmationEmail",
         "requestBody": {
           "x-name": "resendRequest",
           "content": {
@@ -201,9 +201,9 @@
         }
       }
     },
-    "/forgotPassword": {
+    "/api/forgotPassword": {
       "post": {
-        "operationId": "PostForgotPassword",
+        "operationId": "PostApiForgotPassword",
         "requestBody": {
           "x-name": "resetRequest",
           "content": {
@@ -233,9 +233,9 @@
         }
       }
     },
-    "/resetPassword": {
+    "/api/resetPassword": {
       "post": {
-        "operationId": "PostResetPassword",
+        "operationId": "PostApiResetPassword",
         "requestBody": {
           "x-name": "resetRequest",
           "content": {
@@ -265,9 +265,9 @@
         }
       }
     },
-    "/manage/2fa": {
+    "/api/manage/2fa": {
       "post": {
-        "operationId": "PostManage2fa",
+        "operationId": "PostApiManage2fa",
         "requestBody": {
           "x-name": "tfaRequest",
           "content": {
@@ -312,9 +312,9 @@
         ]
       }
     },
-    "/manage/info": {
+    "/api/manage/info": {
       "get": {
-        "operationId": "GetManageInfo",
+        "operationId": "GetApiManageInfo",
         "responses": {
           "200": {
             "description": "",
@@ -347,7 +347,7 @@
         ]
       },
       "post": {
-        "operationId": "PostManageInfo",
+        "operationId": "PostApiManageInfo",
         "requestBody": {
           "x-name": "infoRequest",
           "content": {
