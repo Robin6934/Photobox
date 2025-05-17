@@ -205,7 +205,20 @@ public partial class MainWindow : Window, IHostedService
 
     public void Start()
     {
-        _camera.ResilientConnect();
+        try
+        {
+            _camera.ResilientConnect();
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(
+                "No camera has been found, please check if it is connected and restart the application.",
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error
+            );
+            throw;
+        }
         _camera.StartStream();
     }
 
