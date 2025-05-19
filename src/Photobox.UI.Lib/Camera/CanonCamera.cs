@@ -9,10 +9,7 @@ using Rational = EOSDigital.SDK.Rational;
 
 namespace Photobox.UI.Lib.Camera;
 
-internal class CanonCamera(
-    ILogger<CanonCamera> logger,
-    IHostApplicationLifetime applicationLifetime
-) : CameraBase(logger)
+internal class CanonCamera : CameraBase
 {
     private readonly CanonAPI api = new();
 
@@ -26,11 +23,49 @@ internal class CanonCamera(
 
     private bool secondTick = false;
 
-    private readonly ILogger<CanonCamera> logger = logger;
+    private readonly IHostApplicationLifetime applicationLifetime;
+    private readonly ILogger<CanonCamera> _logger;
 
-    private readonly IHostApplicationLifetime applicationLifetime = applicationLifetime;
+    public CanonCamera(ILogger<CanonCamera> logger, IHostApplicationLifetime applicationLifetime)
+        : base(logger)
+    {
+        _logger = logger;
+        this.applicationLifetime = applicationLifetime;
 
-    public override AspectRatio ImageAspectRatio => new(960, 540);
+        ErrorHandler.SevereErrorHappened += ErrorHandlerOnSevereErrorHappened;
+
+        ErrorHandler.NonSevereErrorHappened += ErrorHandlerOnNonSevereErrorHappened;
+    }
+
+    private void ErrorHandlerOnNonSevereErrorHappened(object sender, ErrorCode errorCode)
+    {
+        _logger.LogWarning(
+            "A non severe error happened in the canon camera error code: {errorCode}",
+            errorCode
+        );
+        if (errorCode == ErrorCode.DEVICE_BUSY)
+        {
+            _logger.LogError("The canon camera is busy, could not connect.");
+            throw new CameraNotFoundException("The canon camera is busy, could not connect.");
+        }
+        if (errorCode == ErrorCode.TAKE_PICTURE_AF_NG)
+        {
+            //camera.SendCommand(CameraCommand.PressShutterButton, 0);
+        }
+    }
+
+    private void ErrorHandlerOnSevereErrorHappened(object sender, Exception ex)
+    {
+        _logger.LogError(ex, "An exception happened in the canon camera.");
+        if (ex is SDKException { Error: ErrorCode.COMM_DISCONNECTED })
+        {
+            _logger.LogError("The camera got disconnected.");
+        }
+
+        throw ex;
+    }
+
+    public override AspectRatio ImageAspectRatio => new(1056, 704);
 
     private void KeepAliveTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
     {
@@ -42,7 +77,7 @@ internal class CanonCamera(
         {
             camera.SendCommand(CameraCommand.DriveLensEvf, (int)DriveLens.Far1);
         }
-        logger.LogDebug(
+        _logger.LogDebug(
             "Keepalive Timer Ticked " + (DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds
         );
         secondTick ^= true;
@@ -80,14 +115,14 @@ internal class CanonCamera(
 
         camera.SetCapacity(4096, int.MaxValue);
 
-        logger.LogInformation("[Canon] has been connected.");
+        _logger.LogInformation("[Canon] has been connected.");
     }
 
     public override void Focus()
     {
         camera.SendCommand(CameraCommand.DoEvfAf, (int)EvfAFMode.Live);
 
-        logger.LogInformation("[Canon] has focused.");
+        _logger.LogInformation("[Canon] has focused.");
     }
 
     public override void StartStream()
@@ -97,7 +132,7 @@ internal class CanonCamera(
             LiveViewActive = true;
             camera.LiveViewUpdated += Camera_LiveViewUpdated;
             camera.StartLiveView();
-            logger.LogInformation("[Canon] liveView started.");
+            _logger.LogInformation("[Canon] liveView started.");
         }
     }
 
@@ -108,19 +143,23 @@ internal class CanonCamera(
             LiveViewActive = false;
             camera.LiveViewUpdated -= Camera_LiveViewUpdated;
             camera.StopLiveView();
-            logger.LogInformation("[Canon] liveView stopped.");
+            _logger.LogInformation("[Canon] liveView stopped.");
         }
     }
 
     public override async Task<Image<Rgb24>> TakePictureAsync()
     {
+        camera.SendCommand(CameraCommand.DoEvfAf, (int)EvfAFMode.Quick);
+
         TaskCompletionSource<DownloadInfo> tcs = new();
 
         camera.DownloadReady += HandleDownloadReady;
 
         try
         {
-            camera.TakePhoto();
+            await camera.TakePhotoAsync();
+            //camera.SendCommand(CameraCommand.PressShutterButton, (int)ShutterButton.Completely);
+            //camera.SendCommand(CameraCommand.PressShutterButton, (int)ShutterButton.OFF);
 
             DownloadInfo info = await tcs.Task;
 
@@ -143,7 +182,7 @@ internal class CanonCamera(
     public override void Disconnect()
     {
         camera.CloseSession();
-        logger.LogInformation("[Canon] has been disconnected.");
+        _logger.LogInformation("[Canon] has been disconnected.");
     }
 
     public override void Dispose()
@@ -152,7 +191,7 @@ internal class CanonCamera(
         camera.Dispose();
         api.Dispose();
         keepAliveTimer.Stop();
-        logger.LogInformation("[Canon] has been disposed.");
+        _logger.LogInformation("[Canon] has been disposed.");
     }
 
     public static bool Connected()
