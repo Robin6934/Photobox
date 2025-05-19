@@ -1,19 +1,17 @@
-﻿using System.Drawing;
+﻿using System.Buffers;
+using System.Drawing;
 using System.Drawing.Printing;
 using System.Management;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Photobox.Lib.Extensions;
 using Photobox.UI.Lib.ConfigModels;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.UI.Lib.Printer;
 
-public class Printer(ILogger<Printer> logger, IOptionsMonitor<PhotoboxConfig> options) : IPrinter
+public class Printer(ILogger<Printer> logger, IOptions<PhotoboxConfig> options) : IPrinter
 {
-    private readonly ILogger<Printer> logger = logger;
-
-    private readonly IOptionsMonitor<PhotoboxConfig> photoboxOptionsMonitor = options;
-
     public bool Enabled => PrintingEnabled();
 
     public List<string> ListPrinters()
@@ -38,33 +36,29 @@ public class Printer(ILogger<Printer> logger, IOptionsMonitor<PhotoboxConfig> op
             return false;
         }
 
-        photoboxOptionsMonitor.CurrentValue.PrinterName = printerName;
+        options.Value.PrinterName = printerName;
 
-        photoboxOptionsMonitor.CurrentValue.Save();
+        options.Value.Save();
 
         return true;
     }
 
     public void SetPrinterEnabled(PrinterEnabledOptions printerEnabled)
     {
-        photoboxOptionsMonitor.CurrentValue.PrintingEnabled = printerEnabled;
-        photoboxOptionsMonitor.CurrentValue.Save();
+        options.Value.PrintingEnabled = printerEnabled;
+        options.Value.Save();
     }
 
-    public Task PrintAsync(SixLabors.ImageSharp.Image<Rgb24> image)
+    public async Task PrintAsync(SixLabors.ImageSharp.Image<Rgb24> image)
     {
+        string printerName = options.Value.PrinterName;
         var tcs = new TaskCompletionSource<bool>();
+        
+        logger.LogInformation("Printing of image on printer: {printerName} started.", printerName);
 
-        byte[] data = new byte[image.PixelType.BitsPerPixel * image.Height * image.Width];
+        Bitmap bitmap = new(await image.ToJpegStreamAsync());
 
-        image.CopyPixelDataTo(data);
-
-        Bitmap bitmap = new(new MemoryStream(data));
-
-        PrinterSettings printerSettings = new()
-        {
-            PrinterName = photoboxOptionsMonitor.CurrentValue.PrinterName,
-        };
+        PrinterSettings printerSettings = new() { PrinterName = printerName };
 
         using PrintDocument pd = new() { PrinterSettings = printerSettings };
 
@@ -84,17 +78,17 @@ public class Printer(ILogger<Printer> logger, IOptionsMonitor<PhotoboxConfig> op
 
         pd.Print();
 
-        return tcs.Task;
+        await tcs.Task;
     }
 
     private bool PrintingEnabled()
     {
-        return photoboxOptionsMonitor.CurrentValue.PrintingEnabled switch
+        return options.Value.PrintingEnabled switch
         {
             PrinterEnabledOptions.True => true,
             PrinterEnabledOptions.False => false,
             PrinterEnabledOptions.Automatic => CheckIfPrinterIsConnected(
-                photoboxOptionsMonitor.CurrentValue.PrinterName
+                options.Value.PrinterName
             ), // Example method to check printer status
             _ => false, // Default case, if necessary
         };
@@ -104,7 +98,7 @@ public class Printer(ILogger<Printer> logger, IOptionsMonitor<PhotoboxConfig> op
     /// Checks if a printer is connected via USB.
     /// </summary>
     /// <returns>A boolean value indicating whether a printer is connected via usb.</returns>
-    private static bool CheckIfPrinterIsConnected(string printerToCheck)
+    private bool CheckIfPrinterIsConnected(string printerToCheck)
     {
         // Replace single quotes in printer name to prevent query errors
         string sanitizedPrinterName = printerToCheck.Replace("'", "''");
@@ -124,6 +118,14 @@ public class Printer(ILogger<Printer> logger, IOptionsMonitor<PhotoboxConfig> op
                 int printerStatus = Convert.ToInt32(printer["PrinterStatus"]); // Status of the printer
                 int detectedState = Convert.ToInt32(printer["DetectedErrorState"]); // Error state of the printer
                 bool isPrinterOnline = !Convert.ToBoolean(printer["WorkOffline"]); // Checks if the printer is online
+
+                logger.LogInformation(
+                    "Printer {PrinterName} with properties printerstatus: {status}, detectedstate {state} and isPrinterOnline {isOnline} found.",
+                    printerName,
+                    printerStatus,
+                    detectedState,
+                    isPrinterOnline
+                );
 
                 // PrinterStatus 3 means it's idle (ready to print)
                 // DetectedErrorState 0 means no error
