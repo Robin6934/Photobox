@@ -579,10 +579,10 @@ namespace EOSDigital.API
         /// <exception cref="ObjectDisposedException">Camera is disposed</exception>
         /// <exception cref="CameraSessionException">Session is closed</exception>
         /// <exception cref="SDKStateException">Canon SDK is not initialized</exception>
-        public async Task TakePhotoAsync()
+        public Task TakePhotoAsync()
         {
             CheckState();
-            await Task.Run(() =>
+            return Task.Run(() =>
             {
                 try
                 {

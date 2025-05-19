@@ -9,7 +9,10 @@
         SizeChanged="MainWindow_SizeChanged"
         Loaded="MainWindow_Loaded"
         Closing="MainWindow_Closing"
-        Closed="Window_Closed">
+        Closed="Window_Closed"
+        WindowState="Maximized"
+        WindowStyle="None"
+        >
 
     <Window.Resources>
         <local:DivideByThreeConverter x:Key="DivideByThreeConverter"/>
@@ -68,7 +71,7 @@
         </Grid>
         <Button x:Name="TakePictureButton" Style="{StaticResource TransparentButtonStyle}" 
                 Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}}" Background="Transparent" 
-                Click="TakePictureButton_Click" 
+                Click="TakePictureButton_Click"
                 HorizontalAlignment="Center" VerticalAlignment="Top"
                 Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}"/>
 
