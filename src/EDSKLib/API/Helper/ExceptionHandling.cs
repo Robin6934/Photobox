@@ -170,12 +170,12 @@ namespace EOSDigital.API
         /// <summary>
         /// If an error happened, that does not break the program, this event is fired (e.g. a focus error)
         /// </summary>
-        public static event SDKExceptionHandler NonSevereErrorHappened = default!;
+        public static event SDKExceptionHandler? NonSevereErrorHappened;
 
         /// <summary>
         /// If an error happened on a thread that does not fall into the non-severe category, this event is fired
         /// </summary>
-        public static event GeneralExceptionHandler SevereErrorHappened = default!;
+        public static event GeneralExceptionHandler? SevereErrorHappened;
 
         /// <summary>
         /// List of all non-severe errors. Items can be added or removed.
@@ -213,9 +213,9 @@ namespace EOSDigital.API
             {
                 bool Severe = !NonSevereErrors.Any(t => t == errorCode);
 
-                var NonSevereErrorHappenedEvent = NonSevereErrorHappened;
+                var nonSevereErrorHappenedEvent = NonSevereErrorHappened;
                 if (!Severe)
-                    Severe = NonSevereErrorHappenedEvent == null;
+                    Severe = nonSevereErrorHappenedEvent is null;
 
                 if (Severe)
                     throw new SDKException(errorCode);
@@ -225,7 +225,7 @@ namespace EOSDigital.API
                     AsyncLocal<SDKExceptionHandler> asyncLocalHandler = new()
                     {
                         // Capture the current delegate and set it in the AsyncLocal
-                        Value = NonSevereErrorHappenedEvent!,
+                        Value = nonSevereErrorHappenedEvent!,
                     };
 
                     asyncLocalHandler.Value(sender, errorCode); // Invoke the delegate stored in AsyncLocal
@@ -266,8 +266,8 @@ namespace EOSDigital.API
         /// <returns>True if the error could be passed on; false otherwise</returns>
         public static bool ReportError(object sender, Exception ex)
         {
-            var SevereErrorHappenedEvent = SevereErrorHappened;
-            if (SevereErrorHappenedEvent == null)
+            var severeErrorHappenedEvent = SevereErrorHappened;
+            if (severeErrorHappenedEvent is null)
                 return false;
             else
             {
@@ -275,7 +275,7 @@ namespace EOSDigital.API
                 AsyncLocal<GeneralExceptionHandler> asyncLocalHandler = new()
                 {
                     // Capture the current delegate and set it in the AsyncLocal
-                    Value = SevereErrorHappenedEvent,
+                    Value = severeErrorHappenedEvent,
                 };
 
                 asyncLocalHandler.Value(sender, ex); // Invoke the delegate stored in AsyncLocal

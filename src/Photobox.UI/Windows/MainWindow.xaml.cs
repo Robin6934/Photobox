@@ -72,9 +72,9 @@ public partial class MainWindow : Window, IHostedService
         {
             Image<Rgb24> image = await this._camera.TakePictureAsync();
 
-            ImageViewResult result = await imageViewer1.ShowImage(image);
-
             BorderText.Visibility = Visibility.Visible;
+
+            ImageViewResult result = await imageViewer1.ShowImage(image);
 
             MemoryStream stream = new();
 
@@ -96,6 +96,8 @@ public partial class MainWindow : Window, IHostedService
                 default:
                     throw new ArgumentOutOfRangeException(nameof(result));
             }
+
+            TakePictureButton.Click += TakePictureButton_Click;
         };
 
         this._logger.LogInformation("Mainwindow created");
@@ -225,6 +227,7 @@ public partial class MainWindow : Window, IHostedService
     private void TakePictureButton_Click(object sender, RoutedEventArgs e)
     {
         BorderText.Visibility = Visibility.Hidden;
+        TakePictureButton.Click -= TakePictureButton_Click;
         _countDown.StartCountDown();
     }
 
