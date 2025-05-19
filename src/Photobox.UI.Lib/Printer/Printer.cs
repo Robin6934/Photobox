@@ -53,7 +53,7 @@ public class Printer(ILogger<Printer> logger, IOptions<PhotoboxConfig> options) 
     {
         string printerName = options.Value.PrinterName;
         var tcs = new TaskCompletionSource<bool>();
-        
+
         logger.LogInformation("Printing of image on printer: {printerName} started.", printerName);
 
         Bitmap bitmap = new(await image.ToJpegStreamAsync());
@@ -87,9 +87,7 @@ public class Printer(ILogger<Printer> logger, IOptions<PhotoboxConfig> options) 
         {
             PrinterEnabledOptions.True => true,
             PrinterEnabledOptions.False => false,
-            PrinterEnabledOptions.Automatic => CheckIfPrinterIsConnected(
-                options.Value.PrinterName
-            ), // Example method to check printer status
+            PrinterEnabledOptions.Automatic => CheckIfPrinterIsConnected(options.Value.PrinterName), // Example method to check printer status
             _ => false, // Default case, if necessary
         };
     }
