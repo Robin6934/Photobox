@@ -70,34 +70,39 @@ public partial class MainWindow : Window, IHostedService
 
         countDown.CountDownExpired += async (o) =>
         {
-            Image<Rgb24> image = await this._camera.TakePictureAsync();
-
-            BorderText.Visibility = Visibility.Visible;
-
-            ImageViewResult result = await imageViewer1.ShowImage(image);
-
-            MemoryStream stream = new();
-
-            await image.SaveAsJpegAsync(stream);
-
-            stream.Position = 0;
-
-            switch (result)
+            await Task.Run(async () =>
             {
-                case ImageViewResult.Save:
-                    await imageManager.SaveAsync(image);
-                    break;
-                case ImageViewResult.Print:
-                    await imageManager.PrintAndSaveAsync(image);
-                    break;
-                case ImageViewResult.Delete:
-                    await imageManager.DeleteAsync(image);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(result));
-            }
+                Image<Rgb24> image = await this._camera.TakePictureAsync();
 
-            TakePictureButton.Click += TakePictureButton_Click;
+                ImageViewResult result = await await Dispatcher.InvokeAsync(() =>
+                    imageViewer1.ShowImage(image)
+                );
+                
+                MemoryStream stream = new();
+
+                await image.SaveAsJpegAsync(stream);
+
+                stream.Position = 0;
+                
+                Dispatcher.Invoke(() => BorderText.Visibility = Visibility.Visible);
+
+                TakePictureButton.Click += TakePictureButton_Click;
+
+                switch (result)
+                {
+                    case ImageViewResult.Save:
+                        await imageManager.SaveAsync(image);
+                        break;
+                    case ImageViewResult.Print:
+                        await imageManager.PrintAndSaveAsync(image);
+                        break;
+                    case ImageViewResult.Delete:
+                        await imageManager.DeleteAsync(image);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(result));
+                }
+            });
         };
 
         this._logger.LogInformation("Mainwindow created");
