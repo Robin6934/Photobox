@@ -37,11 +37,13 @@ public class ImageManager(
         }
     }
 
-    public async Task PrintAndSaveAsync(Image<Rgb24> image)
+    public Task PrintAndSaveAsync(Image<Rgb24> image)
     {
-        await SaveAsync(image);
+        var saveTask = SaveAsync(image);
 
-        await printer.PrintAsync(image);
+        var printTask = printer.PrintAsync(image);
+
+        return Task.WhenAll(saveTask, printTask);
     }
 
     public async Task SaveAsync(Image<Rgb24> image)
