@@ -14,6 +14,7 @@ using Photobox.UI.Lib.ConfigModels;
 using Photobox.UI.Lib.ImageHandler;
 using Photobox.UI.Lib.ImageManager;
 using Photobox.UI.Lib.ImageUploadService;
+using Photobox.UI.Lib.PowerStatusWatcher;
 using Photobox.UI.Lib.Printer;
 using Photobox.UI.Windows;
 using Serilog;
@@ -53,6 +54,7 @@ public partial class App
             ?? "https://localhost";
 
         builder.Services.AddHostedService<MainWindow>();
+        builder.Services.AddHostedService<PowerStatusWatcher>();
 
         builder.Services.AddSingleton<IImageUploadService, ImageUploadService>();
         builder.Services.AddSingleton<CameraFactory>();
@@ -83,6 +85,7 @@ public partial class App
             .Enrich.WithMachineName()
             .Enrich.WithProperty("Source", "UI")
             .WriteTo.Seq("http://localhost:5341")
+            .WriteTo.File("Photobox.log")
             .CreateLogger();
 
         builder.Logging.AddSerilog(logger);
