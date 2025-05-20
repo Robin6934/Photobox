@@ -106,9 +106,9 @@ public class ImageService(
             validFor = TimeSpan.FromMinutes(30);
         }
 
-        var imageModel = dbContext.Images.Where(model => model.ImageName == imageName).First();
+        var imageModel = dbContext.Images.First(model => model.ImageName == imageName);
 
-        if (!memoryCache.TryGetValue(imageModel.DownscaledImageName, out string preSignedUrl))
+        if (!memoryCache.TryGetValue(imageModel.DownscaledImageName, out string? preSignedUrl))
         {
             preSignedUrl = await storageService.GetPreSignedUrl(
                 imageModel.DownscaledImageName,
