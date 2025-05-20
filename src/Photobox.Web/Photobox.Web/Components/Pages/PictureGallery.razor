@@ -5,27 +5,24 @@
 
 <PageTitle>PictureGallery</PageTitle>
 
-<h1 class="heading">Gallery</h1>
-
+<h1 class="mb-4">Gallery</h1>
 
 @if (_images.Count > 0)
 {
-    <div class="gallery">
+    <MudStack>
         @foreach (var imageName in _images.Keys)
         {
-            <div class="container">
-                <MudImage Src="@_images[imageName]" Alt="Description" Class="image" />
-
-                <div class="button-left">
-                    <MudButton Variant="Variant.Filled" Href="@GetDownloadLink(@imageName)" Size="Size.Large" StartIcon="@Icons.Material.Filled.Download" Color="Color.Info">Download</MudButton>
-                </div>
+            <MudStack Class="mb-3" Spacing="0">
+                <MudImage Class="rounded-1" Src="@_images[imageName]" Alt="Description" Fluid="true"/>
+                
+                <MudButton Class="rounded-0" Variant="Variant.Filled" Href="@GetDownloadLink(@imageName)" Size="Size.Large" StartIcon="@Icons.Material.Filled.Download" Color="Color.Info">Download</MudButton>
 
                 @* <div class="button-right"> *@
                 @*     <MudButton Variant="Variant.Filled" Href="@GetPrintLink(@imageName)" Size="Size.Large" StartIcon="@Icons.Material.Filled.Print" Color="Color.Info">Print</MudButton> *@
                 @* </div> *@
-            </div>
+            </MudStack>
         }
-    </div>
+    </MudStack>
 }
 else
 {
