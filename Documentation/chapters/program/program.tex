@@ -1,6 +1,13 @@
 \graphicspath{{images/program}}
 
-\section{Programm}
+\section{Software Architektur}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{system_architektur.png}
+    \caption{Übersicht über die Fotobox-Software}
+    \label{fig:system_architektur}
+\end{figure}
 
 % In diesem Kapitel wird das Programm beschrieben, welches die Fotobox steuert.
 % Zuerst grober aufbau mitteld diagramm und beschreibung einzelner komponenten.
@@ -14,9 +21,12 @@ Im Zentrum steht das Windows-Programm, das die Steuerung der Kamera und des
 Druckers übernimmt. Es zeigt das Livebild der Kamera auf dem Laptop an,
 verarbeitet die aufgenommenen Bilder und sendet sie an den Webserver.
 
-Ein weiterer Bestandteil ist der Webserver. Dieser organisiert die
-aufgenommenen Fotos, stellt eine Benutzeroberfläche bereit, über die die Fotobox
-konfiguriert werden kann, und ermöglicht den Download der Bilder.
+Ein weiterer Bestandteil ist der Webserver, welcher einerseits für die 
+Endbenutzer die hochgeladenen Bilder zum Download bereitstellt, und andererseits
+für den Administrator eine Weboberfläche zur Verwaltung seiner registrierten 
+Fotoboxen bietet. Der Webserver kommuniziert außerdem auch mit der
+Datenbank und dem AWS S3 Cloud Storage, um die Bilder zu speichern und
+zu verwalten.
 
 Das Zusammenspiel dieser Komponenten sowie deren genaue Funktionsweise werden
 in den folgenden Kapiteln im Detail erläutert.
@@ -34,10 +44,12 @@ In dem folgenden Kapitel wird die Desktopapplikation
     \label{fig:Ablauf_Foto_Aufnehmen}
 \end{figure}
 
-In der Abbildung \ref{fig:Ablauf_Foto_Aufnehmen} ist der Ablauf der Fotoaufnahme dargestellt.
+In der \autoref{fig:Ablauf_Foto_Aufnehmen} ist der Ablauf der Fotoaufnahme dargestellt.
 Wenn der Benutzer auf den Auslöser drückt, wird ein Foto aufgenommen.
 Anschließend wird das Bild auf dem Laptop angezeigt, und der Benutzer hat die Möglichkeit,
 auszuwählen, ob das Foto gespeichert, bzw. gedruckt werden soll, oder nicht.
+
+\newpage
 
 \subsection{Webserver}
 
@@ -46,7 +58,7 @@ auszuwählen, ob das Foto gespeichert, bzw. gedruckt werden soll, oder nicht.
 \subsection{Verwendete Technologien}
 
 In dem folgenden Kapitel werden die Technologien beschrieben, welche ich verwendet habe,
-um das Projekt umzusetzen.
+um das Projekt zu realisieren.
 
 \subsubsection{Programmiersprache}
 C\# ist eine moderne, objektorientierte Programmiersprache, die von Microsoft entwickelt wurde.
@@ -88,9 +100,11 @@ aus der Anwendung heraus aufzunehmen und zu speichern.
 
 \subsubsection{Windows Credential Manager}
 Der Windows Credential Manager wird genutzt, um Anmeldedaten wie den Refresh-Token
-sicher zu speichern. Dadurch können Benutzer auch nach einem Neustart der Anwendung
+nach Beenden der Anwendung sicher auf dem System zu speichern.
+Dadurch können Benutzer auch nach einem Neustart der Anwendung
 automatisch eingeloggt bleiben, ohne ihre Zugangsdaten erneut eingeben zu müssen.
 
+%TODO: neuer name für kapitel
 \subsection{Architektonische Konzepte}
 
 In diesem Kapitel werden zentrale Entwurfskonzepte und Prinzipien vorgestellt,
@@ -128,7 +142,7 @@ public class ImageManager(IPrinter printer)
 }
 \end{lstlisting}
 
-Wenn nun diese ImageManager-Klasse vom IOC Container instanziiert wird,
+Wenn nun diese \emph{ImageManager}-Klasse vom IOC Container instanziiert wird,
 wird automatisch die Printer-Klasse mit übergeben. Bei diesem Beispiel, 
 ist es noch sehr übersichtlich, da nur eine Abhängigkeit vorhanden ist.
 Wenn jedoch mehrere Abhängigkeiten vorhanden sind, wird es schnell
@@ -194,3 +208,13 @@ Laufzeit und eine gezielte Analyse im Fehlerfall.
 Insgesamt trägt dieses Logging-Konzept entscheidend zur Wartbarkeit und Fehlersuche bei,
 da relevante Abläufe und Probleme nachvollziehbar und strukturiert dokumentiert werden.
 
+\section{Installation und Konfiguration}
+
+Da das Projekt aus mehreren Komponenten besteht, einerseits die Desktopanwendung,
+welche auf dem Windows Laptop installiert wird, und dem Webserver, welcher
+auf einem aus dem öffentlichen Internet zugänglichen Server installiert wird,
+für den Endnutzer ist jedoch nur die Installation auf dem Windows Laptop notwendig.
+Die Installation auf dem Server sollte normalerweise nicht notwendig sein, wen
+mein Dienst verwendet wird.
+
+\subsection{Installation des Webservers}
