@@ -218,8 +218,6 @@ else
 
 app.UseImageSharp();
 
-app.UseHttpsRedirection();
-
 app.MapControllers();
 
 app.UseAntiforgery();
