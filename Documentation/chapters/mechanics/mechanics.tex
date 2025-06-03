@@ -75,12 +75,8 @@ Dieses Design bringt zudem weitere Vorteile mit sich. Besonders hervorzuheben
 ist die Tatsache, dass die Form der Fotobox einem menschlichen Gesicht ähnelt.
 Dies hat einen positiven psychologischen Effekt auf die Nutzerinnen und Nutzer:
 Menschen fühlen sich in der Regel wohler und entspannter, wenn sie das Gefühl
-haben, jemandem ins Gesicht zu blicken, anstatt lediglich vor einer anonymen,
-leblosen Holzbox zu stehen. Die vertraute, „menschliche“ Gestaltung kann
-Hemmschwellen abbauen und dazu beitragen, dass sich die Personen natürlicher und
-ungezwungener vor der Kamera verhalten. Dadurch entstehen oft authentischere und
-ausdrucksstärkere Fotos, was den Gesamteindruck und die Nutzererfahrung der Fotobox
-deutlich verbessert.
+haben, jemandem ins Gesicht zu blicken, anstatt nur vor einer Holzbox zu stehen.
+
 
 \newpage
 
@@ -98,6 +94,97 @@ einen Boxenflansch zu befestigen, um dir Fotobox auf ein Stativ zu montieren.
 Auf der rechten Seite befinden sich zudem zwei Öffnungen einerseits, um die
 USB Verlängerungskabel für den Drucker einzubauen und die andere um den Kaltgeräteanschluss
 für die Stromversorgung der Fotobox zu integrieren.
+
+\newpage
+
+\subsection{Verwendete Hardware}
+
+In diesem Abschnitt wird die verwendete Hardware der Fotobox beschrieben.
+Unter anderem die Kamera, der Blitz, die LED Lampen und der Laptop und warum
+ich mich für diese Komponenten entschieden habe.
+
+\subsubsection{Kamera}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{fotobox_kamera.jpg}
+    \caption{Canon EOS 550D.}
+    \label{fig:fotobox_kamera}
+\end{figure}
+
+Die Kamera, welche ich für meine Fotobox verwende, ist eine Canon EOS 550D,
+wie in \autoref{fig:fotobox_kamera} zu sehen ist. Ich habe mir für diese
+Kamera entschieden, da sie aufgrund ihres alters einerseits günstig zu
+erwerben ist, und andererseits durch ihre hohe Auflösung von 18 Megapixeln und 
+den relativ großen APS-C Sensor, eine sehr gute Bildqualität liefert.
+Außerdem bietet Canon eine sehr umfangreiches Software Development Kit (SDK) an,
+mit welchem ich die Kamera sehr einfach über meine Software steuern kann.
+
+\subsubsection{Blitz}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.5\textwidth}
+        \includegraphics[width=0.75\textwidth]{fotobox_blitz.jpg}
+        \caption{Canon Speedlite 580EX II.}
+        \label{fig:fotobox_blitz}
+    \end{minipage}    
+    \hfill
+    \begin{minipage}{0.4\textwidth}
+        \small
+        Der Blitz, welcher in der Fotobox verbaut ist, ist ein
+        Canon Speedlite 580EX II. Dieser Blitzt überzeugt mit seiner hohen
+        Leitzahl von 58, wodurch er auch bei hellen Umgebungen
+        eine gute Ausleuchtung des Motivs gewährleistet. Zudem unterstützt
+        er die Canon E-TTL Blitzsteuerung, wodurch die Kamera die optimale
+        Belichtungszeit für jedes Foto individuell berechnet, um eine 
+        gleichmäßige Ausleuchtung des Motivs zu gewährleisten.
+    \end{minipage}
+\end{figure}
+
+\subsubsection{LED Lampen}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.4\textwidth}
+        \small
+        Bei den LED Lampen, habe ich mich für zwei Leuchtmittel des Types GX53 
+        zu sehen in \autoref{fig:fotobox_lampe} entschieden, da diese eine
+        relativ kompakte Bauform haben und gut zur Optik der Box passen. 
+        Zwar sind diese Leuchtmittel keine speziellen Fotolampen, funktionieren
+        aufgrund ihres kalten Lichts aber dennoch sehr gut um das Motiv
+        gleichmäßig auszuleuchten. Diese Leuchtmittel haben auch den Vorteil,
+        das sie einer seit Günstiger sind als spezielle Fotolampen, und 
+        auch einfacher zu montieren sind. Zudem sind sie an einen sich in 
+        der Box befindlichen Dimmschalter angeschlossen, wodurch die 
+        Helligkeit der Lampen angepasst werden kann, um die Belichtung einzustellen.
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.5\textwidth}
+        \includegraphics[width=0.75\textwidth]{fotobox_lampe.jpg}
+        \caption{LED vom Typ GX53.}
+        \label{fig:fotobox_lampe}
+    \end{minipage}    
+\end{figure}
+
+\subsubsection{Laptop}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{fotobox_laptop.jpg}
+    \caption{Lenovo ThinkPad Yoga 370.}
+    \label{fig:fotobox_laptop}
+\end{figure}
+
+Der Laptop, ist wohl das Herzstück der Fotobox, da er die gesamte 
+Steuerung der Komponenten übernimmt. Ich habe mich für einen
+Lenovo ThinkPad Yoga 370 entschieden, da dieser auf dem Gebrauchtmarkt
+für einen überschaubaren Preis erhältlich ist, und durch seinen Touch
+Screen und die Möglichkeit, ihn im Tablet Modus zu verwenden,
+also die Tastatur um 180° umzuklappen, sehr gut für die Fotobox
+geeignet ist. Außerdem bietet er auch die Möglichkeit eine SIM-Karte
+einzusetzen, wodurch sich die Fotobox auch ohne WLAN mit dem Internet 
+verbinden kann.
 
 \newpage
 
@@ -152,7 +239,8 @@ wie in \autoref{fig:fotobox_kanten} zu sehen ist, besser zusammengefügt werden.
     \label{fig:fotobox_kanten}
 \end{figure}
 
-Was erstens die Stabilität der Box erhöht und zweitens die Optik verbessert. 
+Durch diesen Zuschnitt der Kanten wird erstens die Stabilität der Box erhöht
+und zweitens die Optik verbessert. 
 Außerdem, wurde bei diesem Zweiten zuschnitt, auch darauf geachtet, dass die
 Platten genau aneinander passen, da beim ersten Zuschnitt nur grobe Maße
 genommen wurden.
@@ -234,8 +322,6 @@ Radius von 8mm abgerundet. Dieser Arbeitsschritt ist in \autoref{fig:kanten_frae
     \label{fig:kanten_fraesen}
 \end{figure}
 
-\newpage
-
 \subsubsection{Bauen der Halterungen}
 
 Als Nächstes wurden die Halterungen für die Kamera, den Blitz und den Laptop gebaut.
@@ -252,6 +338,8 @@ zu sehen ist eine Gewindestange einzuschrauben.
     \label{fig:fertiges_gewinde}
 \end{figure}
 
+\newpage
+
 Um ein Gewinde der Größe M6 herzustellen, muss zuvor ein Kernloch mit einem
 Durchmesser von 5mm gebohrt werden. Der entsprechende Arbeitsschritt wird in
 \autoref{fig:loch_bohren} gezeigt.
@@ -263,8 +351,6 @@ Durchmesser von 5mm gebohrt werden. Der entsprechende Arbeitsschritt wird in
     \label{fig:loch_bohren}
 \end{figure}
 
-\newpage
-
 Anschließend wird das gebohrte Loch mit einem Kegelsenker bearbeitet, wodurch
 der beim Bohren entstandene Grat entfernt wird, sichtbar in \autoref{fig:loch_senken}.
 
@@ -275,6 +361,8 @@ der beim Bohren entstandene Grat entfernt wird, sichtbar in \autoref{fig:loch_se
     \label{fig:loch_senken}
 \end{figure}
 
+\newpage
+
 Als letzter Schritt wird nun das Gewinde mit einem Gewindeschneider geschnitten,
 wie in \autoref{fig:gewinde_schneiden} dargestellt.
 
@@ -284,8 +372,6 @@ wie in \autoref{fig:gewinde_schneiden} dargestellt.
     \caption{Schneiden des Gewindes.}
     \label{fig:gewinde_schneiden}
 \end{figure}
-
-\newpage
 
 \begin{figure}[H]
     \centering
@@ -301,26 +387,104 @@ mittig über der Kamera positioniert ist.
 \subsubsection{Schleifen und Ölen der Box}
 
 Nachdem die Box zusammengeleimt, die Ecken abgerundet und die Halterungen
-gebaut wurden, wurde die gesamte Oberfläche sorgfältig geschliffen.
-Dabei kamen zunächst grobere Schleifpapiere zum Einsatz, um Unebenheiten zu
+gebaut wurden, wurde die gesamte Oberfläche wie in \autoref{fig:fotobox_schleifen}
+sorgfältig mit dem Schwingschleifer  geschliffen.
+Dabei kamen zunächst gröbere Schleifpapiere zum Einsatz, um Unebenheiten zu
 beseitigen und die Übergänge zwischen den verleimten Holzleisten zu glätten.
 Anschließend wurde mit feineren Körnungen nachgearbeitet, um eine gleichmäßige,
 glatte Oberfläche zu erzielen, die sich angenehm anfühlt und für die
 anschließende Behandlung vorbereitet ist.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{fotobox_schleifen.JPG}
+    \caption{Schleifen der Box.}
+    \label{fig:fotobox_schleifen}
+\end{figure}
+
 Nach dem Schleifen wurde die gesamte Box mit Leinöl behandelt.
-Leinöl ist ein natürlicher Holzschutz, der das Holz vor Feuchtigkeit
-und Schmutz schützt und gleichzeitig die natürliche Farbe und Maserung des Holzes
-betont. Es dringt tief in das Holz ein und bildet eine schützende Schicht,
-die das Holz vor äußeren Einflüssen schützt. Zudem ist Leinöl umweltfreundlich
-und gesundheitlich unbedenklich, was es zu einer idealen Wahl für die
-Oberflächenbehandlung von Möbeln und Holzobjekten macht. In \autoref{fig:fotobox_fertig}
-ist die fertige Box zu sehen.
+Das Leinöl wird dabei einfach mit einem Lappen gleichmäßig auf der gesamten 
+Oberfläche der Box verteilt. Nach dem Auftragen des Öls sollte die Box
+für einige Zeit an einem trockenen Ort ruhen, sodass das Öl gut einziehen kann.
+
+\newpage
+
+\subsection{Fertige Box}
+
+Nachdem alle Einzelteile, wie die Kamera und die Lichter nach dem Schleifen
+und Ölen wieder in der Box montiert wurde, ist die Fotobox nun fertig. In diesem
+Abschnitt wird die Fertige Box beschrieben und die einzelnen Komponenten
+werden vorgestellt.
 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\textwidth]{images/mechanics/fotobox_fertig.JPG}
-    \caption{Die fertige Box.}
-    \label{fig:fotobox_fertig}
+    \begin{minipage}{0.57\textwidth}
+        \includegraphics[width=1\textwidth]{fotobox_stativ.JPG}
+        \caption{Fertige Fotobox.}
+        \label{fig:fotobox_stativ}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.4\textwidth}
+        \small
+        \autoref{fig:fotobox_stativ} zeigt die fertige Fotobox, diese ist 
+        auf dem Stativ montiert. So wird sie auch aufgebaut, wenn sie in
+        Verwendung ist. Da sie auf dem Stativ sehr stabil steht, und man
+        dadurch ebenfalls die Höhe der Box anpassen kann.
+    \end{minipage}
 \end{figure}
+
+\newpage
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{fotobox_vorne.JPG}
+    \caption{Fertige Box.}
+    \label{fig:fotobox_vorne}
+\end{figure}
+
+In \autoref{fig:fotobox_vorne} ist die Fertige Box von vorne zu sehen.
+Die Frontplatte ist mit der Kamera, dem Blitz und den LED Lampen bestückt.
+Der Blitzt befindet sich hinder der Oberen mittleren Öffnung, vor ihm wurde 
+ein milchiges Acrylglas eingesetzt, um die Optik der Box zu verschönern, und 
+die Lücken zwischen blitzt und der Öffnung zu verbergen.
+
+\newpage
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.5\textwidth}
+        \includegraphics[width=1\textwidth]{fotobox_hinten_geschlossen.JPG}
+        \caption{Geschlossene Rückseite.}
+        \label{fig:fotobox_hinten_geschlossen}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.4\textwidth}
+        \small
+        Hier in \autoref{fig:fotobox_hinten_geschlossen} ist die Rückseite 
+        der Box zu sehen. Die gesamte Rückwand der Box kann herausgenommen
+        werden, um einen einfachen Zugang zu den Komponenten der Box zu
+        ermöglichen. Diese wird mit zwei Möbel schlössen gesichert, damit nur
+        berechtigte Personen Zugang zu den Komponenten haben.
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.4\textwidth}
+        \small
+        Nachdem die Schlösser geöffnet wurden, kann die Rückwand der Box
+        entfernt werden, was in \autoref{fig:fotobox_hinten_offen} zu sehen ist.
+        Hier kann die gesamte Elektronik der Box, wie die Kamera, der Blitz und 
+        der umgeklappte Laptop, welcher als Monitor dient, eingesehen werden.
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.5\textwidth}
+        \includegraphics[width=1\textwidth]{fotobox_hinten_offen.JPG}
+        \caption{Geöffnete Rückseite.}
+        \label{fig:fotobox_hinten_offen}
+    \end{minipage}
+\end{figure}
+
+\newpage
+
