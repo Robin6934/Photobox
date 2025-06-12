@@ -77,13 +77,13 @@ public partial class MainWindow : Window, IHostedService
                 ImageViewResult result = await await Dispatcher.InvokeAsync(() =>
                     imageViewer1.ShowImage(image)
                 );
-                
+
                 MemoryStream stream = new();
 
                 await image.SaveAsJpegAsync(stream);
 
                 stream.Position = 0;
-                
+
                 Dispatcher.Invoke(() => BorderText.Visibility = Visibility.Visible);
 
                 TakePictureButton.Click += TakePictureButton_Click;

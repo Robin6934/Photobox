@@ -3182,72 +3182,38 @@ namespace Photobox.Lib.RestApi
 
     }
 
-    /// <summary>
-    /// Represents the result of executing a group of IHealthCheck instances.
-    /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.3.0.0 (NJsonSchema v11.2.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record HealthReport
     {
-        /// <summary>
-        /// A IReadOnlyDictionary`2 containing the results from each health check.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("entries", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.IDictionary<string, HealthReportEntry> Entries { get; set; }
 
-        /// <summary>
-        /// Gets a HealthStatus representing the aggregate status of all the health checks. The value of Status
-        /// <br/>will be the most severe status reported by a health check. If no checks were executed, the value is always Healthy.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public HealthStatus Status { get; set; }
 
-        /// <summary>
-        /// Gets the time the health check service took to execute.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("totalDuration", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.TimeSpan TotalDuration { get; set; }
 
     }
 
-    /// <summary>
-    /// Represents an entry in a HealthReport. Corresponds to the result of a single IHealthCheck.
-    /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.3.0.0 (NJsonSchema v11.2.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record HealthReportEntry
     {
-        /// <summary>
-        /// Gets additional key-value pairs describing the health of the component.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.IDictionary<string, object> Data { get; set; }
 
-        /// <summary>
-        /// Gets a human-readable description of the status of the component that was checked.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Description { get; set; }
 
-        /// <summary>
-        /// Gets the health check execution duration.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("duration", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.TimeSpan Duration { get; set; }
 
-        /// <summary>
-        /// Gets an Exception representing the exception that was thrown when checking for status (if any).
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("exception", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public Exception Exception { get; set; }
 
-        /// <summary>
-        /// Gets the health status of the component that was checked.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public HealthStatus Status { get; set; }
 
-        /// <summary>
-        /// Gets the tags associated with the health check.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("tags", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<string> Tags { get; set; }
 
@@ -4012,9 +3978,6 @@ namespace Photobox.Lib.RestApi
 
     }
 
-    /// <summary>
-    /// Represents the reported status of a health check result.
-    /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.3.0.0 (NJsonSchema v11.2.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public enum HealthStatus
     {
