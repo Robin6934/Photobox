@@ -48,4 +48,29 @@ public class PhotoBoxService(
 
         return photobox;
     }
+
+    public Task<List<PhotoBox>> GetPhotoboxesFromUserIdAsync(
+        Guid userId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return dbContext
+            .PhotoBoxes.Where(p => p.ApplicationUserId == userId)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task DeletePhotoboxByIdAsync(
+        Guid photoboxId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var photobox = await dbContext.PhotoBoxes.FirstOrDefaultAsync(
+            p => p.Id == photoboxId,
+            cancellationToken
+        );
+
+        ArgumentNullException.ThrowIfNull(photobox);
+
+        dbContext.PhotoBoxes.Remove(photobox);
+    }
 }

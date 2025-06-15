@@ -1,0 +1,61 @@
+﻿@page "/ManagePhotoBoxes"
+@using System.Security.Claims
+@using Photobox.Web.Models
+@using Photobox.Web.Services
+@inject PhotoBoxService PhotoboxService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+<MudPaper Class="p-6">
+    <MudText Typo="Typo.h4" Class="mb-4">Meine Fotoboxen</MudText>
+
+    @if (PhotoBoxes == null)
+    {
+        <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
+    }
+    else if (!PhotoBoxes.Any())
+    {
+        <MudAlert Severity="Severity.Info">Du hast noch keine Fotoboxen registriert.</MudAlert>
+    }
+    else
+    {            
+        <MudExpansionPanels MultiExpansion="true">
+            @foreach (var photoBox in PhotoBoxes)
+            {
+                <MudExpansionPanel Text="@photoBox.Name">
+                    <div>
+                        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="() => DeletePhotobox(photoBox.Id)">Delete</MudButton>
+                    </div>
+                </MudExpansionPanel>
+            }
+        </MudExpansionPanels>
+    }
+</MudPaper>
+
+@code {
+    private List<PhotoBox>? PhotoBoxes;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        Console.WriteLine(user.Identity?.IsAuthenticated);
+        
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            ArgumentException.ThrowIfNullOrEmpty(userId);
+            
+            PhotoBoxes = await PhotoboxService.GetPhotoboxesFromUserIdAsync(Guid.Parse(userId));
+            
+            await base.OnInitializedAsync();
+        }
+    }
+
+    private Task DeletePhotobox(Guid photoboxId)
+    {
+        return PhotoboxService.DeletePhotoboxByIdAsync(photoboxId);
+    }
+}
