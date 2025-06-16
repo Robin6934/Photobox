@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.IO.Abstractions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IO;
 using Photobox.UI.Lib.ConfigModels;
 using Photobox.UI.Lib.ImageUploadService;
 using Photobox.UI.Lib.Printer;
@@ -12,7 +14,8 @@ public class ImageManager(
     ILogger<ImageManager> logger,
     IOptionsMonitor<PhotoboxConfig> options,
     IPrinter printer,
-    IImageUploadService imageUploadService
+    IImageUploadService imageUploadService,
+    IFileSystem fileSystem
 ) : IImageManager
 {
     private readonly ILogger<ImageManager> logger = logger;
@@ -23,6 +26,8 @@ public class ImageManager(
 
     private readonly IImageUploadService imageUploadService = imageUploadService;
 
+    private readonly IFileSystem fileSystem = fileSystem;
+
     public async Task DeleteAsync(Image<Rgb24> image)
     {
         if (photoboxConfigMonitor.CurrentValue.StoreDeletedImages)
@@ -31,7 +36,14 @@ public class ImageManager(
 
             string newImagePath = Path.Combine(Folders.PhotoboxBaseDir, Folders.Deleted, imageName);
 
-            await image.SaveAsJpegAsync(newImagePath);
+            await using Stream fileStream = fileSystem.FileStream.New(
+                newImagePath,
+                FileMode.Create,
+                FileAccess.Write,
+                FileShare.None
+            );
+
+            await image.SaveAsJpegAsync(fileStream);
 
             logger.LogInformation("Stored Deleted image under path {imagePath}", imageName);
         }
@@ -52,7 +64,14 @@ public class ImageManager(
 
         string newImagePath = Path.Combine(Folders.PhotoboxBaseDir, Folders.Photos, imageName);
 
-        await image.SaveAsJpegAsync(newImagePath);
+        await using Stream fileStream = fileSystem.FileStream.New(
+            newImagePath,
+            FileMode.Create,
+            FileAccess.Write,
+            FileShare.None
+        );
+
+        await image.SaveAsJpegAsync(fileStream);
 
         await imageUploadService.UploadImageAsync(imageName, image);
 

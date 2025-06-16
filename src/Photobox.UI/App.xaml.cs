@@ -18,6 +18,7 @@ using Photobox.UI.Lib.PowerStatusWatcher;
 using Photobox.UI.Lib.Printer;
 using Photobox.UI.Windows;
 using Serilog;
+using System.IO.Abstractions;
 
 namespace Photobox.UI;
 
@@ -77,6 +78,7 @@ public partial class App
         ));
         builder.Services.AddSingleton<IAccessTokenManager, AccessTokenManager>();
         builder.Services.AddSingleton<IPhotoboxSettingsManager, PhotoboxSettingsManager>();
+        builder.Services.AddSingleton<IFileSystem, FileSystem>();
         builder.Logging.ClearProviders();
 
         var logger = new LoggerConfiguration()
