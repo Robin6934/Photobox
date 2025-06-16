@@ -1,3 +1,5 @@
+using System.IO.Abstractions.TestingHelpers;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NSubstitute;
@@ -19,65 +21,72 @@ public class ImageManagerTest
 
         var logger = Substitute.For<ILogger<ImageManager.ImageManager>>();
 
+        var fileSystem = new MockFileSystem(
+            new Dictionary<string, MockFileData>()
+            {
+                { Folders.GetPath(Folders.Photos), new MockDirectoryData() },
+                { Folders.GetPath(Folders.Deleted), new MockDirectoryData() },
+                { Folders.GetPath(Folders.Temp), new MockDirectoryData() },
+            }
+        );
+        var config = Substitute.For<IOptionsMonitor<PhotoboxConfig>>();
+        config.CurrentValue.Returns(new PhotoboxConfig { StoreDeletedImages = true });
+
         IImageManager imageService = new ImageManager.ImageManager(
             logger,
-            Substitute.For<IOptionsMonitor<PhotoboxConfig>>(),
+            config,
             printer,
-            Substitute.For<IImageUploadService>()
+            Substitute.For<IImageUploadService>(),
+            fileSystem
         );
 
         string imageName = Folders.NewImageName;
 
         string newImagePath = Path.Combine(Folders.PhotoboxBaseDir, Folders.Photos, imageName);
 
-        try
-        {
-            Image<Rgb24> image = new(200, 200);
+        Image<Rgb24> image = new(200, 200);
 
-            await imageService.PrintAndSaveAsync(image);
+        await imageService.PrintAndSaveAsync(image);
 
-            await printer.Received(1).PrintAsync(image);
-        }
-        finally
-        {
-            DeleteFileIfExists(newImagePath);
-            DeleteFileIfExists(imageName);
-        }
+        await printer.Received(1).PrintAsync(image);
     }
 
-    [Fact(Skip = "does not work")]
+    [Fact]
     public async Task PrintImageAndCheckIfItIsAlsoSaved()
     {
         var printer = Substitute.For<IPrinter>();
 
         var logger = Substitute.For<ILogger<ImageManager.ImageManager>>();
 
+        var fileSystem = new MockFileSystem(
+            new Dictionary<string, MockFileData>()
+            {
+                { Folders.GetPath(Folders.Photos), new MockDirectoryData() },
+                { Folders.GetPath(Folders.Deleted), new MockDirectoryData() },
+                { Folders.GetPath(Folders.Temp), new MockDirectoryData() },
+            }
+        );
+
+        var config = Substitute.For<IOptionsMonitor<PhotoboxConfig>>();
+        config.CurrentValue.Returns(new PhotoboxConfig { StoreDeletedImages = true });
+
         IImageManager imageService = new ImageManager.ImageManager(
             logger,
-            Substitute.For<IOptionsMonitor<PhotoboxConfig>>(),
+            config,
             printer,
-            Substitute.For<IImageUploadService>()
+            Substitute.For<IImageUploadService>(),
+            fileSystem
         );
 
         string imageName = Folders.NewImageName;
 
         string newImagePath = Path.Combine(Folders.PhotoboxBaseDir, Folders.Photos, imageName);
 
-        try
-        {
-            DeleteFileIfExists(imageName);
+        Image<Rgb24> image = new(200, 200);
 
-            Image<Rgb24> image = new(200, 200);
+        await imageService.PrintAndSaveAsync(image);
 
-            await imageService.PrintAndSaveAsync(image);
-
-            CheckIfFileExists(newImagePath);
-        }
-        finally
-        {
-            DeleteFileIfExists(newImagePath);
-            DeleteFileIfExists(imageName);
-        }
+        fileSystem.AllFiles.Should().HaveCount(1);
     }
 
     [Fact]
@@ -87,84 +96,71 @@ public class ImageManagerTest
 
         var logger = Substitute.For<ILogger<ImageManager.ImageManager>>();
 
+        var fileSystem = new MockFileSystem(
+            new Dictionary<string, MockFileData>()
+            {
+                { Folders.GetPath(Folders.Photos), new MockDirectoryData() },
+                { Folders.GetPath(Folders.Deleted), new MockDirectoryData() },
+                { Folders.GetPath(Folders.Temp), new MockDirectoryData() },
+            }
+        );
+
+        var config = Substitute.For<IOptionsMonitor<PhotoboxConfig>>();
+        config.CurrentValue.Returns(new PhotoboxConfig { StoreDeletedImages = true });
+
         IImageManager imageService = new ImageManager.ImageManager(
             logger,
-            Substitute.For<IOptionsMonitor<PhotoboxConfig>>(),
+            config,
             printer,
-            Substitute.For<IImageUploadService>()
+            Substitute.For<IImageUploadService>(),
+            fileSystem
         );
 
         string imageName = Folders.NewImageName;
 
         string newImagePath = Path.Combine(Folders.PhotoboxBaseDir, Folders.Photos, imageName);
 
-        try
-        {
-            DeleteFileIfExists(imageName);
+        Image<Rgb24> image = new(200, 200);
 
-            Image<Rgb24> image = new(200, 200);
+        await imageService.SaveAsync(image);
 
-            await imageService.SaveAsync(image);
-
-            CheckIfFileExists(newImagePath);
-        }
-        finally
-        {
-            DeleteFileIfExists(newImagePath);
-            DeleteFileIfExists(imageName);
-        }
+        fileSystem.AllFiles.Should().HaveCount(1);
     }
 
-    [Fact(Skip = "does not work")]
-    public void DeleteImage()
+    [Fact]
+    public async Task DeleteImage()
     {
         var printer = Substitute.For<IPrinter>();
 
         var logger = Substitute.For<ILogger<ImageManager.ImageManager>>();
 
+        var fileSystem = new MockFileSystem(
+            new Dictionary<string, MockFileData>()
+            {
+                { Folders.GetPath(Folders.Photos), new MockDirectoryData() },
+                { Folders.GetPath(Folders.Deleted), new MockDirectoryData() },
+                { Folders.GetPath(Folders.Temp), new MockDirectoryData() },
+            }
+        );
+        var config = Substitute.For<IOptionsMonitor<PhotoboxConfig>>();
+        config.CurrentValue.Returns(new PhotoboxConfig { StoreDeletedImages = true });
+
         IImageManager imageService = new ImageManager.ImageManager(
             logger,
-            Substitute.For<IOptionsMonitor<PhotoboxConfig>>(),
+            config,
             printer,
-            Substitute.For<IImageUploadService>()
+            Substitute.For<IImageUploadService>(),
+            fileSystem
         );
 
         string imageName = Folders.NewImageName;
 
-        Folders.NewImageName.Returns(imageName);
-
         string newImagePath = Path.Combine(Folders.PhotoboxBaseDir, Folders.Deleted, imageName);
 
-        try
-        {
-            DeleteFileIfExists(imageName);
+        Image<Rgb24> image = new(200, 200);
 
-            Image<Rgb24> image = new(200, 200);
+        await imageService.DeleteAsync(image);
 
-            imageService.DeleteAsync(image);
-
-            CheckIfFileExists(newImagePath);
-        }
-        finally
-        {
-            DeleteFileIfExists(newImagePath);
-            DeleteFileIfExists(imageName);
-        }
-    }
-
-    private static void DeleteFileIfExists(string filePath)
-    {
-        if (File.Exists(filePath))
-        {
-            File.Delete(filePath);
-        }
-    }
-
-    private static void CheckIfFileExists(string filePath)
-    {
-        if (!File.Exists(filePath))
-        {
-            throw new FileNotFoundException($"the file {filePath}, is not found!");
-        }
+        fileSystem.AllFiles.Should().HaveCount(1);
     }
 }
