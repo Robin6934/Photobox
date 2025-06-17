@@ -29,12 +29,10 @@ public class ImageManagerTest
                 { Folders.GetPath(Folders.Temp), new MockDirectoryData() },
             }
         );
-        var config = Substitute.For<IOptionsMonitor<PhotoboxConfig>>();
-        config.CurrentValue.Returns(new PhotoboxConfig { StoreDeletedImages = true });
 
         IImageManager imageService = new ImageManager.ImageManager(
             logger,
-            config,
+            Substitute.For<IOptionsMonitor<PhotoboxConfig>>(),
             printer,
             Substitute.For<IImageUploadService>(),
             fileSystem
@@ -67,12 +65,9 @@ public class ImageManagerTest
             }
         );
 
-        var config = Substitute.For<IOptionsMonitor<PhotoboxConfig>>();
-        config.CurrentValue.Returns(new PhotoboxConfig { StoreDeletedImages = true });
-
         IImageManager imageService = new ImageManager.ImageManager(
             logger,
-            config,
+            Substitute.For<IOptionsMonitor<PhotoboxConfig>>(),
             printer,
             Substitute.For<IImageUploadService>(),
             fileSystem
@@ -86,7 +81,10 @@ public class ImageManagerTest
 
         await imageService.PrintAndSaveAsync(image);
 
-        fileSystem.AllFiles.Should().HaveCount(1);
+        fileSystem.Directory
+            .GetFiles(Folders.GetPath(Folders.Photos))
+            .Should()
+            .HaveCount(1);    
     }
 
     [Fact]
@@ -124,11 +122,14 @@ public class ImageManagerTest
 
         await imageService.SaveAsync(image);
 
-        fileSystem.AllFiles.Should().HaveCount(1);
+        fileSystem.Directory
+            .GetFiles(Folders.GetPath(Folders.Photos))
+            .Should()
+            .HaveCount(1);
     }
 
     [Fact]
-    public async Task DeleteImage()
+    public async Task DeleteImage_StoreDeletedImages()
     {
         var printer = Substitute.For<IPrinter>();
 
@@ -161,6 +162,49 @@ public class ImageManagerTest
 
         await imageService.DeleteAsync(image);
 
-        fileSystem.AllFiles.Should().HaveCount(1);
+        fileSystem.Directory
+            .GetFiles(Folders.GetPath(Folders.Deleted))
+            .Should()
+            .HaveCount(1);
+    }
+    
+    [Fact]
+    public async Task DeleteImage_DontStoreDeletedImages()
+    {
+        var printer = Substitute.For<IPrinter>();
+
+        var logger = Substitute.For<ILogger<ImageManager.ImageManager>>();
+
+        var fileSystem = new MockFileSystem(
+            new Dictionary<string, MockFileData>()
+            {
+                { Folders.GetPath(Folders.Photos), new MockDirectoryData() },
+                { Folders.GetPath(Folders.Deleted), new MockDirectoryData() },
+                { Folders.GetPath(Folders.Temp), new MockDirectoryData() },
+            }
+        );
+        var config = Substitute.For<IOptionsMonitor<PhotoboxConfig>>();
+        config.CurrentValue.Returns(new PhotoboxConfig { StoreDeletedImages = false });
+
+        IImageManager imageService = new ImageManager.ImageManager(
+            logger,
+            config,
+            printer,
+            Substitute.For<IImageUploadService>(),
+            fileSystem
+        );
+
+        string imageName = Folders.NewImageName;
+
+        string newImagePath = Path.Combine(Folders.PhotoboxBaseDir, Folders.Deleted, imageName);
+
+        Image<Rgb24> image = new(200, 200);
+
+        await imageService.DeleteAsync(image);
+
+        fileSystem.Directory
+            .GetFiles(Folders.GetPath(Folders.Deleted))
+            .Should()
+            .HaveCount(0);
     }
 }
