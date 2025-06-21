@@ -516,6 +516,78 @@
         }
       }
     },
+    "/api/Event/GetGalleryCode": {
+      "get": {
+        "tags": [
+          "Event"
+        ],
+        "operationId": "Event_GetGalleryCode",
+        "parameters": [
+          {
+            "name": "X-Hardware-Id",
+            "x-originalName": "photoBoxId",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleryCodeResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/Event/Create": {
+      "post": {
+        "tags": [
+          "Event"
+        ],
+        "operationId": "Event_Create",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/api/Image/UploadImage": {
       "post": {
         "tags": [
@@ -934,6 +1006,11 @@
             "type": "boolean",
             "description": "Indicates, wheter the current event is active."
           },
+          "eventCode": {
+            "type": "string",
+            "description": "The Gallery code used, to retreive the images",
+            "maxLength": 6
+          },
           "usedPhotoBoxId": {
             "type": "string",
             "description": "Foreign key to the owning application user.",
@@ -988,7 +1065,7 @@
           },
           "uniqueImageName": {
             "type": "string",
-            "description": "A Unique image name, used to store the image in the bucket storage.\n            ",
+            "description": "A Unique image name, used to store the image in the bucket storage.",
             "maxLength": 45
           },
           "downscaledImageName": {
@@ -2395,6 +2472,15 @@
           1,
           2
         ]
+      },
+      "GalleryCodeResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string"
+          }
+        }
       },
       "ImageUploadResponse": {
         "type": "object",

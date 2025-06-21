@@ -1,0 +1,37 @@
+﻿@inject ISnackbar Snackbar
+@using MudBlazor
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.VpnKey" Class="mr-2" />
+            Enter Gallery Code
+        </MudText>
+    </TitleContent>
+
+    <DialogContent>
+        <MudTextField @bind-Value="_inputCode" Label="Gallery Code" Required="true" Immediate="true" />
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="Submit">Submit</MudButton>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    private string _inputCode = "";
+
+    private void Cancel() => MudDialog.Cancel();
+
+    private void Submit()
+    {
+        if (!string.IsNullOrWhiteSpace(_inputCode))
+            MudDialog.Close(DialogResult.Ok(_inputCode));
+        else
+            Snackbar.Add("Please enter a valid code.", Severity.Warning);
+    }
+}

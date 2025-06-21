@@ -74,6 +74,14 @@
                 Click="TakePictureButton_Click"
                 HorizontalAlignment="Center" VerticalAlignment="Top"
                 Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        
+        <Image x:Name="QrCodeImage"
+               Width="150"
+               Height="150"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Bottom"
+               Margin="20"
+        />
 
     </Grid>
 </Window>

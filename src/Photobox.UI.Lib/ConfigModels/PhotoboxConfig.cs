@@ -9,6 +9,8 @@ public class PhotoboxConfig
 {
     public static readonly string Photobox = "Photobox";
 
+    public string ServerUrl { get; set; }
+
     public PrinterEnabledOptions PrintingEnabled { get; set; }
 
     public string PrinterName { get; set; } = default!;

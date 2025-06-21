@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Photobox.Web.Database;
+using Photobox.Web.Models;
 using SixLabors.ImageSharp.PixelFormats;
+using Image = SixLabors.ImageSharp.Image;
 
 namespace Photobox.Web.Services;
 
@@ -122,5 +124,10 @@ public class ImageService(
         ArgumentException.ThrowIfNullOrEmpty(preSignedUrl);
 
         return preSignedUrl;
+    }
+
+    public Task<List<Photobox.Web.Models.Image>> GetImageFromEventAsync(Event @event)
+    {
+        return dbContext.Images.Where(x => x.EventId == @event.Id).ToListAsync();
     }
 }

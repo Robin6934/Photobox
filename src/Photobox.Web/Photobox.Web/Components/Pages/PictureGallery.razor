@@ -1,7 +1,10 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.WebUtilities
 @using Photobox.Web.Services
-
-@inject ImageService imageService;
+@inject GalleryService GalleryService
+@inject ImageService ImageService
+@inject NavigationManager Nav
+@inject IDialogService DialogService
 
 <PageTitle>PictureGallery</PageTitle>
 
@@ -14,43 +17,78 @@
         {
             <MudStack Class="mb-3" Spacing="0">
                 <MudImage Class="rounded-1" Src="@_images[imageName]" Alt="Description" Fluid="true"/>
-                
-                <MudButton Class="rounded-0" Variant="Variant.Filled" Href="@GetDownloadLink(@imageName)" Size="Size.Large" StartIcon="@Icons.Material.Filled.Download" Color="Color.Info">Download</MudButton>
 
-                @* <div class="button-right"> *@
-                @*     <MudButton Variant="Variant.Filled" Href="@GetPrintLink(@imageName)" Size="Size.Large" StartIcon="@Icons.Material.Filled.Print" Color="Color.Info">Print</MudButton> *@
-                @* </div> *@
+                <MudButton Class="rounded-0" Variant="Variant.Filled" Href="@GetDownloadLink(imageName)" Size="Size.Large" StartIcon="@Icons.Material.Filled.Download" Color="Color.Info">
+                    Download
+                </MudButton>
             </MudStack>
         }
     </MudStack>
 }
-else
+else if (_galleryCodeChecked)
 {
     <p>No images found.</p>
 }
 
 @code {
     private Dictionary<string, string> _images = [];
-    
+    private bool _dialogShown = false;
+    private bool _galleryCodeChecked = false;
+
+    [Parameter] public string? GalleryCode { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        var imageNames = await imageService.ListImagesAsync();
-        imageNames.Reverse();
-
-        foreach (var name in imageNames)
+        var uri = Nav.ToAbsoluteUri(Nav.Uri);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("code", out var code))
         {
-            _images[name] = await imageService.GetPreviewImagePreSignedUrl(name);
+            GalleryCode = code!;
         }
-        
+
+        // Do not load images yet if no code is set
+        if (!string.IsNullOrWhiteSpace(GalleryCode))
+        {
+            await LoadImages();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && string.IsNullOrWhiteSpace(GalleryCode) && !_dialogShown)
+        {
+            _dialogShown = true;
+            await AskForGalleryCode();
+        }
+    }
+
+    private async Task AskForGalleryCode()
+    {
+        var dialog = await DialogService.ShowAsync<GalleryCodeDialog>("Enter Gallery Code");
+        var result = await dialog.Result;
+
+        if (!result.Canceled && result.Data is string code)
+        {
+            Nav.NavigateTo($"/?code={code}", forceLoad: true);
+        }
+    }
+
+    private async Task LoadImages()
+    {
+        var images = await GalleryService.GetImagesByEventCodeAsync(GalleryCode);
+        images.Reverse();
+
+        foreach (var image in images)
+        {
+            _images[image.ImageName] = await ImageService.GetPreviewImagePreSignedUrl(image.ImageName);
+        }
+
+        _galleryCodeChecked = true;
+        StateHasChanged();
     }
 
     private static string GetDownloadLink(string imageName)
-    {
-	    return $"/api/Image/GetImage/{imageName}";
-    }
+        => $"/api/Image/GetImage/{imageName}";
 
     private static string GetPrintLink(string imageName)
-    {
-	    return $"/api/Image/PrintImage/{imageName}";
-    }
+        => $"/api/Image/PrintImage/{imageName}";
 }

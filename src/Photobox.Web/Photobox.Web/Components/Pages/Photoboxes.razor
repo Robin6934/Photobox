@@ -3,37 +3,55 @@
 @using Photobox.Web.Models
 @using Photobox.Web.Services
 @inject PhotoBoxService PhotoboxService
+@inject EventService EventService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 
 <MudPaper Class="p-6">
     <MudText Typo="Typo.h4" Class="mb-4">Meine Fotoboxen</MudText>
 
-    @if (PhotoBoxes == null)
+    @if (_photoBoxes == null)
     {
         <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
     }
-    else if (!PhotoBoxes.Any())
+    else if (!_photoBoxes.Any())
     {
         <MudAlert Severity="Severity.Info">Du hast noch keine Fotoboxen registriert.</MudAlert>
     }
     else
     {            
         <MudExpansionPanels MultiExpansion="true">
-            @foreach (var photoBox in PhotoBoxes)
+            @foreach (var (photoBox, @event) in _photoBoxes)
             {
                 <MudExpansionPanel Text="@photoBox.Name">
-                    <div>
-                        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="() => DeletePhotobox(photoBox.Id)">Delete</MudButton>
-                    </div>
+                    <MudGrid>
+                        <MudItem xs="1">
+                            <MudAvatar Size="Size.Small" Color="@(true ? Color.Success : Color.Error)"/>
+                        </MudItem>
+                        <MudItem xs="7">
+                            @if (@event is not null)
+                            {
+                                <MudLink Href="@($"/events/{@event.Id}")" Target="_blank">
+                                    Current Event: @(@event.Name)
+                                </MudLink>
+                            }
+                            else
+                            {
+                                <MudText Color="Color.Secondary">(No Event)</MudText>
+                            }
+                        </MudItem>
+                    </MudGrid>
                 </MudExpansionPanel>
             }
         </MudExpansionPanels>
+
     }
 </MudPaper>
 
 @code {
-    private List<PhotoBox>? PhotoBoxes;
+    private Dictionary<PhotoBox, Event?> _photoBoxes = [];
+    
+    private Guid _userId;
     
     protected override async Task OnInitializedAsync()
     {
@@ -44,18 +62,25 @@
         
         if (user.Identity?.IsAuthenticated == true)
         {
-            var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            _userId = Guid.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? throw new InvalidOperationException());
             
-            ArgumentException.ThrowIfNullOrEmpty(userId);
-            
-            PhotoBoxes = await PhotoboxService.GetPhotoboxesFromUserIdAsync(Guid.Parse(userId));
+            var photoboxes = await PhotoboxService.GetPhotoboxesFromUserIdAsync(_userId);
+
+            var events = await EventService.GetRunningEventsFromUserId(_userId);
+
+            foreach (var photobox in photoboxes)
+            {
+                _photoBoxes[photobox] = events.FirstOrDefault(x => x.UsedPhotoBoxId == photobox.Id);
+            }
             
             await base.OnInitializedAsync();
         }
     }
 
-    private Task DeletePhotobox(Guid photoboxId)
+    private async Task DeletePhotobox(Guid photoboxId)
     {
-        return PhotoboxService.DeletePhotoboxByIdAsync(photoboxId);
+        await PhotoboxService.DeletePhotoboxByIdAsync(photoboxId); 
+        
+        _photoBoxes.Remove(_photoBoxes.Keys.Single(p => p.Id == photoboxId));
     }
 }
