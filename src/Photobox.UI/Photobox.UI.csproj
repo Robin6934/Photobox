@@ -30,6 +30,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" />
     <PackageReference Include="Polly" />
+    <PackageReference Include="QRCoder.Xaml" />
     <PackageReference Include="Serilog">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>

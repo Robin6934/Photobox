@@ -228,6 +228,10 @@ namespace Photobox.Web.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("EventCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
@@ -246,6 +250,9 @@ namespace Photobox.Web.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
+                    b.HasIndex("EventCode")
+                        .IsUnique();
+
                     b.HasIndex("UsedPhotoBoxId")
                         .IsUnique();
 
@@ -262,7 +269,7 @@ namespace Photobox.Web.Migrations
                         .HasMaxLength(45)
                         .HasColumnType("character varying(45)");
 
-                    b.Property<Guid?>("EventId")
+                    b.Property<Guid>("EventId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ImageName")
@@ -389,7 +396,8 @@ namespace Photobox.Web.Migrations
                     b.HasOne("Photobox.Web.Models.Event", "Event")
                         .WithMany("Images")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Event");
                 });

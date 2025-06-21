@@ -408,3 +408,5 @@ EDSKLib/EDSDK.dll
 # LaTeX
 /Documentation/out
 src/Photobox.Web/Photobox.Web/OpenAPI/swagger.json
+src/EDSKLib/EDSDK.dll
+src/EDSKLib/EdsImage.dll
