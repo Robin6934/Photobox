@@ -1,16 +1,22 @@
 ﻿using System.IO;
 using System.Windows;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Photobox.Lib.AccessTokenManager;
 using Photobox.Lib.PhotoboxSettingsManager;
 using Photobox.Lib.RestApi;
 using Photobox.UI.CountDown;
 using Photobox.UI.ImageViewer;
 using Photobox.UI.Lib.Camera;
+using Photobox.UI.Lib.ConfigModels;
 using Photobox.UI.Lib.ImageHandler;
 using Photobox.UI.Lib.ImageManager;
+using Photobox.UI.Lib.PowerStatusWatcher;
 using Photobox.WpfHelpers;
+using QRCoder;
+using QRCoder.Xaml;
 using Serilog;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -32,6 +38,10 @@ public partial class MainWindow : Window, IHostedService
 
     private readonly IPhotoboxSettingsManager _photoboxSettingsManager;
 
+    private readonly IEventClient _eventClient;
+
+    private readonly IOptions<PhotoboxConfig> _options;
+
     public MainWindow(
         ICamera camera,
         IImageViewer imageViewer,
@@ -42,7 +52,9 @@ public partial class MainWindow : Window, IHostedService
         IImageManager imageManager,
         IAccessTokenManager accessTokenManager,
         IPhotoBoxClient photoBoxClient,
-        IPhotoboxSettingsManager photoboxSettingsManager
+        IPhotoboxSettingsManager photoboxSettingsManager,
+        IEventClient eventClient,
+        IOptions<PhotoboxConfig> options
     )
     {
         InitializeComponent();
@@ -60,12 +72,13 @@ public partial class MainWindow : Window, IHostedService
         _accessTokenManager = accessTokenManager;
 
         _photoboxSettingsManager = photoboxSettingsManager;
+        this._eventClient = eventClient;
+        _options = options;
 
         countDown.Panel = GridLiveView;
 
-        countDown.CountDownEarly += (s) =>
-        {
-            camera.Focus();
+        countDown.CountDownEarly += (s) => {
+            //camera.Focus();
         };
 
         countDown.CountDownExpired += async (o) =>
@@ -77,13 +90,13 @@ public partial class MainWindow : Window, IHostedService
                 ImageViewResult result = await await Dispatcher.InvokeAsync(() =>
                     imageViewer1.ShowImage(image)
                 );
-                
+
                 MemoryStream stream = new();
 
                 await image.SaveAsJpegAsync(stream);
 
                 stream.Position = 0;
-                
+
                 Dispatcher.Invoke(() => BorderText.Visibility = Visibility.Visible);
 
                 TakePictureButton.Click += TakePictureButton_Click;
@@ -123,6 +136,7 @@ public partial class MainWindow : Window, IHostedService
         Start();
         Show();
         _applicationLifetime.ApplicationStopping.Register(Close);
+        _applicationLifetime.ApplicationStopping.Register(StopApplication);
         _logger.LogInformation("The main window has started.");
 
         try
@@ -148,6 +162,8 @@ public partial class MainWindow : Window, IHostedService
                 MessageBoxImage.Error
             );
         }
+
+        await GetGalleryQrCodeAsync();
     }
 
     private async Task<bool> LoginAsync()
@@ -179,6 +195,17 @@ public partial class MainWindow : Window, IHostedService
         }
     }
 
+    private async Task GetGalleryQrCodeAsync()
+    {
+        string code = (await _eventClient.GetGalleryCodeAsync()).Code;
+        string url = $"{_options.Value.ServerUrl}/{code}";
+
+        QRCodeGenerator qrGenerator = new();
+        QRCodeData qrCodeData = qrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
+        XamlQRCode qrCode = new(qrCodeData);
+        QrCodeImage.Source = qrCode.GetGraphic(20);
+    }
+
     public Task StopAsync(CancellationToken cancellationToken)
     {
         Close();
@@ -199,10 +226,16 @@ public partial class MainWindow : Window, IHostedService
 
     private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
     {
-        this._camera.CameraStream -= CameraStreamHandler;
+        StopApplication();
+        _logger.LogInformation("The main window is closing.");
+    }
+
+    private void StopApplication()
+    {
+        _camera.CameraStream -= CameraStreamHandler;
+        _camera.StopStream();
         _camera.Dispose();
         _applicationLifetime.StopApplication();
-        _logger.LogInformation("The main window is closing.");
     }
 
     private void Window_Closed(object sender, EventArgs e)

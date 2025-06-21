@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Photobox.Web.Models;
 
@@ -34,6 +35,12 @@ public class Event
     /// Indicates, wheter the current event is active.
     /// </summary>
     public bool IsActive { get; set; }
+
+    /// <summary>
+    /// The Gallery code used, to retreive the images
+    /// </summary>
+    [MaxLength(6)]
+    public string EventCode { get; set; }
 
     /// <summary>
     /// Foreign key to the owning application user.

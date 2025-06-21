@@ -47,5 +47,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> context)
             .WithOne(i => i.Event)
             .HasForeignKey(i => i.EventId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Event>().HasIndex(e => e.EventCode).IsUnique();
     }
 }

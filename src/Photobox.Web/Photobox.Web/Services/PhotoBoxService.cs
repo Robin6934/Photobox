@@ -72,5 +72,7 @@ public class PhotoBoxService(
         ArgumentNullException.ThrowIfNull(photobox);
 
         dbContext.PhotoBoxes.Remove(photobox);
+
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 }

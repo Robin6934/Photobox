@@ -4,6 +4,7 @@
     <option name="locations">
       <list>
         <option value="$PROJECT_DIR$/../../../../../../Share/Publish" />
+        <option value="$PROJECT_DIR$/../../../../../../Build" />
       </list>
     </option>
   </component>

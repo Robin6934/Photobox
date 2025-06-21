@@ -1,6 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Windows.Media;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Photobox.Lib.PhotoboxSettingsManager;
+using Photobox.Lib.RestApi;
+using Photobox.UI.Lib.ConfigModels;
 using Photobox.UI.Lib.Printer;
 using Photobox.UI.Windows;
+using QRCoder;
+using QRCoder.Xaml;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 

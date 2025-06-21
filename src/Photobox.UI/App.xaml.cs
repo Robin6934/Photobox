@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.IO.Abstractions;
+using System.Net.Http;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,7 +19,6 @@ using Photobox.UI.Lib.PowerStatusWatcher;
 using Photobox.UI.Lib.Printer;
 using Photobox.UI.Windows;
 using Serilog;
-using System.IO.Abstractions;
 
 namespace Photobox.UI;
 
@@ -35,6 +35,7 @@ public partial class App
 
         ImageClient.AccessTokenManager = _host.Services.GetService<IAccessTokenManager>();
         PhotoBoxClient.AccessTokenManager = _host.Services.GetService<IAccessTokenManager>();
+        EventClient.AccessTokenManager = _host.Services.GetService<IAccessTokenManager>();
 
         await _host.StartAsync();
     }
@@ -55,8 +56,8 @@ public partial class App
             ?? "https://localhost";
 
         builder.Services.AddHostedService<MainWindow>();
-        builder.Services.AddHostedService<PowerStatusWatcher>();
 
+        builder.Services.AddSingleton<PowerStatusMonitor>();
         builder.Services.AddSingleton<IImageUploadService, ImageUploadService>();
         builder.Services.AddSingleton<CameraFactory>();
         builder.Services.AddSingleton(s =>
@@ -72,6 +73,7 @@ public partial class App
         builder.Services.AddSingleton<ICountDown, CountDownCircle>();
         builder.Services.AddSingleton<IImageHandler, ImageHandler>();
         builder.Services.AddSingleton<IImageClient, ImageClient>(_ => new ImageClient(url));
+        builder.Services.AddSingleton<IEventClient, EventClient>(_ => new EventClient(url));
         builder.Services.AddSingleton<IClient, Client>(s => new Client(url));
         builder.Services.AddSingleton<IPhotoBoxClient, PhotoBoxClient>(_ => new PhotoBoxClient(
             url

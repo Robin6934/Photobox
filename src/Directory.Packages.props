@@ -5,7 +5,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="AdysTech.CredentialManager" Version="2.6.0" />
-    <PackageVersion Include="akavache" Version="10.2.41" />
     <PackageVersion Include="AspNetCore.HealthChecks.Aws.S3" Version="9.0.0" />
     <PackageVersion Include="AspNetCore.HealthChecks.NpgSql" Version="9.0.0" />
     <PackageVersion Include="AspNetCore.HealthChecks.UI" Version="9.0.0" />
@@ -64,6 +63,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
     <PackageVersion Include="Polly" Version="8.5.2" />
+    <PackageVersion Include="QRCoder.Xaml" Version="1.6.0" />
     <PackageVersion Include="Scalar.AspNetCore" Version="2.1.18" />
     <PackageVersion Include="Serilog" Version="4.2.0" />
     <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />

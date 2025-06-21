@@ -23,7 +23,6 @@ public class Image
 
     /// <summary>
     /// A Unique image name, used to store the image in the bucket storage.
-    ///
     /// </summary>
     [MaxLength(45)]
     public required string UniqueImageName { get; set; }
