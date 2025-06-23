@@ -1,5 +1,6 @@
-﻿@inject ISnackbar Snackbar
-@using MudBlazor
+﻿@using Photobox.Web.Services
+@inject ISnackbar Snackbar
+@inject EventService EventService
 
 <MudDialog>
     <TitleContent>
@@ -10,7 +11,7 @@
     </TitleContent>
 
     <DialogContent>
-        <MudTextField @bind-Value="_inputCode" Label="Gallery Code" Required="true" Immediate="true" />
+        <MudTextField @bind-Value="_inputCode" Label="Gallery Code" Required="true" Immediate="true" InputType="InputType.Number"/>
     </DialogContent>
 
     <DialogActions>
@@ -27,9 +28,9 @@
 
     private void Cancel() => MudDialog.Cancel();
 
-    private void Submit()
+    private async Task Submit()
     {
-        if (!string.IsNullOrWhiteSpace(_inputCode))
+        if (!string.IsNullOrWhiteSpace(_inputCode) && _inputCode.Length == 6 && await EventService.CheckIfEventCodeExists(_inputCode))
             MudDialog.Close(DialogResult.Ok(_inputCode));
         else
             Snackbar.Add("Please enter a valid code.", Severity.Warning);
