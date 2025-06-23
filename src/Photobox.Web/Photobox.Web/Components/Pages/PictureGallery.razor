@@ -5,6 +5,7 @@
 @inject ImageService ImageService
 @inject NavigationManager Nav
 @inject IDialogService DialogService
+@inject ISnackbar Snackbar
 
 <PageTitle>PictureGallery</PageTitle>
 
@@ -74,7 +75,17 @@ else if (_galleryCodeChecked)
 
     private async Task LoadImages()
     {
-        var images = await GalleryService.GetImagesByEventCodeAsync(GalleryCode);
+        List<Photobox.Web.Models.Image> images = [];
+        
+        try
+        {
+            images = await GalleryService.GetImagesByEventCodeAsync(GalleryCode);
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add(e.Message, Severity.Warning);
+        }
+        
         images.Reverse();
 
         foreach (var image in images)
