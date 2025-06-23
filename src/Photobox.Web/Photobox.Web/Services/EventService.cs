@@ -41,6 +41,14 @@ public class EventService(AppDbContext dbContext)
         );
     }
 
+    public Task<bool> CheckIfEventCodeExists(
+        string eventCode,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return dbContext.Events.AnyAsync(x => x.EventCode == eventCode, cancellationToken);
+    }
+
     public async Task<string> GenerateUniqueEventCodeAsync()
     {
         string code;
