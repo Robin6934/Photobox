@@ -198,7 +198,7 @@ public partial class MainWindow : Window, IHostedService
     private async Task GetGalleryQrCodeAsync()
     {
         string code = (await _eventClient.GetGalleryCodeAsync()).Code;
-        string url = $"{_options.Value.ServerUrl}/{code}";
+        string url = $"{_options.Value.ServerUrl}/?code={code}";
 
         QRCodeGenerator qrGenerator = new();
         QRCodeData qrCodeData = qrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
