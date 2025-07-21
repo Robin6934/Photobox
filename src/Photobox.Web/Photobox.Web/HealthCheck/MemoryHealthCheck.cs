@@ -6,8 +6,6 @@ namespace Photobox.Web.HealthCheck;
 
 public class MemoryHealthCheck(IOptionsMonitor<MemoryCheckOptions> options) : IHealthCheck
 {
-    private readonly IOptionsMonitor<MemoryCheckOptions> _options = options;
-
     public string Name => "memory_check";
 
     public Task<HealthCheckResult> CheckHealthAsync(
@@ -15,7 +13,7 @@ public class MemoryHealthCheck(IOptionsMonitor<MemoryCheckOptions> options) : IH
         CancellationToken cancellationToken = default
     )
     {
-        var options = _options.Get(context.Registration.Name);
+        var options1 = options.Get(context.Registration.Name);
 
         // Include GC information in the reported diagnostics.
         var allocated = GC.GetTotalMemory(forceFullCollection: false);
@@ -26,13 +24,13 @@ public class MemoryHealthCheck(IOptionsMonitor<MemoryCheckOptions> options) : IH
             { "Gen1Collections", GC.CollectionCount(1) },
             { "Gen2Collections", GC.CollectionCount(2) },
         };
-        var status = allocated < options.Threshold ? HealthStatus.Healthy : HealthStatus.Unhealthy;
+        var status = allocated < options1.Threshold ? HealthStatus.Healthy : HealthStatus.Unhealthy;
 
         return Task.FromResult(
             new HealthCheckResult(
                 status,
                 description: "Reports degraded status if allocated bytes "
-                    + $">= {options.Threshold} bytes.",
+                    + $">= {options1.Threshold} bytes.",
                 exception: null,
                 data: data
             )
