@@ -3226,99 +3226,51 @@ namespace Photobox.Lib.RestApi
 
     }
 
-    /// <summary>
-    /// Represents a user in the identity system
-    /// </summary>
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.3.0.0 (NJsonSchema v11.2.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial record IdentityUserOfGuid
     {
-        /// <summary>
-        /// Gets or sets the primary key for this user.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Guid Id { get; set; }
 
-        /// <summary>
-        /// Gets or sets the user name for this user.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string UserName { get; set; }
 
-        /// <summary>
-        /// Gets or sets the normalized user name for this user.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("normalizedUserName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string NormalizedUserName { get; set; }
 
-        /// <summary>
-        /// Gets or sets the email address for this user.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Email { get; set; }
 
-        /// <summary>
-        /// Gets or sets the normalized email address for this user.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("normalizedEmail", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string NormalizedEmail { get; set; }
 
-        /// <summary>
-        /// Gets or sets a flag indicating if a user has confirmed their email address.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("emailConfirmed", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool EmailConfirmed { get; set; }
 
-        /// <summary>
-        /// Gets or sets a salted and hashed representation of the password for this user.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("passwordHash", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string PasswordHash { get; set; }
 
-        /// <summary>
-        /// A random value that must change whenever a users credentials change (password changed, login removed)
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("securityStamp", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string SecurityStamp { get; set; }
 
-        /// <summary>
-        /// A random value that must change whenever a user is persisted to the store
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("concurrencyStamp", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string ConcurrencyStamp { get; set; }
 
-        /// <summary>
-        /// Gets or sets a telephone number for the user.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("phoneNumber", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string PhoneNumber { get; set; }
 
-        /// <summary>
-        /// Gets or sets a flag indicating if a user has confirmed their telephone address.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("phoneNumberConfirmed", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool PhoneNumberConfirmed { get; set; }
 
-        /// <summary>
-        /// Gets or sets a flag indicating if two factor authentication is enabled for this user.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("twoFactorEnabled", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool TwoFactorEnabled { get; set; }
 
-        /// <summary>
-        /// Gets or sets the date and time, in UTC, when any user lockout ends.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("lockoutEnd", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.DateTimeOffset? LockoutEnd { get; set; }
 
-        /// <summary>
-        /// Gets or sets a flag indicating if the user could be locked out.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("lockoutEnabled", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool LockoutEnabled { get; set; }
 
-        /// <summary>
-        /// Gets or sets the number of failed login attempts for the current user.
-        /// </summary>
         [Newtonsoft.Json.JsonProperty("accessFailedCount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int AccessFailedCount { get; set; }
 
