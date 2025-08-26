@@ -107,7 +107,7 @@ public class ImageService(
         {
             validFor = TimeSpan.FromMinutes(30);
         }
-
+        
         var imageModel = dbContext.Images.First(model => model.ImageName == imageName);
 
         if (!memoryCache.TryGetValue(imageModel.DownscaledImageName, out string? preSignedUrl))

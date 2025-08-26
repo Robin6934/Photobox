@@ -29,9 +29,14 @@ public class ImageUploadService(ILogger<ImageUploadService> logger, IImageClient
         {
             await using var imageStream = await image.ToJpegStreamAsync();
 
-            string mimeType = image.Metadata.DecodedImageFormat?.DefaultMimeType ?? "image/jpeg";
+            string mimeType = image
+                .Metadata.DecodedImageFormat?.DefaultMimeType ?? "image/jpeg";
 
-            var fileParameter = new FileParameter(imageStream, name, mimeType);
+            var fileParameter =
+                new FileParameter(
+                    imageStream, 
+                    name,
+                    mimeType);
 
             try
             {
