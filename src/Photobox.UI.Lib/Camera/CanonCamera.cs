@@ -149,7 +149,7 @@ internal class CanonCamera : CameraBase
 
     public override async Task<Image<Rgb24>> TakePictureAsync()
     {
-        camera.SendCommand(CameraCommand.DoEvfAf, (int)EvfAFMode.Quick);
+        camera.SendCommand(CameraCommand.DoEvfAf);
 
         TaskCompletionSource<DownloadInfo> tcs = new();
 
@@ -158,8 +158,6 @@ internal class CanonCamera : CameraBase
         try
         {
             await camera.TakePhotoAsync();
-            //camera.SendCommand(CameraCommand.PressShutterButton, (int)ShutterButton.Completely);
-            //camera.SendCommand(CameraCommand.PressShutterButton, (int)ShutterButton.OFF);
 
             DownloadInfo info = await tcs.Task;
 
