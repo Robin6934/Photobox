@@ -8,8 +8,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <AssemblyName>Photobox</AssemblyName>
-    <RootNamespace>Photobox.UI</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CSharpier.MsBuild">

@@ -29,8 +29,7 @@ public class AwsStorageService(IAmazonS3 amazonS3) : IStorageService
         {
             var imageStream = new MemoryStream();
 
-            await image.SaveAsJpegAsync(imageStream,
-                cancellationToken: cancellationToken);
+            await image.SaveAsJpegAsync(imageStream, cancellationToken: cancellationToken);
 
             var request = new PutObjectRequest
             {
