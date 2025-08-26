@@ -97,27 +97,6 @@ builder
     )
     .AddBearerToken(IdentityConstants.BearerScheme);
 
-// builder
-//     .Services.AddAuthentication(options =>
-//     {
-//         options.DefaultScheme = IdentityConstants.ApplicationScheme;
-//     })
-//     .AddBearerToken(IdentityConstants.BearerScheme)
-//     .AddCookie();
-//
-//
-//
-// builder.Services.AddAuthorization(options =>
-// {
-//     var defaultAuthorizationPolicy = new AuthorizationPolicyBuilder(
-//         IdentityConstants.ApplicationScheme,
-//         IdentityConstants.BearerScheme);
-//
-//     options.DefaultPolicy = defaultAuthorizationPolicy.RequireAuthenticatedUser().Build();
-//
-//     options.AddPolicy();
-// });
-
 builder
     .Services.AddIdentityCore<ApplicationUser>()
     .AddEntityFrameworkStores<AppDbContext>()
