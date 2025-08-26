@@ -85,7 +85,7 @@ public partial class MainWindow : Window, IHostedService
         {
             await Task.Run(async () =>
             {
-                Image<Rgb24> image = await _camera.TakePictureAsync();
+                Image<Rgb24> image = await this._camera.TakePictureAsync();
 
                 ImageViewResult result = await await Dispatcher.InvokeAsync(() =>
                     imageViewer1.ShowImage(image)
