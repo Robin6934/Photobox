@@ -13,5 +13,8 @@
   <Project Path="Photobox.UI.Lib.Test\Photobox.UI.Lib.Test.csproj" />
   <Project Path="Photobox.UI.Lib\Photobox.UI.Lib.csproj" />
   <Project Path="Photobox.UI\Photobox.UI.csproj" />
+  <Project Path="photobox.web.client\Photobox.Web.Client.esproj" Type="{54A90642-561A-4BB1-A94E-469ADEE60C69}">
+    <Configuration Solution="Release|Any CPU" Project="Debug|Any CPU" />
+  </Project>
   <Project Path="Photobox.Web\Photobox.Web\Photobox.Web.csproj" Type="Classic C#" />
 </Solution>
