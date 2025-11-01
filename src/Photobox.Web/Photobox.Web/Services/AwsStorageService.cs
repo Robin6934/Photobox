@@ -2,6 +2,7 @@
 using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.Web.Services;
@@ -87,8 +88,6 @@ public class AwsStorageService(IAmazonS3 amazonS3) : IStorageService
 
     public Task<string> GetPreSignedUrl(string name, TimeSpan validFor)
     {
-        AWSConfigsS3.UseSignatureVersion4 = true;
-
         var request = new GetPreSignedUrlRequest()
         {
             BucketName = Aws.Aws.BucketName,

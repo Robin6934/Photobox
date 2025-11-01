@@ -6,6 +6,7 @@ using Photobox.Lib.Extensions;
 using Photobox.Web.Database;
 using Photobox.Web.Responses;
 using Photobox.Web.Services;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Photobox.Web.Controllers;
@@ -40,7 +41,8 @@ public class ImageController(
         }
 
         using var image = await Image.LoadAsync<Rgb24>(
-            formFile.OpenReadStream()
+            formFile.OpenReadStream(),
+            cancellationToken
         );
 
         if (image is null)
