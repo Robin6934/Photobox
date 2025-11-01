@@ -181,22 +181,22 @@ namespace EOSDigital.API
         /// List of all non-severe errors. Items can be added or removed.
         /// </summary>
         public static List<ErrorCode> NonSevereErrors { get; private set; } =
-            [
-                ErrorCode.TAKE_PICTURE_AF_NG,
-                ErrorCode.TAKE_PICTURE_CARD_NG,
-                ErrorCode.TAKE_PICTURE_CARD_PROTECT_NG,
-                ErrorCode.TAKE_PICTURE_LV_REL_PROHIBIT_MODE_NG,
-                ErrorCode.TAKE_PICTURE_MIRROR_UP_NG,
-                ErrorCode.TAKE_PICTURE_MOVIE_CROP_NG,
-                ErrorCode.TAKE_PICTURE_NO_CARD_NG,
-                ErrorCode.TAKE_PICTURE_NO_LENS_NG,
-                ErrorCode.TAKE_PICTURE_SENSOR_CLEANING_NG,
-                ErrorCode.TAKE_PICTURE_SILENCE_NG,
-                ErrorCode.TAKE_PICTURE_SPECIAL_MOVIE_MODE_NG,
-                ErrorCode.TAKE_PICTURE_STROBO_CHARGE_NG,
-                ErrorCode.LENS_COVER_CLOSE,
-                ErrorCode.DEVICE_BUSY,
-            ];
+        [
+            ErrorCode.TAKE_PICTURE_AF_NG,
+            ErrorCode.TAKE_PICTURE_CARD_NG,
+            ErrorCode.TAKE_PICTURE_CARD_PROTECT_NG,
+            ErrorCode.TAKE_PICTURE_LV_REL_PROHIBIT_MODE_NG,
+            ErrorCode.TAKE_PICTURE_MIRROR_UP_NG,
+            ErrorCode.TAKE_PICTURE_MOVIE_CROP_NG,
+            ErrorCode.TAKE_PICTURE_NO_CARD_NG,
+            ErrorCode.TAKE_PICTURE_NO_LENS_NG,
+            ErrorCode.TAKE_PICTURE_SENSOR_CLEANING_NG,
+            ErrorCode.TAKE_PICTURE_SILENCE_NG,
+            ErrorCode.TAKE_PICTURE_SPECIAL_MOVIE_MODE_NG,
+            ErrorCode.TAKE_PICTURE_STROBO_CHARGE_NG,
+            ErrorCode.LENS_COVER_CLOSE,
+            ErrorCode.DEVICE_BUSY,
+        ];
 
         /// <summary>
         /// Checks for an error in SDK calls and checks how to treat it

@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Caching.Memory;
 using Photobox.Web.Database;
 using Photobox.Web.Models;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using Image = SixLabors.ImageSharp.Image;
 
 namespace Photobox.Web.Services;
