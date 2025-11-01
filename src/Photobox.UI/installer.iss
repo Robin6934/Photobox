@@ -2,9 +2,9 @@
 [Setup]
 AppName=Photobox
 AppVersion=Beta-0.1.0
-ArchitecturesAllowed=x64
+ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64
-DefaultDirName={pf64}\Photobox
+DefaultDirName={commonpf64}\Photobox
 DefaultGroupName=Photobox
 OutputDir=output
 OutputBaseFilename=PhotoboxInstaller
@@ -12,7 +12,7 @@ Compression=lzma
 SolidCompression=yes
 
 [Files]
-Source: "bin\Release\net9.0-windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "bin\Release\net9.0-windows\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{group}\Photobox"; Filename: "{app}\Photobox.exe"
@@ -22,43 +22,11 @@ Name: "{commondesktop}\Photobox"; Filename: "{app}\Photobox.exe"
 Filename: "{app}\Photobox.exe"; Description: "Launch Photobox"; Flags: nowait postinstall skipifsilent
 
 [Code]
-function IsDotNet9Installed(): Boolean;
-var
-  Versions: Array of String;
-  I: Integer;
+function InitializeSetup: Boolean;
 begin
-  Result := False;
+  // add the dependencies you need
+  Dependency_AddDotNet90Desktop;
+  // ...
 
-  if RegGetSubkeyNames(HKLM64,
-    'SOFTWARE\dotnet\Setup\InstalledVersions\x64\sharedfx\Microsoft.WindowsDesktop.App',
-    Versions) then
-  begin
-    for I := 0 to GetArrayLength(Versions) - 1 do
-    begin
-      if Pos('9.', Versions[I]) = 1 then
-      begin
-        Result := True;
-        Exit;
-      end;
-    end;
-  end;
-end;
-
-function InitializeSetup(): Boolean;
-var
-  ErrorCode: Integer;
-begin
-  if not IsDotNet9Installed() then
-  begin
-    MsgBox('Photobox requires the .NET 9 Desktop Runtime (x64). Please install it before running the application.',
-           mbError, MB_OK);
-
-    { Open Microsoft download page for .NET 9 runtime }
-    ShellExec('', 'https://dotnet.microsoft.com/en-us/download/dotnet/9.0/runtime',
-              '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
-
-    Result := False; { Abort setup }
-  end
-  else
-    Result := True;
+  Result := True;
 end;
