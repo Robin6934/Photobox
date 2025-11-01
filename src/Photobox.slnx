@@ -13,6 +13,5 @@
   <Project Path="Photobox.UI.Lib.Test\Photobox.UI.Lib.Test.csproj" />
   <Project Path="Photobox.UI.Lib\Photobox.UI.Lib.csproj" />
   <Project Path="Photobox.UI\Photobox.UI.csproj" />
-  <Project Path="Photobox.Web\Photobox.Web.Client\Photobox.Web.Client.csproj" Type="Classic C#" />
   <Project Path="Photobox.Web\Photobox.Web\Photobox.Web.csproj" Type="Classic C#" />
 </Solution>
