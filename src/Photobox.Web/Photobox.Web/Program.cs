@@ -236,8 +236,7 @@ app.UseStaticFiles();
 
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
-    .AddInteractiveServerRenderMode()
-    .AddAdditionalAssemblies(typeof(Photobox.Web.Client._Imports).Assembly);
+    .AddInteractiveServerRenderMode();
 
 app.MapGroup("api").MapIdentityApi<ApplicationUser>();
 

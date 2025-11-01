@@ -66,7 +66,6 @@
     <PackageReference Include="Scalar.AspNetCore" />
     <PackageReference Include="SixLabors.ImageSharp.Web" />
     <ProjectReference Include="..\..\Photobox.Lib\Photobox.Lib.csproj" />
-    <ProjectReference Include="..\Photobox.Web.Client\Photobox.Web.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
