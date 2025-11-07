@@ -88,7 +88,7 @@ public class AwsStorageService(IAmazonS3 amazonS3) : IStorageService
 
     public Task<string> GetPreSignedUrl(string name, TimeSpan validFor)
     {
-        var request = new GetPreSignedUrlRequest()
+        var request = new GetPreSignedUrlRequest
         {
             BucketName = Aws.Aws.BucketName,
             Expires = DateTime.Now.Add(validFor),

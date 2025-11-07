@@ -132,4 +132,12 @@ public class ImageService(
     {
         return dbContext.Images.Where(x => x.EventId == @event.Id).ToListAsync();
     }
+
+    public Task<List<string>> GetImageNamesFromEventAsync(Event @event)
+    {
+        return dbContext
+            .Images.Where(x => x.EventId == @event.Id)
+            .Select(image => image.ImageName)
+            .ToListAsync();
+    }
 }

@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Photobox.Web.Responses;
+using Photobox.Web.Dtos.Responses;
 
 namespace Photobox.Web.Mapping;
 

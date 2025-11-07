@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Photobox.Lib;
 using Photobox.Lib.Extensions;
 using Photobox.Web.Database;
-using Photobox.Web.Responses;
+using Photobox.Web.Dtos.Responses;
 using Photobox.Web.Services;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;

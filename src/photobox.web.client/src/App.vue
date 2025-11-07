@@ -1,24 +1,54 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-import ImageGallery from './components/ImageGallery.vue'
+import { ref } from "vue";
+import SidebarMenu from "@/components/SidebarMenu.vue";
+const drawer = ref(true)
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <v-app>
+    <!-- Top App Bar -->
+    <v-app-bar app color="primary" dark>
+      <v-app-bar-nav-icon @click="drawer = !drawer" :icon="drawer ? 'mdi-close' : 'mdi-menu'"/>
+      <v-app-bar-title>Photobox.Web</v-app-bar-title>
+    </v-app-bar>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
+    <!-- Left Sidebar -->
+    <v-navigation-drawer app v-model="drawer" width="240">
+      <v-list nav>
+        <v-list-item
+          title="Gallery"
+          to="/gallery?code=067548"
+          link
+        />
+        <v-list-item
+          title="Register"
+          to="/account/register"
+          link
+        />
+        <v-list-item
+          title="Login"
+          to="/account/login"
+          link
+        />
+      </v-list>
+    </v-navigation-drawer>
 
-  <main>
-    <ImageGallery />
-  </main>
+
+    <!-- Main content -->
+    <v-main>
+      <v-container fluid width="100vw">
+        <router-view/>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <style scoped>
+html, body, #app {
+  height: 100%;
+  margin: 0;
+}
+
 header {
   line-height: 1.5;
 }
