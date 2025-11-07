@@ -1,4 +1,4 @@
-﻿namespace Photobox.Web.Requests;
+﻿namespace Photobox.Web.Dtos.Requests;
 
 public record CreateEventRequest
 {

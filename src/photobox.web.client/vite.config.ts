@@ -1,11 +1,17 @@
 import { defineConfig } from 'vite';
-import plugin from '@vitejs/plugin-vue';
+import vue from '@vitejs/plugin-vue';
+import path from "node:path";
+import vuetify from 'vite-plugin-vuetify';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [plugin()],
-    server: {
-        port: 60005,
+  plugins: [
+    vue(),
+    // @ts-expect-error: vuetify plugin types not fully resolved in Vite config
+    vuetify({autoImport: true}),
+  ],
+  server: {
+      port: 60005,
       proxy: {
         // Proxy all API requests starting with /api to the backend
         '/api': {
@@ -14,5 +20,10 @@ export default defineConfig({
           secure: false, // allow self-signed certs if using local HTTPS
         },
       }
-    }
+    },
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src'), // <-- this makes '@' point to /src
+      },
+    },
 })

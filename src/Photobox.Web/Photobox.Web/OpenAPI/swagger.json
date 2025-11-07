@@ -2,7 +2,7 @@
   "x-generator": "NSwag v14.6.1.0 (NJsonSchema v11.5.1.0 (Newtonsoft.Json v13.0.0.0))",
   "openapi": "3.0.0",
   "info": {
-    "title": "My Title",
+    "title": "Photobox API",
     "version": "1.0.0"
   },
   "paths": {
@@ -586,6 +586,46 @@
             "bearer": []
           }
         ]
+      }
+    },
+    "/api/Gallery/GetImagesFromGalleryCode": {
+      "get": {
+        "tags": [
+          "Gallery"
+        ],
+        "operationId": "Gallery_GetImagesFromGalleryCode",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageDownloadListResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/Image/UploadImage": {
@@ -2501,6 +2541,30 @@
           }
         }
       },
+      "ImageDownloadListResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImageDownloadDto"
+            }
+          }
+        }
+      },
+      "ImageDownloadDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "originalImageUrl": {
+            "type": "string"
+          },
+          "downscaledImageUrl": {
+            "type": "string"
+          }
+        }
+      },
       "ImageUploadResponse": {
         "type": "object",
         "additionalProperties": false,
@@ -2546,10 +2610,10 @@
     },
     "securitySchemes": {
       "bearer": {
-        "type": "apiKey",
-        "description": "Bearer token authorization header",
-        "name": "Authorization",
-        "in": "header"
+        "type": "http",
+        "description": "Enter 'Bearer {token}' to authenticate",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

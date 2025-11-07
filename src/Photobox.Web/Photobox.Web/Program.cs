@@ -34,17 +34,21 @@ builder
 
 builder.Services.AddOpenApiDocument(doc =>
 {
+    doc.Title = "Photobox API";
+
+    // Add a JWT Bearer security scheme
     doc.AddSecurity(
         "bearer",
         new OpenApiSecurityScheme
         {
-            Type = OpenApiSecuritySchemeType.ApiKey,
-            Name = "Authorization",
-            In = OpenApiSecurityApiKeyLocation.Header,
-            Description = "Bearer token authorization header",
+            Type = OpenApiSecuritySchemeType.Http, // Use Http type for Bearer tokens
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            Description = "Enter 'Bearer {token}' to authenticate",
         }
     );
 
+    // Apply the security scheme to all operations automatically
     doc.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("bearer"));
 });
 
