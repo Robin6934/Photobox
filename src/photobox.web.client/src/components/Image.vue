@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="d-flex flex-column mb-3">
     <v-img
-      :src="imageUrl"
+      :src="previewUrl"
       alt="Description"
       class="rounded"
       max-width="100%"
@@ -14,7 +14,7 @@
       variant="flat"
       size="large"
       prepend-icon="mdi-download"
-      :href="presignedUrl"
+      :href="downloadUrl"
     >
       Download
     </v-btn>
@@ -22,26 +22,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { ImageClient } from "../OpenApi/Client.ts";
 import { VImg, VBtn } from 'vuetify/components'
 
-const props = defineProps<{
-  imageName: string
-  presignedUrl: string
+defineProps<{
+  previewUrl: string
+  downloadUrl: string
 }>()
-
-const imageUrl = ref<string>('')
-
-const client = new ImageClient()
-
-onMounted(async () => {
-  try {
-    imageUrl.value = await client.getPreviewImagePreSignedUrl(props.imageName)
-  } catch (err) {
-    console.error('Failed to fetch preview image URL:', err)
-  }
-})
 </script>
 
 <style scoped>

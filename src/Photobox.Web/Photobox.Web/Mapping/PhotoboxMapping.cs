@@ -1,6 +1,6 @@
-﻿using Photobox.Web.Models;
-using Photobox.Web.Requests;
-using Photobox.Web.Responses;
+﻿using Photobox.Web.Dtos.Requests;
+using Photobox.Web.Dtos.Responses;
+using Photobox.Web.Models;
 
 namespace Photobox.Web.Mapping;
 

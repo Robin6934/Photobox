@@ -1,4 +1,4 @@
-﻿namespace Photobox.Web.Responses;
+﻿namespace Photobox.Web.Dtos.Responses;
 
 public record GalleryCodeResponse
 {

@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Photobox.Lib;
 using Photobox.Web.Database;
+using Photobox.Web.Dtos.Requests;
+using Photobox.Web.Dtos.Responses;
 using Photobox.Web.Mapping;
 using Photobox.Web.Models;
-using Photobox.Web.Requests;
-using Photobox.Web.Responses;
 using Photobox.Web.Services;
 
 namespace Photobox.Web.Controllers;

@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Photobox.Lib;
 using Photobox.Web.Database;
+using Photobox.Web.Dtos.Responses;
 using Photobox.Web.Models;
-using Photobox.Web.Responses;
 using Photobox.Web.Services;
 
 namespace Photobox.Web.Controllers;
