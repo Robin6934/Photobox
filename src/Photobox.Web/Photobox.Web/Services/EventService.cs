@@ -49,6 +49,24 @@ public class EventService(AppDbContext dbContext)
         return dbContext.Events.AnyAsync(x => x.EventCode == eventCode, cancellationToken);
     }
 
+    public async Task CreateNewEvent(ApplicationUser user, PhotoBox photobox)
+    {
+        var @event = new Event
+        {
+            Id = Guid.CreateVersion7(),
+            Name = $"DefaultEvent_{photobox.Name}",
+            ApplicationUser = user,
+            EndDate = DateTime.MaxValue,
+            StartDate = DateTime.UtcNow,
+            EventCode = await GenerateUniqueEventCodeAsync(),
+            UsedPhotoBox = photobox,
+            IsActive = true,
+        };
+
+        dbContext.Events.Add(@event);
+        await dbContext.SaveChangesAsync();
+    }
+
     public async Task<string> GenerateUniqueEventCodeAsync()
     {
         string code;
