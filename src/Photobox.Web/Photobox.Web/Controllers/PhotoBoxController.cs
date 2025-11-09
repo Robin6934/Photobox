@@ -19,7 +19,8 @@ namespace Photobox.Web.Controllers;
 public class PhotoBoxController(
     ILogger<PhotoBoxController> logger,
     PhotoBoxService photoBoxService,
-    AppDbContext dbContext
+    AppDbContext dbContext,
+    EventService eventService
 ) : Controller
 {
     /// <summary>
@@ -63,6 +64,8 @@ public class PhotoBoxController(
         var photobox = request.MapToPhotobox(user, hardwareId);
 
         await photoBoxService.CreateAsync(photobox, cancellationToken);
+
+        await eventService.CreateNewEvent(user, photobox);
 
         logger.LogInformation(
             "Photobox with hardware id: {PhotoBoxId} created.",
