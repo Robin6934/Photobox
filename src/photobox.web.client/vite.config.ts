@@ -7,7 +7,6 @@ import vuetify from 'vite-plugin-vuetify';
 export default defineConfig({
   plugins: [
     vue(),
-    // @ts-expect-error: vuetify plugin types not fully resolved in Vite config
     vuetify({autoImport: true}),
   ],
   server: {

@@ -17,17 +17,22 @@ const drawer = ref(true)
       <v-list nav>
         <v-list-item
           title="Gallery"
-          to="/gallery?code=067548"
+          :to="{ name: 'gallery' , params: { code: '048349' } }"
           link
         />
         <v-list-item
           title="Register"
-          to="/account/register"
+          :to="{ name: 'register' }"
           link
         />
         <v-list-item
           title="Login"
-          to="/account/login"
+          :to="{ name: 'login' }"
+          link
+        />
+        <v-list-item
+          title="Authenthicated"
+          :to="{ name: 'loggedin' }"
           link
         />
       </v-list>

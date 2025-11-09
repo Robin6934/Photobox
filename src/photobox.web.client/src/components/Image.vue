@@ -4,7 +4,6 @@
       :src="previewUrl"
       alt="Description"
       class="rounded"
-      max-width="100%"
       cover
     ></v-img>
 

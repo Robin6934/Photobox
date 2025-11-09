@@ -104,7 +104,7 @@ const loginUser = async () => {
           <v-row class="mt-4">
             <v-col cols="12">
               <router-link to="/account/forgot-password">Forgot your password?</router-link><br>
-              <router-link :to="{ path: '/account/register', query: { returnUrl } }">Register as a new user</router-link><br>
+              <router-link :to="{ name: 'register' }">Register as a new user</router-link><br>
               <router-link to="/account/resend-email-confirmation">Resend email confirmation</router-link>
             </v-col>
           </v-row>

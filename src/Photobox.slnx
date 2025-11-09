@@ -8,6 +8,7 @@
   <Project Path="EDSKLib\EDSKLib.csproj">
     <Configuration Solution="Release|Any CPU" Project="Debug|Any CPU" />
   </Project>
+  <Project Path="Photobow.Web.Uploader\Photobow.Web.Uploader.csproj" Type="Classic C#" />
   <Project Path="Photobox.Lib.Test\Photobox.Lib.Test.csproj" Type="Classic C#" />
   <Project Path="Photobox.Lib\Photobox.Lib.csproj" Type="Classic C#" />
   <Project Path="Photobox.UI.Lib.Test\Photobox.UI.Lib.Test.csproj" />

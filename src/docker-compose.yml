@@ -16,7 +16,7 @@ services:
       - 443:8081
 
   postgres:
-    image: postgres:latest
+    image: postgres:17.0
     restart: always
     ports:
       - "5432:5432"
@@ -60,6 +60,7 @@ services:
 
 volumes:
   local_pgdata:
+    external: true
 #  pgadmin-data:
 
   # loki:
