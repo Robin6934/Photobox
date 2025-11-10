@@ -105,7 +105,7 @@ public class ImageService(
         TimeSpan validFor = default
     )
     {
-        if (validFor == default)
+        if (validFor == TimeSpan.Zero)
         {
             validFor = TimeSpan.FromMinutes(30);
         }
