@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Photobox.Lib;
 using Photobox.Web.Database;
 using Photobox.Web.Dtos.Responses;
+using Photobox.Web.Mapping;
 using Photobox.Web.Models;
 using Photobox.Web.Services;
 
@@ -13,7 +14,12 @@ namespace Photobox.Web.Controllers;
 [ApiController]
 [Route("api/[controller]/[action]")]
 [Authorize(AuthenticationSchemes = "Identity.Bearer")]
-public class EventController(AppDbContext dbContext, ImageService imageService) : Controller
+public class EventController(
+    AppDbContext dbContext,
+    ImageService imageService,
+    PhotoBoxService photoBoxService,
+    EventService eventService
+) : Controller
 {
     [ProducesResponseType<GalleryCodeResponse>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
@@ -23,22 +29,35 @@ public class EventController(AppDbContext dbContext, ImageService imageService) 
         CancellationToken cancellationToken
     )
     {
-        var photobox = await dbContext.PhotoBoxes.FirstOrDefaultAsync(
-            e => e.HardwareId == photoBoxId,
-            cancellationToken
-        );
+        var photobox = await photoBoxService.GetFromHardwareIdAsync(photoBoxId, cancellationToken);
 
         if (photobox is null)
         {
-            return NotFound();
+            return NotFound(
+                new ProblemDetails
+                {
+                    Status = StatusCodes.Status404NotFound,
+                    Title = "Photobox not found",
+                    Detail = "No photobox found with the submitted hardware ID.",
+                }
+            );
         }
 
-        var @event = await dbContext.Events.FirstOrDefaultAsync(
-            x => x.UsedPhotoBoxId == photobox.Id && x.IsActive,
-            cancellationToken
-        );
+        var @event = await eventService.GetEventFromPhotbox(photobox, cancellationToken);
 
-        return Ok(new GalleryCodeResponse { Code = @event.EventCode });
+        if (@event is null)
+        {
+            return NotFound(
+                new ProblemDetails
+                {
+                    Status = StatusCodes.Status404NotFound,
+                    Title = "Event not found",
+                    Detail = "No event is associated with the submitted photobox ID.",
+                }
+            );
+        }
+
+        return Ok(@event.MapToGallerCodeResponse());
     }
 
     [HttpPost]
