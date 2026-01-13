@@ -63,7 +63,7 @@ namespace EOSDigital.API
         /// Creates a new instance of the <see cref="DownloadInfo"/> class
         /// </summary>
         /// <param name="inRef">Pointer to the downloadable object</param>
-        internal protected DownloadInfo(IntPtr inRef)
+        protected internal DownloadInfo(IntPtr inRef)
         {
             if (inRef == IntPtr.Zero)
                 throw new ArgumentNullException(nameof(inRef));
@@ -121,7 +121,7 @@ namespace EOSDigital.API
         /// <summary>
         /// States if the entry is disposed or not
         /// </summary>
-        internal protected bool IsDisposed;
+        protected internal bool IsDisposed;
 
         /// <summary>
         /// Creates a new instance of the <see cref="CameraFileEntry"/> class
@@ -130,7 +130,7 @@ namespace EOSDigital.API
         /// <param name="Name"></param>
         /// <param name="IsFolder"></param>
         /// <param name="IsVolume"></param>
-        internal protected CameraFileEntry(IntPtr Ref, string Name, bool IsFolder, bool IsVolume)
+        protected internal CameraFileEntry(IntPtr Ref, string Name, bool IsFolder, bool IsVolume)
         {
             this.Ref = Ref;
             this.Name = Name;
@@ -199,7 +199,7 @@ namespace EOSDigital.API
         /// Set the thumbnail from a stream. The thumbnail depends on the image class you want to use.
         /// </summary>
         /// <param name="stream">The image stream</param>
-        internal protected virtual void SetThumb(IntPtr stream)
+        protected internal virtual void SetThumb(IntPtr stream)
         {
             SetThumbSub(stream);
         }
