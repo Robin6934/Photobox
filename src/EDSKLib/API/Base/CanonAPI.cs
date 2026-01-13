@@ -68,7 +68,7 @@ namespace EOSDigital.API
         /// <summary>
         /// List of currently connected cameras (since the last time GetCameraList got called)
         /// </summary>
-        private readonly static List<Camera> CurrentCameras = [];
+        private static readonly List<Camera> CurrentCameras = [];
 
         /// <summary>
         /// Object to lock on to safely add/remove cameras from the <see cref="CurrentCameras"/> list

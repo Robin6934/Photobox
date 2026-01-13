@@ -5,7 +5,7 @@ namespace Photobox.Web.Mapping;
 
 public static class EventMapping
 {
-    public static GalleryCodeResponse MapToGallerCodeResponse(this Event @event)
+    public static GalleryCodeResponse MapToGalleryCodeResponse(this Event @event)
     {
         return new GalleryCodeResponse { Code = @event.EventCode };
     }

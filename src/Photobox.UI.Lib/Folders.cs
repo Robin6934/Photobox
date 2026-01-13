@@ -11,13 +11,11 @@ public static class Folders
     }
 
     public static string PhotoboxBaseDir =>
-        Path.Combine(
-            [
-                Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
-                "Pictures",
-                "Photobox",
-            ]
-        );
+        Path.Combine([
+            Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
+            "Pictures",
+            "Photobox",
+        ]);
 
     public static string Deleted => "Deleted";
 
