@@ -1,11 +1,8 @@
 using System.Collections;
-using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
 using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
