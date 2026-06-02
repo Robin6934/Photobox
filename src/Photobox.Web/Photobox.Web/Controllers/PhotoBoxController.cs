@@ -82,6 +82,35 @@ public class PhotoBoxController(
     }
 
     /// <summary>
+    /// Returns all photoboxes registered to the authenticated user.
+    /// </summary>
+    [HttpGet]
+    [ProducesResponseType<IEnumerable<PhotoBoxResponse>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetMyPhotoBoxes(CancellationToken cancellationToken)
+    {
+        var userId = Guid.Parse(User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
+        var photoBoxes = await dbContext
+            .PhotoBoxes.Where(p => p.ApplicationUserId == userId)
+            .ToListAsync(cancellationToken);
+
+        var activeEvents = await dbContext
+            .Events.Where(e => e.ApplicationUserId == userId && e.IsActive)
+            .ToListAsync(cancellationToken);
+
+        var response = photoBoxes.Select(p =>
+        {
+            var dto = p.MapToPhotoBoxResponse();
+            var currentEvent = activeEvents.FirstOrDefault(e => e.UsedPhotoBoxId == p.Id);
+            dto.CurrentEventCode = currentEvent?.EventCode;
+            dto.CurrentEventName = currentEvent?.Name;
+            return dto;
+        });
+
+        return Ok(response);
+    }
+
+    /// <summary>
     /// Checks if a photobox with the specified ID exists in the database.
     /// </summary>
     /// <param name="hardwareId">The ID of the photobox to check.</param>
