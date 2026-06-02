@@ -18,6 +18,11 @@ export default defineConfig({
           changeOrigin: true,
           secure: false, // allow self-signed certs if using local HTTPS
         },
+        '/users': {
+          target: 'https://localhost',
+          changeOrigin: true,
+          secure: false,
+        },
       }
     },
     resolve: {

@@ -1,7 +1,8 @@
 ﻿<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import {ApiException, Client, LoginRequest} from '@/OpenApi/Client'
+import {ApiException} from '@/OpenApi/Client'
+import { useAuth } from '@/services/auth'
 
 // Form model
 const input = ref({
@@ -10,14 +11,13 @@ const input = ref({
   rememberMe: false,
 })
 
-const client = new Client();
-
 // Error message
 const errorMessage = ref<string | null>(null)
 
 // Router for navigation
 const router = useRouter()
 const route = useRoute()
+const { login } = useAuth()
 
 // Optional returnUrl from query
 const returnUrl = route.query.returnUrl as string || '/'
@@ -26,18 +26,7 @@ const returnUrl = route.query.returnUrl as string || '/'
 const loginUser = async () => {
   errorMessage.value = null
   try {
-    const request = new LoginRequest({
-      email: input.value.email,
-      password: input.value.password
-    })
-
-    // Call your backend API login endpoint
-    const response = await client.postApiLogin(false, false, request);
-
-    localStorage.setItem('AccessToken', response.accessToken ?? '');
-    localStorage.setItem('RefreshToken', response.refreshToken ?? '');
-
-    // If successful, redirect
+    await login(input.value.email, input.value.password, input.value.rememberMe)
     await router.push(returnUrl)
   } catch (err) {
     if (err instanceof ApiException) {
@@ -88,11 +77,10 @@ const loginUser = async () => {
               autocomplete="current-password"
             />
 
-            <!-- Remember me -->
-            <!-- <v-checkbox
+            <v-checkbox
               v-model="input.rememberMe"
               label="Remember me"
-            /> -->
+            />
 
             <!-- Submit button -->
             <v-btn type="submit" color="primary" class="mt-4" block>
@@ -100,12 +88,9 @@ const loginUser = async () => {
             </v-btn>
           </v-form>
 
-          <!-- Links -->
           <v-row class="mt-4">
             <v-col cols="12">
-              <router-link to="/account/forgot-password">Forgot your password?</router-link><br>
-              <router-link :to="{ name: 'register' }">Register as a new user</router-link><br>
-              <router-link to="/account/resend-email-confirmation">Resend email confirmation</router-link>
+              <router-link :to="{ name: 'register' }">Register as a new user</router-link>
             </v-col>
           </v-row>
         </v-card>
@@ -115,5 +100,4 @@ const loginUser = async () => {
 </template>
 
 <style scoped>
-/* Optional spacing tweaks */
 </style>
