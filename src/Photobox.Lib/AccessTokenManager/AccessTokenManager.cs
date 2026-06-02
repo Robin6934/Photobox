@@ -88,7 +88,7 @@ public class AccessTokenManager(IClient photoBoxClient) : IAccessTokenManager
         AccessTokenResponse loginResponse;
         try
         {
-            loginResponse = await photoBoxClient.PostApiLoginAsync(loginRequest, false, false);
+            loginResponse = await photoBoxClient.PostApiLoginAsync(loginRequest);
         }
         catch (ApiException e) when (e.StatusCode == (int)HttpStatusCode.Unauthorized)
         {

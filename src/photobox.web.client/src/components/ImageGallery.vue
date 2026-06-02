@@ -1,35 +1,38 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue'
-import { GalleryClient, type ImageDownloadListResponse } from '../OpenApi/Client.ts'
-import Image from "../components/Image.vue"
+import type { ImageDownloadListResponse } from '@/OpenApi/Client'
+import { galleryClient } from '@/services/api'
+import Image from '@/components/Image.vue'
 import { useRoute } from 'vue-router'
 
-const client = new GalleryClient()
 const route = useRoute()
-
 const code = ref(route.params.code as string)
 const images = ref<ImageDownloadListResponse | null>(null)
+const loading = ref(false)
+const error = ref<string | null>(null)
 
 const page = ref(1)
 const pageSize = 20
 
-// Load gallery images
 const loadGallery = async (galleryCode: string) => {
+  loading.value = true
+  error.value = null
   try {
-    images.value = await client.getImagesFromGalleryCode(galleryCode)
-  } catch (err) {
-    console.error('Failed to load gallery:', err)
+    images.value = await galleryClient.getImagesFromGalleryCode(galleryCode)
+  } catch {
+    error.value = 'Failed to load gallery. Check that the code is correct.'
+  } finally {
+    loading.value = false
   }
 }
 
 onMounted(() => loadGallery(code.value))
 
-// Watch for route changes (if user navigates to another code without full reload)
 watch(
   () => route.params.code,
   (newCode) => {
     code.value = newCode as string
-    page.value = 1 // reset pagination
+    page.value = 1
     loadGallery(code.value)
   }
 )
@@ -46,20 +49,43 @@ const paginatedItems = computed(() => {
 </script>
 
 <template>
-  <div v-if="!images">Loading...</div>
-  <div v-else>
-    <div>
-      <Image
-        v-for="item in paginatedItems"
-        :key="item.originalImageUrl"
-        :preview-url="item.downscaledImageUrl ?? ''"
-        :download-url="item.originalImageUrl ?? '#'"/>
+  <div>
+    <div v-if="loading" class="gallery-grid">
+      <v-skeleton-loader v-for="n in 6" :key="n" type="image" class="rounded" />
     </div>
 
-    <v-pagination
-      v-model="page"
-      :length="totalPages"
-      class="mt-4"
-    />
+    <v-alert v-else-if="error" type="error" class="mb-4">
+      {{ error }}
+    </v-alert>
+
+    <template v-else-if="images">
+      <p class="text-body-2 text-medium-emphasis mb-4">
+        {{ images.images?.length ?? 0 }} photos
+      </p>
+
+      <div class="gallery-grid">
+        <Image
+          v-for="item in paginatedItems"
+          :key="item.originalImageUrl"
+          :preview-url="item.downscaledImageUrl ?? ''"
+          :download-url="item.originalImageUrl ?? '#'"
+        />
+      </div>
+
+      <v-pagination
+        v-if="totalPages > 1"
+        v-model="page"
+        :length="totalPages"
+        class="mt-4"
+      />
+    </template>
   </div>
 </template>
+
+<style scoped>
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+</style>

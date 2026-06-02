@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Text.Json.Serialization;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
@@ -72,10 +73,16 @@ builder
         IdentityConstants.ApplicationScheme,
         options =>
         {
+            options.Cookie.HttpOnly = true;
+            options.Cookie.SameSite = SameSiteMode.Lax;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
             options.LoginPath = "/account/login"; // for Razor Pages
             options.Events.OnRedirectToLogin = context =>
             {
-                if (context.Request.Path.StartsWithSegments("/api"))
+                if (
+                    context.Request.Path.StartsWithSegments("/api")
+                    || context.Request.Path.StartsWithSegments("/users")
+                )
                 {
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     return Task.CompletedTask;
@@ -86,7 +93,10 @@ builder
 
             options.Events.OnRedirectToAccessDenied = context =>
             {
-                if (context.Request.Path.StartsWithSegments("/api"))
+                if (
+                    context.Request.Path.StartsWithSegments("/api")
+                    || context.Request.Path.StartsWithSegments("/users")
+                )
                 {
                     context.Response.StatusCode = StatusCodes.Status403Forbidden;
                     return Task.CompletedTask;
@@ -192,12 +202,19 @@ app.MapGet(
         "users/me",
         async (ClaimsPrincipal claims, AppDbContext context) =>
         {
-            string userId = claims.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            Guid userId = Guid.Parse(
+                claims.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value
+            );
 
             return await context.Users.FindAsync(userId);
         }
     )
-    .RequireAuthorization();
+    .RequireAuthorization(policy =>
+        policy.AddAuthenticationSchemes(IdentityConstants.BearerScheme).RequireAuthenticatedUser()
+    );
+
+// Bearer tokens are client-side cleared; no server-side revocation needed
+app.MapPost("/api/logout", () => Results.Ok());
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

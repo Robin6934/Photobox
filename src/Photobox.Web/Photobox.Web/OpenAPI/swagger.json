@@ -28,6 +28,16 @@
         ]
       }
     },
+    "/api/logout": {
+      "post": {
+        "operationId": "PostApiLogout",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/register": {
       "post": {
         "operationId": "PostApiRegister",
@@ -521,7 +531,6 @@
         "tags": [
           "Event"
         ],
-        "summary": "",
         "operationId": "Event_GetGalleryCode",
         "parameters": [
           {
@@ -893,6 +902,35 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/RegisterPhotoBoxResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/PhotoBox/GetMyPhotoBoxes": {
+      "get": {
+        "tags": [
+          "PhotoBox"
+        ],
+        "summary": "Returns all photoboxes registered to the authenticated user.",
+        "operationId": "PhotoBox_GetMyPhotoBoxes",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PhotoBoxResponse"
+                  }
                 }
               }
             }
@@ -2560,6 +2598,30 @@
         "properties": {
           "photoBoxName": {
             "type": "string"
+          }
+        }
+      },
+      "PhotoBoxResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "hardwareId": {
+            "type": "string"
+          },
+          "currentEventCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "currentEventName": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

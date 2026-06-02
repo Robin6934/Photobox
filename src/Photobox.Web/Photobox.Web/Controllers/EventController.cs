@@ -57,7 +57,7 @@ public class EventController(
             );
         }
 
-        return Ok(@event.MapToGallerCodeResponse());
+        return Ok(@event.MapToGalleryCodeResponse());
     }
 
     [HttpPost]

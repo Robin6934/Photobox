@@ -1,7 +1,8 @@
 ﻿<script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import {ApiException, Client, RegisterRequest} from '@/OpenApi/Client'
+import { useRouter } from 'vue-router'
+import {ApiException, RegisterRequest} from '@/OpenApi/Client'
+import { apiClient } from '@/services/api'
 
 // Form model
 const input = ref({
@@ -9,8 +10,6 @@ const input = ref({
   password: '',
   confirmPassword: '',
 })
-
-const client = new Client();
 
 // Error message
 const errorMessage = ref<string | null>(null)
@@ -33,10 +32,7 @@ const registerUser = async () => {
       password: input.value.password
     })
 
-    // Call your backend API login endpoint
-    const response = await client.postApiRegister(request);
-
-    // If successful, redirect
+    await apiClient.postApiRegister(request);
     await router.push({name: 'login'})
   } catch (err) {
     if (err instanceof ApiException) {

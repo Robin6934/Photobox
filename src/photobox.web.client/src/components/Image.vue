@@ -1,12 +1,11 @@
-﻿<template>
-  <div class="d-flex flex-column mb-3">
+<template>
+  <div class="d-flex flex-column">
     <v-img
       :src="previewUrl"
-      alt="Description"
-      class="rounded"
+      :aspect-ratio="4 / 3"
       cover
-    ></v-img>
-
+      class="rounded"
+    />
     <v-btn
       class="rounded-0 mt-2"
       color="info"
@@ -14,6 +13,7 @@
       size="large"
       prepend-icon="mdi-download"
       :href="downloadUrl"
+      target="_blank"
     >
       Download
     </v-btn>
@@ -21,16 +21,8 @@
 </template>
 
 <script setup lang="ts">
-import { VImg, VBtn } from 'vuetify/components'
-
 defineProps<{
   previewUrl: string
   downloadUrl: string
 }>()
 </script>
-
-<style scoped>
-.rounded {
-  border-radius: 0.25rem;
-}
-</style>

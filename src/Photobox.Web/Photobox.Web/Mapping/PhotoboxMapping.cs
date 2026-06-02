@@ -29,4 +29,14 @@ public static class PhotoboxMapping
             PhotoBoxName = photobox.Name,
         };
     }
+
+    public static PhotoBoxResponse MapToPhotoBoxResponse(this PhotoBox photobox)
+    {
+        return new PhotoBoxResponse
+        {
+            Id = photobox.Id,
+            Name = photobox.Name,
+            HardwareId = photobox.HardwareId,
+        };
+    }
 }
