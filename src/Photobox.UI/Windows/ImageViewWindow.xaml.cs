@@ -1,13 +1,13 @@
-﻿using Photobox.Lib;
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using Photobox.Lib;
 using Photobox.Lib.Helper;
 using Photobox.UI.ImageViewer;
 using Photobox.WpfHelpers;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace Photobox.UI.Windows;
 

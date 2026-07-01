@@ -1,8 +1,8 @@
-﻿using DeviceId;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography;
+using DeviceId;
 using MethodTimer;
 using Photobox.Lib.RestApi;
-using System.Diagnostics.CodeAnalysis;
-using System.Security.Cryptography;
 
 namespace Photobox.Lib.Helper;
 

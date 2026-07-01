@@ -1,4 +1,6 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using System.IO;
+using System.Windows;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -18,8 +20,6 @@ using QRCoder.Xaml;
 using Serilog;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System.IO;
-using System.Windows;
 using Exception = System.Exception;
 
 namespace Photobox.UI.Windows;
@@ -77,8 +77,7 @@ public partial class MainWindow : Window, IHostedService
 
         countDown.Panel = GridLiveView;
 
-        countDown.CountDownEarly += (s) =>
-        {
+        countDown.CountDownEarly += (s) => {
             //camera.Focus();
         };
 

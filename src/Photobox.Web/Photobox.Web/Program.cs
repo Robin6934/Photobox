@@ -1,3 +1,8 @@
+using System.Collections;
+using System.Net.NetworkInformation;
+using System.Reflection;
+using System.Security.Claims;
+using System.Text.Json.Serialization;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -17,11 +22,6 @@ using Photobox.Web.Models;
 using Scalar.AspNetCore;
 using Serilog;
 using SixLabors.ImageSharp.Web.DependencyInjection;
-using System.Collections;
-using System.Net.NetworkInformation;
-using System.Reflection;
-using System.Security.Claims;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
