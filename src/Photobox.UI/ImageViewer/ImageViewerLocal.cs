@@ -1,5 +1,4 @@
-﻿using System.Windows.Media;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Photobox.Lib.PhotoboxSettingsManager;
 using Photobox.Lib.RestApi;
@@ -10,6 +9,7 @@ using QRCoder;
 using QRCoder.Xaml;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using System.Windows.Media;
 
 namespace Photobox.UI.ImageViewer;
 

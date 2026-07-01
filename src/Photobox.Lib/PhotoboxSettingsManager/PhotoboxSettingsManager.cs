@@ -1,6 +1,6 @@
-﻿using System.Net;
-using Photobox.Lib.AccessTokenManager;
+﻿using Photobox.Lib.AccessTokenManager;
 using Photobox.Lib.RestApi;
+using System.Net;
 
 namespace Photobox.Lib.PhotoboxSettingsManager;
 

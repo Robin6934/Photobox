@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
+using System.Windows;
 
 namespace Photobox.UI.Windows;
 
