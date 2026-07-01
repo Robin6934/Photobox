@@ -1,7 +1,7 @@
-﻿using System.Net.Http.Headers;
-using MethodTimer;
+﻿using MethodTimer;
 using Photobox.Lib.AccessTokenManager;
 using Photobox.Lib.Helper;
+using System.Net.Http.Headers;
 
 namespace Photobox.Lib.RestApi;
 

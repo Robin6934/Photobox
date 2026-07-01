@@ -1,9 +1,9 @@
-﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 namespace Photobox.UI.Lib.PowerStatusWatcher;
 
