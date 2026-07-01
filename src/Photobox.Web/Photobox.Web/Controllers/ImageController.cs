@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Photobox.Lib;
 using Photobox.Lib.Extensions;
@@ -8,6 +7,7 @@ using Photobox.Web.Responses;
 using Photobox.Web.Services;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using System.Net;
 
 namespace Photobox.Web.Controllers;
 

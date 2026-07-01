@@ -1,4 +1,3 @@
-using System.IO.Abstractions.TestingHelpers;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -9,6 +8,7 @@ using Photobox.UI.Lib.ImageUploadService;
 using Photobox.UI.Lib.Printer;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using System.IO.Abstractions.TestingHelpers;
 
 namespace Photobox.UI.Lib.Test;
 
