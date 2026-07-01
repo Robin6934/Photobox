@@ -1,11 +1,11 @@
-﻿using System.Drawing;
-using System.IO;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using Microsoft.IO;
+﻿using Microsoft.IO;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.PixelFormats;
+using System.Drawing;
+using System.IO;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Photobox.WpfHelpers;
 

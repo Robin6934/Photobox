@@ -1,7 +1,7 @@
-﻿using System.Net;
-using System.Windows;
-using Photobox.Lib.PhotoboxSettingsManager;
+﻿using Photobox.Lib.PhotoboxSettingsManager;
 using Photobox.Lib.RestApi;
+using System.Net;
+using System.Windows;
 
 namespace Photobox.UI.Windows;
 

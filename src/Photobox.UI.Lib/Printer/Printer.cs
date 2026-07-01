@@ -1,12 +1,12 @@
-﻿using System.Buffers;
-using System.Drawing;
-using System.Drawing.Printing;
-using System.Management;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Photobox.Lib.Extensions;
 using Photobox.UI.Lib.ConfigModels;
 using SixLabors.ImageSharp.PixelFormats;
+using System.Buffers;
+using System.Drawing;
+using System.Drawing.Printing;
+using System.Management;
 
 namespace Photobox.UI.Lib.Printer;
 
