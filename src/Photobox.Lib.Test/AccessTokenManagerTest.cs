@@ -1,9 +1,9 @@
-﻿using System.Net;
-using AdysTech.CredentialManager;
+﻿using AdysTech.CredentialManager;
 using NSubstitute;
 using Photobox.Lib.AccessTokenManager;
 using Photobox.Lib.RestApi;
 using Shouldly;
+using System.Net;
 
 namespace Photobox.Lib.Test;
 
