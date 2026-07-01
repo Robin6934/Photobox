@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using System.Text.Json;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
@@ -6,8 +8,6 @@ using Microsoft.Extensions.Primitives;
 using Photobox.Web.Components.Account.Pages;
 using Photobox.Web.Components.Account.Pages.Manage;
 using Photobox.Web.Models;
-using System.Security.Claims;
-using System.Text.Json;
 
 namespace Photobox.Web.Components.Account;
 

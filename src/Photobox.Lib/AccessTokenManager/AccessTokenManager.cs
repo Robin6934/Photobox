@@ -1,7 +1,7 @@
-﻿using AdysTech.CredentialManager;
-using Photobox.Lib.RestApi;
-using System.Net;
+﻿using System.Net;
 using System.Runtime.Versioning;
+using AdysTech.CredentialManager;
+using Photobox.Lib.RestApi;
 using Exception = System.Exception;
 
 namespace Photobox.Lib.AccessTokenManager;

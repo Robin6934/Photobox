@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Options;
-using Photobox.UI.Lib.ConfigModels;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Microsoft.Extensions.Options;
+using Photobox.UI.Lib.ConfigModels;
 
 namespace Photobox.UI.CountDown
 {

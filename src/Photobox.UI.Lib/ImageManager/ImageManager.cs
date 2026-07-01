@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.IO.Abstractions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IO;
 using Photobox.UI.Lib.ConfigModels;
@@ -6,7 +7,6 @@ using Photobox.UI.Lib.ImageUploadService;
 using Photobox.UI.Lib.Printer;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System.IO.Abstractions;
 
 namespace Photobox.UI.Lib.ImageManager;
 
