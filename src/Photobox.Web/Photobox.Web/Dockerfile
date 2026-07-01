@@ -17,7 +17,7 @@ COPY ["Directory.Packages.props", "/"]
 RUN dotnet restore "./Photobox.Web/Photobox.Web/Photobox.Web.csproj"
 COPY . .
 WORKDIR "/src/Photobox.Web/Photobox.Web"
-RUN dotnet build "./Photobox.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build -p:EnforceCodeStyleInBuild=false
+RUN dotnet build "./Photobox.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build -p:CSharpier_Bypass=true
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
