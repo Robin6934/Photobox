@@ -9,6 +9,7 @@ EXPOSE 8080
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+ENV CSharpier_Bypass=true
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Photobox.Web/Photobox.Web/Photobox.Web.csproj", "Photobox.Web/Photobox.Web/"]
@@ -17,7 +18,7 @@ COPY ["Directory.Packages.props", "/"]
 RUN dotnet restore "./Photobox.Web/Photobox.Web/Photobox.Web.csproj"
 COPY . .
 WORKDIR "/src/Photobox.Web/Photobox.Web"
-RUN dotnet build "./Photobox.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build -p:CSharpier_Bypass=true
+RUN dotnet build "./Photobox.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
