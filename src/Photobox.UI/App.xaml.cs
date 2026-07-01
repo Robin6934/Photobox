@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.IO.Abstractions;
+using System.Net.Http;
+using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -16,9 +19,6 @@ using Photobox.UI.Lib.PowerStatusWatcher;
 using Photobox.UI.Lib.Printer;
 using Photobox.UI.Windows;
 using Serilog;
-using System.IO.Abstractions;
-using System.Net.Http;
-using System.Windows;
 
 namespace Photobox.UI;
 
