@@ -1,9 +1,9 @@
-﻿using System.Collections.Concurrent;
-using Amazon;
+﻿using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using System.Collections.Concurrent;
 
 namespace Photobox.Web.Services;
 
