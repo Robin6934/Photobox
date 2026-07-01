@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +9,7 @@ using Photobox.Web.Models;
 using Photobox.Web.Requests;
 using Photobox.Web.Responses;
 using Photobox.Web.Services;
+using System.Security.Claims;
 
 namespace Photobox.Web.Controllers;
 
