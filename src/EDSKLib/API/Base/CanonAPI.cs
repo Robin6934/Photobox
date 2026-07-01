@@ -1,6 +1,6 @@
-﻿using System.Drawing;
+﻿using EOSDigital.SDK;
+using System.Drawing;
 using System.Drawing.Imaging;
-using EOSDigital.SDK;
 using Size = EOSDigital.SDK.Size;
 
 namespace EOSDigital.API
