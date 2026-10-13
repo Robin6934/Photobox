@@ -34,7 +34,7 @@ export class Client extends BaseClass {
         this.baseUrl = baseUrl ?? "";
     }
 
-    getUsersMe(): Promise<ApplicationUser> {
+    getUsersMe(): Promise<UserMeResponse> {
         let url_ = this.baseUrl + "/users/me";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -52,14 +52,14 @@ export class Client extends BaseClass {
         });
     }
 
-    protected processGetUsersMe(response: Response): Promise<ApplicationUser> {
+    protected processGetUsersMe(response: Response): Promise<UserMeResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ApplicationUser.fromJS(resultData200);
+            result200 = UserMeResponse.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -67,7 +67,7 @@ export class Client extends BaseClass {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<ApplicationUser>(null as any);
+        return Promise.resolve<UserMeResponse>(null as any);
     }
 
     postApiLogout(): Promise<void> {
@@ -746,6 +746,102 @@ export class HealthClient extends BaseClass {
     }
 }
 
+export class AccountClient extends BaseClass {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    downloadPersonalData(): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Account/DownloadPersonalData";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "POST",
+            headers: {
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processDownloadPersonalData(_response);
+        });
+    }
+
+    protected processDownloadPersonalData(response: Response): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
+            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
+            if (fileName) {
+                fileName = decodeURIComponent(fileName);
+            } else {
+                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            }
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(null as any);
+    }
+
+    deleteAccount(request: DeleteAccountRequest): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/Account/DeleteAccount";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(request);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.processDeleteAccount(_response);
+        });
+    }
+
+    protected processDeleteAccount(response: Response): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
+            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
+            if (fileName) {
+                fileName = decodeURIComponent(fileName);
+            } else {
+                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            }
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(null as any);
+    }
+}
+
 export class EventClient extends BaseClass {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
@@ -1353,24 +1449,13 @@ export class PhotoBoxClient extends BaseClass {
     }
 }
 
-export class IdentityUserOfGuid implements IIdentityUserOfGuid {
+export class UserMeResponse implements IUserMeResponse {
     id?: string;
-    userName?: string | undefined;
-    normalizedUserName?: string | undefined;
     email?: string | undefined;
-    normalizedEmail?: string | undefined;
+    userName?: string | undefined;
     emailConfirmed?: boolean;
-    passwordHash?: string | undefined;
-    securityStamp?: string | undefined;
-    concurrencyStamp?: string | undefined;
-    phoneNumber?: string | undefined;
-    phoneNumberConfirmed?: boolean;
-    twoFactorEnabled?: boolean;
-    lockoutEnd?: Date | undefined;
-    lockoutEnabled?: boolean;
-    accessFailedCount?: number;
 
-    constructor(data?: IIdentityUserOfGuid) {
+    constructor(data?: IUserMeResponse) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1382,26 +1467,15 @@ export class IdentityUserOfGuid implements IIdentityUserOfGuid {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.userName = _data["userName"];
-            this.normalizedUserName = _data["normalizedUserName"];
             this.email = _data["email"];
-            this.normalizedEmail = _data["normalizedEmail"];
+            this.userName = _data["userName"];
             this.emailConfirmed = _data["emailConfirmed"];
-            this.passwordHash = _data["passwordHash"];
-            this.securityStamp = _data["securityStamp"];
-            this.concurrencyStamp = _data["concurrencyStamp"];
-            this.phoneNumber = _data["phoneNumber"];
-            this.phoneNumberConfirmed = _data["phoneNumberConfirmed"];
-            this.twoFactorEnabled = _data["twoFactorEnabled"];
-            this.lockoutEnd = _data["lockoutEnd"] ? new Date(_data["lockoutEnd"].toString()) : undefined as any;
-            this.lockoutEnabled = _data["lockoutEnabled"];
-            this.accessFailedCount = _data["accessFailedCount"];
         }
     }
 
-    static fromJS(data: any): IdentityUserOfGuid {
+    static fromJS(data: any): UserMeResponse {
         data = typeof data === 'object' ? data : {};
-        let result = new IdentityUserOfGuid();
+        let result = new UserMeResponse();
         result.init(data);
         return result;
     }
@@ -1409,336 +1483,18 @@ export class IdentityUserOfGuid implements IIdentityUserOfGuid {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["userName"] = this.userName;
-        data["normalizedUserName"] = this.normalizedUserName;
         data["email"] = this.email;
-        data["normalizedEmail"] = this.normalizedEmail;
+        data["userName"] = this.userName;
         data["emailConfirmed"] = this.emailConfirmed;
-        data["passwordHash"] = this.passwordHash;
-        data["securityStamp"] = this.securityStamp;
-        data["concurrencyStamp"] = this.concurrencyStamp;
-        data["phoneNumber"] = this.phoneNumber;
-        data["phoneNumberConfirmed"] = this.phoneNumberConfirmed;
-        data["twoFactorEnabled"] = this.twoFactorEnabled;
-        data["lockoutEnd"] = this.lockoutEnd ? this.lockoutEnd.toISOString() : undefined as any;
-        data["lockoutEnabled"] = this.lockoutEnabled;
-        data["accessFailedCount"] = this.accessFailedCount;
         return data;
     }
 }
 
-export interface IIdentityUserOfGuid {
+export interface IUserMeResponse {
     id?: string;
-    userName?: string | undefined;
-    normalizedUserName?: string | undefined;
     email?: string | undefined;
-    normalizedEmail?: string | undefined;
+    userName?: string | undefined;
     emailConfirmed?: boolean;
-    passwordHash?: string | undefined;
-    securityStamp?: string | undefined;
-    concurrencyStamp?: string | undefined;
-    phoneNumber?: string | undefined;
-    phoneNumberConfirmed?: boolean;
-    twoFactorEnabled?: boolean;
-    lockoutEnd?: Date | undefined;
-    lockoutEnabled?: boolean;
-    accessFailedCount?: number;
-}
-
-export class ApplicationUser extends IdentityUserOfGuid implements IApplicationUser {
-    id?: string;
-    photoBoxes?: PhotoBox[];
-    events?: Event[];
-
-    constructor(data?: IApplicationUser) {
-        super(data);
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.id = _data["id"];
-            if (Array.isArray(_data["photoBoxes"])) {
-                this.photoBoxes = [] as any;
-                for (let item of _data["photoBoxes"])
-                    this.photoBoxes!.push(PhotoBox.fromJS(item));
-            }
-            if (Array.isArray(_data["events"])) {
-                this.events = [] as any;
-                for (let item of _data["events"])
-                    this.events!.push(Event.fromJS(item));
-            }
-        }
-    }
-
-    static override fromJS(data: any): ApplicationUser {
-        data = typeof data === 'object' ? data : {};
-        let result = new ApplicationUser();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        if (Array.isArray(this.photoBoxes)) {
-            data["photoBoxes"] = [];
-            for (let item of this.photoBoxes)
-                data["photoBoxes"].push(item ? item.toJSON() : undefined as any);
-        }
-        if (Array.isArray(this.events)) {
-            data["events"] = [];
-            for (let item of this.events)
-                data["events"].push(item ? item.toJSON() : undefined as any);
-        }
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IApplicationUser extends IIdentityUserOfGuid {
-    id?: string;
-    photoBoxes?: PhotoBox[];
-    events?: Event[];
-}
-
-export class PhotoBox implements IPhotoBox {
-    /** Primary key of the PhotoBox. */
-    id?: string;
-    /** Display name of the Photobox, shown in the UI. Max length: 256. */
-    name!: string;
-    /** Stable identifier assigned to a specific device. Used for registration. */
-    hardwareId!: string;
-    /** Foreign key to the owning application user. */
-    applicationUserId?: string;
-    /** Navigation property to the owning application user. */
-    applicationUser?: ApplicationUser;
-
-    constructor(data?: IPhotoBox) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.hardwareId = _data["hardwareId"];
-            this.applicationUserId = _data["applicationUserId"];
-            this.applicationUser = _data["applicationUser"] ? ApplicationUser.fromJS(_data["applicationUser"]) : undefined as any;
-        }
-    }
-
-    static fromJS(data: any): PhotoBox {
-        data = typeof data === 'object' ? data : {};
-        let result = new PhotoBox();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["hardwareId"] = this.hardwareId;
-        data["applicationUserId"] = this.applicationUserId;
-        data["applicationUser"] = this.applicationUser ? this.applicationUser.toJSON() : undefined as any;
-        return data;
-    }
-}
-
-export interface IPhotoBox {
-    /** Primary key of the PhotoBox. */
-    id?: string;
-    /** Display name of the Photobox, shown in the UI. Max length: 256. */
-    name: string;
-    /** Stable identifier assigned to a specific device. Used for registration. */
-    hardwareId: string;
-    /** Foreign key to the owning application user. */
-    applicationUserId?: string;
-    /** Navigation property to the owning application user. */
-    applicationUser?: ApplicationUser;
-}
-
-export class Event implements IEvent {
-    /** Primary key of the PhotoBox. */
-    id?: string;
-    /** Name of the current Event */
-    name!: string;
-    /** The date, when the Event starts. */
-    startDate?: Date;
-    /** The date, when the Event ends. */
-    endDate?: Date;
-    /** Indicates, wheter the current event is active. */
-    isActive?: boolean;
-    /** The Gallery code used, to retreive the images */
-    eventCode?: string;
-    /** Foreign key to the owning application user. */
-    usedPhotoBoxId?: string;
-    /** The Photobox that is used during the event. */
-    usedPhotoBox?: PhotoBox;
-    /** All images taken during the event. */
-    images?: Image[];
-    /** Foreign key to the owning application user. */
-    applicationUserId?: string;
-    /** Navigation property to the owning application user. */
-    applicationUser?: ApplicationUser;
-
-    constructor(data?: IEvent) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : undefined as any;
-            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : undefined as any;
-            this.isActive = _data["isActive"];
-            this.eventCode = _data["eventCode"];
-            this.usedPhotoBoxId = _data["usedPhotoBoxId"];
-            this.usedPhotoBox = _data["usedPhotoBox"] ? PhotoBox.fromJS(_data["usedPhotoBox"]) : undefined as any;
-            if (Array.isArray(_data["images"])) {
-                this.images = [] as any;
-                for (let item of _data["images"])
-                    this.images!.push(Image.fromJS(item));
-            }
-            this.applicationUserId = _data["applicationUserId"];
-            this.applicationUser = _data["applicationUser"] ? ApplicationUser.fromJS(_data["applicationUser"]) : undefined as any;
-        }
-    }
-
-    static fromJS(data: any): Event {
-        data = typeof data === 'object' ? data : {};
-        let result = new Event();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["startDate"] = this.startDate ? this.startDate.toISOString() : undefined as any;
-        data["endDate"] = this.endDate ? this.endDate.toISOString() : undefined as any;
-        data["isActive"] = this.isActive;
-        data["eventCode"] = this.eventCode;
-        data["usedPhotoBoxId"] = this.usedPhotoBoxId;
-        data["usedPhotoBox"] = this.usedPhotoBox ? this.usedPhotoBox.toJSON() : undefined as any;
-        if (Array.isArray(this.images)) {
-            data["images"] = [];
-            for (let item of this.images)
-                data["images"].push(item ? item.toJSON() : undefined as any);
-        }
-        data["applicationUserId"] = this.applicationUserId;
-        data["applicationUser"] = this.applicationUser ? this.applicationUser.toJSON() : undefined as any;
-        return data;
-    }
-}
-
-export interface IEvent {
-    /** Primary key of the PhotoBox. */
-    id?: string;
-    /** Name of the current Event */
-    name: string;
-    /** The date, when the Event starts. */
-    startDate?: Date;
-    /** The date, when the Event ends. */
-    endDate?: Date;
-    /** Indicates, wheter the current event is active. */
-    isActive?: boolean;
-    /** The Gallery code used, to retreive the images */
-    eventCode?: string;
-    /** Foreign key to the owning application user. */
-    usedPhotoBoxId?: string;
-    /** The Photobox that is used during the event. */
-    usedPhotoBox?: PhotoBox;
-    /** All images taken during the event. */
-    images?: Image[];
-    /** Foreign key to the owning application user. */
-    applicationUserId?: string;
-    /** Navigation property to the owning application user. */
-    applicationUser?: ApplicationUser;
-}
-
-export class Image implements IImage {
-    /** Primary key of the Image. */
-    id?: string;
-    /** The Name of the image, which got uploaded. */
-    imageName?: string;
-    /** A Unique image name, used to store the image in the bucket storage. */
-    uniqueImageName?: string;
-    /**   */
-    downscaledImageName?: string;
-    takenAt?: Date;
-    eventId?: string;
-    event!: Event;
-
-    constructor(data?: IImage) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-        if (!data) {
-            this.event = new Event();
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.imageName = _data["imageName"];
-            this.uniqueImageName = _data["uniqueImageName"];
-            this.downscaledImageName = _data["downscaledImageName"];
-            this.takenAt = _data["takenAt"] ? new Date(_data["takenAt"].toString()) : undefined as any;
-            this.eventId = _data["eventId"];
-            this.event = _data["event"] ? Event.fromJS(_data["event"]) : new Event();
-        }
-    }
-
-    static fromJS(data: any): Image {
-        data = typeof data === 'object' ? data : {};
-        let result = new Image();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["imageName"] = this.imageName;
-        data["uniqueImageName"] = this.uniqueImageName;
-        data["downscaledImageName"] = this.downscaledImageName;
-        data["takenAt"] = this.takenAt ? this.takenAt.toISOString() : undefined as any;
-        data["eventId"] = this.eventId;
-        data["event"] = this.event ? this.event.toJSON() : undefined as any;
-        return data;
-    }
-}
-
-export interface IImage {
-    /** Primary key of the Image. */
-    id?: string;
-    /** The Name of the image, which got uploaded. */
-    imageName?: string;
-    /** A Unique image name, used to store the image in the bucket storage. */
-    uniqueImageName?: string;
-    /**   */
-    downscaledImageName?: string;
-    takenAt?: Date;
-    eventId?: string;
-    event: Event;
 }
 
 export class ProblemDetails implements IProblemDetails {
@@ -3983,6 +3739,42 @@ export enum HealthStatus {
     Unhealthy = 0,
     Degraded = 1,
     Healthy = 2,
+}
+
+export class DeleteAccountRequest implements IDeleteAccountRequest {
+    password?: string;
+
+    constructor(data?: IDeleteAccountRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.password = _data["password"];
+        }
+    }
+
+    static fromJS(data: any): DeleteAccountRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new DeleteAccountRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["password"] = this.password;
+        return data;
+    }
+}
+
+export interface IDeleteAccountRequest {
+    password?: string;
 }
 
 export class GalleryCodeResponse implements IGalleryCodeResponse {

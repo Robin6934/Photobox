@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
+import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
-import { useAuth } from "@/services/auth";
+import { useAuthStore } from "@/services/auth";
 
 const drawer = ref(true)
 const router = useRouter()
-const { initialized, initializeAuth, isAuthenticated, logout } = useAuth()
+const authStore = useAuthStore()
+const { initialized, isAuthenticated } = storeToRefs(authStore)
+const { initializeAuth, logout } = authStore
 
 const logoutUser = async () => {
   await logout()
@@ -48,7 +51,7 @@ onMounted(async () => {
         <v-list-item
           v-if="isAuthenticated"
           title="Account"
-          :to="{ name: 'loggedin' }"
+          :to="{ name: 'manage-account' }"
           link
         />
         <v-list-item

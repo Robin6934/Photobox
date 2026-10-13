@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted } from "vue";
-import { useAuth } from "@/services/auth";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/services/auth";
 
-const { currentUser, initializeAuth } = useAuth();
+const authStore = useAuthStore()
+const { currentUser } = storeToRefs(authStore)
+const { initializeAuth } = authStore
 
 const displayName = computed(() => currentUser.value?.email ?? currentUser.value?.userName ?? "Signed in");
 

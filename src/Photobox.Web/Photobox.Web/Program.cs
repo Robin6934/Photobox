@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
@@ -15,6 +14,7 @@ using Photobox.Web.Aws;
 using Photobox.Web.Components;
 using Photobox.Web.Components.Account;
 using Photobox.Web.Database;
+using Photobox.Web.Dtos.Responses;
 using Photobox.Web.HealthCheck;
 using Photobox.Web.Models;
 using Scalar.AspNetCore;
@@ -106,28 +106,13 @@ builder
             };
         }
     )
-    .AddBearerToken(IdentityConstants.BearerScheme);
-
-// builder
-//     .Services.AddAuthentication(options =>
-//     {
-//         options.DefaultScheme = IdentityConstants.ApplicationScheme;
-//     })
-//     .AddBearerToken(IdentityConstants.BearerScheme)
-//     .AddCookie();
-//
-//
-//
-// builder.Services.AddAuthorization(options =>
-// {
-//     var defaultAuthorizationPolicy = new AuthorizationPolicyBuilder(
-//         IdentityConstants.ApplicationScheme,
-//         IdentityConstants.BearerScheme);
-//
-//     options.DefaultPolicy = defaultAuthorizationPolicy.RequireAuthenticatedUser().Build();
-//
-//     options.AddPolicy();
-// });
+    .AddBearerToken(
+        IdentityConstants.BearerScheme,
+        options =>
+        {
+            options.BearerTokenExpiration = TimeSpan.FromMinutes(15);
+        }
+    );
 
 builder
     .Services.AddIdentityCore<ApplicationUser>()
@@ -172,20 +157,6 @@ builder.Services.ConfigureHealthChecks(builder.Configuration);
 
 var app = builder.Build();
 
-var enviroment = Environment.GetEnvironmentVariables();
-
-Console.WriteLine("Enviroment");
-foreach (DictionaryEntry variable in enviroment)
-{
-    Console.WriteLine($"{variable.Key} = {variable.Value}");
-}
-
-Console.WriteLine("Config");
-foreach (var config in builder.Configuration.AsEnumerable())
-{
-    Console.WriteLine($"{config.Key} = {config.Value}");
-}
-
 app.UseSerilogRequestLogging();
 
 //HealthCheck Middleware
@@ -206,15 +177,33 @@ app.MapGet(
                 claims.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value
             );
 
-            return await context.Users.FindAsync(userId);
+            var user = await context.Users.FindAsync(userId);
+            if (user is null)
+                return Results.NotFound();
+
+            return Results.Ok(
+                new UserMeResponse(user.Id, user.Email, user.UserName, user.EmailConfirmed)
+            );
+        }
+    )
+    .RequireAuthorization(policy =>
+        policy.AddAuthenticationSchemes(IdentityConstants.BearerScheme).RequireAuthenticatedUser()
+    )
+    .Produces<UserMeResponse>();
+
+app.MapPost(
+        "/api/logout",
+        async (ClaimsPrincipal claims, UserManager<ApplicationUser> userManager) =>
+        {
+            var user = await userManager.GetUserAsync(claims);
+            if (user is not null)
+                await userManager.UpdateSecurityStampAsync(user);
+            return Results.Ok();
         }
     )
     .RequireAuthorization(policy =>
         policy.AddAuthenticationSchemes(IdentityConstants.BearerScheme).RequireAuthenticatedUser()
     );
-
-// Bearer tokens are client-side cleared; no server-side revocation needed
-app.MapPost("/api/logout", () => Results.Ok());
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
