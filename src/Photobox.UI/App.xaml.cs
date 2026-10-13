@@ -17,6 +17,7 @@ using Photobox.UI.Lib.ImageManager;
 using Photobox.UI.Lib.ImageUploadService;
 using Photobox.UI.Lib.PowerStatusWatcher;
 using Photobox.UI.Lib.Printer;
+using Photobox.UI.ViewModels;
 using Photobox.UI.Windows;
 using Serilog;
 
@@ -56,6 +57,8 @@ public partial class App
             ?? "https://localhost";
 
         builder.Services.AddHostedService<MainWindow>();
+
+        builder.Services.AddSingleton<MainViewModel>();
 
         builder.Services.AddSingleton<PowerStatusMonitor>();
         builder.Services.AddSingleton<IImageUploadService, ImageUploadService>();

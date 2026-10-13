@@ -7,7 +7,11 @@ public readonly struct AspectRatio
 {
     public double Width { get; init; }
 
+    public double WidthPixels { get; init; }
+
     public double Height { get; init; }
+
+    public double HeightPixels { get; init; }
 
     public double Ratio => Width / Height;
 
@@ -21,6 +25,8 @@ public readonly struct AspectRatio
         double gcd = Gcd(width, height);
         Width = width / gcd;
         Height = height / gcd;
+        WidthPixels = width;
+        HeightPixels = height;
     }
 
     private static double Gcd(double a, double b)
