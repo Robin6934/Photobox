@@ -15,7 +15,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApplicationUser"
+                  "$ref": "#/components/schemas/UserMeResponse"
                 }
               }
             }
@@ -35,7 +35,12 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
     "/api/register": {
@@ -526,6 +531,70 @@
         }
       }
     },
+    "/api/Account/DownloadPersonalData": {
+      "post": {
+        "tags": [
+          "Account"
+        ],
+        "operationId": "Account_DownloadPersonalData",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/Account/DeleteAccount": {
+      "post": {
+        "tags": [
+          "Account"
+        ],
+        "operationId": "Account_DeleteAccount",
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteAccountRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/api/Event/GetGalleryCode": {
       "get": {
         "tags": [
@@ -984,247 +1053,24 @@
   },
   "components": {
     "schemas": {
-      "ApplicationUser": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/IdentityUserOfGuid"
-          },
-          {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "id": {
-                "type": "string",
-                "format": "guid"
-              },
-              "photoBoxes": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/PhotoBox"
-                }
-              },
-              "events": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Event"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "PhotoBox": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "name",
-          "hardwareId"
-        ],
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Primary key of the PhotoBox.",
-            "format": "guid"
-          },
-          "name": {
-            "type": "string",
-            "description": "Display name of the Photobox, shown in the UI. Max length: 256.",
-            "maxLength": 256,
-            "minLength": 1
-          },
-          "hardwareId": {
-            "type": "string",
-            "description": "Stable identifier assigned to a specific device. Used for registration.",
-            "maxLength": 52,
-            "minLength": 1
-          },
-          "applicationUserId": {
-            "type": "string",
-            "description": "Foreign key to the owning application user.",
-            "format": "guid"
-          },
-          "applicationUser": {
-            "description": "Navigation property to the owning application user.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/ApplicationUser"
-              }
-            ]
-          }
-        }
-      },
-      "Event": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "name"
-        ],
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Primary key of the PhotoBox.",
-            "format": "guid"
-          },
-          "name": {
-            "type": "string",
-            "description": "Name of the current Event",
-            "maxLength": 256,
-            "minLength": 1
-          },
-          "startDate": {
-            "type": "string",
-            "description": "The date, when the Event starts.",
-            "format": "date-time"
-          },
-          "endDate": {
-            "type": "string",
-            "description": "The date, when the Event ends.",
-            "format": "date-time"
-          },
-          "isActive": {
-            "type": "boolean",
-            "description": "Indicates, wheter the current event is active."
-          },
-          "eventCode": {
-            "type": "string",
-            "description": "The Gallery code used, to retreive the images",
-            "maxLength": 6
-          },
-          "usedPhotoBoxId": {
-            "type": "string",
-            "description": "Foreign key to the owning application user.",
-            "format": "guid"
-          },
-          "usedPhotoBox": {
-            "description": "The Photobox that is used during the event.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/PhotoBox"
-              }
-            ]
-          },
-          "images": {
-            "type": "array",
-            "description": "All images taken during the event.",
-            "items": {
-              "$ref": "#/components/schemas/Image"
-            }
-          },
-          "applicationUserId": {
-            "type": "string",
-            "description": "Foreign key to the owning application user.",
-            "format": "guid"
-          },
-          "applicationUser": {
-            "description": "Navigation property to the owning application user.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/ApplicationUser"
-              }
-            ]
-          }
-        }
-      },
-      "Image": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "event"
-        ],
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Primary key of the Image.",
-            "format": "guid"
-          },
-          "imageName": {
-            "type": "string",
-            "description": "The Name of the image, which got uploaded.",
-            "maxLength": 64
-          },
-          "uniqueImageName": {
-            "type": "string",
-            "description": "A Unique image name, used to store the image in the bucket storage.",
-            "maxLength": 45
-          },
-          "downscaledImageName": {
-            "type": "string",
-            "description": " ",
-            "maxLength": 45
-          },
-          "takenAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "eventId": {
-            "type": "string",
-            "format": "guid"
-          },
-          "event": {
-            "$ref": "#/components/schemas/Event"
-          }
-        }
-      },
-      "IdentityUserOfGuid": {
+      "UserMeResponse": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "id": {
             "type": "string",
             "format": "guid"
-          },
-          "userName": {
-            "type": "string",
-            "nullable": true
-          },
-          "normalizedUserName": {
-            "type": "string",
-            "nullable": true
           },
           "email": {
             "type": "string",
             "nullable": true
           },
-          "normalizedEmail": {
+          "userName": {
             "type": "string",
             "nullable": true
           },
           "emailConfirmed": {
             "type": "boolean"
-          },
-          "passwordHash": {
-            "type": "string",
-            "nullable": true
-          },
-          "securityStamp": {
-            "type": "string",
-            "nullable": true
-          },
-          "concurrencyStamp": {
-            "type": "string",
-            "nullable": true
-          },
-          "phoneNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "phoneNumberConfirmed": {
-            "type": "boolean"
-          },
-          "twoFactorEnabled": {
-            "type": "boolean"
-          },
-          "lockoutEnd": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "lockoutEnabled": {
-            "type": "boolean"
-          },
-          "accessFailedCount": {
-            "type": "integer",
-            "format": "int32"
           }
         }
       },
@@ -2537,6 +2383,15 @@
           1,
           2
         ]
+      },
+      "DeleteAccountRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "password": {
+            "type": "string"
+          }
+        }
       },
       "GalleryCodeResponse": {
         "type": "object",
