@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using System.Windows;
+using Microsoft.Extensions.Hosting;
 using Photobox.Lib.AccessTokenManager;
 using Photobox.Lib.RestApi;
-using System.Windows;
 using Exception = System.Exception;
 
 namespace Photobox.UI.Windows;

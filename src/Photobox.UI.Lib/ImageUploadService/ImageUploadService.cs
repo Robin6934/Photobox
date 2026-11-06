@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Collections.Concurrent;
+using Microsoft.Extensions.Logging;
 using Photobox.Lib.Extensions;
 using Photobox.Lib.RestApi;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Collections.Concurrent;
 
 namespace Photobox.UI.Lib.ImageUploadService;
 
